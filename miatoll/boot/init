@@ -5,7 +5,13 @@ mount -t proc proc /proc
 mount -t sysfs sysfs /sys
 mount -t tmpfs -o mode=0755 tmpfs /run
 exec </dev/console >/dev/console 2>&1
-echo 'BOOT1_INIT_OK: standalone RAM userspace reached'
+boot_tag=BOOT1
+boot_prompt=miatoll-boot1
+if [ -x /bin/display-banner ]; then
+    boot_tag=DISPLAY1
+    boot_prompt=miatoll-display1
+fi
+echo "${boot_tag}_INIT_OK: standalone RAM userspace reached"
 uname -r
 echo 'No Android filesystems are mounted; firmware and module loaders are absent.'
 mkdir -p /sys/kernel/config /sys/kernel/debug /sys/fs/pstore
@@ -19,10 +25,13 @@ done
 if [ -c /dev/watchdog ]; then
     watchdog -T 20 -t 5 /dev/watchdog
 fi
-export PS1='miatoll-boot1# '
+export PS1="$boot_prompt# "
+if [ -x /bin/display-banner ]; then
+    /bin/display-banner >/run/display-banner.log 2>&1 &
+fi
 if /bin/usb-gadget >/run/usb-setup.log 2>&1; then
     cat /run/usb-setup.log
-    echo 'BOOT1_USB_READY: open the Windows COM port at 115200 baud'
+    echo "${boot_tag}_USB_READY: open the Windows COM port at 115200 baud"
     (
         while :; do
             /bin/setsid -c /bin/sh -i </dev/ttyGS0 >/dev/ttyGS0 2>&1
@@ -34,7 +43,7 @@ else
     dmesg | grep -Ei 'usb|phy|dwc3|qusb' | tail -n 20
 fi
 if [ -c /dev/pmsg0 ]; then
-    echo "BOOT1_INIT_OK $(uname -r)" >/dev/pmsg0
+    echo "${boot_tag}_INIT_OK $(uname -r)" >/dev/pmsg0
     cat /run/usb-setup.log >/dev/pmsg0
 fi
 if [ -c /dev/tty1 ]; then

@@ -10,7 +10,7 @@ cat /proc/uptime /sys/devices/system/cpu/online
 head -n 5 /proc/meminfo
 echo '--- mounts (RAM and pseudo filesystems only) ---'
 cat /proc/mounts
-echo '--- storage enumeration (no reads or mounts) ---'
+echo '--- storage enumeration (no explicit block reads or mounts) ---'
 cat /proc/partitions
 for disk in /sys/block/sd*; do
     [ -e "$disk" ] || continue

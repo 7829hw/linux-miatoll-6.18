@@ -1,18 +1,29 @@
 param(
     [string]$Fastboot = 'fastboot',
     [string]$Port = '',
-    [switch]$CaptureOnly
+    [switch]$CaptureOnly,
+    [string]$ReportName = 'boot1-report.json'
 )
 $ErrorActionPreference = 'Stop'
-$bootReport = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'boot1-report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
-$bootImage = Join-Path $PSScriptRoot 'boot-curtana-6.18.58-boot1.img'
+$bootReport = Get-Content -LiteralPath (Join-Path $PSScriptRoot $ReportName) -Raw -Encoding UTF8 | ConvertFrom-Json
+$bootImage = Join-Path $PSScriptRoot $bootReport.image
+$testName = 'boot1'
+$probeCommand = 'boot-probe'
+$probeEnd = 'BOOT1_PROBE_END'
+if ($bootReport.boot_profile -eq 'display1-ram-only') {
+    $testName = 'display1'
+    $probeCommand = 'display-probe'
+    $probeEnd = 'DISPLAY1_PROBE_END'
+} elseif ($bootReport.boot_profile -ne 'boot1-ram-only') {
+    throw 'Unknown RAM boot profile.'
+}
 $bootHash = (Get-FileHash -LiteralPath $bootImage -Algorithm SHA256).Hash.ToLowerInvariant()
 if ($bootHash -ne $bootReport.image_sha256) { throw 'Image SHA256 does not match the report.' }
 $fastbootExe = $null
 if (-not $CaptureOnly) { $fastbootExe = (Get-Command $Fastboot -ErrorAction Stop).Source }
 $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
-$fastbootLog = Join-Path $PSScriptRoot "boot1-fastboot-$stamp.txt"
-$serialLog = Join-Path $PSScriptRoot "boot1-serial-$stamp.txt"
+$fastbootLog = Join-Path $PSScriptRoot "$testName-fastboot-$stamp.txt"
+$serialLog = Join-Path $PSScriptRoot "$testName-serial-$stamp.txt"
 
 function Invoke-Boot1Fastboot([string[]]$CommandArguments) {
     $previousPreference = $ErrorActionPreference
@@ -70,7 +81,7 @@ try {
     Start-Sleep -Seconds 2
     $serialConnection.WriteLine('')
     $serialConnection.WriteLine('uname -r')
-    $serialConnection.WriteLine('boot-probe')
+    $serialConnection.WriteLine($probeCommand)
     # The first tested RAMdisk omitted /bin/dmesg; BusyBox contains the applet.
     # This also works with that already running image, without another boot.
     $serialConnection.WriteLine('/bin/busybox dmesg; printf "\nBOOT1_KERNELLOG_EXIT=%s\n" "$?"')
@@ -91,8 +102,12 @@ try {
     $serialConnection.Dispose()
 }
 $releasePattern = [regex]::Escape($bootReport.kernel_release)
-if ($capturedText -match $releasePattern -and $capturedText.Contains('boot1-ram-only') -and $capturedText.Contains('BOOT1_PROBE_END')) {
-    Write-Host "BOOT1_CONFIRMED: $($bootReport.kernel_release) reached a RAM userspace and USB shell."
+if ($capturedText -match $releasePattern -and $capturedText.Contains($bootReport.boot_profile) -and $capturedText.Contains($probeEnd)) {
+    if ($testName -eq 'display1') {
+        Write-Host "DISPLAY1_LOG_CAPTURED: $($bootReport.kernel_release) reached the USB shell. Report whether the screen shows the test banner."
+    } else {
+        Write-Host "BOOT1_CONFIRMED: $($bootReport.kernel_release) reached a RAM userspace and USB shell."
+    }
 } else {
     Write-Host 'Boot is not confirmed. Return the logs for inspection.'
 }

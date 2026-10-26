@@ -1,0 +1,22 @@
+#!/bin/sh
+# Paint a VT test banner only after a native MSM framebuffer appears.
+attempt=0
+while [ "$attempt" -lt 60 ]; do
+    for fb in /sys/class/graphics/fb*; do
+        [ -f "$fb/name" ] || continue
+        if grep -q '^msmdrmfb$' "$fb/name"; then
+            if [ -c /dev/tty1 ]; then
+                printf '\033[2J\033[H\033[1;37;44m\n  MIATOLL LINUX DISPLAY TEST 1  \n\033[0m\n' >/dev/tty1
+                printf '  %s\n\n' "$(uname -r)" >/dev/tty1
+                printf '\033[1;31m  RED     \033[32mGREEN     \033[34mBLUE\033[0m\n\n' >/dev/tty1
+                printf '  Huaxing panel: expected 1080 x 2400\n\n  Report the visible text and colours.\n' >/dev/tty1
+                echo "DISPLAY1_BANNER_WRITTEN: $fb via tty1"
+                exit 0
+            fi
+        fi
+    done
+    attempt=$((attempt + 1))
+    sleep 1
+done
+echo 'DISPLAY1_BANNER_UNAVAILABLE: native MSM framebuffer or tty1 did not appear'
+exit 1

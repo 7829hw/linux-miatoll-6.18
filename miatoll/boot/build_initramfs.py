@@ -14,7 +14,11 @@ ROOT = Path(__file__).resolve().parents[2]
 BOOT = ROOT / 'miatoll/boot'
 APK_SHA256 = 'ee469aee2958feffd7f64dd96655704025ff60af614f77a1d7323dc237c34da2'
 
-def build(output):
+def build(output, profile='boot1'):
+    assert profile in ('boot1', 'display1')
+    script_names = ['init', 'usb-gadget', 'boot-probe']
+    if profile == 'display1':
+        script_names += ['display-banner', 'display-probe']
     package = ROOT.parent / 'downloads/busybox-static-1.37.0-r20.apk'
     assert hashlib.sha256(package.read_bytes()).hexdigest() == APK_SHA256
     with tarfile.open(package, 'r:gz', ignore_zeros=True) as archive:
@@ -37,7 +41,7 @@ def build(output):
         help_result = subprocess.run([str(qemu), str(executable), 'setsid', '--help'],
                                      capture_output=True, text=True, check=True)
         assert 'Set controlling terminal to stdin' in help_result.stdout + help_result.stderr
-        for name in ('init', 'usb-gadget', 'boot-probe'):
+        for name in script_names:
             subprocess.run([str(qemu), str(executable), 'sh', '-n', str(BOOT / name)], check=True)
     stream = io.BytesIO()
     inode = 0
@@ -61,7 +65,7 @@ def build(output):
     for name in sorted(required):
         add('bin/' + name, stat.S_IFLNK | 0o777, b'busybox')
     add('init', stat.S_IFREG | 0o755, (BOOT / 'init').read_bytes())
-    for name in ('usb-gadget', 'boot-probe'):
+    for name in script_names[1:]:
         add('bin/' + name, stat.S_IFREG | 0o755, (BOOT / name).read_bytes())
     add('TRAILER!!!', 0)
     assert not any(name.startswith(('lib/', 'vendor/', 'system/')) for name in members)
@@ -71,6 +75,6 @@ def build(output):
               'busybox_apk_sha256': APK_SHA256, 'members': members,
               'arm64_static_busybox_and_shell_syntax_passed': True,
               'contains_firmware': False, 'contains_modules': False,
-              'mounts_android_filesystems': False}
+              'mounts_android_filesystems': False, 'profile': profile}
     output.with_suffix('.json').write_text(json.dumps(result, indent=2) + '\n')
     return result

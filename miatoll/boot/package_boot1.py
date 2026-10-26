@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Package one curtana RAM boot candidate without modifying existing artifacts."""
 import importlib.util
+import argparse
 import json
 from pathlib import Path, PurePosixPath
 import shutil
@@ -16,8 +17,6 @@ import build_shim
 ROOT = Path(__file__).resolve().parents[2]
 WORKSPACE = ROOT.parent
 BOOT = ROOT / 'miatoll/boot'
-DIST = WORKSPACE / 'dist/miatoll-boot1'
-OUT = WORKSPACE / 'out-miatoll-boot1'
 TOOLS = WORKSPACE / 'tools'
 PINS = {
     'aosp-mkbootimg/mkbootimg.py': '37d84b3d162e0bc62e36c1f4e1c63c85ea0caa9f29be023eb2f8efe006ad948c',
@@ -51,7 +50,10 @@ def analyze_avb(module, path):
             'rollback_index': header.rollback_index, 'rollback_index_location': header.rollback_index_location,
             'properties': properties}
 
-def main():
+def main(profile='boot1'):
+    require(profile in ('boot1', 'display1'), 'Unknown RAM test profile')
+    DIST = WORKSPACE / ('dist/miatoll-' + profile)
+    OUT = WORKSPACE / ('out-miatoll-' + profile)
     DIST.mkdir(parents=True, exist_ok=True)
     for path, expected in PINS.items():
         require(digest((TOOLS / path).read_bytes()) == expected, 'Changed tool: ' + path)
@@ -68,38 +70,50 @@ def main():
     kernel = DIST / 'kernel/Image'
     config = (DIST / 'kernel/.config').read_text()
     release = (DIST / 'kernel/kernelrelease.txt').read_text().strip()
-    require(release == '6.18.58-miatoll-boot1+', 'Unexpected test kernel release: ' + release)
+    require(release == '6.18.58-miatoll-' + profile + '+', 'Unexpected test kernel release: ' + release)
     require(('Linux version ' + release).encode() in kernel.read_bytes(), 'Wrong kernel payload')
     for symbol in ('BLK_DEV_INITRD', 'RD_GZIP', 'DEVTMPFS', 'USB_CONFIGFS_ACM',
                    'USB_DWC3_GADGET', 'PHY_QCOM_QUSB2', 'DRM_SIMPLEDRM'):
         require('CONFIG_' + symbol + '=y\n' in config, 'Missing built-in: ' + symbol)
-    dtb = OUT / 'arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-boot1.dtb'
+    if profile == 'display1':
+        for symbol in ('DRM_MSM', 'DRM_MSM_DPU', 'DRM_MSM_DSI', 'DRM_MSM_DSI_10NM_PHY',
+                       'DRM_PANEL_HUAXING_FT8756', 'BACKLIGHT_QCOM_WLED', 'SC_DISPCC_7180',
+                       'DRM_FBDEV_EMULATION', 'DRM_CLIENT_DEFAULT_FBDEV', 'FRAMEBUFFER_CONSOLE'):
+            require('CONFIG_' + symbol + '=y\n' in config, 'Missing display built-in: ' + symbol)
+    dtb = OUT / ('arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-' + profile + '.dtb')
     require(fdt(dtb, '/', 'qcom,board-id', 'x') == '20022 1', 'Not the curtana board')
-    require(fdt(dtb, '/chosen', 'miatoll,boot-profile') == 'boot1-ram-only', 'Wrong profile')
+    require(fdt(dtb, '/chosen', 'miatoll,boot-profile') == profile + '-ram-only', 'Wrong profile')
     for node in ('/soc@0/usb@a6f8800/usb@a600000', '/soc@0/phy@88e3000'):
         available(dtb, node)
     require(fdt(dtb, '/soc@0/usb@a6f8800/usb@a600000', 'dr_mode') == 'peripheral', 'USB must be peripheral')
-    disabled = ('/soc@0/display-subsystem@ae00000', '/soc@0/gpu@5000000',
+    disabled = ('/soc@0/gpu@5000000',
                 '/soc@0/remoteproc@4080000', '/soc@0/remoteproc@62400000',
                 '/soc@0/remoteproc@8300000', '/soc@0/wifi@18800000',
                 '/soc@0/camss@acb3000', '/soc@0/mmc@8804000', '/sound')
+    if profile == 'boot1':
+        disabled += ('/soc@0/display-subsystem@ae00000',)
+    else:
+        from check_display import check as check_display
+        display_validation = check_display(dtb, config)
     for node in disabled:
         require(fdt(dtb, node, 'status') == 'disabled', 'Unexpected active device: ' + node)
-    validation_file = WORKSPACE / 'out-miatoll-boot1-shim-test/test-result.json'
+    validation_file = WORKSPACE / ('out-miatoll-' + profile + '-shim-test/test-result.json')
     validation = json.loads(validation_file.read_text())
     require(validation['arm64_emulation_passed'] and validation['host_validation_passed'], 'Run test_shim.py first')
     require(validation['template_sha256'] == digest(dtb.read_bytes()), 'DT changed since shim test')
     for name, expected in validation['sources'].items():
         require(digest((ROOT / name).read_bytes()) == expected, 'Retest changed shim source: ' + name)
-    ramdisk = DIST / 'initramfs-boot1.cpio.gz'
-    ramdisk_report = build_initramfs(ramdisk)
-    shim = build_shim.build(kernel, dtb, WORKSPACE / 'out-miatoll-boot1-shim')
+    ramdisk = DIST / ('initramfs-' + profile + '.cpio.gz')
+    ramdisk_report = build_initramfs(ramdisk, profile=profile)
+    shim = build_shim.build(kernel, dtb, WORKSPACE / ('out-miatoll-' + profile + '-shim'))
     require(shim.stat().st_size < stock_runtime, 'Loader footprint exceeds the original kernel budget')
     shutil.copy2(dtb, DIST / dtb.name)
     command_line = ('rdinit=/init console=tty0 loglevel=8 ignore_loglevel clk_ignore_unused '
                     'pd_ignore_unused no_console_suspend deferred_probe_timeout=30 panic=0 '
-                    'enforcing=0 miatoll_boot=boot1')
-    plain = DIST / 'boot1-plain.img'
+                    'enforcing=0 miatoll_boot=' + profile)
+    if profile == 'display1':
+        command_line += ' consoleblank=0 drm.debug=0x06'
+    plain = DIST / (profile + '-plain.img')
     mkbootimg = TOOLS / 'aosp-mkbootimg/mkbootimg.py'
     command = [sys.executable, str(mkbootimg), '--kernel', str(shim), '--ramdisk', str(ramdisk),
                '--dtb', str(stock_dtb), '--header_version', '2', '--pagesize', '4096', '--base', '0',
@@ -118,7 +132,7 @@ def main():
     avb = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(avb)
     avb_reference = analyze_avb(avb, reference)
-    image = DIST / 'boot-curtana-6.18.58-boot1.img'
+    image = DIST / ('boot-curtana-6.18.58-' + profile + '.img')
     shutil.copy2(plain, image)
     command = [sys.executable, str(avb_path), 'add_hash_footer', '--image', str(image),
                '--partition_name', 'boot', '--partition_size', str(avb_reference['bytes']),
@@ -136,7 +150,7 @@ def main():
         verify = subprocess.run([sys.executable, str(avb_path), 'verify_image', '--image', str(checked_image)],
                                 check=True, capture_output=True, text=True)
     (DIST / 'avb-verify.txt').write_text(verify.stdout + verify.stderr)
-    unpack = WORKSPACE / 'out-miatoll-boot1-unpacked'
+    unpack = WORKSPACE / ('out-miatoll-' + profile + '-unpacked')
     subprocess.run([sys.executable, str(TOOLS / 'aosp-mkbootimg/unpack_bootimg.py'),
                     '--boot_img', str(image), '--out', str(unpack)], check=True, stdout=subprocess.DEVNULL)
     for name in ('kernel', 'ramdisk', 'dtb'):
@@ -146,7 +160,7 @@ def main():
               'kernel_build_commit': (DIST / 'kernel/source-commit.txt').read_text().strip(),
               'kernel_runtime_bytes': struct.unpack_from('<Q', kernel.read_bytes(), 16)[0],
               'shim_runtime_bytes': shim.stat().st_size, 'stock_runtime_budget_bytes': stock_runtime,
-              'boot_profile': 'boot1-ram-only', 'dtb_sha256': digest(dtb.read_bytes()),
+              'boot_profile': profile + '-ram-only', 'dtb_sha256': digest(dtb.read_bytes()),
               'outer_dtb_sha256': digest(stock_dtb.read_bytes()), 'avb_hash_verified': True,
               'avb_algorithm': 'NONE (unsigned hash metadata, not OEM authentication)',
               'aosp_unpack_verified': True, 'shim_arm64_mock_entry_tested': True,
@@ -154,16 +168,24 @@ def main():
               'reference_container': str(reference), 'reference_container_is_stock_image': False,
               'original_uploaded_boot_image_available': False,
               'hardware_scope': 'CPU/RAM, inherited framebuffer, UFS enumeration and USB console only'}
+    if profile == 'display1':
+        result.update(hardware_scope='Native Huaxing DPU/DSI/WLED display, USB console and read-only UFS enumeration',
+                      display_validation=display_validation, physical_display_confirmed=False)
     result['packaging_source_commit'] = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], text=True).strip()
     checked_sources = [*BOOT.glob('*.py'), *BOOT.glob('*.ps1'), *BOOT.glob('shim/*'),
-                       *(BOOT / name for name in ('init', 'boot-probe', 'usb-gadget')),
+                       *(BOOT / name for name in ('init', 'boot-probe', 'usb-gadget', 'display-banner', 'display-probe')),
+                       ROOT / ('arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-' + profile + '.dts'),
                        ROOT / 'arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-boot1.dts',
-                       ROOT / 'miatoll/configs/boot1.config', ROOT / 'miatoll/configs/miatoll.config']
+                       ROOT / ('miatoll/configs/' + profile + '.config'), ROOT / 'miatoll/configs/miatoll.config']
     result['packaging_sources'] = {str(path.relative_to(ROOT)): digest(path.read_bytes())
                                     for path in checked_sources if path.is_file()}
-    (DIST / 'boot1-report.json').write_text(json.dumps(result, indent=2) + '\n')
+    (DIST / (profile + '-report.json')).write_text(json.dumps(result, indent=2) + '\n')
     shutil.copy2(BOOT / 'Test-Boot1.ps1', DIST / 'Test-Boot1.ps1')
+    if profile == 'display1':
+        shutil.copy2(BOOT / 'Test-Display1.ps1', DIST / 'Test-Display1.ps1')
     print(json.dumps({key: value for key, value in result.items() if key != 'ramdisk'}, indent=2))
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--profile', choices=('boot1', 'display1'), default='boot1')
+    main(parser.parse_args().profile)

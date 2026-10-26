@@ -3,6 +3,7 @@
 기준일: 2026-10-26 KST. 이후 개발은 `/data/hwkim/kernel/miatoll-6.18`의
 `miatoll/6.18-sm7125`와 그 기반 기능 브랜치에서 진행한다.
 현재 단독 RAM 부팅 시험은 `miatoll/6.18-boot1`에서 진행한다.
+단독 부팅 확인 이후의 화면 RAM 시험은 그 위의 `miatoll/6.18-display1`에서 진행한다.
 
 ## 기준과 보존
 
@@ -27,6 +28,7 @@
 | `miatoll/6.18-lts` | 기존 로컬 수정을 6.18.58에 이어 붙여 본 이전 이식 시도. 보존만 한다 |
 | `miatoll/6.18-sm7125` | 공식 6.18.58에서 새로 시작한 현재 개발 |
 | `miatoll/6.18-boot1` | 위 브랜치에서 분기한 최소 RAM 부팅·실기기 증거 및 진단 도구 |
+| `miatoll/6.18-display1` | 확인된 boot1을 보존하고 네이티브 화면 경로를 활성화한 RAM 시험 후보 |
 
 최초 Git 보존 bundle은 백업 디렉터리의 `legacy-kernel.bundle`이다.
 공식 태그는 shallow fetch로 고정했으므로 모든 과거 upstream 이력을 보유한 전체 clone은 아니다.

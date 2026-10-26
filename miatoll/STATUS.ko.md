@@ -1,7 +1,8 @@
 # Linux 6.18 기반 miatoll 지원 현황
 
 2026-10-26 KST. 하드웨어 이식 기준: **`miatoll/6.18-sm7125`**.
-현재 실기기 시험 브랜치: **`miatoll/6.18-boot1`**.
+확인된 단독 부팅 브랜치: **`miatoll/6.18-boot1`**.
+현재 화면 시험 준비 브랜치: **`miatoll/6.18-display1`**.
 공식 Linux **v6.18.58**을 기반으로, 6.14.7 포크의 Xiaomi 하드웨어 구현을 직접 선별 이식했다.
 기존 로컬 커널 수정은 보존 브랜치와 백업에 남겼다.
 
@@ -76,6 +77,17 @@ RAMdisk 생성기에 `dmesg` 링크를 추가하고 캡처 스크립트가 BusyB
 드라이버가 이미 켜진 것으로 가정하고 열거를 계속한다. 임의 전원 배선 패치는 적용하지 않았다.
 또한 ICE의 raw key 전용 경로와 QSEE allowlist 제외가 실기기에서도 확인돼, 기존
 `wrappedkey_v0` 데이터·TEE 서비스와의 Android 호환성은 계속 미해결이다.
+
+## 다음 RAM 시험: display1
+
+사용자가 boot1에서 **화면이 검고 백라이트만 켜짐**을 보고했다. boot1의 MDSS/DSI/WLED는
+비활성 상태였으며 native framebuffer 등록도 없었다. 화면 표시 성공으로 기록하지 않는다.
+새 `sm7125-xiaomi-curtana-display1.dts`는 boot1에서 화면 경로만 켜고 WLED 기본 밝기 256,
+불필요한 BWMON/Venus 비활성화를 지정한다. 터치는 계속 비활성화한다.
+커널/패널 C 코드는 현재 6.18+6.14 선별 이식 그대로이며, 별도 실행 버전은
+`6.18.58-miatoll-display1+`다. 시험 문구를 VT에 쓰고 DRM/DSI/fb/WLED/IRQ/dmesg를 수집한다.
+현재 후보의 실제 부팅·화면 표시는 **미검증**이다.
+실행 절차와 범위는 [DISPLAY1.ko.md](boot/DISPLAY1.ko.md)를 참고한다.
 
 ## 하드웨어별 상태
 
