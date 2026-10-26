@@ -1,0 +1,41 @@
+{
+  "tqftpserv": {
+    "bytes": 76344,
+    "sha256": "dcfb703ea4cddd8c410e5498db7edcdf2fd2fe925e07520830850dd2d6475ac8",
+    "elf_aarch64_static_verified": true,
+    "sources": {
+      "userspace/tqftpserv/tqftpserv.c": "b980c9d7ba3e67ac353b279d85e8bad9de6836d3887454a87d674001184b96ca",
+      "userspace/tqftpserv/translate.c": "8a36b05b0cbbe9e8de3326deb604e91d664dee04643c5287a800ae1e769868bd",
+      "userspace/qrtr/lib/qrtr.c": "e2aaa6829bb109c22f2b97c6eca8a1cbf6ff4d1c65d5283c83aa58bc89d91391",
+      "userspace/qrtr/lib/qmi.c": "dc5e608ed83348a1536b93877596a8bf4a32498e2b740d18f0f7b3a4951cf04b",
+      "userspace/qrtr/lib/logging.c": "a40eb62226579806fd258f0ecd454892f986877f6c3d9acf6ace5c1de5c4f005"
+    }
+  },
+  "rmtfs": {
+    "bytes": 96680,
+    "sha256": "ffc2d843dc6bdcb94f2423ec96b1b4a3e05f7623cd22daa01e1869f262a6ace4",
+    "elf_aarch64_static_verified": true,
+    "sources": {
+      "userspace/rmtfs/qmi_rmtfs.c": "fdac6b8eef0c18cb93a4242f1b1acc811ce3bf207caa2fc201fdb97c25cef35d",
+      "userspace/rmtfs/rmtfs.c": "fec95521beaa6983c3dfdf208760e842298c3999147fe219bfbb453e957504f2",
+      "userspace/rmtfs/rproc.c": "62b4ecc78b1fcf7adc83bebf1852b248911219af1e7c25627e26752665b1e1cd",
+      "userspace/rmtfs/sharedmem-curtana.c": "aa6d09d67e01edce17d8b44e813abb928ba482d6dd5567c1176105269501465a",
+      "userspace/rmtfs/storage.c": "7b64f34cf176270f90e26be939bb4073e9c47e0614466ff40822991dbeb76eed",
+      "userspace/rmtfs/util.c": "901a9d4794e47f77800f14cbc290ed99eedd5704be5e082b6fc42cd143b683b7",
+      "userspace/qrtr/lib/qrtr.c": "e2aaa6829bb109c22f2b97c6eca8a1cbf6ff4d1c65d5283c83aa58bc89d91391",
+      "userspace/qrtr/lib/qmi.c": "dc5e608ed83348a1536b93877596a8bf4a32498e2b740d18f0f7b3a4951cf04b",
+      "userspace/qrtr/lib/logging.c": "a40eb62226579806fd258f0ecd454892f986877f6c3d9acf6ace5c1de5c4f005"
+    }
+  },
+  "qrtr-lookup": {
+    "bytes": 54176,
+    "sha256": "0f907ccd217219b05c53bbff4060963beaf10381f5a3e556bb695d06c27d884e",
+    "elf_aarch64_static_verified": true,
+    "sources": {
+      "userspace/qrtr/src/lookup.c": "5dd7666a73dc584fd7c1fb4b34cc3a6cdb6735721865d8446e778cc5c0f46df0",
+      "userspace/qrtr/lib/qrtr.c": "e2aaa6829bb109c22f2b97c6eca8a1cbf6ff4d1c65d5283c83aa58bc89d91391",
+      "userspace/qrtr/lib/qmi.c": "dc5e608ed83348a1536b93877596a8bf4a32498e2b740d18f0f7b3a4951cf04b",
+      "userspace/qrtr/lib/logging.c": "a40eb62226579806fd258f0ecd454892f986877f6c3d9acf6ace5c1de5c4f005"
+    }
+  }
+}

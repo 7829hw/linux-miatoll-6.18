@@ -1,0 +1,28 @@
+[
+  {
+    "name": "libnl3-dev",
+    "version": "3.11.0-r0",
+    "url": "https://dl-cdn.alpinelinux.org/alpine/v3.22/main/aarch64/libnl3-dev-3.11.0-r0.apk",
+    "sha256": "74a83633c873712c75cab400fa02f0f01c104e8cdc911c74e95fd9ae652fc045",
+    "control_checksum_verified": true,
+    "datahash_verified": true,
+    "aports_commit": "4084996615c2a6601e26eedde99e3ae66e7d6ab7"
+  },
+  {
+    "name": "libnl3-static",
+    "version": "3.11.0-r0",
+    "url": "https://dl-cdn.alpinelinux.org/alpine/v3.22/main/aarch64/libnl3-static-3.11.0-r0.apk",
+    "sha256": "501e667173207502959fa11db949cc55916fcf001bc98acbf2d3e3a84a7de15d",
+    "control_checksum_verified": true,
+    "datahash_verified": true,
+    "aports_commit": "4084996615c2a6601e26eedde99e3ae66e7d6ab7"
+  },
+  {
+    "name": "iw",
+    "version": "6.9",
+    "url": "https://www.kernel.org/pub/software/network/iw/iw-6.9.tar.xz",
+    "sha512": "cbafa54cffa6098a727edd8fb90382ab9f08d2db999811e543bcdaf8de41386c87a34504cf8965340839445929879a608faf51314b7335783beab403cf3f9cbc",
+    "sha256": "3f2db22ad41c675242b98ae3942dbf3112548c60a42ff739210f2de4e98e4894",
+    "checksum_source": "https://github.com/alpinelinux/aports/blob/8eb8183bdae879445973711fb2466397753d7e43/main/iw/APKBUILD"
+  }
+]

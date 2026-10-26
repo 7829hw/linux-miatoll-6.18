@@ -1,0 +1,41 @@
+{
+  "files": [
+    {
+      "repository": "sm7125-mainline/firmware-xiaomi-miatoll",
+      "source_path": "lib/firmware/qcom/sm7125/miatoll/modem.mbn",
+      "source_url": "https://api.github.com/repos/sm7125-mainline/firmware-xiaomi-miatoll/git/blobs/7e890a505bcc8f7bf1de085c5b653db5a00238e4",
+      "git_blob_sha1": "7e890a505bcc8f7bf1de085c5b653db5a00238e4",
+      "bytes": 62183024,
+      "sha256": "112271f1756f7b8f10567c10bc2923fa27622b34468087dc055524113535cf6d",
+      "cached_path": "downloads/wifi-firmware/lib/firmware/qcom/sm7125/miatoll/modem.mbn"
+    },
+    {
+      "repository": "sm7125-mainline/firmware-xiaomi-miatoll",
+      "source_path": "lib/firmware/qcom/sm7125/miatoll/wlanmdsp.mbn",
+      "source_url": "https://api.github.com/repos/sm7125-mainline/firmware-xiaomi-miatoll/git/blobs/485353b9f054d0121f3c3b882b92575338a112a9",
+      "git_blob_sha1": "485353b9f054d0121f3c3b882b92575338a112a9",
+      "bytes": 3844700,
+      "sha256": "39c60ee8ba62b720bbfb3183cadff21f94353f253470429e84868f2d343b7ab9",
+      "cached_path": "downloads/wifi-firmware/lib/firmware/qcom/sm7125/miatoll/wlanmdsp.mbn"
+    },
+    {
+      "repository": "sm7125-mainline/firmware-xiaomi-miatoll",
+      "source_path": "lib/firmware/postmarketos/ath10k/WCN3990/hw1.0/board-2.bin.zst",
+      "source_url": "https://api.github.com/repos/sm7125-mainline/firmware-xiaomi-miatoll/git/blobs/16dfcacb004c8fc8537bba5ede05fb20c111710a",
+      "git_blob_sha1": "16dfcacb004c8fc8537bba5ede05fb20c111710a",
+      "bytes": 29537,
+      "sha256": "5e28e3ebe6cb09ddb02c1c5c407437d3224a3e440ed9b5245638e49919b9b762",
+      "cached_path": "downloads/wifi-firmware/lib/firmware/postmarketos/ath10k/WCN3990/hw1.0/board-2.bin.zst"
+    },
+    {
+      "repository": "kernel-firmware/linux-firmware",
+      "source_path": "lib/firmware/ath10k/WCN3990/hw1.0/firmware-5.bin",
+      "source_url": "https://gitlab.com/api/v4/projects/kernel-firmware%2Flinux-firmware/repository/blobs/69b4cae2d5e9fc340fbc43f3f120dd0698d907af",
+      "git_blob_sha1": "69b4cae2d5e9fc340fbc43f3f120dd0698d907af",
+      "bytes": 60,
+      "sha256": "fef6539e0127579536bc977be57a90d018b83f2931fedc3a8870fbe38d6c4127",
+      "cached_path": "downloads/wifi-firmware/lib/firmware/ath10k/WCN3990/hw1.0/firmware-5.bin"
+    }
+  ],
+  "verification": "Pinned Git blob identities and byte sizes; SHA256 calculated for local provenance, not OEM signature authentication"
+}

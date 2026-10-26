@@ -1,0 +1,15 @@
+// SPDX-License-Identifier: GPL-2.0
+// WCN3990 Wi-Fi through MPSS on top of the verified usb2 RAM test.
+#include "sm7125-xiaomi-curtana-usb2.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing wifi1 test)";
+	chosen {
+		miatoll,boot-profile = "wifi1-ram-only";
+	};
+};
+
+// Restore the common-board MPSS and WLAN nodes. The 6.18 MPSS PAS
+// descriptor does not auto-boot; the RAM test starts it explicitly.
+&remoteproc_mpss { status = "okay"; };
+&wifi { status = "okay"; };

@@ -1,0 +1,84 @@
+#!/bin/sh
+# Stage the installed device's raw BDF in initramfs RAM before MPSS starts.
+# Never mount persist/userdata, and never choose a different board's entry.
+fail() { echo "WIFI BOARD: $*"; exit 1; }
+root=${CURTANA_BOARD_ROOT:-}
+
+tr '\000' '\n' < "$root/proc/device-tree/compatible" | grep -qx 'xiaomi,curtana' ||
+    fail 'This helper requires xiaomi,curtana.'
+found=no
+for rp in "$root"/sys/class/remoteproc/remoteproc*; do
+    [ -r "$rp/firmware" ] || continue
+    [ "$(cat "$rp/firmware")" = qcom/sm7125/miatoll/modem.mbn ] || continue
+    [ "$found" = no ] || fail 'Multiple MPSS devices.'
+    found=yes
+    [ "$(cat "$rp/state")" = offline ] || fail 'MPSS must be offline; reboot before staging BDF.'
+done
+[ "$found" = yes ] || fail 'MPSS firmware device is unavailable.'
+
+disk=
+for entry in "$root"/sys/class/block/*; do
+    [ -r "$entry/uevent" ] || continue
+    label=$(sed -n 's/^PARTNAME=//p' "$entry/uevent")
+    [ "$label" = modem ] || continue
+    [ -z "$disk" ] || fail 'Multiple modem labels; no partition selected.'
+    disk="$root/dev/${entry##*/}"
+done
+[ -n "$disk" ] || fail 'No partition with PARTNAME=modem.'
+[ "$(LC_ALL=C stat -c '%F' "$disk")" = 'block special file' ] || fail "Not a block device: $disk"
+[ "$(blockdev --getro "$disk")" = 1 ] || fail "Source is not read-only: $disk"
+echo "WIFI BOARD: modem source $disk (block read-only=1)"
+
+work=$(mktemp -d "$root/run/wifi-board.XXXXXX") || exit 1
+mounted=no
+cleanup() {
+    if [ "$mounted" = yes ]; then
+        umount "$work/mount" || return 1
+    fi
+    rm -rf "$work"
+}
+trap cleanup EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
+mkdir "$work/mount" || exit 1
+mount -t vfat -o ro,nosuid,nodev,noexec,shortname=lower "$disk" "$work/mount" ||
+    fail 'Read-only VFAT mount failed.'
+mounted=yes
+awk -v path="$work/mount" '$2 == path && $3 == "vfat" {
+    n = split($4, options, ","); for (i = 1; i <= n; i++) if (options[i] == "ro") ok = 1
+} END { exit !ok }' "$root/proc/mounts" || fail 'Mount is not read-only VFAT.'
+echo 'WIFI BOARD: installed firmware board files:'
+for file in "$work/mount"/image/bdwlan*; do
+    [ -f "$file" ] || continue
+    printf '%s bytes=' "${file##*/}"
+    stat -c '%s' "$file"
+done
+
+source_file="$work/mount/image/bdwlan.bin"
+[ -f "$source_file" ] && [ ! -L "$source_file" ] ||
+    fail 'image/bdwlan.bin not present; collect the inventory above.'
+size=$(stat -c '%s' "$source_file") || exit 1
+# Linux v6.18 WCN3990_BOARD_DATA_SZ. Other formats need explicit review.
+[ "$size" = 26328 ] || fail "Unexpected bdwlan.bin size $size; no BDF staged."
+magic=$(hexdump -n 4 -v -e '1/1 "%02x"' "$source_file") || exit 1
+[ "$magic" != 7f454c46 ] || fail 'ELF BDF requires explicit format review.'
+source_hash=$(sha256sum "$source_file") || exit 1
+source_hash=${source_hash%% *}
+cp "$source_file" "$work/board.bin" || exit 1
+copy_hash=$(sha256sum "$work/board.bin") || exit 1
+copy_hash=${copy_hash%% *}
+[ "$copy_hash" = "$source_hash" ] || fail 'BDF copy hash mismatch.'
+target="$root/lib/firmware/ath10k/WCN3990/hw1.0/board-snoc-18800000.wifi.bin"
+# initramfs supplies /lib/firmware; reject an unexpected mounted backing store.
+awk -v root="$root" '$2 == root "/lib" || $2 == root "/lib/firmware" { found = 1 }
+     END { exit found }' "$root/proc/mounts" || fail 'Firmware destination has a mounted backing store.'
+mkdir -p "${target%/*}" || exit 1
+umount "$work/mount" || fail 'Could not unmount firmware source.'
+mounted=no
+mv "$work/board.bin" "$target" || exit 1
+chmod 0644 "$target" || exit 1
+printf 'source_partition=%s\nsource_file=image/bdwlan.bin\nbytes=%s\nsha256=%s\ntarget=%s\n' \
+    "$disk" "$size" "$source_hash" "$target" > "$root/run/wifi-board-source.txt" || exit 1
+echo "WIFI BOARD: staged $size bytes in RAM, sha256=$source_hash"
+echo 'WIFI BOARD: source unmounted; ath10k API-1 fallback is ready.'

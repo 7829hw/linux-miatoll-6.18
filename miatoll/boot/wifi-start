@@ -1,0 +1,44 @@
+#!/bin/sh
+remoteproc_class=${CURTANA_REMOTEPROC_CLASS:-/sys/class/remoteproc}
+runtime_dir=${CURTANA_RUN_DIR:-/run}
+mpss=
+for rp in "$remoteproc_class"/remoteproc*; do
+    [ -r "$rp/name" ] || continue
+    [ -r "$rp/firmware" ] || continue
+    [ "$(cat "$rp/firmware")" = qcom/sm7125/miatoll/modem.mbn ] || continue
+    if [ -n "$mpss" ]; then
+        echo 'Multiple matching MPSS devices; no start requested. Run wifi-probe.'
+        exit 1
+    fi
+    mpss=$rp
+done
+if [ -z "$mpss" ]; then
+    echo 'MPSS firmware device is unavailable. Run wifi-probe.'
+    exit 1
+fi
+echo "MPSS: $mpss"
+printf 'name: '; cat "$mpss/name"
+printf 'firmware: '; cat "$mpss/firmware"
+state=$(cat "$mpss/state") || exit 1
+if [ "$state" = running ]; then
+    echo 'MPSS is already running; no start requested. Run wifi-probe.'
+    exit 0
+fi
+if [ "$state" != offline ]; then
+    echo "MPSS state is $state; no start requested. Run wifi-probe."
+    exit 1
+fi
+if command -v wifi-board >/dev/null 2>&1; then
+    wifi-board > "$runtime_dir/wifi-board.log" 2>&1
+    board_result=$?
+    cat "$runtime_dir/wifi-board.log"
+    [ "$board_result" = 0 ] || exit 1
+fi
+if command -v wifi-services >/dev/null 2>&1; then
+    wifi-services || exit 1
+fi
+printf 'disabled\n' > "$mpss/recovery" || exit 1
+echo 'MPSS automatic recovery disabled for this diagnostic start.'
+echo 'Starting MPSS; collect wifi-probe afterward.'
+printf 'start\n' > "$mpss/state" || exit 1
+printf 'state: '; cat "$mpss/state"

@@ -1,0 +1,36 @@
+#!/bin/sh
+# Observe first RF reception without choosing an AP or changing regulatory/MAC state.
+runtime_dir=${CURTANA_RUN_DIR:-/run}
+mkdir -p "$runtime_dir/wifi-scan" || exit 1
+echo '===== WIFI SCAN revision 1 ====='
+iw --version || exit 1
+iw dev wlan0 info || exit 1
+echo '===== REGULATORY STATE ====='
+iw reg get || exit 1
+echo '===== INTERFACE UP ====='
+ip link set dev wlan0 up || exit 1
+ip link show dev wlan0
+echo '===== PASSIVE SCAN (45 second limit) ====='
+timeout 45 iw dev wlan0 scan passive > "$runtime_dir/wifi-scan/full.txt" 2>&1
+scan_result=$?
+echo "scan_exit=$scan_result"
+if [ "$scan_result" = 0 ]; then
+    grep -E '^BSS |^[[:space:]]+(freq:|signal:|SSID:)' "$runtime_dir/wifi-scan/full.txt" ||
+        echo 'No BSS entries returned; full output is in /run/wifi-scan/full.txt.'
+else
+    cat "$runtime_dir/wifi-scan/full.txt"
+fi
+printf '%s\n' "$scan_result" > "$runtime_dir/wifi-scan/exit-code"
+echo '===== LINK STATE ====='
+iw dev wlan0 link
+echo '===== MPSS STATE ====='
+for rp in /sys/class/remoteproc/remoteproc*; do
+    [ -r "$rp/firmware" ] || continue
+    [ "$(cat "$rp/firmware")" = qcom/sm7125/miatoll/modem.mbn ] || continue
+    cat "$rp/state"
+done
+echo '===== WLAN / MPSS IRQS ====='
+grep -E 'WLAN_CE_|q6v5 fatal|q6v5 ready|glink-smem' /proc/interrupts
+echo '===== RECENT KERNEL LOG ====='
+dmesg | tail -n 60
+exit "$scan_result"

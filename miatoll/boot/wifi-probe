@@ -1,0 +1,45 @@
+#!/bin/sh
+echo '===== WIFI PROBE VERSION ====='
+uname -a
+echo '===== REMOTEPROC ====='
+for rp in /sys/class/remoteproc/remoteproc*; do
+    [ -r "$rp/name" ] || continue
+    echo "$rp"
+    for attr in name firmware state; do
+        printf '%s: ' "$attr"
+        cat "$rp/$attr"
+    done
+    ls -l "$rp/device" 2>/dev/null
+done
+if [ -r /run/wifi-board.log ]; then
+    echo '===== INSTALLED BOARD DATA ====='
+    cat /run/wifi-board.log
+    cat /run/wifi-board-source.txt 2>/dev/null
+fi
+echo '===== WIFI PLATFORM ====='
+for dev in /sys/bus/platform/devices/*wifi*; do
+    [ -d "$dev" ] || continue
+    echo "$dev"
+    ls -l "$dev/driver" 2>/dev/null
+done
+echo '===== NETWORK / PHY ====='
+ls /sys/class/net
+ls /sys/class/ieee80211 2>/dev/null
+echo '===== WIFI / MPSS IRQS ====='
+grep -E 'WLAN_CE_|18800000|4080000|modem|smp2p-mpss|glink|qrtr' /proc/interrupts
+echo '===== DEFERRED PROBES ====='
+cat /sys/kernel/debug/devices_deferred
+echo '===== WIFI / MPSS LOG ====='
+dmesg | grep -Ei 'ath10k|wcn|wlan|wifi|qrtr|qmi|pdm|remoteproc|mpss|modem|qcom-q6|qcom_q6|firmware|context fault' | tail -n 160
+echo '===== RECENT FULL LOG ====='
+dmesg | tail -n 80
+if command -v qrtr-lookup >/dev/null 2>&1; then
+    echo '===== QRTR SERVICES ====='
+    timeout 5 qrtr-lookup
+fi
+for service in tqftpserv rmtfs; do
+    if [ -r "/run/$service.log" ]; then
+        echo "===== $service LOG ====="
+        tail -n 100 "/run/$service.log"
+    fi
+done

@@ -1,0 +1,51 @@
+#!/bin/sh
+# Original NV partitions are read-only; the rmtfs binary uses RAM shadows.
+mkdir -p /run/rmtfs-by-label /run/tqftpserv || exit 1
+for sysdev in /sys/class/block/*; do
+    [ -r "$sysdev/uevent" ] || continue
+    label=$(sed -n 's/^PARTNAME=//p' "$sysdev/uevent")
+    case "$label" in
+        modemst1|modemst2|fsg|fsc) ;;
+        *) continue ;;
+    esac
+    disk="/dev/${sysdev##*/}"
+    [ -b "$disk" ] || exit 1
+    if [ "$(blockdev --getro "$disk")" != 1 ]; then
+        echo "NV source is not read-only: $disk ($label); no services started."
+        exit 1
+    fi
+    if [ -L "/run/rmtfs-by-label/$label" ] &&
+       [ "$(readlink "/run/rmtfs-by-label/$label")" != "$disk" ]; then
+        echo "Ambiguous NV label $label; no services started."
+        exit 1
+    fi
+    ln -sf "$disk" "/run/rmtfs-by-label/$label" || exit 1
+    echo "RMTFS source $label: $disk (read-only)"
+done
+for label in modemst1 modemst2 fsg; do
+    if [ ! -b "/run/rmtfs-by-label/$label" ]; then
+        echo "Missing NV source $label; no services started."
+        exit 1
+    fi
+done
+if [ ! -c /dev/qcom_rmtfs_mem1 ]; then
+    echo 'RMTFS shared-memory device is unavailable; no services started.'
+    exit 1
+fi
+for service in tqftpserv rmtfs; do
+    if [ -r "/run/$service.pid" ] && kill -0 "$(cat "/run/$service.pid")" 2>/dev/null; then
+        echo "$service is already active"
+        continue
+    fi
+    case "$service" in
+        tqftpserv) tqftpserv -d > /run/tqftpserv.log 2>&1 & ;;
+        rmtfs) rmtfs -r -P -o /run/rmtfs-by-label -v > /run/rmtfs.log 2>&1 & ;;
+    esac
+    echo "$!" > "/run/$service.pid"
+    sleep 1
+    if ! kill -0 "$(cat "/run/$service.pid")" 2>/dev/null; then
+        echo "$service exited; inspect /run/$service.log"
+        cat "/run/$service.log"
+        exit 1
+    fi
+done

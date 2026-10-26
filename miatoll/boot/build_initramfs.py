@@ -21,17 +21,19 @@ TOUCH_FIRMWARE = 'focaltech_ts_fw_huaxing.bin'
 TOUCH_FIRMWARE_SHA256 = '83e7fb01d3a0595984c2b701633db83db4eb71eb4fd613aa635437a768ad6c9b'
 
 def build(output, profile='boot1'):
-    assert profile in ('boot1', 'display1', 'display2', 'touch1', 'storage1', 'usb2')
+    assert profile in ('boot1', 'display1', 'display2', 'touch1', 'storage1', 'usb2', 'wifi1')
     script_names = ['init', 'usb-gadget', 'boot-probe']
     if profile != 'boot1':
         script_names += ['display-banner', 'display-probe']
-    touch = profile in ('touch1', 'storage1', 'usb2')
+    touch = profile in ('touch1', 'storage1', 'usb2', 'wifi1')
     if touch:
         script_names += ['touch-probe', 'touch-events']
-    if profile in ('storage1', 'usb2'):
+    if profile in ('storage1', 'usb2', 'wifi1'):
         script_names += ['storage-probe']
-    if profile == 'usb2':
+    if profile in ('usb2', 'wifi1'):
         script_names += ['usb-host-watch']
+    if profile == 'wifi1':
+        script_names += ['wifi-start', 'wifi-services', 'wifi-board', 'wifi-probe', 'wifi-scan']
     package = ROOT.parent / 'downloads/busybox-static-1.37.0-r20.apk'
     assert hashlib.sha256(package.read_bytes()).hexdigest() == APK_SHA256
     with tarfile.open(package, 'r:gz', ignore_zeros=True) as archive:
@@ -47,8 +49,10 @@ def build(output, profile='boot1'):
                 'blockdev', 'watchdog', 'tr', 'setsid', 'sleep', 'ln', 'ls', 'dmesg'}
     if touch:
         required |= {'hexdump', 'timeout', 'seq', 'cut', 'basename', 'readlink'}
-    if profile in ('storage1', 'usb2'):
+    if profile in ('storage1', 'usb2', 'wifi1'):
         required |= {'dd', 'sha256sum', 'sync', 'chmod', 'uniq'}
+    if profile == 'wifi1':
+        required |= {'sed', 'awk', 'mktemp', 'stat', 'mount', 'umount', 'cp', 'mv', 'rm', 'kill', 'ip'}
     with tempfile.TemporaryDirectory(prefix='boot1-busybox-') as temporary:
         executable = Path(temporary) / 'busybox'
         executable.write_bytes(binary)
@@ -91,8 +95,23 @@ def build(output, profile='boot1'):
         for name in ('lib', 'lib/firmware'):
             add(name, stat.S_IFDIR | 0o755)
         add('lib/firmware/' + TOUCH_FIRMWARE, stat.S_IFREG | 0o644, firmware)
+    wifi = {}
+    if profile == 'wifi1':
+        import wifi_payload
+        wifi, wifi_summary = wifi_payload.load(ROOT.parent)
+        made = {'lib', 'lib/firmware'}
+        for name in sorted(wifi):
+            parts = name.split('/')
+            for depth in range(1, len(parts)):
+                directory = '/'.join(parts[:depth])
+                if directory not in made and directory != 'bin':
+                    add(directory, stat.S_IFDIR | 0o755)
+                    made.add(directory)
+            data, mode = wifi[name]
+            add(name, stat.S_IFREG | mode, data)
     add('TRAILER!!!', 0)
     allowed = {'lib', 'lib/firmware', 'lib/firmware/' + TOUCH_FIRMWARE} if firmware else set()
+    allowed |= {name for name in members if name.startswith('lib/firmware/') and profile == 'wifi1'}
     assert not any(name.startswith(('lib', 'vendor/', 'system/')) and name not in allowed
                    for name in members)
     compressed = gzip.compress(stream.getvalue(), mtime=0)
@@ -102,6 +121,7 @@ def build(output, profile='boot1'):
               'arm64_static_busybox_and_shell_syntax_passed': True,
               'contains_firmware': [TOUCH_FIRMWARE] if firmware else False,
               'firmware_sha256': TOUCH_FIRMWARE_SHA256 if firmware else None,
+              'wifi_payload': wifi_summary if wifi else None,
               'contains_modules': False,
               'mounts_android_filesystems': False, 'profile': profile}
     output.with_suffix('.json').write_text(json.dumps(result, indent=2) + '\n')
