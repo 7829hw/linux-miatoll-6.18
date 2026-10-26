@@ -773,7 +773,9 @@ static const struct adreno_info a6xx_gpus[] = {
 		.quirks = ADRENO_QUIRK_HAS_CACHED_COHERENT |
 			  ADRENO_QUIRK_4GB_VA,
 		.init = a6xx_gpu_init,
+		.zapfw = "a615_zap.mbn",
 		.a6xx = &(const struct a6xx_info) {
+			.hwcg = a615_hwcg,
 			.protect = &a630_protect,
 			.gmu_cgc_mode = 0x00000222,
 			.prim_fifo_threshold = 0x00180000,
@@ -782,6 +784,7 @@ static const struct adreno_info a6xx_gpus[] = {
 			{ 0,   0 },
 			{ 169, 1 },
 			{ 174, 2 },
+			{ 159, 3 },
 		),
 	}, {
 		.machine = "qcom,sm4350",
