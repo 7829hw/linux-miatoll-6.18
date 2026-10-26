@@ -1476,7 +1476,7 @@ static const struct ov8856_lane_cfg lane_cfg_2 = {
 			.regs = mipi_data_rate_lane_2.regs_1,
 		}
 	}},
-	{{
+	{/*{
 		.width = 3280,
 		.height = 2464,
 		.hts = 1928,
@@ -1490,7 +1490,7 @@ static const struct ov8856_lane_cfg lane_cfg_2 = {
 		.link_freq_index = 0,
 		.data_lanes = 2,
 		.default_mbus_index = OV8856_MEDIA_BUS_FMT_SGRBG10_1X10,
-	},
+	},*/
 	{
 		.width = 1640,
 		.height = 1232,
@@ -1887,7 +1887,9 @@ static const struct v4l2_ctrl_ops ov8856_ctrl_ops = {
 
 static int ov8856_init_controls(struct ov8856 *ov8856)
 {
+	struct i2c_client *client = v4l2_get_subdevdata(&ov8856->sd);
 	struct v4l2_ctrl_handler *ctrl_hdlr;
+	struct v4l2_fwnode_device_properties props;
 	s64 exposure_max, h_blank;
 	int ret;
 
@@ -1955,6 +1957,15 @@ static int ov8856_init_controls(struct ov8856 *ov8856)
 		ret = ctrl_hdlr->error;
 		goto err_ctrl_handler_free;
 	}
+
+	/* Preserve firmware orientation/rotation controls and cleanup. */
+	ret = v4l2_fwnode_device_parse(&client->dev, &props);
+	if (ret)
+		goto err_ctrl_handler_free;
+
+	ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &ov8856_ctrl_ops, &props);
+	if (ret)
+		goto err_ctrl_handler_free;
 
 	ov8856->sd.ctrl_handler = ctrl_hdlr;
 
@@ -2176,9 +2187,10 @@ static int ov8856_get_format(struct v4l2_subdev *sd,
 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
 		fmt->format = *v4l2_subdev_state_get_format(sd_state,
 							    fmt->pad);
-	else
+	else {
+		fmt->format.code = ov8856_mbus_codes[ov8856->cur_mbus_index];
 		ov8856_update_pad_format(ov8856, ov8856->cur_mode, &fmt->format);
-
+	}
 	mutex_unlock(&ov8856->mutex);
 
 	return 0;

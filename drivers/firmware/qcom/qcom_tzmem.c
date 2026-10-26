@@ -83,6 +83,8 @@ static const char *const qcom_tzmem_blacklist[] = {
 	"qcom,sdm670", /* failure in GPU firmware loading */
 	"qcom,sdm845", /* reset in rmtfs memory assignment */
 	"qcom,sm7150", /* reset in rmtfs memory assignment */
+
+	"qcom,sm7125",
 	"qcom,sm8150", /* reset in rmtfs memory assignment */
 	NULL
 };

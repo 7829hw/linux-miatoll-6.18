@@ -39,6 +39,7 @@ struct dw9714_device {
 	struct v4l2_subdev sd;
 	u16 current_val;
 	struct regulator *vcc;
+	struct regulator *vin;
 	struct gpio_desc *powerdown_gpio;
 };
 
@@ -143,9 +144,18 @@ static int dw9714_power_up(struct dw9714_device *dw9714_dev)
 {
 	int ret;
 
+	if (dw9714_dev->vin) {
+		ret = regulator_enable(dw9714_dev->vin);
+		if (ret)
+			return ret;
+	}
+
 	ret = regulator_enable(dw9714_dev->vcc);
-	if (ret)
+	if (ret) {
+		if (dw9714_dev->vin)
+			regulator_disable(dw9714_dev->vin);
 		return ret;
+	}
 
 	gpiod_set_value_cansleep(dw9714_dev->powerdown_gpio, 0);
 
@@ -156,9 +166,15 @@ static int dw9714_power_up(struct dw9714_device *dw9714_dev)
 
 static int dw9714_power_down(struct dw9714_device *dw9714_dev)
 {
+	int ret, vin_ret = 0;
+
 	gpiod_set_value_cansleep(dw9714_dev->powerdown_gpio, 1);
 
-	return regulator_disable(dw9714_dev->vcc);
+	ret = regulator_disable(dw9714_dev->vcc);
+	if (dw9714_dev->vin)
+		vin_ret = regulator_disable(dw9714_dev->vin);
+
+	return ret ?: vin_ret;
 }
 
 static int dw9714_probe(struct i2c_client *client)
@@ -174,6 +190,14 @@ static int dw9714_probe(struct i2c_client *client)
 	dw9714_dev->vcc = devm_regulator_get(&client->dev, "vcc");
 	if (IS_ERR(dw9714_dev->vcc))
 		return PTR_ERR(dw9714_dev->vcc);
+
+	dw9714_dev->vin = devm_regulator_get_optional(&client->dev, "vin");
+	if (IS_ERR(dw9714_dev->vin)) {
+		if (PTR_ERR(dw9714_dev->vin) != -ENODEV)
+			return dev_err_probe(&client->dev, PTR_ERR(dw9714_dev->vin),
+					     "could not get vin supply\n");
+		dw9714_dev->vin = NULL;
+	}
 
 	dw9714_dev->powerdown_gpio = devm_gpiod_get_optional(&client->dev,
 							     "powerdown",

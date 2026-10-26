@@ -396,6 +396,7 @@ static const struct qcom_pdm_domain_data *sc7180_domains[] = {
 	&adsp_audio_pd,
 	&adsp_root_pd_pdr,
 	&adsp_sensor_pd,
+	&cdsp_root_pd,
 	&mpss_root_pd_gps_pdr,
 	&mpss_wlan_pd,
 	NULL,
@@ -576,6 +577,8 @@ static const struct of_device_id qcom_pdm_domains[] __maybe_unused = {
 	{ .compatible = "qcom,sm6115", .data = sm6115_domains, },
 	{ .compatible = "qcom,sm6350", .data = sm6350_domains, },
 	{ .compatible = "qcom,sm7150", .data = sm7150_domains, },
+
+	{ .compatible = "qcom,sm7125", .data = sc7180_domains, },
 	{ .compatible = "qcom,sm7225", .data = sm6350_domains, },
 	{ .compatible = "qcom,sm7325", .data = sc7280_domains, },
 	{ .compatible = "qcom,sm8150", .data = sm8150_domains, },
