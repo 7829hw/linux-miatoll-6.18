@@ -638,6 +638,9 @@ struct ath10k_hw_params {
 
 	/* The hardware support multicast frame registrations */
 	bool mcast_frame_registration;
+
+	/* PMF peer flag is supported even without the firmware feature bit. */
+	bool peer_pmf_support;
 };
 
 struct htt_resp;
