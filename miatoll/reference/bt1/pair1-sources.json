@@ -1,0 +1,17 @@
+{
+  "kernel_reference": "Linux v6.18; no kernel, DTB, image or firmware changes for RAM pairing tool",
+  "management_references": {
+    "linux-6.18/include/net/bluetooth/mgmt.h": "d7d8afc38cd6761d4df87b4ad4b55eeef00881fbcf6f32b913febb368c942798",
+    "linux-6.18/net/bluetooth/mgmt.c": "2cc16b3da4a9e8e0f48c6693308b59bb6457045e5d4a33d8c0b7ac5ee38745c7"
+  },
+  "source_sha256": {
+    "userspace/btctl/btctl.c": "2cb71ce4565c3f5362c380f1b8167c082a600f7cda4bfc1d649cc0865bf6c088",
+    "scripts/build-btctl.py": "8ad07d06d2f2f350c64d053bcce642cc9fc2293f750a693acce91c1d757c2392",
+    "scripts/package-btctl-ram.py": "967e029360d96c6adf7e5a399cb25b525a78f9a02d0f979e74d1cc3af0063d75",
+    "tests/test_btctl.py": "7311f1c9064e5691f6bed8c49a3fc2c59913d109474f000b2659f7cd4fbf98a4",
+    "tests/test_btctl_pair.py": "56e74a1501b6bf9746fd35b3a8e96fbb6c37c90fa8df4249a4f99f6a2f0fc55a"
+  },
+  "previous_sources": "reference/bluetooth/scan1-source-snapshot/sources.json",
+  "target_from_direct_user_reply": "Galaxy Buds Pro, first generation",
+  "device_address_identified": false
+}

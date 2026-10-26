@@ -1,0 +1,37 @@
+#!/bin/sh
+set -u
+echo '===== BT PROBE ====='
+uname -a
+echo '===== BLUETOOTH CONTROLLERS ====='
+ls -l /sys/class/bluetooth 2>/dev/null || :
+for dev in /sys/class/bluetooth/hci*; do
+    [ -e "$dev" ] || continue
+    echo "$dev"
+    for attr in address name; do
+        [ -r "$dev/$attr" ] && { printf '%s: ' "$attr"; cat "$dev/$attr"; }
+    done
+done
+echo '===== MANAGEMENT INFO ====='
+timeout -k 3 8 btctl info
+echo "info_exit=$?"
+echo '===== UART / SERDEV ====='
+ls -l /sys/bus/serial/devices /sys/bus/serial/drivers/hci_uart_qca 2>/dev/null || :
+ls -l /sys/bus/platform/devices/88c000.serial/driver 2>/dev/null || :
+echo '===== RFKILL ====='
+for dev in /sys/class/rfkill/rfkill*; do
+    [ -e "$dev" ] || continue
+    echo "$dev"
+    for attr in name type soft hard; do
+        printf '%s: ' "$attr"; cat "$dev/$attr" 2>/dev/null || :
+    done
+done
+echo '===== BT START RESULT ====='
+cat "${CURTANA_RUN_DIR:-/run}/bt-start.log" 2>/dev/null || :
+echo '===== UART / SWCTRL GPIO ====='
+grep -E 'gpio-?(38|39|40|41|73)[[:space:]:]' /sys/kernel/debug/gpio 2>/dev/null || :
+echo '===== SERIAL INTERRUPTS ====='
+grep -Ei '88c000|geni.*serial|uart|bluetooth' /proc/interrupts || :
+echo '===== DEFERRED PROBES ====='
+cat /sys/kernel/debug/devices_deferred 2>/dev/null || :
+echo '===== BLUETOOTH LOG ====='
+dmesg | grep -Ei 'Bluetooth|hci[0-9]|qca|88c000|firmware|serdev' | tail -n 110

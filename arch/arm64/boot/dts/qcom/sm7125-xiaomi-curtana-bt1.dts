@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0
+// WCN3991 Bluetooth over UART3 on top of the verified wifi3 RAM test.
+#include "sm7125-xiaomi-curtana-wifi3.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing bt1 test)";
+	chosen {
+		miatoll,boot-profile = "bt1-ram-only";
+	};
+};
+
+// Restore the common-board QUP0 wrapper and UART3 with its Bluetooth node.
+&qupv3_id_0 { status = "okay"; };
+&uart3 { status = "okay"; };

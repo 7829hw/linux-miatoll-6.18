@@ -1,0 +1,25 @@
+#!/bin/sh
+# Manual power-on; optionally fill a missing identity for this diagnostic boot.
+set -u
+case "${1:-}" in
+    '') test_address=no ;;
+    --test-address) [ "$#" -eq 1 ] || exit 1; test_address=yes ;;
+    *) echo 'usage: bt-start [--test-address]' >&2; exit 1 ;;
+esac
+run=${CURTANA_RUN_DIR:-/run}
+mkdir -p "$run"
+for dev in /sys/class/rfkill/rfkill*; do
+    [ -r "$dev/type" ] || continue
+    [ "$(cat "$dev/type")" = bluetooth ] || continue
+    printf '0\n' > "$dev/soft" || exit 1
+done
+(
+    if [ "$test_address" = yes ]; then
+        timeout -k 3 35 btctl configure-test || exit "$?"
+    fi
+    timeout -k 3 30 btctl power-on
+) > "$run/bt-start.log" 2>&1
+result=$?
+cat "$run/bt-start.log"
+echo "bt_start_exit=$result"
+exit "$result"

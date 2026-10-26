@@ -1,0 +1,37 @@
+{
+  "package": "linux-firmware-qca-20250509-r0.apk",
+  "url": "https://dl-cdn.alpinelinux.org/alpine/v3.22/main/aarch64/linux-firmware-qca-20250509-r0.apk",
+  "package_sha256": "5b26191c5e3bba0899d6c178ce159066c52f6eac10bb404965db4afdb37d05b9",
+  "control_index_checksum_verified": true,
+  "datahash_verified": true,
+  "upstream_ref": "20250509",
+  "license_source_base": "https://kernel.googlesource.com/pub/scm/linux/kernel/git/firmware/linux-firmware/+/refs/tags/20250509/",
+  "licenses_sha256": {
+    "LICENSE.QualcommAtheros_ath10k": "337a55102138d7baa143ee4a4c6c91693e0113fece35d380b2a12109e8c23b3f",
+    "NOTICE.txt": "600276e0992c8e5a85300d605fb2db6132ffcf2a21ddcfd0e8566a19e0f491c3"
+  },
+  "files": {
+    "lib/firmware/qca/crbtfw21.tlv": {
+      "bytes": 177060,
+      "sha256": "62ce092b55e5d4bd511a637b3d8b5d56bc9fb39b5fa9639ea0a54f161daff144"
+    },
+    "lib/firmware/qca/crbtfw32.tlv": {
+      "bytes": 117664,
+      "sha256": "4912682905b3650f31ada8f4cea31d65c9ff1659f479824ae6f2ee9ae55f1f26"
+    },
+    "lib/firmware/qca/crnv21.bin": {
+      "bytes": 4587,
+      "sha256": "274ac49ab207200629a4324cd9665184fc9339618c0ee78fa978f86bab20cfcd"
+    },
+    "lib/firmware/qca/crnv32.bin": {
+      "bytes": 5407,
+      "sha256": "eb860dc1020a48dc437c904b5ad6945e3fa114bb94f893b9634dc85868435616"
+    },
+    "lib/firmware/qca/crnv32u.bin": {
+      "bytes": 5407,
+      "sha256": "9577e673475f1324ffa137201e067b5269aa7b9d1036b52d85fe0c1e07edbdd7"
+    }
+  },
+  "renamed_or_aliased_firmware": false,
+  "hardware_compatibility_verified": false
+}
