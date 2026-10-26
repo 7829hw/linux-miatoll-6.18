@@ -30,12 +30,12 @@ LE device address=<addr> type=2 rssi=-49 flags=0x00000004
 LE device address=<addr> type=2 rssi=-100 flags=0x00000000
 LE device address=<addr> type=2 rssi=-72 flags=0x00000000
 LE device address=<addr> type=2 rssi=-89 flags=0x00000000
-LE device address=<addr> type=2 rssi=-87 flags=0x00000000 name=<redacted>
+LE device address=<addr> type=2 rssi=-87 flags=0x00000000 name="<redacted>"
 LE device address=<addr> type=2 rssi=-48 flags=0x00000004
 LE device address=<addr> type=1 rssi=-62 flags=0x00000000
-LE device address=<addr> type=2 rssi=-96 flags=0x00000000 name=<redacted>
+LE device address=<addr> type=2 rssi=-96 flags=0x00000000 name="<redacted>"
 LE device address=<addr> type=2 rssi=-60 flags=0x00000000
-LE device address=<addr> type=2 rssi=-85 flags=0x00000004 name=<redacted>
+LE device address=<addr> type=2 rssi=-85 flags=0x00000004 name="<redacted>"
 LE device address=<addr> type=2 rssi=-89 flags=0x00000000
 LE device address=<addr> type=2 rssi=-82 flags=0x00000020
 LE device address=<addr> type=2 rssi=-88 flags=0x00000020
@@ -62,11 +62,11 @@ configured_controllers=1 unconfigured_controllers=0
 BR/EDR discovery started for 20 seconds
 BR/EDR device address=<addr> type=0 rssi=-80 flags=0x00000001
 BR/EDR device address=<addr> type=0 rssi=-85 flags=0x00000001
-BR/EDR device address=<addr> type=0 rssi=-78 flags=0x00000000 name=<redacted>
+BR/EDR device address=<addr> type=0 rssi=-78 flags=0x00000000 name="<redacted>"
 BR/EDR device address=<addr> type=0 rssi=-100 flags=0x00000001
-BR/EDR device address=<addr> type=0 rssi=-84 flags=0x00000000 name=<redacted>
-BR/EDR device address=<addr> type=0 rssi=-83 flags=0x00000000 name=<redacted>
-BR/EDR device address=<addr> type=0 rssi=-83 flags=0x00000000 name=<redacted>
+BR/EDR device address=<addr> type=0 rssi=-84 flags=0x00000000 name="<redacted>"
+BR/EDR device address=<addr> type=0 rssi=-83 flags=0x00000000 name="<redacted>"
+BR/EDR device address=<addr> type=0 rssi=-83 flags=0x00000000 name="<redacted>"
 BR/EDR discovery reports=7
 scan_classic_exit=0
 mgmt_version=1 revision=23
@@ -86,4 +86,64 @@ info_exit=0
 [   28.303033] Bluetooth: hci0: QCA setup on UART is completed
 
 STEP_DONE_035051=0
+miatoll-bt1# [6n
+### 2026-10-27T03:53:37 pair-scan-classic
+$ timeout -k 3 30 btctl scan-classic; echo "scan_exit=$?"; btctl connections; btctl info
+timeout -k 3 30 btctl scan-classic; echo "scan_exit=$?"; btctl conn
+ections; btctl info; printf "\nSTEP_DONE_035322=%s\n" "$?"
+mgmt_version=1 revision=23
+configured_controllers=1 unconfigured_controllers=0
+BR/EDR discovery started for 20 seconds
+BR/EDR device address=<addr> type=0 rssi=-92 flags=0x00000001 name="<redacted>"
+BR/EDR device address=<addr> type=0 rssi=-63 flags=0x00000001
+BR/EDR device address=<addr> type=0 rssi=-89 flags=0x00000001
+BR/EDR device address=<addr> type=0 rssi=-100 flags=0x00000001
+BR/EDR device address=<addr> type=0 rssi=-57 flags=0x00000000 name="Galaxy Buds Pro (<redacted>)"
+BR/EDR device address=<addr> type=0 rssi=-78 flags=0x00000000 name="<redacted>"
+BR/EDR device address=<addr> type=0 rssi=-100 flags=0x00000010
+BR/EDR discovery reports=7
+scan_exit=0
+mgmt_version=1 revision=23
+configured_controllers=1 unconfigured_controllers=0
+connections=0
+mgmt_version=1 revision=23
+configured_controllers=1 unconfigured_controllers=0
+hci0 address=<addr> version=10 manufacturer=29
+supported_settings=0x01c3feff current_settings=0x00000081 powered=1 le_enabled=0 bredr_enabled=1
+ssp_enabled=0
+name=
+
+STEP_DONE_035322=0
+miatoll-bt1# [6n
+### 2026-10-27T03:53:52 pair-classic
+$ timeout -k 3 60 btctl pair-classic <addr>; echo "pair_exit=$?"; sleep 3; btctl connections; btctl info; dmesg | grep -iE 'Bluetooth|hci0' | tail -6
+timeout -k 3 60 btctl pair-classic <addr>; echo "pair_ex
+it=$?"; sleep 3; btctl connections; btctl info; dmesg | grep -iE 'Bluetooth|hci0
+' | tail -6; printf "\nSTEP_DONE_035348=%s\n" "$?"
+mgmt_version=1 revision=23
+configured_controllers=1 unconfigured_controllers=0
+ssp_enabled=1 (retained for this boot)
+pairing_target=<addr> type=0 timeout_seconds=45
+pairing_complete=1
+connections=1
+connected address=<addr> type=0
+paired_target_connected=1
+pair_exit=0
+mgmt_version=1 revision=23
+configured_controllers=1 unconfigured_controllers=0
+connections=0
+mgmt_version=1 revision=23
+configured_controllers=1 unconfigured_controllers=0
+hci0 address=<addr> version=10 manufacturer=29
+supported_settings=0x01c3feff current_settings=0x000000c1 powered=1 le_enabled=0 bredr_enabled=1
+ssp_enabled=1
+name=
+[   27.437290] Bluetooth: hci0: QCA ROM Version  :0x00000302
+[   27.437346] Bluetooth: hci0: QCA Patch Version:0x00000de9
+[   27.448548] Bluetooth: hci0: QCA controller version 0x03200302
+[   27.448638] Bluetooth: hci0: QCA Downloading qca/crbtfw32.tlv
+[   27.978348] Bluetooth: hci0: QCA Downloading qca/crnv32.bin
+[   28.303033] Bluetooth: hci0: QCA setup on UART is completed
+
+STEP_DONE_035348=0
 miatoll-bt1# [6n

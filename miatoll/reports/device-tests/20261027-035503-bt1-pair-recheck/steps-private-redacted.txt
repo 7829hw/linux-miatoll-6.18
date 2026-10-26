@@ -1,0 +1,84 @@
+### 2026-10-27T03:55:41 bt-start
+$ sleep 3; bt-start --test-address | grep -E "powered|bt_start_exit|temporary"
+sleep 3; bt-start --test-address | grep -E "powered|bt_start_exit|t
+emporary"; printf "\nSTEP_DONE_035536=%s\n" "$?"
+temporary_test_address=<addr> (current boot only; not factory address)
+supported_settings=0x01c3feff current_settings=0x00000080 powered=0 le_enabled=0 bredr_enabled=1
+supported_settings=0x01c3feff current_settings=0x00000081 powered=1 le_enabled=0 bredr_enabled=1
+bt_start_exit=0
+
+STEP_DONE_035536=0
+miatoll-bt1# [6n
+### 2026-10-27T03:56:23 pair-scan-classic
+$ timeout -k 3 30 btctl scan-classic; echo "scan_exit=$?"
+timeout -k 3 30 btctl scan-classic; echo "scan_exit=$?"; printf "\n
+STEP_DONE_035603=%s\n" "$?"
+mgmt_version=1 revision=23
+configured_controllers=1 unconfigured_controllers=0
+BR/EDR discovery started for 20 seconds
+BR/EDR device address=<addr> type=0 rssi=-100 flags=0x00000001
+BR/EDR device address=<addr> type=0 rssi=-61 flags=0x00000001
+BR/EDR device address=<addr> type=0 rssi=-82 flags=0x00000001
+BR/EDR device address=<addr> type=0 rssi=-61 flags=0x00000010
+BR/EDR device address=<addr> type=0 rssi=-82 flags=0x00000000 name="<redacted>"
+BR/EDR discovery reports=5
+scan_exit=0
+
+STEP_DONE_035603=0
+miatoll-bt1# [6n
+### 2026-10-27T03:57:13 pair-scan-classic-2
+$ timeout -k 3 30 btctl scan-classic; echo "scan_exit=$?"
+timeout -k 3 30 btctl scan-classic; echo "scan_exit=$?"; printf "\n
+STEP_DONE_035659=%s\n" "$?"
+mgmt_version=1 revision=23
+configured_controllers=1 unconfigured_controllers=0
+BR/EDR discovery started for 20 seconds
+BR/EDR device address=<addr> type=0 rssi=-53 flags=0x00000000 name="Galaxy Buds Pro (<redacted>)"
+BR/EDR device address=<addr> type=0 rssi=-90 flags=0x00000001
+BR/EDR device address=<addr> type=0 rssi=-86 flags=0x00000001
+BR/EDR device address=<addr> type=0 rssi=-90 flags=0x00000000 name="<redacted>"
+BR/EDR device address=<addr> type=0 rssi=-85 flags=0x00000000 name="<redacted>"
+BR/EDR device address=<addr> type=0 rssi=-46 flags=0x00000001
+BR/EDR device address=<addr> type=0 rssi=-48 flags=0x00000000 name="<redacted>"
+BR/EDR device address=<addr> type=0 rssi=-82 flags=0x00000000 name="<redacted>"
+BR/EDR device address=<addr> type=0 rssi=-90 flags=0x00000000 name="<redacted>"
+BR/EDR discovery reports=9
+scan_exit=0
+
+STEP_DONE_035659=0
+miatoll-bt1# [6n
+### 2026-10-27T03:57:22 pair-classic
+$ timeout -k 3 60 btctl pair-classic <addr>; echo "pair_exit=$?"; i=0; while [ $i -lt 6 ]; do sleep 1; i=$((i+1)); echo "t=${i}s $(btctl connections | head -n 1)"; done
+timeout -k 3 60 btctl pair-classic <addr>; echo "pair_ex
+it=$?"; i=0; while [ $i -lt 6 ]; do sleep 1; i=$((i+1)); echo "t=${i}s $(btctl c
+onnections | head -n 1)"; done; printf "\nSTEP_DONE_035715=%s\n" "$?"
+mgmt_version=1 revision=23
+configured_controllers=1 unconfigured_controllers=0
+ssp_enabled=1 (retained for this boot)
+pairing_target=<addr> type=0 timeout_seconds=45
+pairing_complete=1
+connections=1
+connected address=<addr> type=0
+paired_target_connected=1
+pair_exit=0
+t=1s mgmt_version=1 revision=23
+t=2s mgmt_version=1 revision=23
+t=3s mgmt_version=1 revision=23
+t=4s mgmt_version=1 revision=23
+t=5s mgmt_version=1 revision=23
+t=6s mgmt_version=1 revision=23
+
+STEP_DONE_035715=0
+miatoll-bt1# [6n
+### 2026-10-27T03:57:34 connections-after
+$ btctl connections | grep -E "^connections="; dmesg | grep -iE "Bluetooth|hci0" | tail -4
+btctl connections | grep -E "^connections="; dmesg | grep -iE "Blue
+tooth|hci0" | tail -4; printf "\nSTEP_DONE_035734=%s\n" "$?"
+connections=0
+[   11.838936] Bluetooth: hci0: QCA controller version 0x03200302
+[   11.839134] Bluetooth: hci0: QCA Downloading qca/crbtfw32.tlv
+[   12.364732] Bluetooth: hci0: QCA Downloading qca/crnv32.bin
+[   12.685054] Bluetooth: hci0: QCA setup on UART is completed
+
+STEP_DONE_035734=0
+miatoll-bt1# [6n

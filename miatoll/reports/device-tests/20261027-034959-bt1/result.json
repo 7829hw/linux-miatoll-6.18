@@ -62,8 +62,8 @@
       "sha256": "a059091aabaeb086f1d5f3c6f784d7850034b54e09675384ea78e1dfff04a75c"
     },
     "steps-private-redacted.txt": {
-      "bytes": 4806,
-      "sha256": "e2d61aae4d9e32df07fe90df6d87aed959bddd6b8808585a6f02da3402170a10"
+      "bytes": 7580,
+      "sha256": "7aac5b143c77d163397de569b8160a685138fb55c343e25a08444815b9b8efd8"
     },
     "steps.txt": {
       "bytes": 5416,
@@ -73,14 +73,18 @@
   "private_logs": {
     "kept_outside_git": "dist/miatoll-bt1/private-logs/steps.txt",
     "sha256": "a9a6c6b192a73f9b88453118f4caf78d6a3d21d3ec552ba8be038d2ef0a63d15",
-    "committed_copy": "steps-private-redacted.txt (device addresses and names removed)"
+    "committed_copy": "steps-private-redacted.txt (device addresses and names removed)",
+    "pairing": {
+      "kept_outside_git": "dist/miatoll-bt1/private-logs/steps.txt",
+      "sha256": "bb18ecca2806bc904183fb682112e0d403ac3dd6a195a84f41a067445650d3bf"
+    }
   },
   "bluetooth_confirmed": {
     "uart_serdev_and_firmware": true,
     "temporary_address_and_power_on": true,
     "le_scan": true,
     "bredr_scan": true,
-    "pairing": false
+    "pairing": true
   },
   "bluetooth": {
     "controller": "QCA product 0x0a, SOC 0x40010320, ROM 0x0302, patch 0x0de9; crbtfw32.tlv + crnv32.bin; setup completed at 1.49 s",
@@ -107,5 +111,19 @@
       ]
     },
     "btctl": "curtana btctl revision 4 (da00bdee…)"
+  },
+  "step_observations": {
+    "pair-classic": {
+      "screen": "user asked to re-check; earbuds reaction not yet confirmed",
+      "backlight": "on",
+      "notes": "pairing_complete=1, paired_target_connected=1 immediately, connections=0 after 3 s"
+    }
+  },
+  "bluetooth_pairing": {
+    "pair_attempt": "first boot: pairing_complete=1, paired_target_connected=1 immediately, connections=0 after 3 s",
+    "target": "Galaxy Buds Pro (user-selected), BR/EDR, Just Works via btctl rev 4 pair-classic",
+    "link_key": "kernel RAM only; not printed or stored",
+    "audible_confirmation": false,
+    "interpretation": "base ACL link only (no A2DP/HFP); idle link dropped after ~2 s, consistent with HCI_DISCONN_TIMEOUT; disconnect reason not captured"
   }
 }
