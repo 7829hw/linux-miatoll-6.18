@@ -1,0 +1,65 @@
+0ff84da2669f5b2206de9c2880265e79a90d3dc9
+100644 01e727b021ec587f7b3384f7301620a21ddef281 1	arch/arm64/boot/dts/qcom/sc7180.dtsi
+100644 dc96d3d5e943be887088791df3e941ba42a04b40 2	arch/arm64/boot/dts/qcom/sc7180.dtsi
+100644 60de24fa4a578cde0013f1b3f29db9fea74f146b 3	arch/arm64/boot/dts/qcom/sc7180.dtsi
+100644 714cbac830e3f0be3659f1907c5dbacef863bbd8 1	drivers/gpu/drm/panel/Makefile
+100644 3615a761b44f9de0b4a653be157d8e0bcbc8f6b7 2	drivers/gpu/drm/panel/Makefile
+100644 a505cfe7d971599e0d923785393cc9cdfd4ccf76 3	drivers/gpu/drm/panel/Makefile
+100644 f5496ca0c0d2bfcb7968503ccd1844ff43bbc1c0 1	drivers/input/misc/Kconfig
+100644 cc2558630797e6913b6f2f76d7047e95b3a2fd5c 2	drivers/input/misc/Kconfig
+100644 b44a1026e491ba727e031e9502a9f3024a7b5c06 3	drivers/input/misc/Kconfig
+100644 6d91804d0a6f761a094e6c380f878f74c3054d63 1	drivers/input/misc/Makefile
+100644 f5ebfa9d99831436dc1c0ad982b60921035dce77 2	drivers/input/misc/Makefile
+100644 99db19d1e43e44d7e8ae378ec7b3fd17d69064eb 3	drivers/input/misc/Makefile
+100644 2ddd7daa79e28a2cde915b4173fa27e60d5a2b57 1	drivers/media/i2c/dw9714.c
+100644 3288de539452ebae41daa0988b2d52f27a790da7 2	drivers/media/i2c/dw9714.c
+100644 40728f6b45895cc9dbe713300959894fbc71f6c3 3	drivers/media/i2c/dw9714.c
+100644 4b6874d2a104ad4858349e6dee67f5e34318c18b 1	drivers/media/i2c/ov8856.c
+100644 dd01e1d515ff6d715de3dc4676365ad680ff4117 2	drivers/media/i2c/ov8856.c
+100644 8e7c851f7292b0434a72b5c44ffcd2785b028611 3	drivers/media/i2c/ov8856.c
+100644 f732a76de93e3e7b787d9553bf7f31e6c0596c58 1	drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+100644 a229ba04b158739ddfe4076bdd28167a309f13ea 2	drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+100644 e0790035d41ba1de2d80881c8489d03f7cf7948d 3	drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+100644 4bca6c3abaff9b898ea879674a3ff8f3592d3139 1	drivers/media/platform/qcom/camss/camss-vfe.c
+100644 20e0d6604fa936990b84334f152d8b2a660b131d 2	drivers/media/platform/qcom/camss/camss-vfe.c
+100644 8239f527a901fee8538883bdcd9c403c1cb67d51 3	drivers/media/platform/qcom/camss/camss-vfe.c
+100644 06f42875702f02f9d8d83d06ddaa972eacb593f8 1	drivers/media/platform/qcom/camss/camss.c
+100644 c1148f6ad6b2654ef4306d8468fc316270a7d9d2 2	drivers/media/platform/qcom/camss/camss.c
+100644 ab0fc46707dcb97fa7a15a21fb4a1eefb8a2d5fd 3	drivers/media/platform/qcom/camss/camss.c
+100644 63c0afee154a02194820016ccf554620d6521c8b 1	drivers/media/platform/qcom/camss/camss.h
+100644 a70fbc78ccc307c0abc2f3c834fb1e2dafd83c6b 2	drivers/media/platform/qcom/camss/camss.h
+100644 b21ea95551a460567940b75322aef6638d7c91eb 3	drivers/media/platform/qcom/camss/camss.h
+
+Auto-merging arch/arm64/boot/dts/qcom/Makefile
+Auto-merging arch/arm64/boot/dts/qcom/sc7180.dtsi
+CONFLICT (content): Merge conflict in arch/arm64/boot/dts/qcom/sc7180.dtsi
+Auto-merging drivers/cpufreq/cpufreq-dt-platdev.c
+Auto-merging drivers/firmware/qcom/qcom_tzmem.c
+Auto-merging drivers/gpu/drm/msm/adreno/a6xx_catalog.c
+Auto-merging drivers/gpu/drm/panel/Kconfig
+Auto-merging drivers/gpu/drm/panel/Makefile
+CONFLICT (content): Merge conflict in drivers/gpu/drm/panel/Makefile
+Auto-merging drivers/input/misc/Kconfig
+CONFLICT (content): Merge conflict in drivers/input/misc/Kconfig
+Auto-merging drivers/input/misc/Makefile
+CONFLICT (content): Merge conflict in drivers/input/misc/Makefile
+Auto-merging drivers/input/touchscreen/Kconfig
+Auto-merging drivers/input/touchscreen/Makefile
+Auto-merging drivers/media/i2c/Kconfig
+Auto-merging drivers/media/i2c/Makefile
+Auto-merging drivers/media/i2c/dw9714.c
+CONFLICT (content): Merge conflict in drivers/media/i2c/dw9714.c
+Auto-merging drivers/media/i2c/ov8856.c
+CONFLICT (content): Merge conflict in drivers/media/i2c/ov8856.c
+Auto-merging drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+CONFLICT (content): Merge conflict in drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+Auto-merging drivers/media/platform/qcom/camss/camss-vfe.c
+CONFLICT (content): Merge conflict in drivers/media/platform/qcom/camss/camss-vfe.c
+Auto-merging drivers/media/platform/qcom/camss/camss.c
+CONFLICT (content): Merge conflict in drivers/media/platform/qcom/camss/camss.c
+Auto-merging drivers/media/platform/qcom/camss/camss.h
+CONFLICT (content): Merge conflict in drivers/media/platform/qcom/camss/camss.h
+Auto-merging drivers/power/supply/Kconfig
+Auto-merging drivers/power/supply/Makefile
+Auto-merging drivers/soc/qcom/qcom_pd_mapper.c
+Auto-merging drivers/video/backlight/qcom-wled.c

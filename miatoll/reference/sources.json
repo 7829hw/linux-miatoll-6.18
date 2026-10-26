@@ -1,0 +1,61 @@
+{
+  "kernel_commit": "803b55865869df8558ef07f51bfb8182d95d08ed",
+  "device_commit": "45b3b7dab47ac792be975fb7623f03268c4a6dc2",
+  "files": [
+    {
+      "path": "vendor-4.14/include/uapi/linux/android/binder.h",
+      "git_blob": "74e69740580abdcbdbad7405ea1c6a2986af0b36",
+      "url": "https://github.com/LineageOS/android_kernel_xiaomi_sm6250/blob/803b55865869df8558ef07f51bfb8182d95d08ed/include/uapi/linux/android/binder.h"
+    },
+    {
+      "path": "vendor-4.14/include/uapi/linux/msm_ipa.h",
+      "git_blob": "c6c47e59ff4f37b2b304aa0c61d1476cbab41050",
+      "url": "https://github.com/LineageOS/android_kernel_xiaomi_sm6250/blob/803b55865869df8558ef07f51bfb8182d95d08ed/include/uapi/linux/msm_ipa.h"
+    },
+    {
+      "path": "vendor-4.14/include/uapi/linux/msm_kgsl.h",
+      "git_blob": "25a18bd4becd531104c866da2eb1236459aa2404",
+      "url": "https://github.com/LineageOS/android_kernel_xiaomi_sm6250/blob/803b55865869df8558ef07f51bfb8182d95d08ed/include/uapi/linux/msm_kgsl.h"
+    },
+    {
+      "path": "vendor-4.14/include/uapi/linux/ion.h",
+      "git_blob": "17e8dbb24265d796b03846ac233e3b909d16feed",
+      "url": "https://github.com/LineageOS/android_kernel_xiaomi_sm6250/blob/803b55865869df8558ef07f51bfb8182d95d08ed/include/uapi/linux/ion.h"
+    },
+    {
+      "path": "vendor-4.14/atoll-perf_defconfig",
+      "git_blob": "50c25a6b3e61450ca71df9ae3573a3562982ef6c",
+      "url": "https://github.com/LineageOS/android_kernel_xiaomi_sm6250/blob/803b55865869df8558ef07f51bfb8182d95d08ed/arch/arm64/configs/vendor/atoll-perf_defconfig"
+    },
+    {
+      "path": "device/ueventd.qcom.rc",
+      "git_blob": "181a66432454e958e0dcec9bcbbe0c320be5c8b0",
+      "url": "https://github.com/LineageOS/android_device_xiaomi_sm6250-common/blob/45b3b7dab47ac792be975fb7623f03268c4a6dc2/rootdir/etc/ueventd.qcom.rc"
+    },
+    {
+      "path": "device/init.qcom.rc",
+      "git_blob": "3d74bfccb10f61a80729259c84fd14b55d3170ef",
+      "url": "https://github.com/LineageOS/android_device_xiaomi_sm6250-common/blob/45b3b7dab47ac792be975fb7623f03268c4a6dc2/rootdir/etc/init.qcom.rc"
+    },
+    {
+      "path": "device/init.target.rc",
+      "git_blob": "34c6d5c672a6351abb32e69acb6c6fc474c5c806",
+      "url": "https://github.com/LineageOS/android_device_xiaomi_sm6250-common/blob/45b3b7dab47ac792be975fb7623f03268c4a6dc2/rootdir/etc/init.target.rc"
+    },
+    {
+      "path": "device/fstab.qcom",
+      "git_blob": "fe95b4b615134ff181418afef482bba41dad874c",
+      "url": "https://github.com/LineageOS/android_device_xiaomi_sm6250-common/blob/45b3b7dab47ac792be975fb7623f03268c4a6dc2/rootdir/etc/fstab.qcom"
+    },
+    {
+      "path": "device/BoardConfigCommon.mk",
+      "git_blob": "7e140e802c984da76985cc5bf0032e0766cd6909",
+      "url": "https://github.com/LineageOS/android_device_xiaomi_sm6250-common/blob/lineage-22.2/BoardConfigCommon.mk"
+    },
+    {
+      "path": "device/proprietary-files.txt",
+      "git_blob": "91b2b133175bfaf7ccf3753cacbf83a8666097f4",
+      "url": "https://github.com/LineageOS/android_device_xiaomi_sm6250-common/blob/lineage-22.2/proprietary-files.txt"
+    }
+  ]
+}
