@@ -1,0 +1,31 @@
+#!/bin/sh
+runtime=${CURTANA_RUN_DIR:-/run}
+echo '===== WIFI LINK PROBE ====='
+uname -a
+echo '===== AUTHENTICATION STATUS ====='
+wpa_cli -p "$runtime/wpa_supplicant" -i wlan0 status
+echo '===== LINK ====='
+iw dev wlan0 link
+ip addr show dev wlan0
+ip route show dev wlan0
+echo '===== REGULATORY STATE ====='
+iw reg get
+for file in status.txt lease.txt dhcp.log; do
+    if [ -r "$runtime/wifi-connect/$file" ]; then
+        echo "===== $file ====="
+        cat "$runtime/wifi-connect/$file"
+    fi
+done
+if [ -r "$runtime/wifi-connect/wpa.log" ]; then
+    echo '===== WPA LOG ====='
+    tail -n 80 "$runtime/wifi-connect/wpa.log"
+fi
+echo '===== MPSS / WLAN IRQS ====='
+for rp in /sys/class/remoteproc/remoteproc*; do
+    [ -r "$rp/firmware" ] || continue
+    [ "$(cat "$rp/firmware")" = qcom/sm7125/miatoll/modem.mbn ] || continue
+    cat "$rp/state"
+done
+grep -E 'WLAN_CE_|q6v5 fatal|q6v5 ready|glink-smem' /proc/interrupts
+echo '===== RECENT KERNEL LOG ====='
+dmesg | tail -n 80

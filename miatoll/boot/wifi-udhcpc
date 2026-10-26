@@ -1,0 +1,28 @@
+#!/bin/sh
+# udhcpc hook for the diagnostic wlan0 only. Lease data remains in RAM.
+[ "$interface" = wlan0 ] || exit 1
+runtime=${CURTANA_RUN_DIR:-/run}
+work="$runtime/wifi-connect"
+umask 077
+mkdir -p "$work" || exit 1
+case "$1" in
+    deconfig)
+        ifconfig wlan0 0.0.0.0 || exit 1
+        rm -f "$work/gateway" "$work/lease.txt"
+        ;;
+    bound|renew)
+        case "$ip:$subnet" in *[!0-9.:]*|:*) exit 1 ;; esac
+        [ -n "$ip" ] && [ -n "$subnet" ] || exit 1
+        ifconfig wlan0 "$ip" netmask "$subnet" up || exit 1
+        for gateway in $router; do
+            case "$gateway" in ''|*[!0-9.]*) continue ;; esac
+            ip route replace default via "$gateway" dev wlan0 || exit 1
+            printf '%s\n' "$gateway" > "$work/gateway" || exit 1
+            break
+        done
+        printf 'ip=%s\nsubnet=%s\nrouter=%s\ndns=%s\n' \
+            "$ip" "$subnet" "$router" "$dns" > "$work/lease.txt" || exit 1
+        cat "$work/lease.txt"
+        ;;
+    *) exit 0 ;;
+esac

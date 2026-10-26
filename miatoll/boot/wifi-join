@@ -1,0 +1,85 @@
+#!/bin/sh
+# Join a WPA3-SAE network, typed by the user on the phone's own console (tty1).
+# The SSID is echoed; the password is read with echo off, stored only as a
+# hex sae_password in a 0600 file under /run, and never placed in argv or logs.
+# Based on the earlier curtana wifi-connect, which fixed one SSID.
+umask 077
+export LC_ALL=C
+runtime=${CURTANA_RUN_DIR:-/run}
+work="$runtime/wifi-connect"
+control="$runtime/wpa_supplicant"
+country=${WIFI_COUNTRY:-KR}
+log="$work/join.log"
+mkdir -p "$work" "$control" || exit 1
+note() { echo "$*"; echo "$*" >>"$log"; }
+if wpa_cli -p "$control" -i wlan0 ping 2>/dev/null | grep -qx PONG; then
+    echo 'A supplicant is already active. Run wifi-disconnect first.'
+    exit 1
+fi
+[ -t 0 ] || { echo 'Run wifi-join interactively on the phone console.'; exit 1; }
+iw dev wlan0 info >/dev/null || { echo 'wlan0 is missing; run wifi-start first.'; exit 1; }
+printf 'SSID: '
+IFS= read -r ssid || exit 1
+[ -n "$ssid" ] && [ "${#ssid}" -le 32 ] || { echo 'Enter an SSID of 1-32 bytes.'; exit 1; }
+saved_tty=$(stty -g) || exit 1
+restore_tty() { stty "$saved_tty"; }
+trap restore_tty EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
+stty -echo || exit 1
+printf 'Password (hidden): '
+IFS= read -r password
+read_result=$?
+restore_tty
+printf '\n'
+[ "$read_result" = 0 ] || exit 1
+[ -n "$password" ] && [ "${#password}" -le 128 ] || {
+    unset password
+    echo 'Enter a nonempty password of at most 128 bytes.'
+    exit 1
+}
+# Hex string syntax is decoded by wpa_config_parse_string for ssid and
+# sae_password, so neither value is interpreted by the shell or the parser.
+ssid_hex=$(printf '%s' "$ssid" | hexdump -v -e '1/1 "%02x"') || exit 1
+password_hex=$(printf '%s' "$password" | hexdump -v -e '1/1 "%02x"') || exit 1
+unset password
+printf 'ctrl_interface=%s\ncountry=%s\nsae_pwe=2\nnetwork={\n    ssid=%s\n    key_mgmt=SAE\n    proto=RSN\n    ieee80211w=2\n    sae_password=%s\n}\n' \
+    "$control" "$country" "$ssid_hex" "$password_hex" > "$work/network.conf" || exit 1
+unset password_hex
+chmod 0600 "$work/network.conf" || exit 1
+note "WIFI_JOIN_BEGIN country=$country key_mgmt=SAE ieee80211w=2"
+iw reg set "$country" || exit 1
+sleep 2
+iw reg get | head -n 3 | tee -a "$log"
+ip link set dev wlan0 up || exit 1
+wpa_supplicant -B -Dnl80211 -i wlan0 -c "$work/network.conf" \
+    -C "$control" -P "$work/wpa.pid" -f "$work/wpa.log" || exit 1
+note 'Waiting up to 60 s for WPA3 authentication...'
+connected=no
+i=0
+while [ "$i" -lt 60 ]; do
+    wpa_cli -p "$control" -i wlan0 status > "$work/status.txt" 2>&1
+    if grep -qx 'wpa_state=COMPLETED' "$work/status.txt"; then
+        connected=yes
+        break
+    fi
+    i=$((i + 1))
+    sleep 1
+done
+grep -E '^(wpa_state|freq|key_mgmt|pairwise_cipher|pmf|sae_group|wifi_generation)=' "$work/status.txt" | tee -a "$log"
+if [ "$connected" != yes ]; then
+    note 'WIFI_JOIN_AUTH_FAILED: authentication did not complete'
+    exit 2
+fi
+note 'WIFI_JOIN_AUTH_OK'
+udhcpc -i wlan0 -n -q -t 5 -T 3 -s /bin/wifi-udhcpc > "$work/dhcp.log" 2>&1
+dhcp_result=$?
+note "dhcp_exit=$dhcp_result"
+[ "$dhcp_result" = 0 ] || exit 4
+ip -4 addr show dev wlan0 | grep inet | tee -a "$log"
+if [ -r "$work/gateway" ]; then
+    ping -I wlan0 -c 3 -W 2 "$(cat "$work/gateway")" | tail -n 2 | tee -a "$log"
+fi
+ping -I wlan0 -c 3 -W 3 1.1.1.1 | tail -n 2 | tee -a "$log"
+note 'WIFI_JOIN_DONE: unplug the keyboard and reconnect the PC cable'

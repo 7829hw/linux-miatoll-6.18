@@ -1,0 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0
+// WPA3 association test; hardware description identical to wifi1.
+#include "sm7125-xiaomi-curtana-wifi1.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing wifi2 test)";
+	chosen {
+		miatoll,boot-profile = "wifi2-ram-only";
+	};
+};

@@ -48,8 +48,11 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def load(workspace):
-    """Return {initramfs path: (bytes, mode)} and a provenance summary."""
+def load(workspace, connect=False):
+    """Return {initramfs path: (bytes, mode)} and a provenance summary.
+
+    With connect, also add the validated static wpa_supplicant and wpa_cli.
+    """
     workspace = Path(workspace)
     files, summary = {}, {'firmware': {}, 'tools': {}}
     for target, source, size, blob, sha256 in FIRMWARE:
@@ -79,6 +82,21 @@ def load(workspace):
             files['bin/' + name] = (data, 0o755)
             summary['tools'][name] = {'bytes': len(data), 'sha256': entry['sha256'],
                                       'built_from': directory, 'source_files': len(entry['sources'])}
+    if connect:
+        record = json.loads((workspace / 'out-wifi-connect/build-result.json').read_text())
+        assert record['actual_sae_config_parser_verified'], 'Unverified wpa_supplicant build'
+        for path in record['sources']:
+            assert (workspace / path).is_file(), 'Missing wpa_supplicant source: ' + path
+        for name in ('wpa_supplicant', 'wpa_cli'):
+            entry = record['binaries'][name]
+            data = (workspace / 'out-wifi-connect' / name).read_bytes()
+            assert len(data) == entry['bytes'] and digest(data) == entry['sha256'], 'Tool changed: ' + name
+            assert entry['elf_aarch64_static_verified'], 'Unverified tool: ' + name
+            files['bin/' + name] = (data, 0o755)
+            summary['tools'][name] = {'bytes': len(data), 'sha256': entry['sha256'],
+                                      'built_from': 'out-wifi-connect', 'source_files': len(record['sources'])}
+        files['usr/share/licenses/wpa_supplicant/COPYING'] = (
+            (workspace / 'userspace/wpa_supplicant/COPYING').read_bytes(), 0o644)
     for target, source in LICENSES.items():
         files[target] = ((workspace / source).read_bytes(), 0o644)
     return files, summary

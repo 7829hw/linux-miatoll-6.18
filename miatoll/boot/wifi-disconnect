@@ -1,0 +1,17 @@
+#!/bin/sh
+runtime=${CURTANA_RUN_DIR:-/run}
+control="$runtime/wpa_supplicant"
+if wpa_cli -p "$control" -i wlan0 ping 2>/dev/null | grep -qx PONG; then
+    wpa_cli -p "$control" -i wlan0 terminate || exit 1
+    attempt=0; while [ "$attempt" -lt 5 ]; do attempt=$((attempt + 1))
+        if ! wpa_cli -p "$control" -i wlan0 ping 2>/dev/null | grep -qx PONG; then break; fi
+        sleep 1
+    done
+    if wpa_cli -p "$control" -i wlan0 ping 2>/dev/null | grep -qx PONG; then
+        echo 'Supplicant is still active; credential file retained.'
+        exit 1
+    fi
+fi
+ip link set dev wlan0 down || exit 1
+rm -f "$runtime/wifi-connect/network.conf" "$runtime/wifi-connect/wpa.pid"
+echo 'Diagnostic supplicant stopped and RAM credential file removed.'
