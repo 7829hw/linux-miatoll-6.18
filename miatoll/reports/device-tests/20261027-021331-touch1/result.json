@@ -1,0 +1,83 @@
+{
+  "capture_id": "20261027-021331",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-touch1+",
+  "boot_profile": "touch1-ram-only",
+  "image": "boot-curtana-6.18.58-touch1.img",
+  "image_sha256": "463cc412ac994c145998e7a10da8250e4f57d756ece2ec9ad9313bfd627f3b3c",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-touch1/boot-curtana-6.18.58-touch1.img"
+  ],
+  "physical_display_confirmed": true,
+  "user_observation": {
+    "screen": "TOUCH TEST 1 banner shown, display normal throughout",
+    "backlight": "on",
+    "notes": ""
+  },
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "TOUCH1_BANNER_WRITTEN",
+      "TOUCH1_PROBE_BEGIN",
+      "TOUCH1_PROBE_END",
+      "TOUCH1_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "119:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "120:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "touch1-fastboot-20261027-021331.txt": {
+      "bytes": 585,
+      "sha256": "a9349314f213127ad29cde92a381c65c20d2a0825dcd13f3e1c2b0ebc6efcc42"
+    },
+    "touch1-serial-20261027-021331.txt": {
+      "bytes": 146357,
+      "sha256": "1a239fc983a638a8f3b9f72bd0a34bbd2bda7869643dfcbefca41bbb7c736631"
+    },
+    "steps.txt": {
+      "bytes": 314421,
+      "sha256": "35e7f322dd02f7783a8b7e31b6e772f06b07a6a63985f0933a289f626bfb292f"
+    },
+    "touch-events-summary.json": {
+      "bytes": 17964,
+      "sha256": "8fa44639ca8f70dcca373a3171c3d2d77fd2952a8a80f7affbf12f6c8677ef79"
+    }
+  },
+  "step_observations": {
+    "touch-events-40s": {
+      "screen": "user asked to retry; no events captured, touch IRQ stayed at 1 during the window",
+      "backlight": "on",
+      "notes": ""
+    },
+    "touch-events-30s-retry": {
+      "screen": "corners, top-to-bottom drags and several fingers; log matches what the user did; display stayed normal",
+      "backlight": "on",
+      "notes": ""
+    }
+  },
+  "touch_input_confirmed": true
+}

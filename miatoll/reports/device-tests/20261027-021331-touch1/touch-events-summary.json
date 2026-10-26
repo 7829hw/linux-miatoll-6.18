@@ -1,0 +1,1431 @@
+{
+ "records": 5107,
+ "frames": 713,
+ "contacts": 101,
+ "max_simultaneous": 5,
+ "all_released": false,
+ "x_range": [
+  30,
+  1071
+ ],
+ "y_range": [
+  0,
+  2396
+ ],
+ "contact_list": [
+  {
+   "slot": 0,
+   "tracking_id": 102,
+   "points": 10,
+   "released": true,
+   "first": {
+    "x": 58,
+    "y": 0
+   },
+   "last": {
+    "x": 146,
+    "y": 107
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 103,
+   "points": 10,
+   "released": true,
+   "first": {
+    "x": 99,
+    "y": 2
+   },
+   "last": {
+    "x": 166,
+    "y": 108
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 104,
+   "points": 11,
+   "released": true,
+   "first": {
+    "x": 120,
+    "y": 40
+   },
+   "last": {
+    "x": 192,
+    "y": 121
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 105,
+   "points": 6,
+   "released": true,
+   "first": {
+    "x": 89,
+    "y": 118
+   },
+   "last": {
+    "x": 215,
+    "y": 174
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 106,
+   "points": 7,
+   "released": true,
+   "first": {
+    "x": 71,
+    "y": 112
+   },
+   "last": {
+    "x": 322,
+    "y": 146
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 107,
+   "points": 7,
+   "released": true,
+   "first": {
+    "x": 91,
+    "y": 83
+   },
+   "last": {
+    "x": 338,
+    "y": 210
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 108,
+   "points": 20,
+   "released": true,
+   "first": {
+    "x": 930,
+    "y": 140
+   },
+   "last": {
+    "x": 759,
+    "y": 617
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 109,
+   "points": 41,
+   "released": true,
+   "first": {
+    "x": 630,
+    "y": 651
+   },
+   "last": {
+    "x": 405,
+    "y": 1318
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 110,
+   "points": 40,
+   "released": true,
+   "first": {
+    "x": 379,
+    "y": 1410
+   },
+   "last": {
+    "x": 350,
+    "y": 2125
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 111,
+   "points": 40,
+   "released": true,
+   "first": {
+    "x": 335,
+    "y": 2048
+   },
+   "last": {
+    "x": 366,
+    "y": 2145
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 112,
+   "points": 104,
+   "released": true,
+   "first": {
+    "x": 526,
+    "y": 1114
+   },
+   "last": {
+    "x": 359,
+    "y": 1433
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 113,
+   "points": 33,
+   "released": true,
+   "first": {
+    "x": 308,
+    "y": 1572
+   },
+   "last": {
+    "x": 261,
+    "y": 2140
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 114,
+   "points": 18,
+   "released": true,
+   "first": {
+    "x": 739,
+    "y": 949
+   },
+   "last": {
+    "x": 653,
+    "y": 1910
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 115,
+   "points": 17,
+   "released": true,
+   "first": {
+    "x": 397,
+    "y": 1128
+   },
+   "last": {
+    "x": 303,
+    "y": 2151
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 116,
+   "points": 22,
+   "released": true,
+   "first": {
+    "x": 781,
+    "y": 1422
+   },
+   "last": {
+    "x": 664,
+    "y": 2004
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 117,
+   "points": 20,
+   "released": true,
+   "first": {
+    "x": 414,
+    "y": 1566
+   },
+   "last": {
+    "x": 300,
+    "y": 2189
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 118,
+   "points": 20,
+   "released": true,
+   "first": {
+    "x": 737,
+    "y": 1068
+   },
+   "last": {
+    "x": 639,
+    "y": 1773
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 119,
+   "points": 20,
+   "released": true,
+   "first": {
+    "x": 400,
+    "y": 1241
+   },
+   "last": {
+    "x": 349,
+    "y": 1982
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 120,
+   "points": 2,
+   "released": true,
+   "first": {
+    "x": 32,
+    "y": 27
+   },
+   "last": {
+    "x": 30,
+    "y": 27
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 121,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 55,
+    "y": 2
+   },
+   "last": {
+    "x": 55,
+    "y": 2
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 122,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 1000,
+    "y": 23
+   },
+   "last": {
+    "x": 1000,
+    "y": 23
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 123,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 1029,
+    "y": 0
+   },
+   "last": {
+    "x": 1029,
+    "y": 0
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 124,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 113,
+    "y": 2396
+   },
+   "last": {
+    "x": 113,
+    "y": 2396
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 125,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 978,
+    "y": 2390
+   },
+   "last": {
+    "x": 978,
+    "y": 2390
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 126,
+   "points": 18,
+   "released": true,
+   "first": {
+    "x": 816,
+    "y": 822
+   },
+   "last": {
+    "x": 742,
+    "y": 1473
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 127,
+   "points": 19,
+   "released": true,
+   "first": {
+    "x": 532,
+    "y": 983
+   },
+   "last": {
+    "x": 484,
+    "y": 1783
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 128,
+   "points": 10,
+   "released": true,
+   "first": {
+    "x": 734,
+    "y": 1240
+   },
+   "last": {
+    "x": 648,
+    "y": 1627
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 129,
+   "points": 10,
+   "released": true,
+   "first": {
+    "x": 465,
+    "y": 1436
+   },
+   "last": {
+    "x": 395,
+    "y": 1933
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 130,
+   "points": 33,
+   "released": true,
+   "first": {
+    "x": 482,
+    "y": 1537
+   },
+   "last": {
+    "x": 459,
+    "y": 1742
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 131,
+   "points": 33,
+   "released": true,
+   "first": {
+    "x": 710,
+    "y": 1379
+   },
+   "last": {
+    "x": 683,
+    "y": 1564
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 132,
+   "points": 18,
+   "released": true,
+   "first": {
+    "x": 743,
+    "y": 1093
+   },
+   "last": {
+    "x": 715,
+    "y": 1454
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 133,
+   "points": 18,
+   "released": true,
+   "first": {
+    "x": 504,
+    "y": 1257
+   },
+   "last": {
+    "x": 462,
+    "y": 1665
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 134,
+   "points": 17,
+   "released": true,
+   "first": {
+    "x": 553,
+    "y": 570
+   },
+   "last": {
+    "x": 476,
+    "y": 1692
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 135,
+   "points": 14,
+   "released": true,
+   "first": {
+    "x": 840,
+    "y": 808
+   },
+   "last": {
+    "x": 701,
+    "y": 1694
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 136,
+   "points": 38,
+   "released": true,
+   "first": {
+    "x": 670,
+    "y": 556
+   },
+   "last": {
+    "x": 782,
+    "y": 1352
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 137,
+   "points": 37,
+   "released": true,
+   "first": {
+    "x": 222,
+    "y": 908
+   },
+   "last": {
+    "x": 322,
+    "y": 1746
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 138,
+   "points": 37,
+   "released": true,
+   "first": {
+    "x": 389,
+    "y": 629
+   },
+   "last": {
+    "x": 451,
+    "y": 1434
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 139,
+   "points": 29,
+   "released": true,
+   "first": {
+    "x": 954,
+    "y": 560
+   },
+   "last": {
+    "x": 988,
+    "y": 926
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 140,
+   "points": 28,
+   "released": true,
+   "first": {
+    "x": 214,
+    "y": 724
+   },
+   "last": {
+    "x": 222,
+    "y": 1159
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 141,
+   "points": 26,
+   "released": true,
+   "first": {
+    "x": 417,
+    "y": 408
+   },
+   "last": {
+    "x": 432,
+    "y": 876
+   }
+  },
+  {
+   "slot": 3,
+   "tracking_id": 142,
+   "points": 26,
+   "released": true,
+   "first": {
+    "x": 325,
+    "y": 1545
+   },
+   "last": {
+    "x": 351,
+    "y": 1849
+   }
+  },
+  {
+   "slot": 4,
+   "tracking_id": 143,
+   "points": 22,
+   "released": true,
+   "first": {
+    "x": 740,
+    "y": 441
+   },
+   "last": {
+    "x": 738,
+    "y": 751
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 144,
+   "points": 9,
+   "released": true,
+   "first": {
+    "x": 667,
+    "y": 510
+   },
+   "last": {
+    "x": 664,
+    "y": 559
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 145,
+   "points": 9,
+   "released": true,
+   "first": {
+    "x": 178,
+    "y": 1899
+   },
+   "last": {
+    "x": 287,
+    "y": 1768
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 146,
+   "points": 8,
+   "released": true,
+   "first": {
+    "x": 349,
+    "y": 497
+   },
+   "last": {
+    "x": 369,
+    "y": 594
+   }
+  },
+  {
+   "slot": 3,
+   "tracking_id": 147,
+   "points": 8,
+   "released": true,
+   "first": {
+    "x": 160,
+    "y": 840
+   },
+   "last": {
+    "x": 196,
+    "y": 925
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 148,
+   "points": 4,
+   "released": true,
+   "first": {
+    "x": 714,
+    "y": 636
+   },
+   "last": {
+    "x": 714,
+    "y": 636
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 149,
+   "points": 4,
+   "released": true,
+   "first": {
+    "x": 420,
+    "y": 657
+   },
+   "last": {
+    "x": 420,
+    "y": 657
+   }
+  },
+  {
+   "slot": 3,
+   "tracking_id": 150,
+   "points": 4,
+   "released": true,
+   "first": {
+    "x": 368,
+    "y": 1764
+   },
+   "last": {
+    "x": 368,
+    "y": 1765
+   }
+  },
+  {
+   "slot": 4,
+   "tracking_id": 151,
+   "points": 3,
+   "released": true,
+   "first": {
+    "x": 233,
+    "y": 941
+   },
+   "last": {
+    "x": 233,
+    "y": 945
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 152,
+   "points": 5,
+   "released": true,
+   "first": {
+    "x": 204,
+    "y": 961
+   },
+   "last": {
+    "x": 204,
+    "y": 962
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 153,
+   "points": 5,
+   "released": true,
+   "first": {
+    "x": 707,
+    "y": 644
+   },
+   "last": {
+    "x": 707,
+    "y": 644
+   }
+  },
+  {
+   "slot": 3,
+   "tracking_id": 154,
+   "points": 5,
+   "released": true,
+   "first": {
+    "x": 366,
+    "y": 1828
+   },
+   "last": {
+    "x": 366,
+    "y": 1828
+   }
+  },
+  {
+   "slot": 4,
+   "tracking_id": 155,
+   "points": 4,
+   "released": true,
+   "first": {
+    "x": 406,
+    "y": 639
+   },
+   "last": {
+    "x": 404,
+    "y": 648
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 156,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 973,
+    "y": 33
+   },
+   "last": {
+    "x": 973,
+    "y": 33
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 157,
+   "points": 3,
+   "released": true,
+   "first": {
+    "x": 170,
+    "y": 2152
+   },
+   "last": {
+    "x": 170,
+    "y": 2152
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 158,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 501,
+    "y": 1946
+   },
+   "last": {
+    "x": 501,
+    "y": 1946
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 159,
+   "points": 4,
+   "released": true,
+   "first": {
+    "x": 821,
+    "y": 2138
+   },
+   "last": {
+    "x": 821,
+    "y": 2157
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 160,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 520,
+    "y": 2050
+   },
+   "last": {
+    "x": 520,
+    "y": 2050
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 161,
+   "points": 7,
+   "released": true,
+   "first": {
+    "x": 126,
+    "y": 2356
+   },
+   "last": {
+    "x": 126,
+    "y": 2356
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 162,
+   "points": 6,
+   "released": true,
+   "first": {
+    "x": 618,
+    "y": 2169
+   },
+   "last": {
+    "x": 606,
+    "y": 2182
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 163,
+   "points": 4,
+   "released": true,
+   "first": {
+    "x": 175,
+    "y": 2382
+   },
+   "last": {
+    "x": 176,
+    "y": 2396
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 164,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 592,
+    "y": 2227
+   },
+   "last": {
+    "x": 592,
+    "y": 2227
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 165,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 113,
+    "y": 2343
+   },
+   "last": {
+    "x": 113,
+    "y": 2343
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 166,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 1049,
+    "y": 2358
+   },
+   "last": {
+    "x": 1049,
+    "y": 2358
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 167,
+   "points": 2,
+   "released": true,
+   "first": {
+    "x": 172,
+    "y": 2205
+   },
+   "last": {
+    "x": 172,
+    "y": 2205
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 168,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 671,
+    "y": 2007
+   },
+   "last": {
+    "x": 671,
+    "y": 2007
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 169,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 218,
+    "y": 508
+   },
+   "last": {
+    "x": 218,
+    "y": 508
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 170,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 1071,
+    "y": 410
+   },
+   "last": {
+    "x": 1071,
+    "y": 410
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 171,
+   "points": 2,
+   "released": true,
+   "first": {
+    "x": 277,
+    "y": 411
+   },
+   "last": {
+    "x": 277,
+    "y": 411
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 172,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 284,
+    "y": 322
+   },
+   "last": {
+    "x": 284,
+    "y": 322
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 173,
+   "points": 3,
+   "released": true,
+   "first": {
+    "x": 119,
+    "y": 44
+   },
+   "last": {
+    "x": 119,
+    "y": 44
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 174,
+   "points": 3,
+   "released": true,
+   "first": {
+    "x": 988,
+    "y": 0
+   },
+   "last": {
+    "x": 988,
+    "y": 0
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 175,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 936,
+    "y": 0
+   },
+   "last": {
+    "x": 936,
+    "y": 0
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 176,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 91,
+    "y": 31
+   },
+   "last": {
+    "x": 91,
+    "y": 31
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 177,
+   "points": 2,
+   "released": true,
+   "first": {
+    "x": 63,
+    "y": 8
+   },
+   "last": {
+    "x": 63,
+    "y": 8
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 178,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 953,
+    "y": 0
+   },
+   "last": {
+    "x": 953,
+    "y": 0
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 179,
+   "points": 6,
+   "released": true,
+   "first": {
+    "x": 148,
+    "y": 571
+   },
+   "last": {
+    "x": 153,
+    "y": 596
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 180,
+   "points": 6,
+   "released": true,
+   "first": {
+    "x": 974,
+    "y": 583
+   },
+   "last": {
+    "x": 974,
+    "y": 589
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 181,
+   "points": 3,
+   "released": true,
+   "first": {
+    "x": 642,
+    "y": 420
+   },
+   "last": {
+    "x": 642,
+    "y": 420
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 182,
+   "points": 3,
+   "released": true,
+   "first": {
+    "x": 946,
+    "y": 717
+   },
+   "last": {
+    "x": 946,
+    "y": 718
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 183,
+   "points": 3,
+   "released": true,
+   "first": {
+    "x": 136,
+    "y": 711
+   },
+   "last": {
+    "x": 136,
+    "y": 713
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 184,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 633,
+    "y": 538
+   },
+   "last": {
+    "x": 633,
+    "y": 538
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 185,
+   "points": 3,
+   "released": true,
+   "first": {
+    "x": 146,
+    "y": 1256
+   },
+   "last": {
+    "x": 146,
+    "y": 1256
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 186,
+   "points": 3,
+   "released": true,
+   "first": {
+    "x": 941,
+    "y": 1232
+   },
+   "last": {
+    "x": 941,
+    "y": 1234
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 187,
+   "points": 2,
+   "released": true,
+   "first": {
+    "x": 649,
+    "y": 1058
+   },
+   "last": {
+    "x": 649,
+    "y": 1058
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 188,
+   "points": 4,
+   "released": true,
+   "first": {
+    "x": 936,
+    "y": 1283
+   },
+   "last": {
+    "x": 936,
+    "y": 1284
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 189,
+   "points": 4,
+   "released": true,
+   "first": {
+    "x": 150,
+    "y": 1340
+   },
+   "last": {
+    "x": 149,
+    "y": 1341
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 190,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 626,
+    "y": 1136
+   },
+   "last": {
+    "x": 626,
+    "y": 1136
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 191,
+   "points": 5,
+   "released": true,
+   "first": {
+    "x": 926,
+    "y": 1694
+   },
+   "last": {
+    "x": 923,
+    "y": 1701
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 192,
+   "points": 4,
+   "released": true,
+   "first": {
+    "x": 103,
+    "y": 1771
+   },
+   "last": {
+    "x": 103,
+    "y": 1772
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 193,
+   "points": 5,
+   "released": true,
+   "first": {
+    "x": 945,
+    "y": 1745
+   },
+   "last": {
+    "x": 944,
+    "y": 1747
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 194,
+   "points": 6,
+   "released": true,
+   "first": {
+    "x": 135,
+    "y": 1813
+   },
+   "last": {
+    "x": 133,
+    "y": 1819
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 195,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 625,
+    "y": 1603
+   },
+   "last": {
+    "x": 625,
+    "y": 1603
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 196,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 207,
+    "y": 2188
+   },
+   "last": {
+    "x": 207,
+    "y": 2188
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 197,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 957,
+    "y": 2114
+   },
+   "last": {
+    "x": 957,
+    "y": 2114
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 198,
+   "points": 3,
+   "released": true,
+   "first": {
+    "x": 219,
+    "y": 2194
+   },
+   "last": {
+    "x": 219,
+    "y": 2194
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 199,
+   "points": 3,
+   "released": true,
+   "first": {
+    "x": 975,
+    "y": 2092
+   },
+   "last": {
+    "x": 975,
+    "y": 2092
+   }
+  },
+  {
+   "slot": 2,
+   "tracking_id": 200,
+   "points": 1,
+   "released": true,
+   "first": {
+    "x": 681,
+    "y": 1947
+   },
+   "last": {
+    "x": 681,
+    "y": 1947
+   }
+  },
+  {
+   "slot": 0,
+   "tracking_id": 201,
+   "points": 1,
+   "released": false,
+   "first": {
+    "x": 134,
+    "y": 2301
+   },
+   "last": {
+    "x": 134,
+    "y": 2301
+   }
+  },
+  {
+   "slot": 1,
+   "tracking_id": 202,
+   "points": 1,
+   "released": false,
+   "first": {
+    "x": 980,
+    "y": 2189
+   },
+   "last": {
+    "x": 980,
+    "y": 2189
+   }
+  }
+ ]
+}
