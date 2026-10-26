@@ -2,7 +2,7 @@
 
 2026-10-27 KST. 하드웨어 이식 기준: **`miatoll/6.18-sm7125`**.
 확인된 단독 부팅 브랜치: **`miatoll/6.18-boot1`**.
-현재 화면 수정 시험 준비 브랜치: **`miatoll/6.18-display2`**.
+화면 표시를 실기기로 확인한 브랜치: **`miatoll/6.18-display2`**.
 공식 Linux **v6.18.58**을 기반으로, 6.14.7 포크의 Xiaomi 하드웨어 구현을 직접 선별 이식했다.
 기존 로컬 커널 수정은 보존 브랜치와 백업에 남겼다.
 
@@ -103,8 +103,16 @@ Windows ZIP의 CRC/파일 해시 검사는 통과했다. 로더 포함 실행 �
 다음 후보 `6.18.58-miatoll-display2+`는 별도 DT에 MDSS_CORE reset을 연결해 기존
 upstream `msm_mdss_reset()`을 사용한다. framebuffer 시스템 RAM에는 `FBINFO_VIRTFB`를
 지정하고 VT 표시 전 표준 `blank=0` unblank를 한 번 요청한다. DPU/MDSS·클록·WLED
-드라이버와 IOMMU 보호는 display1 기준을 유지한다. 실제 reset·화면 성공은 **미검증**이다.
-실행 절차는 [DISPLAY2.ko.md](boot/DISPLAY2.ko.md)에 있다.
+드라이버와 IOMMU 보호는 display1 기준을 유지한다. 실행 절차는 [DISPLAY2.ko.md](boot/DISPLAY2.ko.md)에 있다.
+
+## display2 실기기 결과: 화면 표시 확인
+
+2026-10-27 `20261027-015228` 회차(WSL 실행기, `fastboot boot` 1회)에서 사용자가
+**시험 문구와 RED/GREEN/BLUE 색상 표시, 백라이트 켜짐**을 직접 확인했다.
+같은 로그에서 SMMU context fault 0회(display1: IRQ 7,796회), pixel RCG WARN·`FBINFO_VIRTFB`
+경고·커널 WARNING 0건, fb0 `blank=0`이다. 세 변경은 함께 시험해 개별 기여는 분리하지 않았다.
+확인 범위는 부팅 직후 정지 화면 1회이며 밝기 조절·blank 반복·장시간·절전·Tianma 패널은 미검증이다.
+[display2 실기기 기록](reports/device-tests/20261027-015228-display2/README.ko.md)
 
 ## 하드웨어별 상태
 
@@ -114,7 +122,7 @@ upstream `msm_mdss_reset()`을 사용한다. framebuffer 시스템 RAM에는 `FB
 | 기능 | upstream 6.18 재사용 | 6.14.7에서 반영한 부분 | 남은 확인 |
 | --- | --- | --- | --- |
 | CPU/RAM/UFS/SD/USB/버튼 | 기존 SM7125/SC7180, PMIC, UFS/MMC/GENI/QUSB2 드라이버 | 보드 DT와 추가 주변장치 연결 | boot1에서 CPU/RAM/USB ACM/UFS 열거 확인. UFS 파일 읽기, SD CMD48 재발 여부, USB role, 입력은 미검증 |
-| 디스플레이 | DRM/MSM DPU/DSI, PHY, WLED, 표준 MDSS reset | Huaxing FT8756 및 Tianma NT36675 패널, DT, WLED 수정. DSI API 변환 | display1의 등록·활성 모드는 확인했지만 실제 화면·백라이트 실패. display2의 reset 연결·fbdev 수정은 실기기 미검증 |
+| 디스플레이 | DRM/MSM DPU/DSI, PHY, WLED, 표준 MDSS reset | Huaxing FT8756 및 Tianma NT36675 패널, DT, WLED 수정. DSI API 변환 | display2(Huaxing)에서 부팅 직후 VT 문구·색상과 백라이트를 실기기 확인. 밝기 조절, blank 반복, 절전, Tianma 패널, 안정성은 미검증 |
 | 터치 | SPI/GENI/input | FT8756 및 NT36xxx SPI 드라이버, 패널 연동과 firmware 이름 | RAM firmware 제공, IRQ/좌표/멀티터치, suspend/resume |
 | GPU | Adreno A618/GMU/DRM | ZAP 이름, HWCG, fuse 0x9f/bin 3. OPP는 SM7125에 한정 | firmware, GMU/GPU 초기화, 렌더링/Android GPU userspace |
 | 카메라 | CAMSS 공통 코드, OV8856/DW9714 | SC7180 CAMSS/CCI/PHY/DT, S5KGM2/S5K5E9/OV16A1Q/DW9800, 기존 센서/VCM 확장 | ID/전원/스트림/초점/영상 품질. DW9800은 원본도 WIP. joyeuse DT에는 S5K5E9/OV16A1Q만 있고 주카메라 경로가 완성되지 않음 |
@@ -169,10 +177,14 @@ python3 miatoll/verify-artifacts.py
 
 Clang/LLD 18.1.3과 호스트 도구는 작업 공간의 `tools/`에만 준비했다.
 시스템 패키지를 설치/교체하지 않았다. 패키지 출처와 해시는 `reports/toolchain.json`에 기록했다.
+2026-10-27 WSL(Ubuntu 26.04) 작업 공간에서는 복사된 LLVM에 빠진 `libllvm18`, `libclang-cpp18`
+(18.1.3-1ubuntu1)과 noble `libxml2` 2.9.14, `libicu74`를 Ubuntu 인덱스 SHA256 확인 후
+`tools/llvm18`에만 풀고, 로컬 `patchelf`로 두 보조 라이브러리에 `$ORIGIN` runpath를 지정했다.
+실기기 USB는 usbipd-win 5.3.0과 `boot/wsl/51-curtana-ramtest.rules`로 WSL에 연결한다.
 
 ## 우선 남은 작업
 
-1. display2의 MDSS reset 연결로 화면 인계·SMMU 오류·물리 화면/백라이트를 재시험하고,
+1. display2 화면 표시는 확인했다. 밝기 조절·blank/unblank 반복·장시간 표시를 확인하고
    반복 부팅·부하·idle/suspend/resume를 별도로 검증한다. BWMON/Venus는 화면 시험 DT에서 비활성화했다.
 2. 화면·터치·SD·무선을 기능별 RAM 시험으로 재검증한다. 새 DT/모듈/firmware와
    boot header v2·메모리 인계를 Android 부팅 구성에도 연결한다.

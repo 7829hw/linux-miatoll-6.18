@@ -3,7 +3,8 @@
 브랜치 `miatoll/6.18-display2`, 커널 `6.18.58-miatoll-display2+`.
 display1의 부팅은 성공했지만 실제 화면·백라이트가 꺼지고, 부트로더 화면 주소에 대한
 SMMU fault와 framebuffer 플래그 경고가 확인돼 수정 후보를 준비했다.
-이 후보의 실제 부팅·화면 성공 여부는 아직 미검증이다.
+2026-10-27 `20261027-015228` 회차에서 사용자가 시험 문구·색상과 백라이트 켜짐을 확인했다.
+SMMU fault와 클록/fbdev 경고는 사라졌다. [실기기 기록](../reports/device-tests/20261027-015228-display2/README.ko.md)
 
 ## 변경과 검증 범위
 
@@ -23,6 +24,20 @@ host의 reset 연결 검증은 실제 하드웨어 reset 성공의 검증이 아
 모뎀·GPU·터치·오디오 등은 계속 비활성화하고 firmware/모듈이 없는 RAM initramfs를 사용한다.
 Android 파일시스템은 마운트하지 않으며 UFS 디스크는 읽기 전용으로 설정한다.
 기존 boot1/display1 이미지·ZIP·로그는 보존한다.
+
+## WSL 실행
+
+Windows 관리자 PowerShell에서 한 번 `usbipd bind --hardware-id 18d1:d00d`와
+`usbipd policy add --effect Allow --operation AutoBind --hardware-id 1d6b:0104`를 실행하고,
+WSL에 `wsl/51-curtana-ramtest.rules`를 `/etc/udev/rules.d/`로 설치한다. 그 뒤 Fastboot 상태에서:
+
+```sh
+python3 miatoll/boot/ram_boot_test.py boot ../dist/miatoll-display2/display2-report.json
+python3 miatoll/boot/ram_boot_test.py observe miatoll/reports/device-tests/<회차> \
+  --screen '<사용자 관찰>' --backlight on|off [--confirmed]
+```
+
+실행기는 장치를 `usbipd.exe attach`로 WSL에 붙이고 Windows 절차와 같은 순서·명령 범위로 동작한다.
 
 ## Windows 실행
 
@@ -67,7 +82,7 @@ DPU↔DSI↔패널 graph·부모 활성·IOMMU 보존, ARM64 shim 인계와 inva
 Windows의 새 display2 분기와 실제 화면/절전/안정성은 별도 실기기 검증이다.
 
 ```sh
-cd /data/hwkim/kernel/miatoll-6.18
+cd <workspace>/miatoll-6.18
 OUT_DIR=/data/hwkim/kernel/out-miatoll-display2 \
 DIST_DIR=/data/hwkim/kernel/dist/miatoll-display2/kernel \
 JOBS=48 bash miatoll/build.sh miatoll/configs/display2.config
