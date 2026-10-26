@@ -1,0 +1,23 @@
+{
+  "vendor_4_14": {
+    "protocol": 8,
+    "transaction_size": 64,
+    "write_read_size": 48,
+    "transaction_data_offset": 48,
+    "BINDER_WRITE_READ": 3224396289,
+    "BINDER_VERSION": 3221512713,
+    "BC_TRANSACTION": 1077961472,
+    "BC_TRANSACTION_SG": 1078485777
+  },
+  "upstream_6_18": {
+    "protocol": 8,
+    "transaction_size": 64,
+    "write_read_size": 48,
+    "transaction_data_offset": 48,
+    "BINDER_WRITE_READ": 3224396289,
+    "BINDER_VERSION": 3221512713,
+    "BC_TRANSACTION": 1077961472,
+    "BC_TRANSACTION_SG": 1078485777
+  },
+  "match": true
+}

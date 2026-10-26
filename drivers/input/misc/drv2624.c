@@ -13,14 +13,13 @@
 #include <linux/fs.h>
 #include <linux/i2c.h>
 #include <linux/device.h>
-#include <linux/gpio.h>
+#include <linux/gpio/consumer.h>
 #include <linux/sched.h>
 #include <linux/spinlock_types.h>
 #include <linux/spinlock.h>
 #include <linux/delay.h>
 #include <linux/interrupt.h>
 #include <linux/of.h>
-#include <linux/of_gpio.h>
 #include <linux/of_irq.h>
 #include <linux/regmap.h>
 #include <linux/err.h>
@@ -119,16 +118,16 @@ static void drv2624_reset(struct drv2624_data *drv2624)
 {
 	int ret;
 
-	gpio_set_value(drv2624->plat_data.gpio_nrst, 0);
+	gpiod_set_value_cansleep(drv2624->reset_gpio, 0);
 	usleep_range(1000, 2000);
-	gpio_set_value(drv2624->plat_data.gpio_nrst, 1);
+	gpiod_set_value_cansleep(drv2624->reset_gpio, 1);
 	usleep_range(1000, 2000);
 
 	regcache_mark_dirty(drv2624->regmap);
 	ret = regcache_sync(drv2624->regmap);
 	if (ret) {
 		dev_err(drv2624->dev, "Failed to sync cache: %d\n", ret);
-		gpio_direction_output(drv2624->plat_data.gpio_nrst, 0);
+		gpiod_set_value_cansleep(drv2624->reset_gpio, 0);
 	}
 }
 
@@ -543,14 +542,6 @@ static int drv2624_parse_dt(struct device *dev, struct drv2624_data *drv2624)
 	int ret = 0;
 	unsigned int value;
 
-	pdata->gpio_nrst = of_get_named_gpio(np, "reset-gpios", 0);
-	if (!gpio_is_valid(pdata->gpio_nrst)) {
-		dev_err(drv2624->dev,
-			"Looking up %s property in node %s failed %d\n",
-			"ti,reset-gpio", np->full_name, pdata->gpio_nrst);
-		ret = -EINVAL;
-		goto drv2624_parse_dt_out;
-	}
 
 	ret = of_property_read_u32(np, "ti,smart-loop", &value);
 	if (ret) {
@@ -817,7 +808,7 @@ static int drv2624_i2c_probe(struct i2c_client *client)
 	struct drv2624_data *drv2624;
 	int err = 0;
 
-	drv2624 = kzalloc(sizeof(struct drv2624_data), GFP_KERNEL);
+	drv2624 = devm_kzalloc(&client->dev, sizeof(*drv2624), GFP_KERNEL);
 	if (!drv2624) {
 		dev_err(&client->dev, "Could not allocate memory\n");
 		return -ENOMEM;
@@ -840,7 +831,7 @@ static int drv2624_i2c_probe(struct i2c_client *client)
 		if (err) {
 			dev_err(drv2624->dev,
 				"%s: platform data error\n", __func__);
-			return -ENODEV;
+			return err;
 		}
 	} else if (client->dev.platform_data) {
 		dev_dbg(drv2624->dev, "platform data parse\n");
@@ -852,22 +843,14 @@ static int drv2624_i2c_probe(struct i2c_client *client)
 		return -ENODEV;
 	}
 
-	if (gpio_is_valid(drv2624->plat_data.gpio_nrst)) {
-		err = devm_gpio_request(&client->dev,
-					drv2624->plat_data.gpio_nrst,
-					"DRV2624-NRST");
-		if (err < 0) {
-			dev_err(drv2624->dev,
-				"%s: GPIO %d request NRST error\n",
-				__func__, drv2624->plat_data.gpio_nrst);
-			return err;
-		}
+	drv2624->reset_gpio = devm_gpiod_get(&client->dev, "reset", GPIOD_OUT_LOW);
+	if (IS_ERR(drv2624->reset_gpio))
+		return dev_err_probe(&client->dev, PTR_ERR(drv2624->reset_gpio),
+				     "Failed to get reset GPIO\n");
 
-		gpio_direction_output(drv2624->plat_data.gpio_nrst, 0);
-		usleep_range(1000, 2000);
-		gpio_direction_output(drv2624->plat_data.gpio_nrst, 1);
-		usleep_range(1000, 2000); /* t(on) = 1ms */
-	}
+	usleep_range(1000, 2000);
+	gpiod_set_value_cansleep(drv2624->reset_gpio, 1);
+	usleep_range(1000, 2000); /* t(on) = 1ms */
 
 	err = drv2624_reg_read(drv2624, DRV2624_REG_ID);
 	if (err < 0) {
@@ -881,6 +864,7 @@ static int drv2624_i2c_probe(struct i2c_client *client)
 	if ((drv2624->device_id & 0xf0) != DRV2624_ID) {
 		dev_err(drv2624->dev, "%s, device_id(0x%x) fail\n",
 			__func__, drv2624->device_id);
+		err = -ENODEV;
 		goto drv2624_i2c_probe_err;
 	}
 

@@ -27,6 +27,9 @@ properties:
   vcc-supply:
     description: VDD power supply
 
+  vin-supply:
+    description: Optional power supply for the control interface
+
 required:
   - compatible
   - reg

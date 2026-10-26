@@ -12,7 +12,7 @@ if [[ -d "$host/usr/bin" ]]; then
     export PATH="$host/usr/bin:$PATH"
     export BISON_PKGDATADIR="$host/usr/share/bison"
     export M4="$host/usr/bin/m4"
-    export HOSTCFLAGS="-I$host/usr/include ${HOSTCFLAGS:-}"
+    export HOSTCFLAGS="-I$host/usr/include -I$host/usr/include/x86_64-linux-gnu ${HOSTCFLAGS:-}"
     export HOSTLDFLAGS="-L$host/usr/lib/x86_64-linux-gnu ${HOSTLDFLAGS:-}"
     export PKG_CONFIG_LIBDIR="$host/usr/lib/x86_64-linux-gnu/pkgconfig"
     export PKG_CONFIG_SYSROOT_DIR="$host"
@@ -37,7 +37,7 @@ for symbol in re.findall(r'^config (ARCH_[A-Z0-9_]+)$',
         subprocess.run([str(src/'scripts/config'), '--file', str(config),
                         '--disable', symbol], check=True)
 PY
-fragments=("$src/miatoll/configs/miatoll.config")
+fragments=("$src/miatoll/configs/sm7125-prune.config" "$src/miatoll/configs/miatoll.config")
 for fragment in "$@"; do fragments+=("$(realpath "$fragment")"); done
 "$src/scripts/kconfig/merge_config.sh" -m -O "$out" "$out/.config" "${fragments[@]}"
 make -C "$src" O="$out" olddefconfig

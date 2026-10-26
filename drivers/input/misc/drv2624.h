@@ -252,8 +252,6 @@ struct drv2624_diag_result {
 };
 
 struct drv2624_platform_data {
-	int gpio_nrst;
-	int gpio_int;
 	unsigned char loop;
 	struct actuator_data actuator;
 };
@@ -262,6 +260,7 @@ struct drv2624_data {
 	struct drv2624_platform_data plat_data;
 	unsigned char device_id;
 	struct device *dev;
+	struct gpio_desc *reset_gpio;
 	struct regmap *regmap;
 	int irq;
 	unsigned char int_status;

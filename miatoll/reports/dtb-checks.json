@@ -1,0 +1,473 @@
+{
+  "passed": true,
+  "profiles": [
+    {
+      "dtb": "sm7125-xiaomi-curtana-huaxing.dtb",
+      "panel": "huaxing,ft8756",
+      "touch": "focaltech,ft8756-spi",
+      "ancestry": {
+        "/soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/display-subsystem@ae00000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/display-subsystem@ae00000/dsi@ae94000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/geniqup@ac0000/spi@a94000/touchscreen@0": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/geniqup@ac0000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/geniqup@ac0000/spi@a94000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/geniqup@ac0000/spi@a94000/touchscreen@0",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/gpu@5000000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/gpu@5000000",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/camss@acb3000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/camss@acb3000",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/cci@ac4a000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/cci@ac4a000",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/cci@ac4b000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/cci@ac4b000",
+            "status": "okay"
+          }
+        ],
+        "/sound": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/sound",
+            "status": "okay"
+          }
+        ]
+      }
+    },
+    {
+      "dtb": "sm7125-xiaomi-curtana-tianma.dtb",
+      "panel": "tianma,nt36675",
+      "touch": "novatek,nt36xxx-spi",
+      "ancestry": {
+        "/soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/display-subsystem@ae00000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/display-subsystem@ae00000/dsi@ae94000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/geniqup@ac0000/spi@a94000/touchscreen@0": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/geniqup@ac0000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/geniqup@ac0000/spi@a94000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/geniqup@ac0000/spi@a94000/touchscreen@0",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/gpu@5000000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/gpu@5000000",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/camss@acb3000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/camss@acb3000",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/cci@ac4a000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/cci@ac4a000",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/cci@ac4b000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/cci@ac4b000",
+            "status": "okay"
+          }
+        ],
+        "/sound": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/sound",
+            "status": "okay"
+          }
+        ]
+      }
+    },
+    {
+      "dtb": "sm7125-xiaomi-joyeuse-huaxing.dtb",
+      "panel": "huaxing,ft8756",
+      "touch": "focaltech,ft8756-spi",
+      "ancestry": {
+        "/soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/display-subsystem@ae00000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/display-subsystem@ae00000/dsi@ae94000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/geniqup@ac0000/spi@a94000/touchscreen@0": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/geniqup@ac0000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/geniqup@ac0000/spi@a94000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/geniqup@ac0000/spi@a94000/touchscreen@0",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/gpu@5000000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/gpu@5000000",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/camss@acb3000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/camss@acb3000",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/cci@ac4a000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/cci@ac4a000",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/cci@ac4b000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/cci@ac4b000",
+            "status": "okay"
+          }
+        ],
+        "/sound": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/sound",
+            "status": "okay"
+          }
+        ]
+      }
+    },
+    {
+      "dtb": "sm7125-xiaomi-joyeuse-tianma.dtb",
+      "panel": "tianma,nt36675",
+      "touch": "novatek,nt36xxx-spi",
+      "ancestry": {
+        "/soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/display-subsystem@ae00000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/display-subsystem@ae00000/dsi@ae94000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/display-subsystem@ae00000/dsi@ae94000/panel@0",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/geniqup@ac0000/spi@a94000/touchscreen@0": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/geniqup@ac0000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/geniqup@ac0000/spi@a94000",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/geniqup@ac0000/spi@a94000/touchscreen@0",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/gpu@5000000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/gpu@5000000",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/camss@acb3000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/camss@acb3000",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/cci@ac4a000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/cci@ac4a000",
+            "status": "okay"
+          }
+        ],
+        "/soc@0/cci@ac4b000": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0",
+            "status": "okay"
+          },
+          {
+            "path": "/soc@0/cci@ac4b000",
+            "status": "okay"
+          }
+        ],
+        "/sound": [
+          {
+            "path": "/",
+            "status": "okay"
+          },
+          {
+            "path": "/sound",
+            "status": "okay"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -775,11 +775,11 @@ static int ft8756_spi_probe(struct spi_device *spi)
 		return ret;
 
 skip_regulators:
-    ret = ft8756_check_chip_id(ts);
-    if (ret)
-        return ret;
+	ret = ft8756_check_chip_id(ts);
+	if (ret)
+		return ret;
 
-    /* Parse the firmware path from the device tree */
+	/* Parse the firmware path from the device tree */
 	ret = of_property_read_string(dev->of_node, "firmware-name", &ts->firmware_path);
 	if (ret) {
 		dev_err(dev, "Failed to read firmware-name property\n");
