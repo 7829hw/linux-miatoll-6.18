@@ -1,0 +1,27 @@
+### 2026-10-27T03:21:32 wifi-start
+$ timeout 30 wifi-start | grep -vE "^bdwlan"; echo "start_exit=$?"; i=0; while [ $i -lt 60 ] && [ ! -e /sys/class/net/wlan0 ]; do sleep 1; i=$((i+1)); done; ls /sys/class/net; cat /sys/class/remoteproc/remoteproc0/state; grep "q6v5 fatal" /proc/interrupts
+timeout 30 wifi-start | grep -vE "^bdwlan"; echo "start_exit=$?";
+ i=0; while [ $i -lt 60 ] && [ ! -e /sys/class/net/wlan0 ]; do sleep 1; i=$((i+1
+)); done; ls /sys/class/net; cat /sys/class/remoteproc/remoteproc0/state; grep "
+q6v5 fatal" /proc/interrupts; printf "\nSTEP_DONE_032124=%s\n" "$?"
+MPSS: /sys/class/remoteproc/remoteproc0
+name: modem
+firmware: qcom/sm7125/miatoll/modem.mbn
+WIFI BOARD: modem source /dev/sde4 (block read-only=1)
+WIFI BOARD: installed firmware board files:
+WIFI BOARD: staged 26328 bytes in RAM, sha256=902d380c3a59f5af480d5e4f748a5b577dadcb99b602d27a54ddc88724fe8fd9
+WIFI BOARD: source unmounted; ath10k API-1 fallback is ready.
+RMTFS source modemst1: /dev/sdf2 (read-only)
+RMTFS source modemst2: /dev/sdf3 (read-only)
+RMTFS source fsg: /dev/sdf4 (read-only)
+RMTFS source fsc: /dev/sdf5 (read-only)
+MPSS automatic recovery disabled for this diagnostic start.
+Starting MPSS; collect wifi-probe afterward.
+state: running
+start_exit=0
+[1;36mlo[m     [1;36mwlan0[m
+running
+166:          0          0          0          0          0          0          0          0 smp2p-mpss   0 Edge      q6v5 fatal
+
+STEP_DONE_032124=0
+miatoll-wifi2# [6n

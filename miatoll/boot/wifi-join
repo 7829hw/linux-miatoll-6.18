@@ -10,7 +10,8 @@ work="$runtime/wifi-connect"
 control="$runtime/wpa_supplicant"
 country=${WIFI_COUNTRY:-KR}
 log="$work/join.log"
-mkdir -p "$work" "$control" || exit 1
+# wpa_cli binds its client socket in /tmp; without it every query fails.
+mkdir -p "$work" "$control" /tmp || exit 1
 note() { echo "$*"; echo "$*" >>"$log"; }
 if wpa_cli -p "$control" -i wlan0 ping 2>/dev/null | grep -qx PONG; then
     echo 'A supplicant is already active. Run wifi-disconnect first.'

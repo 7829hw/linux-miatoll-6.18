@@ -85,6 +85,9 @@ def build(output, profile='boot1'):
         members.append(name)
     for name in ('.', 'bin', 'sbin', 'dev', 'proc', 'sys', 'run', 'etc', 'root'):
         add(name, stat.S_IFDIR | 0o755)
+    if profile == 'wifi2':
+        # wpa_cli binds its client socket in /tmp.
+        add('tmp', stat.S_IFDIR | 0o1777)
     add('dev/console', stat.S_IFCHR | 0o600, major=5, minor=1)
     add('bin/busybox', stat.S_IFREG | 0o755, binary)
     for name in sorted(required):

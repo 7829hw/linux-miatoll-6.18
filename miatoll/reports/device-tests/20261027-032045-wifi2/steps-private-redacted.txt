@@ -1,0 +1,181 @@
+### 2026-10-27T03:25:21 wifi-join-logs
+$ cat /run/wifi-connect/join.log; echo ===STATUS; cat /run/wifi-connect/status.txt; echo ===WPA; cat /run/wifi-connect/wpa.log; echo ===KERNEL; dmesg | grep -iE "wlan0|ath10k|cfg80211|authenticat|associat|deauth|disassoc|reg" | tail -40; grep "q6v5 fatal" /proc/interrupts
+cat /run/wifi-connect/join.log; echo ===STATUS; c
+at /run/wifi-connect/status.txt; echo ===WPA; cat /run/wifi-connect/wpa.log; ech
+o ===KERNEL; dmesg | grep -iE "wlan0|ath10k|cfg80211|authenticat|associat|deauth
+|disassoc|reg" | tail -40; grep "q6v5 fatal" /proc/interrupts; printf "\nSTEP_DO
+NE_032521=%s\n" "$?"
+/bin/sh: miatoll-wifi2#: not found
+===STATUS
+Failed to connect to non-global ctrl_ifname: wlan0  error: No such file or directory
+===WPA
+Successfully initialized wpa_supplicant
+wlan0: SME: Trying to authenticate with <mac> (SSID='<ssid>' freq=5500 MHz)
+wlan0: SME: Trying to authenticate with <mac> (SSID='<ssid>' freq=5500 MHz)
+wlan0: Trying to associate with <mac> (SSID='<ssid>' freq=5500 MHz)
+wlan0: Associated with <mac>
+wlan0: CTRL-EVENT-SUBNET-STATUS-UPDATE status=0
+wlan0: CTRL-EVENT-REGDOM-CHANGE init=COUNTRY_IE type=COUNTRY alpha2=KR
+wlan0: Unknown event 37
+wlan0: WPA: Key negotiation completed with <mac> [PTK=CCMP GTK=CCMP]
+wlan0: CTRL-EVENT-CONNECTED - Connection to <mac> completed [id=0 id_str=]
+wlan0: Unknown event 37
+Successfully initialized wpa_supplicant
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+ctrl_iface exists and seems to be in use - cannot override it
+Delete '/run/wpa_supplicant/wlan0' manually if it is not used anymore
+Failed to initialize control interface '/run/wpa_supplicant'.
+You may have another wpa_supplicant process already running or the file was
+left by an unclean termination of wpa_supplicant in which case you will need
+to manually remove this file before starting wpa_supplicant again.
+
+wlan0: CTRL-EVENT-DSCP-POLICY clear_all
+wlan0: CTRL-EVENT-DSCP-POLICY clear_all
+nl80211: deinit ifname=wlan0 disabled_11b_rates=0
+Successfully initialized wpa_supplicant
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+ctrl_iface exists and seems to be in use - cannot override it
+Delete '/run/wpa_supplicant/wlan0' manually if it is not used anymore
+Failed to initialize control interface '/run/wpa_supplicant'.
+You may have another wpa_supplicant process already running or the file was
+left by an unclean termination of wpa_supplicant in which case you will need
+to manually remove this file before starting wpa_supplicant again.
+
+wlan0: CTRL-EVENT-DSCP-POLICY clear_all
+wlan0: CTRL-EVENT-DSCP-POLICY clear_all
+nl80211: deinit ifname=wlan0 disabled_11b_rates=0
+===KERNEL
+[    0.237626] NET: Registered PF_INET6 protocol family
+[    0.238657] NET: Registered PF_PACKET protocol family
+[    0.238682] Key type dns_resolver registered
+[    0.245632] registered taskstats version 1
+[    0.251953] Key type .fscrypt registered
+[    0.251972] Key type fscrypt-provisioning registered
+[    0.280414] arm-smmu 5040000.iommu: 	stream matching with 5 register groups
+[    0.308113] msm_dsi_phy ae94400.phy: supply vdds not found, using dummy regulator
+[    0.330238] ufshcd-qcom 1d84000.ufshc: ufshcd_populate_vreg: Unable to find vdd-hba-supply regulator, assuming enabled
+[    0.330270] ufshcd-qcom 1d84000.ufshc: ufshcd_populate_vreg: Unable to find vccq-supply regulator, assuming enabled
+[    0.436788] msm_dsi ae94000.dsi: supply refgen not found, using dummy regulator
+[    0.891126] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[    1.135067] mmc2: error -110 reading general info of SD ext reg
+[   18.403078] ath10k_snoc 18800000.wifi: qmi chip_id 0x320 chip_family 0x4001 board_id 0xff soc_id 0x400c0000
+[   18.403360] ath10k_snoc 18800000.wifi: qmi fw_version 0x322183b3 fw_build_timestamp 2023-03-03 11:36 fw_build_id QC_IMAGE_VERSION_STRING=WLAN.HL.3.2.2-00947-QCAHLSWMTPLZ-1.24884.5.26445.2
+[   18.405161] ath10k_snoc 18800000.wifi: failed to fetch board data for bus=snoc,qmi-board-id=ff,qmi-chip-id=320 from ath10k/WCN3990/hw1.0/board-2.bin
+[   21.512318] ath10k_snoc 18800000.wifi: wcn3990 hw1.0 target 0x00000008 chip_id 0x00000000 sub 0000:0000
+[   21.512553] ath10k_snoc 18800000.wifi: kconfig debug 0 debugfs 0 tracing 0 dfs 0 testmode 0
+[   21.512653] ath10k_snoc 18800000.wifi: firmware ver  api 5 features wowlan,mgmt-tx-by-reference,non-bmi crc32 b3d4b790
+[   21.549336] ath10k_snoc 18800000.wifi: htt-ver 3.89 wmi-op 4 htt-op 3 cal file max-sta 32 raw 0 hwcrypto 1
+[   21.690355] ath10k_snoc 18800000.wifi: invalid MAC address; choosing random
+[   21.690563] ath: EEPROM regdomain: 0x0
+[   21.690617] ath: doing EEPROM country->regdmn map search
+[   21.690645] ath: country maps to regdmn code: 0x3a
+[   21.690693] ath: Regpair used: 0x3a
+[   51.743105] xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
+[   51.744211] xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 2
+[   98.417668] ath10k_snoc 18800000.wifi: chan info: invalid frequency 0 (idx 41 out of bounds)
+[  101.346035] ath10k_snoc 18800000.wifi: chan info: invalid frequency 0 (idx 41 out of bounds)
+[  101.399708] wlan0: authenticate with <mac> (local address=<mac>)
+[  101.399970] wlan0: send auth to <mac> (try 1/3)
+[  101.450769] wlan0: authenticate with <mac> (local address=<mac>)
+[  101.451024] wlan0: send auth to <mac> (try 1/3)
+[  101.468550] wlan0: authenticated
+[  101.471366] wlan0: associate with <mac> (try 1/3)
+[  101.501309] wlan0: RX AssocResp from <mac> (capab=0x1511 status=0 aid=1)
+[  101.585470] wlan0: associated
+[  101.585685] wlan0: Limiting TX power to 27 (30 - 3) dBm as advertised by <mac>
+[  243.046619] xhci-hcd xhci-hcd.0.auto: USB bus 2 deregistered
+[  243.048903] xhci-hcd xhci-hcd.0.auto: USB bus 1 deregistered
+166:          0          0          0          0          0          0          0          0 smp2p-mpss   0 Edge      q6v5 fatal
+
+STEP_DONE_032521=0
+miatoll-wifi2# [6n
+### 2026-10-27T03:25:44 ctrl-socket-check
+$ ls -la /run/wpa_supplicant /run/wifi-connect; ps | grep -v grep | grep wpa; grep -iE "ctrl|control" /run/wifi-connect/wpa.log | head; iw dev wlan0 link | grep -vE "SSID|Connected to"
+ls -la /run/wpa_supplicant /run/wifi-connect; ps | grep -v grep |
+ grep wpa; grep -iE "ctrl|control" /run/wifi-connect/wpa.log | head; iw dev wlan
+0 link | grep -vE "SSID|Connected to"; printf "\nSTEP_DONE_032544=%s\n" "$?"
+/run/wifi-connect:
+total 16
+drwx------    2 0        0              120 Jan  1 00:03 [1;34m.[m
+drwxr-xr-x    6 0        0              300 Jan  1 00:01 [1;34m..[m
+-rw-------    1 0        0              452 Jan  1 00:03 [0;0mjoin.log[m
+-rw-------    1 0        0              182 Jan  1 00:03 [0;0mnetwork.conf[m
+-rw-------    1 0        0               85 Jan  1 00:02 [0;0mstatus.txt[m
+-rw-------    1 0        0             2957 Jan  1 00:03 [0;0mwpa.log[m
+
+/run/wpa_supplicant:
+total 0
+drwx------    2 0        0               60 Jan  1 00:01 [1;34m.[m
+drwxr-xr-x    6 0        0              300 Jan  1 00:01 [1;34m..[m
+srwxrwx---    1 0        0                0 Jan  1 00:01 [1;35mwlan0[m
+/bin/sh: ps: not found
+wlan0: CTRL-EVENT-SUBNET-STATUS-UPDATE status=0
+wlan0: CTRL-EVENT-REGDOM-CHANGE init=COUNTRY_IE type=COUNTRY alpha2=KR
+wlan0: CTRL-EVENT-CONNECTED - Connection to <mac> completed [id=0 id_str=]
+ctrl_iface exists and seems to be in use - cannot override it
+Failed to initialize control interface '/run/wpa_supplicant'.
+wlan0: CTRL-EVENT-DSCP-POLICY clear_all
+wlan0: CTRL-EVENT-DSCP-POLICY clear_all
+ctrl_iface exists and seems to be in use - cannot override it
+Failed to initialize control interface '/run/wpa_supplicant'.
+wlan0: CTRL-EVENT-DSCP-POLICY clear_all
+	freq: 5500.0
+	RX: 23609 bytes (130 packets)
+	TX: 2249 bytes (20 packets)
+	signal: -46 dBm
+	rx bitrate: 6.0 MBit/s
+	bss flags: short-slot-time
+	dtim period: 1
+	beacon int: 100
+
+STEP_DONE_032544=0
+miatoll-wifi2# [6n
+### 2026-10-27T03:26:11 dhcp-after-tmp-fix
+$ mkdir -p /tmp; wpa_cli -p /run/wpa_supplicant -i wlan0 status | grep -E "^(wpa_state|freq|key_mgmt|pairwise_cipher|group_cipher|pmf|sae_group|wifi_generation)="; udhcpc -i wlan0 -n -q -t 5 -T 3 -s /bin/wifi-udhcpc > /run/wifi-connect/dhcp.log 2>&1; echo "dhcp_exit=$?"; ip -4 addr show dev wlan0 | grep inet; ip route; g=$(cat /run/wifi-connect/gateway); ping -I wlan0 -c 5 -W 2 $g | tail -n 2; ping -I wlan0 -c 5 -W 3 1.1.1.1 | tail -n 2; grep "q6v5 fatal" /proc/interrupts
+mkdir -p /tmp; wpa_cli -p /run/wpa_supplicant -i wlan0 status | g
+rep -E "^(wpa_state|freq|key_mgmt|pairwise_cipher|group_cipher|pmf|sae_group|wif
+i_generation)="; udhcpc -i wlan0 -n -q -t 5 -T 3 -s /bin/wifi-udhcpc > /run/wifi
+-connect/dhcp.log 2>&1; echo "dhcp_exit=$?"; ip -4 addr show dev wlan0 | grep in
+et; ip route; g=$(cat /run/wifi-connect/gateway); ping -I wlan0 -c 5 -W 2 $g | t
+ail -n 2; ping -I wlan0 -c 5 -W 3 1.1.1.1 | tail -n 2; grep "q6v5 fatal" /proc/i
+nterrupts; printf "\nSTEP_DONE_032601=%s\n" "$?"
+freq=5500
+wifi_generation=5
+pairwise_cipher=CCMP
+group_cipher=CCMP
+key_mgmt=SAE
+pmf=2
+sae_group=19
+wpa_state=COMPLETED
+dhcp_exit=0
+    inet 192.168.31.149/24 brd 192.168.31.255 scope global wlan0
+default via 192.168.31.1 dev wlan0 
+192.168.31.0/24 dev wlan0 scope link  src 192.168.31.149 
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 120.067/224.575/393.258 ms
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 24.794/188.182/264.947 ms
+166:          0          0          0          0          0          0          0          0 smp2p-mpss   0 Edge      q6v5 fatal
+
+STEP_DONE_032601=0
+miatoll-wifi2# [6n

@@ -1,0 +1,98 @@
+{
+  "capture_id": "20261027-032045",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-wifi2+",
+  "boot_profile": "wifi2-ram-only",
+  "image": "boot-curtana-6.18.58-wifi2.img",
+  "image_sha256": "7804a187d8f27b967fbbc724e294d3f5cf3efe85b8a54fffac7a6c57acc063d0",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-wifi2/boot-curtana-6.18.58-wifi2.img"
+  ],
+  "physical_display_confirmed": true,
+  "user_observation": {
+    "screen": "WIFI TEST 2 banner; display normal",
+    "backlight": "on",
+    "notes": ""
+  },
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "WIFI2_BANNER_WRITTEN",
+      "WIFI2_PROBE_BEGIN",
+      "WIFI2_PROBE_END",
+      "WIFI2_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "wifi2-fastboot-20261027-032045.txt": {
+      "bytes": 583,
+      "sha256": "8a56d5c508f9d0ee4f7ea872ac9a1bd27c1012589e362b74783ad305d050ca9e"
+    },
+    "wifi2-serial-20261027-032045.txt": {
+      "bytes": 153742,
+      "sha256": "df1fa1cc33419aad71818b00a4f1849d347711c336a649966305504077043cb9"
+    },
+    "steps-private-redacted.txt": {
+      "bytes": 10804,
+      "sha256": "01ecedb84b8510792342baf5b97fd73fe537e26a0f99db9f61e03781fc931299"
+    },
+    "steps.txt": {
+      "bytes": 1491,
+      "sha256": "c941229373554c0fea7af5662c893f708f5120996dbbbd0da0b3f67c72fe2cfe"
+    }
+  },
+  "step_observations": {
+    "wifi-join": {
+      "screen": "user typed SSID and hidden password with the OTG keyboard; screen showed WIFI_JOIN_AUTH_FAILED",
+      "backlight": "on",
+      "notes": "script could not query wpa_supplicant (no /tmp); the link had in fact completed"
+    }
+  },
+  "private_logs": {
+    "kept_outside_git": "dist/miatoll-wifi2/private-logs/steps.txt",
+    "sha256": "f0a94e5ba73507054fe066d67e9c64b51674d29c4dda38daa999ba338e271630",
+    "committed_copy": "steps-private-redacted.txt (MAC/BSSID and SSID removed)"
+  },
+  "wifi_association_confirmed": true,
+  "wifi": {
+    "auth": "WPA3-SAE group 19, pmf=2 (userspace), CCMP pairwise/group, wpa_state=COMPLETED",
+    "freq_mhz": 5500,
+    "signal_dbm": -46,
+    "country": "KR (set by wifi-join, confirmed by AP country IE)",
+    "dhcp": "192.168.31.149/24 via 192.168.31.1",
+    "gateway_ping": "5/5, rtt min/avg/max 120.1/224.6/393.3 ms",
+    "external_ping_1.1.1.1": "5/5, rtt 24.8/188.2/264.9 ms",
+    "mpss_fatal_irq": 0,
+    "script_issue": "no /tmp in RAMdisk: wpa_cli could not bind its client socket, so wifi-join reported AUTH_FAILED while the link completed; further start attempts failed with \"ctrl_iface exists and seems to be in use\" and exited; one supplicant kept the link. DHCP and pings were then run over serial after mkdir /tmp, without re-entering the password.",
+    "latency_note": "high RTT reproduces the earlier bring-up before its WCN3990 PMF peer patch; the kernel here has no such patch"
+  },
+  "credential_cleanup": "after the test the supplicant was terminated (1 process) and /run/wifi-connect/network.conf deleted; the password never crossed the serial link"
+}
