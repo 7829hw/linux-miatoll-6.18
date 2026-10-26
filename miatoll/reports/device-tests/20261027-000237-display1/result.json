@@ -1,0 +1,134 @@
+{
+  "date_kst": "2026-10-27",
+  "capture_id": "20261027-000237",
+  "kernel_release": "6.18.58-miatoll-display1+",
+  "boot_profile": "display1-ram-only",
+  "device_boot_confirmed": true,
+  "usb_shell_and_probe_confirmed": true,
+  "physical_display_confirmed": false,
+  "user_observation": {
+    "screen": "blank",
+    "backlight": "off",
+    "perceived_sequence": "Returned to fastboot and flashed again"
+  },
+  "fastboot_analysis": {
+    "commands": [
+      "fastboot devices",
+      "fastboot -s REDACTED getvar product",
+      "fastboot -s REDACTED reboot bootloader",
+      "fastboot devices",
+      "fastboot devices",
+      "fastboot -s REDACTED boot C:\\Users\\User\\Downloads\\miatoll-display1-windows\\boot-curtana-6.18.58-display1.img"
+    ],
+    "bootloader_reboot_requests": 1,
+    "ram_boot_requests": 1,
+    "flash_or_erase_commands": 0,
+    "return_to_fastboot_after_linux_established": false,
+    "interpretation": "Logged bootloader restart is the scripted pre-boot step. Then one RAM boot succeeds and a Linux USB shell answers; no post-Linux reboot is present in these logs."
+  },
+  "observations": {
+    "uptime_seconds": 4.35,
+    "ufs_disks_read_only": {
+      "sda": 1,
+      "sdb": 1,
+      "sdc": 1,
+      "sdd": 1,
+      "sde": 1,
+      "sdf": 1
+    },
+    "framebuffer": "msmdrmfb",
+    "framebuffer_virtual_size": "1080,2400",
+    "bits_per_pixel": 32,
+    "fb_blank": 4,
+    "dsi_status": "connected",
+    "dsi_dpms": "On",
+    "crtc0_active": true,
+    "backlight_brightness": 256,
+    "backlight_actual_brightness": 256,
+    "backlight_bl_power": 0,
+    "brightness_readback_is_physical_light_measurement": false,
+    "banner_written": true,
+    "physical_banner_seen": false,
+    "smmu_fault_irq_count_at_snapshot": 7796
+  },
+  "findings": [
+    {
+      "id": "boot-scanout-iommu",
+      "first_dump_message_count": 10,
+      "log_lines": [
+        640,
+        643,
+        646,
+        649,
+        652,
+        655,
+        658,
+        661,
+        664,
+        667,
+        1965,
+        1968,
+        1971,
+        1974,
+        1977,
+        1980,
+        1983,
+        1986,
+        1989,
+        1992
+      ],
+      "sid": "0x800",
+      "context_bank": 3,
+      "address_example": "0x9c000000",
+      "assessment": "Faults start when DPU takes a translated IOMMU domain while the firmware scanout references the reserved boot framebuffer. Inference from addresses and ordering; reset wiring is the next test."
+    },
+    {
+      "id": "pixel-rcg-update",
+      "log_lines": [
+        706,
+        2031
+      ],
+      "assessment": "Pixel clock RCG update WARN occurs during DSI enable. Clock driver remains unchanged; retest after MDSS reset."
+    },
+    {
+      "id": "fbdev-system-memory",
+      "log_lines": [
+        872,
+        879,
+        2197,
+        2204
+      ],
+      "assessment": "MSM fbdev uses msm_gem_get_vaddr but does not mark FBINFO_VIRTFB. Drawing helpers warn and continue; this warning alone does not explain the black screen."
+    },
+    {
+      "id": "backlight-state",
+      "log_lines": [
+        1323
+      ],
+      "assessment": "Software reads 256, but user sees no light. These readbacks do not establish actual module output."
+    }
+  ],
+  "next_candidate": {
+    "profile": "display2",
+    "planned_changes": [
+      "Connect existing upstream msm_mdss_reset via DISP_CC_MDSS_CORE_BCR in a separate curtana test DT",
+      "Mark MSM system RAM fbdev as FBINFO_VIRTFB"
+    ],
+    "preserve": [
+      "IOMMU translation and fault reporting",
+      "Panel command sequence and timing",
+      "WLED and clock driver implementations",
+      "Existing images and device logs"
+    ]
+  },
+  "log_files": {
+    "display1-fastboot-20261027-000237.txt": {
+      "bytes": 588,
+      "sha256": "10273836e6c7094e52135fd29068e89633ece35a7b05f1c8f557aa5106cbddb8"
+    },
+    "display1-serial-20261027-000237.txt": {
+      "bytes": 145320,
+      "sha256": "cafa65c52bfb585cf3ce7ab2e661961dd467f89802c18de67b84b87c9eb3c7d4"
+    }
+  }
+}
