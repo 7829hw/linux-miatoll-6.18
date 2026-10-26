@@ -1,6 +1,6 @@
 """Build a module-free ARM64 RAM diagnostic initramfs.
 
-Only the touch1 profile carries firmware: the pinned Huaxing FT8756 RAM image.
+Only the touch profiles carry firmware: the pinned Huaxing FT8756 RAM image.
 """
 import gzip
 import hashlib
@@ -21,12 +21,15 @@ TOUCH_FIRMWARE = 'focaltech_ts_fw_huaxing.bin'
 TOUCH_FIRMWARE_SHA256 = '83e7fb01d3a0595984c2b701633db83db4eb71eb4fd613aa635437a768ad6c9b'
 
 def build(output, profile='boot1'):
-    assert profile in ('boot1', 'display1', 'display2', 'touch1')
+    assert profile in ('boot1', 'display1', 'display2', 'touch1', 'storage1')
     script_names = ['init', 'usb-gadget', 'boot-probe']
     if profile != 'boot1':
         script_names += ['display-banner', 'display-probe']
-    if profile == 'touch1':
+    touch = profile in ('touch1', 'storage1')
+    if touch:
         script_names += ['touch-probe', 'touch-events']
+    if profile == 'storage1':
+        script_names += ['storage-probe']
     package = ROOT.parent / 'downloads/busybox-static-1.37.0-r20.apk'
     assert hashlib.sha256(package.read_bytes()).hexdigest() == APK_SHA256
     with tarfile.open(package, 'r:gz', ignore_zeros=True) as archive:
@@ -40,8 +43,10 @@ def build(output, profile='boot1'):
     qemu = ROOT.parent / 'tools/qemu/qemu-aarch64-static'
     required = {'sh', 'mount', 'uname', 'mkdir', 'cat', 'head', 'tail', 'grep',
                 'blockdev', 'watchdog', 'tr', 'setsid', 'sleep', 'ln', 'ls', 'dmesg'}
-    if profile == 'touch1':
+    if touch:
         required |= {'hexdump', 'timeout', 'seq', 'cut', 'basename', 'readlink'}
+    if profile == 'storage1':
+        required |= {'dd', 'sha256sum'}
     with tempfile.TemporaryDirectory(prefix='boot1-busybox-') as temporary:
         executable = Path(temporary) / 'busybox'
         executable.write_bytes(binary)
@@ -78,7 +83,7 @@ def build(output, profile='boot1'):
     for name in script_names[1:]:
         add('bin/' + name, stat.S_IFREG | 0o755, (BOOT / name).read_bytes())
     firmware = None
-    if profile == 'touch1':
+    if touch:
         firmware = (ROOT.parent / 'downloads' / TOUCH_FIRMWARE).read_bytes()
         assert hashlib.sha256(firmware).hexdigest() == TOUCH_FIRMWARE_SHA256
         for name in ('lib', 'lib/firmware'):

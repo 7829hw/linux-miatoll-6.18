@@ -1,0 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0
+// Read-only UFS/SD storage test on top of the verified touch1 RAM test.
+#include "sm7125-xiaomi-curtana-touch1.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing storage1 test)";
+	chosen {
+		miatoll,boot-profile = "storage1-ram-only";
+	};
+};
+
+// Restore the common-board SD controller exactly as ported from 6.14.7.
+&sdhc_2 { status = "okay"; };

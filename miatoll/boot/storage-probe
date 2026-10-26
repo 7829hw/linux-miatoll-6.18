@@ -1,0 +1,56 @@
+#!/bin/sh
+# Read-only UFS/SD check: set every block device read-only, list partitions,
+# then read the first MiBs twice from UFS "super" and the SD card and compare
+# hashes. Nothing is mounted or written; partition contents are not printed.
+mib=${1:-64}
+echo 'STORAGE_PROBE_BEGIN'
+for dev in /sys/class/block/*; do
+    blockdev --setro "/dev/${dev##*/}" 2>/dev/null
+done
+echo '--- block devices: name size(512B) ro partname ---'
+for dev in /sys/class/block/*; do
+    name=${dev##*/}
+    part=$(grep '^PARTNAME=' "$dev/uevent" | cut -d= -f2)
+    printf '%s %s %s %s\n' "$name" "$(cat "$dev/size")" "$(blockdev --getro "/dev/$name")" "$part"
+done
+read_twice() {
+    for pass in 1 2; do
+        # Drop the page cache so that each pass reads the device again.
+        sync
+        echo 3 >/proc/sys/vm/drop_caches
+        hash=$(dd if="$1" bs=1M count="$mib" 2>/run/dd.err | sha256sum | cut -d' ' -f1)
+        echo "STORAGE_READ $2 pass=$pass bytes=$((mib * 1048576)) sha256=$hash"
+        cat /run/dd.err
+    done
+}
+super=
+for dev in /sys/class/block/sd*; do
+    grep -q '^PARTNAME=super$' "$dev/uevent" 2>/dev/null && super=/dev/${dev##*/}
+done
+if [ -n "$super" ] && [ "$(blockdev --getro "$super")" = 1 ]; then
+    read_twice "$super" "ufs-super($super)"
+else
+    echo "STORAGE_UFS_SKIPPED: super=$super"
+fi
+echo '--- SD card ---'
+card=
+for dev in /sys/block/mmcblk*; do
+    [ -e "$dev" ] && card=/dev/${dev##*/}
+done
+if [ -n "$card" ]; then
+    info=/sys/block/${card##*/}/device
+    for field in type name manfid oemid date; do
+        printf '%s=%s\n' "$field" "$(cat "$info/$field" 2>/dev/null)"
+    done
+    cat /sys/kernel/debug/mmc*/ios 2>/dev/null
+    if [ "$(blockdev --getro "$card")" = 1 ]; then
+        read_twice "$card" "sd($card)"
+    else
+        echo "STORAGE_SD_SKIPPED: $card is not read-only"
+    fi
+else
+    echo 'STORAGE_SD_ABSENT: no mmcblk device'
+fi
+echo '--- storage kernel messages ---'
+dmesg | grep -Ei 'mmc|sdhci|ufs|scsi|sd[a-f]:| sd |I/O error|blk_update'
+echo 'STORAGE_PROBE_END'
