@@ -35,6 +35,10 @@
 &i2c9 { status = "disabled"; };
 &spi10 { status = "disabled"; };
 &spi11 { status = "disabled"; };
+&qupv3_id_0 { status = "disabled"; };
+&qupv3_id_1 { status = "disabled"; };
+&gpi_dma0 { status = "disabled"; };
+&gpi_dma1 { status = "disabled"; };
 &pm6150_qgauge { status = "disabled"; };
 &pm6150_typec { status = "disabled"; };
 &pm6150_vbus { status = "disabled"; };
@@ -47,5 +51,9 @@
 };
 
 &usb_1_dwc3_hs {
+	/delete-property/ remote-endpoint;
+};
+
+&pm6150_role_switch_in {
 	/delete-property/ remote-endpoint;
 };

@@ -1,0 +1,32 @@
+#!/bin/sh
+echo 'BOOT1_PROBE_BEGIN'
+uname -a
+echo '--- profile ---'
+tr '\000' '\n' </sys/firmware/devicetree/base/chosen/miatoll,boot-profile
+echo '--- command line ---'
+cat /proc/cmdline
+echo '--- uptime / CPU / RAM ---'
+cat /proc/uptime /sys/devices/system/cpu/online
+head -n 5 /proc/meminfo
+echo '--- mounts (RAM and pseudo filesystems only) ---'
+cat /proc/mounts
+echo '--- storage enumeration (no reads or mounts) ---'
+cat /proc/partitions
+for disk in /sys/block/sd*; do
+    [ -e "$disk" ] || continue
+    blockdev --setro "/dev/${disk##*/}"
+    printf '%s read-only=' "${disk##*/}"
+    blockdev --getro "/dev/${disk##*/}"
+done
+echo '--- USB ---'
+cat /run/usb-setup.log
+for state in /sys/class/udc/*/state; do
+    [ -f "$state" ] && cat "$state"
+done
+echo '--- loaded modules (expected empty) ---'
+cat /proc/modules
+echo '--- deferred probes ---'
+cat /sys/kernel/debug/devices_deferred 2>/dev/null
+echo '--- kernel log ---'
+dmesg
+echo 'BOOT1_PROBE_END'

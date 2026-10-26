@@ -1,0 +1,169 @@
+#!/usr/bin/env python3
+"""Package one curtana RAM boot candidate without modifying existing artifacts."""
+import importlib.util
+import json
+from pathlib import Path, PurePosixPath
+import shutil
+import struct
+import subprocess
+import sys
+import tempfile
+
+from boot_v2 import digest, parse_boot, require
+from build_initramfs import build as build_initramfs
+import build_shim
+
+ROOT = Path(__file__).resolve().parents[2]
+WORKSPACE = ROOT.parent
+BOOT = ROOT / 'miatoll/boot'
+DIST = WORKSPACE / 'dist/miatoll-boot1'
+OUT = WORKSPACE / 'out-miatoll-boot1'
+TOOLS = WORKSPACE / 'tools'
+PINS = {
+    'aosp-mkbootimg/mkbootimg.py': '37d84b3d162e0bc62e36c1f4e1c63c85ea0caa9f29be023eb2f8efe006ad948c',
+    'aosp-mkbootimg/unpack_bootimg.py': 'a9d260978a63bd06a24b6347e7dee8a28ff96639793caea15dff6aa491316308',
+    'aosp-avb/avbtool.py': '78a50c8620985709f2e131cf948dcd66ecc43f09ed735e09d75751a7e21e4eb8',
+}
+
+def fdt(dtb, node, prop, kind='s'):
+    return subprocess.check_output(['fdtget', '-t', kind, str(dtb), node, prop], text=True).strip()
+
+def available(dtb, node):
+    path = PurePosixPath(node)
+    for parent in (*reversed(path.parents), path):
+        properties = subprocess.check_output(['fdtget', '-p', str(dtb), str(parent)], text=True).splitlines()
+        if 'status' in properties:
+            require(fdt(dtb, str(parent), 'status') in ('okay', 'ok'), 'Disabled USB ancestor: ' + str(parent))
+
+def analyze_avb(module, path):
+    handle = module.ImageHandler(str(path), read_only=True)
+    footer, header, descriptors, size = module.Avb()._parse_image(handle)
+    require(footer is not None and header.algorithm_type == 0, 'Expected unsigned AVB hash metadata')
+    hashes = [x for x in descriptors if isinstance(x, module.AvbHashDescriptor)]
+    properties = {x.key: x.value.decode('utf-8') for x in descriptors if isinstance(x, module.AvbPropertyDescriptor)}
+    require(len(hashes) == 1 and hashes[0].partition_name == 'boot', 'Unexpected AVB descriptors')
+    entry = hashes[0]
+    require(entry.flags == 0 and entry.hash_algorithm == 'sha256', 'Unexpected boot hash parameters')
+    require(entry.image_size == footer.original_image_size, 'Invalid AVB payload size')
+    import hashlib
+    require(entry.digest == hashlib.sha256(entry.salt + path.read_bytes()[:entry.image_size]).digest(), 'AVB digest mismatch')
+    return {'bytes': size, 'salt': entry.salt.hex(), 'flags': header.flags,
+            'rollback_index': header.rollback_index, 'rollback_index_location': header.rollback_index_location,
+            'properties': properties}
+
+def main():
+    DIST.mkdir(parents=True, exist_ok=True)
+    for path, expected in PINS.items():
+        require(digest((TOOLS / path).read_bytes()) == expected, 'Changed tool: ' + path)
+    # The original uploaded boot.img is no longer present. Use the intact,
+    # previously validated audio2 container only as the header/AVB reference.
+    reference = WORKSPACE / 'dist/boot-curtana-6.18-stockdt-shim-audio2.img'
+    require(digest(reference.read_bytes()) == 'd99f276d122f54ed5eb1df6a0883b166c38e7d4df2df881e7b22da188eed2b3f', 'Changed reference container')
+    header, original_parts = parse_boot(reference.read_bytes())
+    stock_dtb = WORKSPACE / 'reference/pixelos/dtb'
+    require(stock_dtb.read_bytes() == original_parts['dtb'], 'Outer DTB differs from preserved stock DTB')
+    stock_kernel = (WORKSPACE / 'reference/pixelos/kernel').read_bytes()
+    require(stock_kernel[56:60] == b'ARM\x64', 'Invalid original kernel header')
+    stock_runtime = struct.unpack_from('<Q', stock_kernel, 16)[0]
+    kernel = DIST / 'kernel/Image'
+    config = (DIST / 'kernel/.config').read_text()
+    release = (DIST / 'kernel/kernelrelease.txt').read_text().strip()
+    require(release == '6.18.58-miatoll-boot1+', 'Unexpected test kernel release: ' + release)
+    require(('Linux version ' + release).encode() in kernel.read_bytes(), 'Wrong kernel payload')
+    for symbol in ('BLK_DEV_INITRD', 'RD_GZIP', 'DEVTMPFS', 'USB_CONFIGFS_ACM',
+                   'USB_DWC3_GADGET', 'PHY_QCOM_QUSB2', 'DRM_SIMPLEDRM'):
+        require('CONFIG_' + symbol + '=y\n' in config, 'Missing built-in: ' + symbol)
+    dtb = OUT / 'arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-boot1.dtb'
+    require(fdt(dtb, '/', 'qcom,board-id', 'x') == '20022 1', 'Not the curtana board')
+    require(fdt(dtb, '/chosen', 'miatoll,boot-profile') == 'boot1-ram-only', 'Wrong profile')
+    for node in ('/soc@0/usb@a6f8800/usb@a600000', '/soc@0/phy@88e3000'):
+        available(dtb, node)
+    require(fdt(dtb, '/soc@0/usb@a6f8800/usb@a600000', 'dr_mode') == 'peripheral', 'USB must be peripheral')
+    disabled = ('/soc@0/display-subsystem@ae00000', '/soc@0/gpu@5000000',
+                '/soc@0/remoteproc@4080000', '/soc@0/remoteproc@62400000',
+                '/soc@0/remoteproc@8300000', '/soc@0/wifi@18800000',
+                '/soc@0/camss@acb3000', '/soc@0/mmc@8804000', '/sound')
+    for node in disabled:
+        require(fdt(dtb, node, 'status') == 'disabled', 'Unexpected active device: ' + node)
+    validation_file = WORKSPACE / 'out-miatoll-boot1-shim-test/test-result.json'
+    validation = json.loads(validation_file.read_text())
+    require(validation['arm64_emulation_passed'] and validation['host_validation_passed'], 'Run test_shim.py first')
+    require(validation['template_sha256'] == digest(dtb.read_bytes()), 'DT changed since shim test')
+    for name, expected in validation['sources'].items():
+        require(digest((ROOT / name).read_bytes()) == expected, 'Retest changed shim source: ' + name)
+    ramdisk = DIST / 'initramfs-boot1.cpio.gz'
+    ramdisk_report = build_initramfs(ramdisk)
+    shim = build_shim.build(kernel, dtb, WORKSPACE / 'out-miatoll-boot1-shim')
+    require(shim.stat().st_size < stock_runtime, 'Loader footprint exceeds the original kernel budget')
+    shutil.copy2(dtb, DIST / dtb.name)
+    command_line = ('rdinit=/init console=tty0 loglevel=8 ignore_loglevel clk_ignore_unused '
+                    'pd_ignore_unused no_console_suspend deferred_probe_timeout=30 panic=0 '
+                    'enforcing=0 miatoll_boot=boot1')
+    plain = DIST / 'boot1-plain.img'
+    mkbootimg = TOOLS / 'aosp-mkbootimg/mkbootimg.py'
+    command = [sys.executable, str(mkbootimg), '--kernel', str(shim), '--ramdisk', str(ramdisk),
+               '--dtb', str(stock_dtb), '--header_version', '2', '--pagesize', '4096', '--base', '0',
+               '--board', header['board'], '--os_version', header['os_version'],
+               '--os_patch_level', header['os_patch_level'], '--cmdline', command_line, '--output', str(plain)]
+    for flag, field in (('kernel_offset', 'kernel_addr'), ('ramdisk_offset', 'ramdisk_addr'),
+                        ('second_offset', 'second_addr'), ('tags_offset', 'tags_addr'), ('dtb_offset', 'dtb_addr')):
+        command += ['--' + flag, hex(header[field])]
+    subprocess.run(command, check=True)
+    built_header, parts = parse_boot(plain.read_bytes())
+    require(built_header['cmdline'] == command_line, 'Command line mismatch')
+    for name, path in (('kernel', shim), ('ramdisk', ramdisk), ('dtb', stock_dtb)):
+        require(parts[name] == path.read_bytes(), 'Boot component mismatch: ' + name)
+    avb_path = TOOLS / 'aosp-avb/avbtool.py'
+    spec = importlib.util.spec_from_file_location('boot1_avb', avb_path)
+    avb = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(avb)
+    avb_reference = analyze_avb(avb, reference)
+    image = DIST / 'boot-curtana-6.18.58-boot1.img'
+    shutil.copy2(plain, image)
+    command = [sys.executable, str(avb_path), 'add_hash_footer', '--image', str(image),
+               '--partition_name', 'boot', '--partition_size', str(avb_reference['bytes']),
+               '--algorithm', 'NONE', '--hash_algorithm', 'sha256', '--salt', avb_reference['salt'],
+               '--flags', str(avb_reference['flags']), '--rollback_index', str(avb_reference['rollback_index']),
+               '--rollback_index_location', str(avb_reference['rollback_index_location'])]
+    for key, value in avb_reference['properties'].items():
+        command += ['--prop', key + ':' + value]
+    subprocess.run(command, check=True)
+    analyze_avb(avb, image)
+    # This avbtool resolves the 'boot' descriptor as boot.img in the same folder.
+    with tempfile.TemporaryDirectory(prefix='boot1-avb-verify-') as temporary:
+        checked_image = Path(temporary) / 'boot.img'
+        shutil.copy2(image, checked_image)
+        verify = subprocess.run([sys.executable, str(avb_path), 'verify_image', '--image', str(checked_image)],
+                                check=True, capture_output=True, text=True)
+    (DIST / 'avb-verify.txt').write_text(verify.stdout + verify.stderr)
+    unpack = WORKSPACE / 'out-miatoll-boot1-unpacked'
+    subprocess.run([sys.executable, str(TOOLS / 'aosp-mkbootimg/unpack_bootimg.py'),
+                    '--boot_img', str(image), '--out', str(unpack)], check=True, stdout=subprocess.DEVNULL)
+    for name in ('kernel', 'ramdisk', 'dtb'):
+        require((unpack / name).read_bytes() == parts[name], 'Independent unpack mismatch: ' + name)
+    result = {'kernel_release': release, 'image': image.name, 'image_bytes': image.stat().st_size,
+              'image_sha256': digest(image.read_bytes()), 'kernel_sha256': digest(kernel.read_bytes()),
+              'kernel_build_commit': (DIST / 'kernel/source-commit.txt').read_text().strip(),
+              'kernel_runtime_bytes': struct.unpack_from('<Q', kernel.read_bytes(), 16)[0],
+              'shim_runtime_bytes': shim.stat().st_size, 'stock_runtime_budget_bytes': stock_runtime,
+              'boot_profile': 'boot1-ram-only', 'dtb_sha256': digest(dtb.read_bytes()),
+              'outer_dtb_sha256': digest(stock_dtb.read_bytes()), 'avb_hash_verified': True,
+              'avb_algorithm': 'NONE (unsigned hash metadata, not OEM authentication)',
+              'aosp_unpack_verified': True, 'shim_arm64_mock_entry_tested': True,
+              'ramdisk': ramdisk_report, 'device_boot_confirmed': False,
+              'reference_container': str(reference), 'reference_container_is_stock_image': False,
+              'original_uploaded_boot_image_available': False,
+              'hardware_scope': 'CPU/RAM, inherited framebuffer, UFS enumeration and USB console only'}
+    result['packaging_source_commit'] = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], text=True).strip()
+    checked_sources = [*BOOT.glob('*.py'), *BOOT.glob('*.ps1'), *BOOT.glob('shim/*'),
+                       *(BOOT / name for name in ('init', 'boot-probe', 'usb-gadget')),
+                       ROOT / 'arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-boot1.dts',
+                       ROOT / 'miatoll/configs/boot1.config', ROOT / 'miatoll/configs/miatoll.config']
+    result['packaging_sources'] = {str(path.relative_to(ROOT)): digest(path.read_bytes())
+                                    for path in checked_sources if path.is_file()}
+    (DIST / 'boot1-report.json').write_text(json.dumps(result, indent=2) + '\n')
+    shutil.copy2(BOOT / 'Test-Boot1.ps1', DIST / 'Test-Boot1.ps1')
+    print(json.dumps({key: value for key, value in result.items() if key != 'ramdisk'}, indent=2))
+
+if __name__ == '__main__':
+    main()

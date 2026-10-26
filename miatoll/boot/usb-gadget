@@ -1,0 +1,43 @@
+#!/bin/sh
+# A separate POSIX script also allows userspace configuration tests with a
+# temporary sysfs tree. It never writes storage or changes kernel drivers.
+sysfs=${USB_SYSFS_ROOT:-/sys}
+timeout=${USB_UDC_TIMEOUT:-60}
+base="$sysfs/kernel/config/usb_gadget"
+gadget="$base/miatoll-boot1"
+fail() { echo "USB: $*" >&2; exit 1; }
+[ -d "$base" ] || fail 'configfs usb_gadget subsystem is unavailable'
+mkdir -p "$gadget" || fail 'cannot create gadget'
+current=$(cat "$gadget/UDC" 2>/dev/null)
+if [ -n "$current" ]; then
+    echo "USB: already bound to $current"
+    exit 0
+fi
+printf '0x1d6b' >"$gadget/idVendor" || fail 'idVendor failed'
+printf '0x0104' >"$gadget/idProduct" || fail 'idProduct failed'
+printf '0x02' >"$gadget/bDeviceClass" || fail 'device class failed'
+mkdir -p "$gadget/strings/0x409" "$gadget/configs/c.1/strings/0x409" \
+    "$gadget/functions/acm.usb0" || fail 'ACM function creation failed'
+printf 'miatoll-boot1' >"$gadget/strings/0x409/serialnumber" || fail 'serial failed'
+printf 'Linux' >"$gadget/strings/0x409/manufacturer" || fail 'manufacturer failed'
+printf 'miatoll 6.18.58 RAM boot1' >"$gadget/strings/0x409/product" || fail 'product failed'
+printf 'USB serial diagnostics' >"$gadget/configs/c.1/strings/0x409/configuration" || fail 'configuration failed'
+printf '100' >"$gadget/configs/c.1/MaxPower" || fail 'MaxPower failed'
+link="$gadget/configs/c.1/acm.usb0"
+if [ ! -e "$link" ]; then
+    ln -s "$gadget/functions/acm.usb0" "$link" || fail 'ACM link failed'
+fi
+echo 'USB: ACM function configured; waiting for a device controller'
+count=0
+while :; do
+    for controller in "$sysfs"/class/udc/*; do
+        [ -e "$controller" ] || continue
+        name=${controller##*/}
+        printf '%s' "$name" >"$gadget/UDC" || fail "cannot bind to $name"
+        echo "USB: bound ACM gadget to $name"
+        exit 0
+    done
+    [ "$count" -ge "$timeout" ] && fail "no UDC registered after $timeout seconds"
+    count=$((count + 1))
+    sleep 1
+done
