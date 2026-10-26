@@ -37,6 +37,7 @@ display1의 실제 화면 실패 로그를 보존하고 수정 후보는 `miatol
 | `miatoll/6.18-wifi1` | usb2에 MPSS·WCN3990과 read-only rmtfs/BDF 복사를 더한 Wi-Fi 시험 |
 | `miatoll/6.18-wifi2` | wifi1과 같은 커널에 wpa_supplicant와 화면 키보드 입력 연결 스크립트를 더한 WPA3 연결 시험 |
 | `miatoll/6.18-wifi3` | wifi2에 ath10k WCN3990 PMF peer 비트 backport(공개 제안, 병합 미확인)를 더한 지연 비교 |
+| `miatoll/6.18-bt1` | wifi3에 UART3 WCN3991 Bluetooth·QCA firmware·btctl을 더한 초기화·검색 시험 |
 
 최초 Git 보존 bundle은 백업 디렉터리의 `legacy-kernel.bundle`이다.
 공식 태그는 shallow fetch로 고정했으므로 모든 과거 upstream 이력을 보유한 전체 clone은 아니다.

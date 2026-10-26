@@ -9,6 +9,7 @@ USB-C 역할 전환·host를 실기기로 확인한 브랜치: **`miatoll/6.18-u
 Wi-Fi firmware·검색을 실기기로 확인한 브랜치: **`miatoll/6.18-wifi1`**(usb2 기반).
 WPA3 연결·IPv4 통신을 실기기로 확인한 브랜치: **`miatoll/6.18-wifi2`**(wifi1과 같은 커널).
 Wi-Fi 지연을 개선한 브랜치: **`miatoll/6.18-wifi3`**(wifi2 + ath10k WCN3990 PMF peer 비트 backport).
+Bluetooth 초기화·검색을 실기기로 확인한 브랜치: **`miatoll/6.18-bt1`**(wifi3 기반).
 공식 Linux **v6.18.58**을 기반으로, 6.14.7 포크의 Xiaomi 하드웨어 구현을 직접 선별 이식했다.
 기존 로컬 커널 수정은 보존 브랜치와 백업에 남겼다.
 
@@ -187,6 +188,14 @@ RAMdisk에 `/tmp`가 없어 스크립트가 연결 완료를 읽지 못했고, �
 고친 `/tmp` RAMdisk로 `wifi-join`이 끝까지 완료됐다. 처리량·2.4 GHz·장시간·공장 MAC은 미검증이다.
 [wifi3 실기기 기록](reports/device-tests/20261027-033718-wifi3/README.ko.md)
 
+## bt1 실기기 결과: WCN3991 Bluetooth 초기화·검색 확인
+
+`20261027-034959` 회차는 wifi3에 QUP0/UART3와 Bluetooth 내장, 고정 QCA firmware, btctl rev 4를 더했다.
+firmware 초기화가 완료됐지만 공개 주소가 없어 unconfigured였다. 이번 부팅에만 쓰는 임시 진단 주소를 설정한 뒤
+전원이 켜졌다. LE 검색(주소 26개)과 BR/EDR 검색(주소 3개)이 성공했다.
+공장 주소, 페어링·연결, Wi-Fi 동시 동작은 미검증이다.
+[bt1 실기기 기록](reports/device-tests/20261027-034959-bt1/README.ko.md)
+
 ## 하드웨어별 상태
 
 아래의 '반영'은 새 브랜치의 소스·설정·컴파일 결과다. boot1에서 확인한 기본 기능 외의
@@ -201,7 +210,7 @@ RAMdisk에 `/tmp`가 없어 스크립트가 연결 완료를 읽지 못했고, �
 | 카메라 | CAMSS 공통 코드, OV8856/DW9714 | SC7180 CAMSS/CCI/PHY/DT, S5KGM2/S5K5E9/OV16A1Q/DW9800, 기존 센서/VCM 확장 | ID/전원/스트림/초점/영상 품질. DW9800은 원본도 WIP. joyeuse DT에는 S5K5E9/OV16A1Q만 있고 주카메라 경로가 완성되지 않음 |
 | 오디오 | QDSP6/APR, sm8250 machine, TAS2562, WCD937x, SoundWire/LPASS | ADSP 및 스피커/헤드폰/마이크 DT 경로, 드라이버 설정 | ALSA 열거, 스피커 소리, 녹음/마이크/통화, 기존 ACDB/HAL 대응 |
 | LTE 모뎀 | MPSS remoteproc, QRTR/QMI, IPA/RMNET | 보드 firmware/메모리/IPA DT, SM7125 PD mapper | MPSS/QMI/SIM/망 등록, 데이터, RIL/IMS/음성 호환성 |
-| Wi-Fi/Bluetooth | ath10k SNOC, QCA UART/HCI | 전원/버스/펌웨어 DT | wifi1에서 MPSS·WLAN firmware·wlan0·수동 검색, wifi2에서 WPA3-SAE 연결·DHCPv4·ICMP, wifi3에서 PMF peer 비트 backport 후 지연 개선(평균 23 ms) 실기기 확인(read-only rmtfs, 기기 BDF). 공장 MAC, 처리량, 공존, Bluetooth 미검증. PMF 패치는 wifi3 브랜치에만 포함 |
+| Wi-Fi/Bluetooth | ath10k SNOC, QCA UART/HCI | 전원/버스/펌웨어 DT | wifi1에서 MPSS·WLAN firmware·wlan0·수동 검색, wifi2에서 WPA3-SAE 연결·DHCPv4·ICMP, wifi3에서 PMF peer 비트 backport 후 지연 개선(평균 23 ms) 실기기 확인(read-only rmtfs, 기기 BDF). bt1에서 Bluetooth firmware·임시 주소 전원·LE/BR 검색 확인. 공장 MAC/BD 주소, 처리량, 공존, 페어링 미검증. PMF 패치는 wifi3 브랜치에만 포함 |
 | 배터리/충전 | ADC5, SPMI SDAM, regulator, Type-C | 실험적 QGauge와 PM6150 DT. 6.18 fwnode API 변환 | QGauge 잔량은 선형 전압 추정이며 STATUS_UNKNOWN. 충전 제어·정확한 SOC·건강 HAL은 미완성. SM5714는 Samsung용이므로 제외 |
 | 전력 관리 | RPMh/CPUfreq/thermal/PSCI | 보드 전원 DT와 Android wakelock/autosleep 설정 | 실제 idle/suspend/resume/열 보호/소비 전류/USB 전력 역할 |
 | 추가 기능 | Venus/IR SPI | 기존 드라이버 모듈 설정, 보드 DT; AW8695/DRV2624 진동 드라이버 | 영상 가속/IR/진동은 실행 미검증. DRV2624 GPIO API 변환 |
@@ -257,7 +266,7 @@ Clang/LLD 18.1.3과 호스트 도구는 작업 공간의 `tools/`에만 준비�
 
 ## 우선 남은 작업
 
-1. display2 화면, touch1 터치, storage1 UFS/SD 읽기, usb2 USB 역할 전환·host, wifi1–3 Wi-Fi 검색·WPA3 연결·지연 개선은 확인했다. 다음 단계는 BT·GPU·오디오·충전이며,
+1. display2 화면, touch1 터치, storage1 UFS/SD 읽기, usb2 USB 역할 전환·host, wifi1–3 Wi-Fi와 bt1 Bluetooth 검색은 확인했다. 다음 단계는 BT 페어링·공존, GPU·오디오·충전이며,
    반복 부팅·부하·idle/suspend/resume와 장시간 표시는 별도로 검증한다. BWMON/Venus는 화면 시험 DT에서 비활성화했다.
 2. 화면·터치·SD·무선을 기능별 RAM 시험으로 재검증한다. 새 DT/모듈/firmware와
    boot header v2·메모리 인계를 Android 부팅 구성에도 연결한다.

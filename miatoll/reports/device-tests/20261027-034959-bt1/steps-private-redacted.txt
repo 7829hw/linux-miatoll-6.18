@@ -1,0 +1,89 @@
+### 2026-10-27T03:51:16 bt-start-and-scan
+$ btctl --version; bt-start --test-address; sleep 2; timeout -k 3 40 btctl scan; echo "scan_le_exit=$?"; timeout -k 3 40 btctl scan-classic; echo "scan_classic_exit=$?"; timeout -k 3 8 btctl info; echo "info_exit=$?"; dmesg | grep -iE "Bluetooth|hci0" | tail -8
+btctl --version; bt-start --test-address; sleep 2; timeout -k 3 40 
+btctl scan; echo "scan_le_exit=$?"; timeout -k 3 40 btctl scan-classic; echo "sc
+an_classic_exit=$?"; timeout -k 3 8 btctl info; echo "info_exit=$?"; dmesg | gre
+p -iE "Bluetooth|hci0" | tail -8; printf "\nSTEP_DONE_035051=%s\n" "$?"
+curtana btctl revision 4
+mgmt_version=1 revision=23
+configured_controllers=0 unconfigured_controllers=1
+temporary_test_address=<addr> (current boot only; not factory address)
+hci0 address=<addr> version=10 manufacturer=29
+supported_settings=0x01c3feff current_settings=0x00000080 powered=0 le_enabled=0 bredr_enabled=1
+ssp_enabled=0
+name=
+mgmt_version=1 revision=23
+configured_controllers=1 unconfigured_controllers=0
+hci0 address=<addr> version=10 manufacturer=29
+supported_settings=0x01c3feff current_settings=0x00000081 powered=1 le_enabled=0 bredr_enabled=1
+ssp_enabled=0
+name=
+bt_start_exit=0
+mgmt_version=1 revision=23
+configured_controllers=1 unconfigured_controllers=0
+le_enabled=1 current_settings=0x01c00281
+LE discovery started for 10 seconds
+LE device address=<addr> type=2 rssi=-48 flags=0x00000004
+LE device address=<addr> type=2 rssi=-92 flags=0x00000000
+LE device address=<addr> type=2 rssi=-90 flags=0x00000000
+LE device address=<addr> type=2 rssi=-49 flags=0x00000004
+LE device address=<addr> type=2 rssi=-100 flags=0x00000000
+LE device address=<addr> type=2 rssi=-72 flags=0x00000000
+LE device address=<addr> type=2 rssi=-89 flags=0x00000000
+LE device address=<addr> type=2 rssi=-87 flags=0x00000000 name=<redacted>
+LE device address=<addr> type=2 rssi=-48 flags=0x00000004
+LE device address=<addr> type=1 rssi=-62 flags=0x00000000
+LE device address=<addr> type=2 rssi=-96 flags=0x00000000 name=<redacted>
+LE device address=<addr> type=2 rssi=-60 flags=0x00000000
+LE device address=<addr> type=2 rssi=-85 flags=0x00000004 name=<redacted>
+LE device address=<addr> type=2 rssi=-89 flags=0x00000000
+LE device address=<addr> type=2 rssi=-82 flags=0x00000020
+LE device address=<addr> type=2 rssi=-88 flags=0x00000020
+LE device address=<addr> type=2 rssi=-84 flags=0x00000000
+LE device address=<addr> type=2 rssi=-82 flags=0x00000004
+LE device address=<addr> type=2 rssi=-101 flags=0x00000000
+LE device address=<addr> type=2 rssi=-89 flags=0x00000004
+LE device address=<addr> type=2 rssi=-90 flags=0x00000020
+LE device address=<addr> type=2 rssi=-67 flags=0x00000004
+LE device address=<addr> type=2 rssi=-65 flags=0x00000000
+LE device address=<addr> type=2 rssi=-97 flags=0x00000004
+LE device address=<addr> type=2 rssi=-97 flags=0x00000004
+LE device address=<addr> type=2 rssi=-75 flags=0x00000004
+LE device address=<addr> type=2 rssi=-100 flags=0x00000000
+LE device address=<addr> type=2 rssi=-98 flags=0x00000004
+LE device address=<addr> type=2 rssi=-97 flags=0x00000004
+LE device address=<addr> type=2 rssi=-90 flags=0x00000004
+LE discovery reports=30
+le_enabled=0 current_settings=0x00000081
+Original LE setting restored: off
+scan_le_exit=0
+mgmt_version=1 revision=23
+configured_controllers=1 unconfigured_controllers=0
+BR/EDR discovery started for 20 seconds
+BR/EDR device address=<addr> type=0 rssi=-80 flags=0x00000001
+BR/EDR device address=<addr> type=0 rssi=-85 flags=0x00000001
+BR/EDR device address=<addr> type=0 rssi=-78 flags=0x00000000 name=<redacted>
+BR/EDR device address=<addr> type=0 rssi=-100 flags=0x00000001
+BR/EDR device address=<addr> type=0 rssi=-84 flags=0x00000000 name=<redacted>
+BR/EDR device address=<addr> type=0 rssi=-83 flags=0x00000000 name=<redacted>
+BR/EDR device address=<addr> type=0 rssi=-83 flags=0x00000000 name=<redacted>
+BR/EDR discovery reports=7
+scan_classic_exit=0
+mgmt_version=1 revision=23
+configured_controllers=1 unconfigured_controllers=0
+hci0 address=<addr> version=10 manufacturer=29
+supported_settings=0x01c3feff current_settings=0x00000081 powered=1 le_enabled=0 bredr_enabled=1
+ssp_enabled=0
+name=
+info_exit=0
+[   27.437095] Bluetooth: hci0: QCA Product ID   :0x0000000a
+[   27.437234] Bluetooth: hci0: QCA SOC Version  :0x40010320
+[   27.437290] Bluetooth: hci0: QCA ROM Version  :0x00000302
+[   27.437346] Bluetooth: hci0: QCA Patch Version:0x00000de9
+[   27.448548] Bluetooth: hci0: QCA controller version 0x03200302
+[   27.448638] Bluetooth: hci0: QCA Downloading qca/crbtfw32.tlv
+[   27.978348] Bluetooth: hci0: QCA Downloading qca/crnv32.bin
+[   28.303033] Bluetooth: hci0: QCA setup on UART is completed
+
+STEP_DONE_035051=0
+miatoll-bt1# [6n

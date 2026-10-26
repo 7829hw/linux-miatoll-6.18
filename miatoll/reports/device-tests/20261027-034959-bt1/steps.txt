@@ -1,0 +1,84 @@
+### 2026-10-27T03:50:38 bt-probe-initial
+$ sleep 5; bt-probe
+sleep 5; bt-probe; printf "\nSTEP_DONE_035032=%s\n" "$?"
+===== BT PROBE =====
+Linux (none) 6.18.58-miatoll-bt1+ #1 SMP PREEMPT 2026-10-26 00:00:00 +0000 aarch64 Linux
+===== BLUETOOTH CONTROLLERS =====
+total 0
+lrwxrwxrwx    1 0        0                0 Jan  1 00:00 [1;36mhci0[m -> [1;34m../../devices/platform/soc@0/8c0000.geniqup/88c000.serial/88c000.serial:0/88c000.serial:0.0/serial0/serial0-0/bluetooth/hci0[m
+/sys/class/bluetooth/hci0
+===== MANAGEMENT INFO =====
+mgmt_version=1 revision=23
+configured_controllers=0 unconfigured_controllers=1
+hci0 unconfigured manufacturer=29 supported_options=0x00000002 missing_options=0x00000002
+info_exit=2
+===== UART / SERDEV =====
+/sys/bus/serial/devices:
+total 0
+lrwxrwxrwx    1 0        0                0 Jan  1 00:00 [1;36mserial0[m -> [1;34m../../../devices/platform/soc@0/8c0000.geniqup/88c000.serial/88c000.serial:0/88c000.serial:0.0/serial0[m
+lrwxrwxrwx    1 0        0                0 Jan  1 00:00 [1;36mserial0-0[m -> [1;34m../../../devices/platform/soc@0/8c0000.geniqup/88c000.serial/88c000.serial:0/88c000.serial:0.0/serial0/serial0-0[m
+
+/sys/bus/serial/drivers/hci_uart_qca:
+total 0
+--w-------    1 0        0             4096 Jan  1 00:00 [0;0mbind[m
+lrwxrwxrwx    1 0        0                0 Jan  1 00:00 [1;36mserial0-0[m -> [1;34m../../../../devices/platform/soc@0/8c0000.geniqup/88c000.serial/88c000.serial:0/88c000.serial:0.0/serial0/serial0-0[m
+--w-------    1 0        0             4096 Jan  1 00:00 [0;0muevent[m
+--w-------    1 0        0             4096 Jan  1 00:00 [0;0munbind[m
+lrwxrwxrwx    1 0        0                0 Jan  1 00:00 [1;36m/sys/bus/platform/devices/88c000.serial/driver[m -> [1;34m../../../../../bus/platform/drivers/qcom_geni_serial[m
+===== RFKILL =====
+/sys/class/rfkill/rfkill0
+name: hci0
+type: bluetooth
+soft: 0
+hard: 0
+===== BT START RESULT =====
+===== UART / SWCTRL GPIO =====
+ gpio38  : in  low  func0 2mA pull down
+ gpio39  : in  low  func0 2mA pull down
+ gpio40  : in  high func0 2mA pull up
+ gpio41  : in  high func0 2mA pull up
+ gpio73  : in  low  func0 2mA pull down
+===== SERIAL INTERRUPTS =====
+171:        686          0          0          0          0          0          0          0    GICv3 636 Level     qcom_geni_serial_uart0
+172:          0          0          0          0          0          0          0          0  msmgpio  41 Edge      88c000.serial:wakeup
+===== DEFERRED PROBES =====
+===== BLUETOOTH LOG =====
+[    0.000000] OF: reserved mem: 0x000000009d700000..0x000000009d7fffff (1024 KiB) map non-reusable firmware-reserved@9d700000
+[    0.000000] OF: reserved mem: 0x000000009c9e3400..0x000000009d6fffff (13427 KiB) map non-reusable firmware-reserved@9c9e3400
+[    0.000000] OF: reserved mem: 0x000000009f400000..0x00000000a11fffff (30720 KiB) nomap non-reusable firmware-reserved@9f400000
+[    0.000000] OF: reserved mem: 0x000000009e000000..0x000000009f3fffff (20480 KiB) nomap non-reusable firmware-reserved@9e000000
+[    0.000000] OF: reserved mem: 0x0000000093b10000..0x0000000093b14fff (20 KiB) nomap non-reusable firmware-reserved@93b10000
+[    0.000000] OF: reserved mem: 0x000000008e900000..0x000000008edfffff (5120 KiB) nomap non-reusable firmware-reserved@8e900000
+[    0.000000] OF: reserved mem: 0x000000008e400000..0x000000008e8fffff (5120 KiB) nomap non-reusable firmware-reserved@8e400000
+[    0.000000] psci: PSCIv1.1 detected in firmware.
+[    0.000000] psci: [Firmware Bug]: failed to set PC mode: -3
+[    0.080300] qcom_scm firmware:scm: qseecom: found qseecom with version 0x1400000
+[    0.080332] qcom_scm firmware:scm: qseecom: untested machine, skipping
+[    0.081356] Bluetooth: Core ver 2.22
+[    0.081387] NET: Registered PF_BLUETOOTH protocol family
+[    0.081397] Bluetooth: HCI device and connection manager initialized
+[    0.081410] Bluetooth: HCI socket layer initialized
+[    0.081420] Bluetooth: L2CAP socket layer initialized
+[    0.081433] Bluetooth: SCO socket layer initialized
+[    0.222950] Bluetooth: HCI UART driver ver 2.3
+[    0.222964] Bluetooth: HCI UART protocol H4 registered
+[    0.222990] Bluetooth: HCI UART protocol LL registered
+[    0.223053] Bluetooth: HCI UART protocol Broadcom registered
+[    0.223073] Bluetooth: HCI UART protocol QCA registered
+[    0.223092] Bluetooth: HCI UART protocol Marvell registered
+[    0.454046] 88c000.serial: ttyHS0 at MMIO 0x88c000 (irq = 171, base_baud = 0) is a MSM
+[    0.456281] Bluetooth: hci0: setting up wcn399x
+[    0.467593] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] Not using firmware configuration
+[    0.587303] Bluetooth: hci0: QCA Product ID   :0x0000000a
+[    0.587310] Bluetooth: hci0: QCA SOC Version  :0x40010320
+[    0.587311] Bluetooth: hci0: QCA ROM Version  :0x00000302
+[    0.587312] Bluetooth: hci0: QCA Patch Version:0x00000de9
+[    0.601503] Bluetooth: hci0: QCA controller version 0x03200302
+[    0.601511] Bluetooth: hci0: QCA Downloading qca/crbtfw32.tlv
+[    0.661753] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] Not using firmware configuration
+[    1.182413] Bluetooth: hci0: QCA Downloading qca/crnv32.bin
+[    1.490778] Bluetooth: hci0: QCA setup on UART is completed
+[   13.638382] Bluetooth: MGMT ver 1.23
+
+STEP_DONE_035032=0
+miatoll-bt1# [6n

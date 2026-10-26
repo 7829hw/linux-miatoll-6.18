@@ -1,0 +1,111 @@
+{
+  "capture_id": "20261027-034959",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-bt1+",
+  "boot_profile": "bt1-ram-only",
+  "image": "boot-curtana-6.18.58-bt1.img",
+  "image_sha256": "fccd44fc18c0ff89aa45355806de4afdfa91a5ae0c60ffc4053df9399c6ccc8f",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-bt1/boot-curtana-6.18.58-bt1.img"
+  ],
+  "physical_display_confirmed": true,
+  "user_observation": {
+    "screen": "BT TEST 1 banner; display and touch normal, no reboot; a discoverable device was nearby during the scans",
+    "backlight": "on",
+    "notes": ""
+  },
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "BT1_BANNER_WRITTEN",
+      "BT1_PROBE_BEGIN",
+      "BT1_PROBE_END",
+      "BT1_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "27:          0          0          0          0          0          0          0          0    GICv3 134 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "bt1-fastboot-20261027-034959.txt": {
+      "bytes": 579,
+      "sha256": "78b1fff559672e682381ae5d2d999f8dfbba0746625023ed65e80c940cb0ed83"
+    },
+    "bt1-serial-20261027-034959.txt": {
+      "bytes": 157564,
+      "sha256": "a059091aabaeb086f1d5f3c6f784d7850034b54e09675384ea78e1dfff04a75c"
+    },
+    "steps-private-redacted.txt": {
+      "bytes": 4806,
+      "sha256": "e2d61aae4d9e32df07fe90df6d87aed959bddd6b8808585a6f02da3402170a10"
+    },
+    "steps.txt": {
+      "bytes": 5416,
+      "sha256": "7537e827c6e62f7ab4d9520d269f4c07c3d40ad36bdd7ea8a535954adbf3a8ca"
+    }
+  },
+  "private_logs": {
+    "kept_outside_git": "dist/miatoll-bt1/private-logs/steps.txt",
+    "sha256": "a9a6c6b192a73f9b88453118f4caf78d6a3d21d3ec552ba8be038d2ef0a63d15",
+    "committed_copy": "steps-private-redacted.txt (device addresses and names removed)"
+  },
+  "bluetooth_confirmed": {
+    "uart_serdev_and_firmware": true,
+    "temporary_address_and_power_on": true,
+    "le_scan": true,
+    "bredr_scan": true,
+    "pairing": false
+  },
+  "bluetooth": {
+    "controller": "QCA product 0x0a, SOC 0x40010320, ROM 0x0302, patch 0x0de9; crbtfw32.tlv + crnv32.bin; setup completed at 1.49 s",
+    "initial_state": "unconfigured, missing_options=0x2 (public address)",
+    "address": "temporary 02:xx diagnostic address for this boot only (btctl configure-test); not the factory address",
+    "power": "powered=1, current_settings 0x81",
+    "le_scan": {
+      "exit": 0,
+      "reports": 30,
+      "distinct_addresses": 26,
+      "rssi_dbm": [
+        -101,
+        -48
+      ],
+      "le_setting": "enabled only during scan (0x01c00281) then restored to 0x81"
+    },
+    "bredr_scan": {
+      "exit": 0,
+      "reports": 7,
+      "distinct_addresses": 3,
+      "rssi_dbm": [
+        -100,
+        -78
+      ]
+    },
+    "btctl": "curtana btctl revision 4 (da00bdee…)"
+  }
+}
