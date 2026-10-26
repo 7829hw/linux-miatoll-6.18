@@ -11,6 +11,7 @@ if [[ -d "$llvm" ]]; then export PATH="$llvm:$PATH"; fi
 if [[ -d "$host/usr/bin" ]]; then
     export PATH="$host/usr/bin:$PATH"
     export BISON_PKGDATADIR="$host/usr/share/bison"
+    export M4="$host/usr/bin/m4"
     export HOSTCFLAGS="-I$host/usr/include ${HOSTCFLAGS:-}"
     export HOSTLDFLAGS="-L$host/usr/lib/x86_64-linux-gnu ${HOSTLDFLAGS:-}"
     export PKG_CONFIG_LIBDIR="$host/usr/lib/x86_64-linux-gnu/pkgconfig"
