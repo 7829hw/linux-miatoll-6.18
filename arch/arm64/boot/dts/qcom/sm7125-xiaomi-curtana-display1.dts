@@ -1,0 +1,23 @@
+// SPDX-License-Identifier: GPL-2.0
+// First native display test on the 6.14-derived hardware port.
+#include "sm7125-xiaomi-curtana-boot1.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing display1 test)";
+	chosen {
+		miatoll,boot-profile = "display1-ram-only";
+	};
+};
+
+&mdss { status = "okay"; };
+&mdss_dsi0 { status = "okay"; };
+&mdss_dsi0_phy { status = "okay"; };
+&pm6150l_wled {
+	status = "okay";
+	default-brightness = <256>;
+};
+
+// These consumers have no driver/modules in the RAM test environment.
+&venus { status = "disabled"; };
+&{/soc@0/pmu@90b6300} { status = "disabled"; };
+&{/soc@0/pmu@90cd000} { status = "disabled"; };
