@@ -1,0 +1,12 @@
+{
+  "origin": "previously device-tested RAM entry shim, copied without changing source",
+  "files": {
+    "bootshim/entry.S": "d3a48c0c3c504dc37b12030fe6ad0322eb217490c175481d47a15ebeda8c1944",
+    "bootshim/env.h": "a914b9ab59c6c7dcdaff8f56abb49de7257f2105c7f10117e5bc2ebe1bac844e",
+    "bootshim/fdt_handoff.c": "51edccd6efe8b9a1c36c099b4ec179d8d7c0c1d799e3e1a34f26f26eeb5c174c",
+    "bootshim/link.ld": "c972735c766dac28533296914f628204a595158f06eb9afa0bf908cd86d44119",
+    "bootshim/mock_kernel.S": "3b8a6fa5e2092e95f70e6375a3ddc534d732bf6b3c472007d82301e01b925893",
+    "bootshim/mock_kernel.c": "2baef414c710cecdffe65c304b539682b8322af24b00832f0e27d5f5af328453",
+    "bootshim/runtime.c": "402891dc4dcc775e6b5188a6403a622dbb244996b457c4f4bba13872cf6bebe2"
+  }
+}
