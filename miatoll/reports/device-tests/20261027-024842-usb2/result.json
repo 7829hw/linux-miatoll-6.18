@@ -1,0 +1,29 @@
+{
+  "capture_id": "20261027-024842",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-usb2+",
+  "boot_profile": "usb2-ram-only",
+  "image": "boot-curtana-6.18.58-usb2.img",
+  "image_sha256": "a953740e0cce80aef561c5a95634dc0577b995e035f8d7dc6d5385a16a323ef2",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot .../boot-curtana-6.18.58-usb2.img (TIMEOUT 120 s)"
+  ],
+  "physical_display_confirmed": null,
+  "user_observation": "pending",
+  "log_files": {
+    "usb2-fastboot-20261027-024842.txt": {
+      "bytes": 516,
+      "sha256": "0daa0e253e02b1c0e1c295073b6b88471bb00e0e1c55d7622b7012b2bb4de055"
+    }
+  },
+  "stopped": "fastboot boot gave no output for 120 s; a later getvar product also hung (20 s). Phone stayed on the Fastboot screen. Nothing was written.",
+  "recovery": "User restarted Fastboot with Power + Volume Down; one approved retry succeeded (20261027-025327-usb2-retry).",
+  "likely_cause": "USB/IP (usbipd-win) transfer stall; not confirmed"
+}

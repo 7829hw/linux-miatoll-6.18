@@ -17,7 +17,8 @@ echo "USB_HOST_WATCH_BEGIN seconds=$seconds" >>"$log"
 i=0
 while [ "$i" -lt "$seconds" ]; do
     row=30
-    role=$(cat /sys/class/usb_role/*/role 2>/dev/null)
+    # The role switch class has no readable role here; DWC3 debugfs reports it.
+    role=$(cat /sys/kernel/debug/usb/a600000.usb/mode 2>/dev/null)
     partner=none
     [ -e "$port/port0-partner" ] && partner=attached
     show "USB t=${i}s role=$role data=$(cat "$port/data_role" 2>/dev/null)" \
@@ -41,7 +42,7 @@ while [ "$i" -lt "$seconds" ]; do
         done
     done
     for disk in $done_disks; do
-        show "  disk $disk $(grep USB_DISK_READ "$log" | grep -c " $disk ") reads, last $(grep "USB_DISK_READ $disk " "$log" | tail -n 1 | cut -c1-60)"
+        show "  disk $disk $(grep -c "^USB_DISK_READ $disk " "$log") reads, last $(grep "^USB_DISK_READ $disk " "$log" | tail -n 1 | cut -c1-60)"
     done
     for input in /sys/class/input/input*; do
         case "$(readlink -f "$input")" in */usb*) show "  input $(cat "$input/name")" ;; esac

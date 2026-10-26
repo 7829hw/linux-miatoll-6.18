@@ -1,0 +1,427 @@
+cat /run/usb-host.log; printf "\nSTEP_DONE_025747=%s\n" "$?"
+USB_HOST_WATCH_BEGIN seconds=3
+USB t=0s role=device data=host [device] power=[source] partner=none
+USB t=1s role=device data=host [device] power=[source] partner=none
+USB t=2s role=device data=host [device] power=[source] partner=none
+USB_HOST_WATCH_END
+USB_HOST_WATCH_BEGIN seconds=300
+USB t=0s role=device data=host [device] power=[source] partner=none
+USB t=1s role=device data=host [device] power=[source] partner=none
+USB t=2s role=device data=host [device] power=[source] partner=none
+USB t=3s role=device data=host [device] power=[source] partner=none
+USB t=4s role=device data=host [device] power=[source] partner=none
+USB t=5s role=device data=host [device] power=[source] partner=none
+USB t=6s role=device data=host [device] power=[source] partner=none
+USB t=7s role=device data=host [device] power=[source] partner=none
+USB t=8s role=device data=host [device] power=[source] partner=none
+USB t=9s role=device data=host [device] power=[source] partner=none
+USB t=10s role=device data=host [device] power=[source] partner=none
+USB t=11s role=device data=host [device] power=[source] partner=none
+USB t=12s role=device data=host [device] power=[source] partner=none
+USB t=13s role=device data=host [device] power=[source] partner=none
+USB t=14s role=device data=host [device] power=[source] partner=none
+USB t=15s role=device data=host [device] power=[source] partner=none
+USB t=16s role=device data=host [device] power=[source] partner=none
+USB t=17s role=device data=host [device] power=[source] partner=none
+USB t=18s role=device data=host [device] power=[source] partner=none
+USB t=19s role=device data=host [device] power=[source] partner=none
+USB t=20s role=device data=host [device] power=[source] partner=none
+USB t=21s role=device data=host [device] power=[source] partner=none
+USB t=22s role=device data=host [device] power=[source] partner=none
+USB t=23s role=device data=host [device] power=[source] partner=none
+USB t=24s role=device data=host [device] power=[source] partner=none
+USB t=25s role=device data=host [device] power=[source] partner=none
+USB t=26s role=device data=host [device] power=[source] partner=none
+USB t=27s role=device data=host [device] power=[source] partner=none
+USB t=28s role=device data=host [device] power=[source] partner=none
+USB t=29s role=device data=host [device] power=[source] partner=none
+USB t=30s role=device data=host [device] power=[source] partner=none
+USB t=31s role=device data=host [device] power=[source] partner=none
+USB t=32s role=device data=host [device] power=[source] partner=none
+USB t=33s role=device data=host [device] power=[source] partner=none
+USB t=34s role=device data=host [device] power=[source] partner=none
+USB t=35s role=device data=host [device] power=[source] partner=none
+USB t=36s role=device data=host [device] power=[source] partner=none
+USB t=37s role=device data=host [device] power=[source] partner=none
+USB t=38s role=device data=host [device] power=[source] partner=none
+USB t=39s role=device data=host [device] power=[source] partner=none
+USB t=40s role=device data=host [device] power=[source] partner=none
+USB t=41s role=device data=host [device] power=[source] partner=none
+USB t=42s role=device data=host [device] power=[source] partner=none
+USB t=43s role=device data=host [device] power=[source] partner=none
+USB t=44s role=device data=host [device] power=[source] partner=none
+USB t=45s role=device data=host [device] power=[source] partner=none
+USB t=46s role=device data=host [device] power=[source] partner=none
+USB t=47s role=device data=host [device] power=[source] partner=none
+USB t=48s role=device data=host [device] power=[source] partner=none
+USB t=49s role=device data=host [device] power=[source] partner=none
+USB t=50s role=device data=host [device] power=[source] partner=none
+USB t=51s role=device data=host [device] power=[source] partner=none
+USB t=52s role=device data=host [device] power=[source] partner=none
+USB t=53s role=device data=host [device] power=[source] partner=none
+USB t=54s role=device data=host [device] power=[source] partner=none
+USB t=55s role=device data=host [device] power=[source] partner=none
+USB t=56s role=device data=host [device] power=[source] partner=none
+USB t=57s role=device data=host [device] power=[source] partner=none
+USB t=58s role=device data=host [device] power=[source] partner=none
+USB t=59s role=device data=host [device] power=[source] partner=none
+USB t=60s role=device data=host [device] power=[source] partner=none
+USB t=61s role=device data=host [device] power=[source] partner=none
+USB t=62s role=device data=host [device] power=[source] partner=none
+USB t=63s role=device data=[host] device power=[source] partner=none
+USB t=64s role=host data=[host] device power=[source] partner=none
+USB t=65s role=host data=[host] device power=[source] partner=none
+USB t=66s role=host data=[host] device power=[source] partner=none
+  1-1 090c:1000 Flash Drive
+USB t=67s role=host data=[host] device power=[source] partner=none
+  1-1 090c:1000 Flash Drive
+USB t=68s role=host data=[host] device power=[source] partner=none
+  1-1 090c:1000 Flash Drive
+USB t=69s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+USB_DISK_READ sdg ro=1 pass=1 sha256=62f7c0616b3e8b0303fc3842b5a306d5b7d967ee348dfaaa5840ab17a892bd78
+16+0 records in
+16+0 records out
+16777216 bytes (16.0MB) copied, 1.062105 seconds, 15.1MB/s
+USB_DISK_READ sdg ro=1 pass=2 sha256=62f7c0616b3e8b0303fc3842b5a306d5b7d967ee348dfaaa5840ab17a892bd78
+16+0 records in
+16+0 records out
+16777216 bytes (16.0MB) copied, 1.012610 seconds, 15.8MB/s
+  disk sdg 2 reads, last USB_DISK_READ sdg ro=1 pass=2 sha256=62f7c0616b3e8b0303fc384
+USB t=70s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_READ sdg ro=1 pass=2 sha25
+USB t=71s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=72s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=73s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=74s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=75s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=76s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=77s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=78s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=79s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=80s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=81s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=82s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=83s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=84s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=85s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=86s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=87s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=88s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=89s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=90s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=91s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=92s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=93s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=94s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=95s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=96s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=97s role=host data=[host] device power=[source] partner=attached
+  1-1 090c:1000 Flash Drive
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=98s role=host data=[host] device power=[source] partner=attached
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=99s role=host data=[host] device power=[source] partner=attached
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=100s role=host data=[host] device power=[source] partner=attached
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=101s role=host data=[host] device power=[source] partner=attached
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=102s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=103s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=104s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=105s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=106s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=107s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=108s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=109s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=110s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=111s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=112s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=113s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=114s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=115s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=116s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=117s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=118s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=119s role=host data=[host] device power=[source] partner=attached
+  1-1 0c45:fefe QSENN 2.4G
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G
+  input QSENN 2.4G Consumer Control
+  input QSENN 2.4G System Control
+  input QSENN 2.4G Keyboard
+  input QSENN 2.4G System Multi Axis
+USB t=120s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=121s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=122s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=123s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=124s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=125s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=126s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=127s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=128s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=129s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=130s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=131s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=132s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=133s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=134s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=135s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=136s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=137s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=138s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=139s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=140s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=141s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=142s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=143s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=144s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=145s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=146s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=147s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=148s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=149s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+USB t=150s role=device data=[host] device power=[source] partner=none
+  disk sdg 4 reads, last   disk sdg 3 reads, last   disk sdg 2 reads, last USB_DISK_R
+
+STEP_DONE_025747=0
+miatoll-usb2# [6n

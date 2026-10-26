@@ -48,7 +48,7 @@ def build(output, profile='boot1'):
     if touch:
         required |= {'hexdump', 'timeout', 'seq', 'cut', 'basename', 'readlink'}
     if profile in ('storage1', 'usb2'):
-        required |= {'dd', 'sha256sum', 'sync'}
+        required |= {'dd', 'sha256sum', 'sync', 'chmod', 'uniq'}
     with tempfile.TemporaryDirectory(prefix='boot1-busybox-') as temporary:
         executable = Path(temporary) / 'busybox'
         executable.write_bytes(binary)

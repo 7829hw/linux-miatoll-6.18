@@ -1,0 +1,94 @@
+{
+  "capture_id": "20261027-025327",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-usb2+",
+  "boot_profile": "usb2-ram-only",
+  "image": "boot-curtana-6.18.58-usb2.img",
+  "image_sha256": "a953740e0cce80aef561c5a95634dc0577b995e035f8d7dc6d5385a16a323ef2",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-usb2/boot-curtana-6.18.58-usb2.img"
+  ],
+  "physical_display_confirmed": true,
+  "user_observation": {
+    "screen": "USB TEST 2 banner; display normal; host-mode results shown on screen",
+    "backlight": "on",
+    "notes": ""
+  },
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "USB2_BANNER_WRITTEN",
+      "USB2_PROBE_BEGIN",
+      "USB2_PROBE_END",
+      "USB2_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "134:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "135:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "usb2-fastboot-20261027-025327.txt": {
+      "bytes": 581,
+      "sha256": "8042e8765f1de79479ee81b631e6e2862186e174682f9ff49f9f0efd1c5e5030"
+    },
+    "usb2-serial-20261027-025327.txt": {
+      "bytes": 151149,
+      "sha256": "8b5d34a16611b396d4474bc118dd2232538998af91eac80309c850bb5f1b19c5"
+    },
+    "steps.txt": {
+      "bytes": 31875,
+      "sha256": "5ac21a6870cb24ac4233082f12b6e3d31a243893725a3d6249ed30fcb20c3df9"
+    },
+    "usb-host-watch-log.txt": {
+      "bytes": 23643,
+      "sha256": "3831f8505be032f0a618d3fd432ecdccfc914686ee2c6ba7a737c727804fb795"
+    }
+  },
+  "step_observations": {
+    "usb-host-log": {
+      "screen": "flash drive: role=host, device listed and 'disk sdX 2 reads' shown; keyboard: typed letters appeared on screen; PC cable reconnected afterwards",
+      "backlight": "on",
+      "notes": ""
+    }
+  },
+  "usb_host_confirmed": true,
+  "usb": {
+    "typec_port": "port0 source-only, data role device with USB-A PC cable (no partner)",
+    "dwc3_default_mode": "device (ACM console worked)",
+    "host_flash_drive": {
+      "name": "sdg",
+      "size": "64.2 GB",
+      "speed": "high-speed",
+      "read_only": 1,
+      "read": "16 MiB x2, sha256 identical, ~15 MB/s"
+    },
+    "host_keyboard": "QSENN 2.4G receiver, HID keyboard+mouse; user saw typed letters",
+    "return_to_device": "ACM re-enumerated; UDC core re-bound the configfs gadget (watcher fallback not used)",
+    "watcher_script_sha256_on_device": "01a72aee201bb85dea95b193f002839ca3da071d00f362f7a22563d8e6608a5b",
+    "watcher_note": "pushed over serial because the packaged copy read a missing usb_role attribute; its on-screen disk-read counter double-counted its own log lines (display only)"
+  }
+}

@@ -46,7 +46,14 @@ class Fastboot:
         if command not in FASTBOOT_ALLOWED and not (command[:1] == ('boot',) and len(command) == 2):
             raise Stop('Refusing fastboot command outside the RAM test allowlist: ' + ' '.join(command))
         argv = [str(FASTBOOT)] + (['-s', serial] if serial else []) + list(command)
-        result = subprocess.run(argv, capture_output=True, text=True, timeout=timeout)
+        try:
+            result = subprocess.run(argv, capture_output=True, text=True, timeout=timeout)
+        except subprocess.TimeoutExpired as expired:
+            partial = b''.join(x for x in (expired.stdout, expired.stderr) if x).decode(errors='replace')
+            with self.log.open('a', encoding='utf-8') as stream:
+                stream.write('fastboot ' + ' '.join(argv[1:]) + '\n' + partial +
+                             f'\nTIMEOUT after {timeout} s\n')
+            raise Stop(f'fastboot timed out after {timeout} s; no automatic retry. Log: {self.log}')
         text = (result.stdout + result.stderr).strip()
         with self.log.open('a', encoding='utf-8') as stream:
             stream.write('fastboot ' + ' '.join(argv[1:]) + '\n' + text + '\n')
