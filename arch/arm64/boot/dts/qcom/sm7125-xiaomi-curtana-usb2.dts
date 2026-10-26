@@ -1,0 +1,28 @@
+// SPDX-License-Identifier: GPL-2.0
+// USB-C role switching and host mode on top of the verified storage1 RAM test.
+#include "sm7125-xiaomi-curtana-storage1.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing usb2 test)";
+	chosen {
+		miatoll,boot-profile = "usb2-ram-only";
+	};
+};
+
+// Undo the boot1 peripheral-only overrides and restore the common-board
+// PM6150 Type-C port, VBUS source and DWC3 role switch graph.
+&pm6150_typec { status = "okay"; };
+&pm6150_vbus { status = "okay"; };
+
+&usb_1_dwc3 {
+	dr_mode = "otg";
+	usb-role-switch;
+};
+
+&usb_1_dwc3_hs {
+	remote-endpoint = <&pm6150_role_switch_in>;
+};
+
+&pm6150_role_switch_in {
+	remote-endpoint = <&usb_1_dwc3_hs>;
+};

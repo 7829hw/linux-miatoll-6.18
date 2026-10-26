@@ -21,15 +21,17 @@ TOUCH_FIRMWARE = 'focaltech_ts_fw_huaxing.bin'
 TOUCH_FIRMWARE_SHA256 = '83e7fb01d3a0595984c2b701633db83db4eb71eb4fd613aa635437a768ad6c9b'
 
 def build(output, profile='boot1'):
-    assert profile in ('boot1', 'display1', 'display2', 'touch1', 'storage1')
+    assert profile in ('boot1', 'display1', 'display2', 'touch1', 'storage1', 'usb2')
     script_names = ['init', 'usb-gadget', 'boot-probe']
     if profile != 'boot1':
         script_names += ['display-banner', 'display-probe']
-    touch = profile in ('touch1', 'storage1')
+    touch = profile in ('touch1', 'storage1', 'usb2')
     if touch:
         script_names += ['touch-probe', 'touch-events']
-    if profile == 'storage1':
+    if profile in ('storage1', 'usb2'):
         script_names += ['storage-probe']
+    if profile == 'usb2':
+        script_names += ['usb-host-watch']
     package = ROOT.parent / 'downloads/busybox-static-1.37.0-r20.apk'
     assert hashlib.sha256(package.read_bytes()).hexdigest() == APK_SHA256
     with tarfile.open(package, 'r:gz', ignore_zeros=True) as archive:
@@ -45,8 +47,8 @@ def build(output, profile='boot1'):
                 'blockdev', 'watchdog', 'tr', 'setsid', 'sleep', 'ln', 'ls', 'dmesg'}
     if touch:
         required |= {'hexdump', 'timeout', 'seq', 'cut', 'basename', 'readlink'}
-    if profile == 'storage1':
-        required |= {'dd', 'sha256sum'}
+    if profile in ('storage1', 'usb2'):
+        required |= {'dd', 'sha256sum', 'sync'}
     with tempfile.TemporaryDirectory(prefix='boot1-busybox-') as temporary:
         executable = Path(temporary) / 'busybox'
         executable.write_bytes(binary)

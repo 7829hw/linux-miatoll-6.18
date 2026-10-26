@@ -50,7 +50,7 @@ def analyze_avb(module, path):
             'rollback_index': header.rollback_index, 'rollback_index_location': header.rollback_index_location,
             'properties': properties}
 
-PROFILES = ('boot1', 'display1', 'display2', 'touch1', 'storage1')
+PROFILES = ('boot1', 'display1', 'display2', 'touch1', 'storage1', 'usb2')
 
 def main(profile='boot1'):
     require(profile in PROFILES, 'Unknown RAM test profile')
@@ -75,14 +75,17 @@ def main(profile='boot1'):
     require(release == '6.18.58-miatoll-' + profile + '+', 'Unexpected test kernel release: ' + release)
     require(('Linux version ' + release).encode() in kernel.read_bytes(), 'Wrong kernel payload')
     for symbol in ('BLK_DEV_INITRD', 'RD_GZIP', 'DEVTMPFS', 'USB_CONFIGFS_ACM',
-                   'USB_DWC3_GADGET', 'PHY_QCOM_QUSB2', 'DRM_SIMPLEDRM'):
+                   'PHY_QCOM_QUSB2', 'DRM_SIMPLEDRM'):
         require('CONFIG_' + symbol + '=y\n' in config, 'Missing built-in: ' + symbol)
+    # Dual-role DWC3 includes the gadget side used by the ACM console.
+    require('CONFIG_USB_DWC3_GADGET=y\n' in config or 'CONFIG_USB_DWC3_DUAL_ROLE=y\n' in config,
+            'Missing built-in DWC3 gadget support')
     if profile != 'boot1':
         for symbol in ('DRM_MSM', 'DRM_MSM_DPU', 'DRM_MSM_DSI', 'DRM_MSM_DSI_10NM_PHY',
                        'DRM_PANEL_HUAXING_FT8756', 'BACKLIGHT_QCOM_WLED', 'SC_DISPCC_7180',
                        'DRM_FBDEV_EMULATION', 'DRM_CLIENT_DEFAULT_FBDEV', 'FRAMEBUFFER_CONSOLE'):
             require('CONFIG_' + symbol + '=y\n' in config, 'Missing display built-in: ' + symbol)
-    if profile in ('touch1', 'storage1'):
+    if profile in ('touch1', 'storage1', 'usb2'):
         for symbol in ('SPI_QCOM_GENI', 'QCOM_GPI_DMA', 'TOUCHSCREEN_FT8756', 'INPUT_EVDEV'):
             require('CONFIG_' + symbol + '=y\n' in config, 'Missing touch built-in: ' + symbol)
     dtb = OUT / ('arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-' + profile + '.dtb')
@@ -90,12 +93,29 @@ def main(profile='boot1'):
     require(fdt(dtb, '/chosen', 'miatoll,boot-profile') == profile + '-ram-only', 'Wrong profile')
     for node in ('/soc@0/usb@a6f8800/usb@a600000', '/soc@0/phy@88e3000'):
         available(dtb, node)
-    require(fdt(dtb, '/soc@0/usb@a6f8800/usb@a600000', 'dr_mode') == 'peripheral', 'USB must be peripheral')
+    dwc3 = '/soc@0/usb@a6f8800/usb@a600000'
+    if profile == 'usb2':
+        for symbol in ('TYPEC_QCOM_PMIC', 'REGULATOR_QCOM_USB_VBUS', 'USB_DWC3_DUAL_ROLE', 'USB_ROLE_SWITCH',
+                       'USB_XHCI_HCD', 'USB_STORAGE', 'USB_HID'):
+            require('CONFIG_' + symbol + '=y\n' in config, 'Missing USB role built-in: ' + symbol)
+        require(fdt(dtb, dwc3, 'dr_mode') == 'otg', 'USB must be OTG')
+        require('usb-role-switch' in subprocess.check_output(['fdtget', '-p', str(dtb), dwc3], text=True).split(),
+                'DWC3 role switch missing')
+        typec = '/soc@0/spmi@c440000/pmic@0/typec@1500'
+        available(dtb, typec)
+        available(dtb, '/soc@0/spmi@c440000/pmic@0/usb-vbus-regulator@1100')
+        hs = dwc3 + '/ports/port@0/endpoint'
+        peer = typec + '/connector/ports/port@0/endpoint'
+        require(fdt(dtb, hs, 'remote-endpoint', 'x') == fdt(dtb, peer, 'phandle', 'x') and
+                fdt(dtb, peer, 'remote-endpoint', 'x') == fdt(dtb, hs, 'phandle', 'x'), 'Broken role switch graph')
+        require(fdt(dtb, typec + '/connector', 'power-role') == 'source', 'Unexpected Type-C power role')
+    else:
+        require(fdt(dtb, dwc3, 'dr_mode') == 'peripheral', 'USB must be peripheral')
     disabled = ('/soc@0/gpu@5000000',
                 '/soc@0/remoteproc@4080000', '/soc@0/remoteproc@62400000',
                 '/soc@0/remoteproc@8300000', '/soc@0/wifi@18800000',
                 '/soc@0/camss@acb3000', '/sound')
-    if profile == 'storage1':
+    if profile in ('storage1', 'usb2'):
         for symbol in ('MMC_SDHCI_MSM', 'MMC_BLOCK', 'SCSI_UFS_QCOM', 'BLK_DEV_SD', 'EFI_PARTITION'):
             require('CONFIG_' + symbol + '=y\n' in config, 'Missing storage built-in: ' + symbol)
         available(dtb, '/soc@0/mmc@8804000')
@@ -187,14 +207,19 @@ def main(profile='boot1'):
     if profile in ('touch1', 'storage1'):
         result.update(hardware_scope=result['hardware_scope'] + ', FT8756 SPI touch with RAM firmware',
                       touch_input_confirmed=False)
-    if profile == 'storage1':
+    if profile in ('storage1', 'usb2'):
         result.update(hardware_scope=result['hardware_scope'] + ', read-only UFS and SD block reads',
                       storage_read_confirmed=False)
+    if profile == 'usb2':
+        result.update(hardware_scope=result['hardware_scope'] + ', PM6150 Type-C role switch and USB host',
+                      usb_host_confirmed=False)
     result['packaging_source_commit'] = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], text=True).strip()
     checked_sources = [*BOOT.glob('*.py'), *BOOT.glob('*.ps1'), *BOOT.glob('shim/*'),
                        *(BOOT / name for name in ('init', 'boot-probe', 'usb-gadget', 'display-banner', 'display-probe',
-                                                  'touch-probe', 'touch-events', 'storage-probe')),
+                                                  'touch-probe', 'touch-events', 'storage-probe',
+                                                  'usb-host-watch')),
                        ROOT / ('arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-' + profile + '.dts'),
+                       ROOT / 'arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-storage1.dts',
                        ROOT / 'arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-touch1.dts',
                        ROOT / 'arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-display2.dts',
                        ROOT / 'arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-display1.dts',

@@ -208,6 +208,13 @@ def shell(args):
     """Run one step on the running RAM shell and append it to steps.txt."""
     import serial
     ports = [Path(args.port)] if args.port else list(find_acm())
+    deadline = time.monotonic() + args.wait_port
+    while not ports and time.monotonic() < deadline:
+        usbipd_attach(ACM_ID)
+        time.sleep(1)
+        ports = list(find_acm())
+    if ports and not args.port:
+        time.sleep(2)
     if len(ports) != 1:
         raise Stop('Expected exactly one Linux ACM port; nothing was sent.')
     marker = 'STEP_DONE_' + datetime.datetime.now().strftime('%H%M%S')
@@ -258,6 +265,8 @@ def main():
     step.add_argument('cmdline', metavar='command')
     step.add_argument('--port')
     step.add_argument('--timeout', type=int, default=60)
+    step.add_argument('--wait-port', type=int, default=0,
+                      help='seconds to wait for (and attach) a re-enumerated ACM port')
     note = commands.add_parser('observe', help="record the user's physical observation")
     note.add_argument('directory')
     note.add_argument('--screen', required=True)
