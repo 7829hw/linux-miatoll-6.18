@@ -196,7 +196,7 @@ firmware 초기화가 완료됐지만 공개 주소가 없어 unconfigured였다
 공장 주소, 페어링·연결, Wi-Fi 동시 동작은 미검증이다.
 [bt1 실기기 기록](reports/device-tests/20261027-034959-bt1/README.ko.md)
 같은 이미지로 두 번 Galaxy Buds Pro와 BR/EDR Just Works 페어링(`pairing_complete=1`)과 직후 기본 연결을 확인했다.
-프로필이 없어 수 초 뒤 연결이 해제됐고, 소리로 확인하지는 않았다.
+프로필이 없어 수 초 뒤 기본 연결은 해제됐다. 같은 부팅에서 A2DP SBC 3초 시험음을 보냈고, 사용자가 이어폰에서 들었다고 확인했다.
 [페어링 재확인 기록](reports/device-tests/20261027-035503-bt1-pair-recheck/README.ko.md)
 
 ## 하드웨어별 상태
@@ -213,7 +213,7 @@ firmware 초기화가 완료됐지만 공개 주소가 없어 unconfigured였다
 | 카메라 | CAMSS 공통 코드, OV8856/DW9714 | SC7180 CAMSS/CCI/PHY/DT, S5KGM2/S5K5E9/OV16A1Q/DW9800, 기존 센서/VCM 확장 | ID/전원/스트림/초점/영상 품질. DW9800은 원본도 WIP. joyeuse DT에는 S5K5E9/OV16A1Q만 있고 주카메라 경로가 완성되지 않음 |
 | 오디오 | QDSP6/APR, sm8250 machine, TAS2562, WCD937x, SoundWire/LPASS | ADSP 및 스피커/헤드폰/마이크 DT 경로, 드라이버 설정 | ALSA 열거, 스피커 소리, 녹음/마이크/통화, 기존 ACDB/HAL 대응 |
 | LTE 모뎀 | MPSS remoteproc, QRTR/QMI, IPA/RMNET | 보드 firmware/메모리/IPA DT, SM7125 PD mapper | MPSS/QMI/SIM/망 등록, 데이터, RIL/IMS/음성 호환성 |
-| Wi-Fi/Bluetooth | ath10k SNOC, QCA UART/HCI | 전원/버스/펌웨어 DT | wifi1에서 MPSS·WLAN firmware·wlan0·수동 검색, wifi2에서 WPA3-SAE 연결·DHCPv4·ICMP, wifi3에서 PMF peer 비트 backport 후 지연 개선(평균 23 ms) 실기기 확인(read-only rmtfs, 기기 BDF). bt1에서 Bluetooth firmware·임시 주소 전원·LE/BR 검색 확인. Galaxy Buds Pro 페어링(로그) 확인. 공장 MAC/BD 주소, 처리량, 공존, 오디오 프로필 미검증. PMF 패치는 wifi3 브랜치에만 포함 |
+| Wi-Fi/Bluetooth | ath10k SNOC, QCA UART/HCI | 전원/버스/펌웨어 DT | wifi1에서 MPSS·WLAN firmware·wlan0·수동 검색, wifi2에서 WPA3-SAE 연결·DHCPv4·ICMP, wifi3에서 PMF peer 비트 backport 후 지연 개선(평균 23 ms) 실기기 확인(read-only rmtfs, 기기 BDF). bt1에서 Bluetooth firmware·임시 주소 전원·LE/BR 검색 확인. Galaxy Buds Pro 페어링과 A2DP SBC 시험음 청취 확인. 공장 MAC/BD 주소, 처리량, 공존, 장시간 오디오·통화 미검증. PMF 패치는 wifi3 브랜치에만 포함 |
 | 배터리/충전 | ADC5, SPMI SDAM, regulator, Type-C | 실험적 QGauge와 PM6150 DT. 6.18 fwnode API 변환 | QGauge 잔량은 선형 전압 추정이며 STATUS_UNKNOWN. 충전 제어·정확한 SOC·건강 HAL은 미완성. SM5714는 Samsung용이므로 제외 |
 | 전력 관리 | RPMh/CPUfreq/thermal/PSCI | 보드 전원 DT와 Android wakelock/autosleep 설정 | 실제 idle/suspend/resume/열 보호/소비 전류/USB 전력 역할 |
 | 추가 기능 | Venus/IR SPI | 기존 드라이버 모듈 설정, 보드 DT; AW8695/DRV2624 진동 드라이버 | 영상 가속/IR/진동은 실행 미검증. DRV2624 GPIO API 변환 |

@@ -62,21 +62,47 @@
       "sha256": "ec56637a23ca2e3636e53a7fd7ccf4eba83e3137c4d73ccc97865b162b037fb0"
     },
     "steps-private-redacted.txt": {
-      "bytes": 3906,
-      "sha256": "1ea6a82f47b6f2117816ce785f23b6c20a008bb69a0c6e8853aae862bb20f708"
+      "bytes": 6527,
+      "sha256": "4932cd47a88b7aa5d8a1c4defee94b47d8d6250bb3a767893dc589b18c2c7a50"
     }
   },
   "private_logs": {
     "pairing": {
       "kept_outside_git": "dist/miatoll-bt1/private-logs-recheck/steps.txt",
-      "sha256": "cff990e0adb5d968bf516eadd8416c25c45599715019a51e52eae1c08cda6fc4"
+      "sha256": "2d520b2e403108d99d6aedd33fe94187085650d83866d88b975b3f2453ef4d75"
     }
   },
   "bluetooth_pairing": {
     "pair_attempt": "second boot (fresh temporary address): first scan did not see the earbuds; after the user re-entered pairing mode, pairing_complete=1 and connected immediately, connections=0 a few seconds later",
     "target": "Galaxy Buds Pro (user-selected), BR/EDR, Just Works via btctl rev 4 pair-classic",
     "link_key": "kernel RAM only; not printed or stored",
-    "audible_confirmation": false,
+    "audible_confirmation": true,
     "interpretation": "base ACL link only (no A2DP/HFP); idle link dropped after ~2 s, consistent with HCI_DISCONN_TIMEOUT; disconnect reason not captured"
+  },
+  "step_observations": {
+    "tone-play": {
+      "screen": "user heard the quiet 440 Hz tone in the Galaxy Buds Pro",
+      "backlight": "on",
+      "notes": ""
+    }
+  },
+  "a2dp_tone": {
+    "tool": "curtana bt-tone revision 1 (sha256 cf6f0b2f…, 161008 bytes) from the earlier bring-up, pushed over serial into /run and hash-checked on the device",
+    "archive_runner_not_used": "it hard-codes the earlier controller address",
+    "sdp": "audio sink record, L2CAP PSM 25, AVDTP 1.3, A2DP 1.3; security level 2, 16-byte key",
+    "avdtp": "Discover, GetCapabilities (SBC 3fff0225), SetConfiguration, GetConfiguration (11152020), Open, Start, Suspend, Close all accepted",
+    "stream": {
+      "sbc_frames": 1125,
+      "rtp_packets": 141,
+      "samples_per_channel": 144000,
+      "media_elapsed_ms": 3082,
+      "max_schedule_late_us": 3042,
+      "media_mtu": 679,
+      "bitpool": 32,
+      "sample_rate": 48000
+    },
+    "tone": "440 Hz, 3 s, input peak -40 dBFS, volume unchanged",
+    "tone_exit": 0,
+    "user_heard_tone": true
   }
 }

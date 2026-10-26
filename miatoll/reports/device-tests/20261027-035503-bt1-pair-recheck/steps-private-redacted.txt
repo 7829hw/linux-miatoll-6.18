@@ -82,3 +82,54 @@ connections=0
 
 STEP_DONE_035734=0
 miatoll-bt1# [6n
+### 2026-10-27T04:04:01 tone-play
+$ btctl info | grep -E 'powered|ssp|^hci0'; btctl connections | grep connections=; /run/bt-tone1 --play <addr> <addr>; echo "tone_exit=$?"; sleep 3; btctl connections | grep connections=
+btctl info | grep -E 'powered|ssp|^hci0'; btctl connections | grep 
+connections=; /run/bt-tone1 --play <addr> <addr>; echo "to
+ne_exit=$?"; sleep 3; btctl connections | grep connections=; printf "\nSTEP_DONE
+_040353=%s\n" "$?"
+hci0 address=<addr> version=10 manufacturer=29
+supported_settings=0x01c3feff current_settings=0x000000c1 powered=1 le_enabled=0 bredr_enabled=1
+ssp_enabled=1
+connections=0
+local=<addr> peer=<addr> tone_duration_ms=3000 input_peak_dbfs=-40
+l2cap_connect_start psm=1
+l2cap_psm=1 security_level=2 encryption_key_size=16
+sdp_query_start stage=initial
+stage=initial record=0 handle=0x00010007 audio_sink=1 l2cap_psm=25 avdtp_version=0x0103 a2dp_profile_version=0x0103
+stage=initial audio_sink_records=1 valid_audio_sink_records=1
+l2cap_connect_start psm=25
+l2cap_psm=25 security_level=2 encryption_key_size=16
+avdtp_signalling_connected=1
+sdp_socket_closed_after_avdtp_connect=1
+avdtp_request_sent label=0 signal_id=0x01 payload_bytes=0
+avdtp_accept signal_id=0x01 payload_bytes=6
+avdtp_request_sent label=1 signal_id=0x02 payload_bytes=1
+avdtp_accept signal_id=0x02 payload_bytes=10
+sbc_capabilities data_hex=3fff0225
+selected_sbc_seid=1 local_source_seid=1
+avdtp_request_sent label=2 signal_id=0x03 payload_bytes=12
+avdtp_accept signal_id=0x03 payload_bytes=0
+avdtp_request_sent label=3 signal_id=0x04 payload_bytes=1
+avdtp_accept signal_id=0x04 payload_bytes=10
+sbc_configured data_hex=11152020
+avdtp_request_sent label=4 signal_id=0x06 payload_bytes=1
+avdtp_accept signal_id=0x06 payload_bytes=0
+l2cap_connect_start psm=25
+l2cap_psm=25 security_level=2 encryption_key_size=16
+media_channel_connected=1 mtu=679
+avdtp_request_sent label=5 signal_id=0x07 payload_bytes=1
+avdtp_accept signal_id=0x07 payload_bytes=0
+tone_stream_started=1 duration_ms=3000 frequency_hz=440 input_peak=327 bitpool=32 sample_rate=48000 media_mtu=679 frames_per_packet=8
+tone_media_sent=1 sbc_frames=1125 rtp_packets=141 samples_per_channel=144000 media_elapsed_ms=3082 max_schedule_late_us=3042
+avdtp_request_sent label=6 signal_id=0x09 payload_bytes=1
+avdtp_accept signal_id=0x09 payload_bytes=0
+avdtp_request_sent label=7 signal_id=0x08 payload_bytes=1
+avdtp_accept signal_id=0x08 payload_bytes=0
+tone_protocol_complete=1 audible_result_requires_user=1
+tone_owned_sockets_closed=1
+tone_exit=0
+connections=0
+
+STEP_DONE_040353=0
+miatoll-bt1# [6n
