@@ -1,0 +1,46 @@
+### 2026-10-27T03:40:33 latency-ps-on-off
+$ cat /run/wifi-connect/join.log; wpa_cli -p /run/wpa_supplicant -i wlan0 status | grep -E "^(wpa_state|freq|key_mgmt|pairwise_cipher|pmf|sae_group)="; iw dev wlan0 link | grep -E "freq|signal|bitrate"; g=$(cat /run/wifi-connect/gateway); echo "PS: $(iw dev wlan0 get power_save)"; ping -I wlan0 -c 30 -i 1 -W 2 $g | tail -n 2; iw dev wlan0 set power_save off; echo "PS: $(iw dev wlan0 get power_save)"; ping -I wlan0 -c 30 -i 1 -W 2 $g | tail -n 2; ping -I wlan0 -c 10 -W 3 1.1.1.1 | tail -n 2; grep "q6v5 fatal" /proc/interrupts; dmesg | grep -iE "ath10k.*(warn|err|fail)" | tail -5
+cat /run/wifi-connect/join.log; wpa_cli -p /run/w
+pa_supplicant -i wlan0 status | grep -E "^(wpa_state|freq|key_mgmt|pairwise_ciph
+er|pmf|sae_group)="; iw dev wlan0 link | grep -E "freq|signal|bitrate"; g=$(cat 
+/run/wifi-connect/gateway); echo "PS: $(iw dev wlan0 get power_save)"; ping -I w
+lan0 -c 30 -i 1 -W 2 $g | tail -n 2; iw dev wlan0 set power_save off; echo "PS: 
+$(iw dev wlan0 get power_save)"; ping -I wlan0 -c 30 -i 1 -W 2 $g | tail -n 2; p
+ing -I wlan0 -c 10 -W 3 1.1.1.1 | tail -n 2; grep "q6v5 fatal" /proc/interrupts;
+ dmesg | grep -iE "ath10k.*(warn|err|fail)" | tail -5; printf "\nSTEP_DONE_03392
+5=%s\n" "$?"
+/bin/sh: miatoll-wifi3#: not found
+freq=5500
+pairwise_cipher=CCMP
+key_mgmt=SAE
+pmf=2
+sae_group=19
+wpa_state=COMPLETED
+	freq: 5500.0
+	signal: -47 dBm
+	rx bitrate: 650.0 MBit/s VHT-MCS 7 80MHz short GI VHT-NSS 2
+PS: Power save: on
+30 packets transmitted, 30 packets received, 0% packet loss
+round-trip min/avg/max = 18.271/22.769/93.098 ms
+PS: Power save: off
+30 packets transmitted, 30 packets received, 0% packet loss
+round-trip min/avg/max = 4.502/8.018/67.850 ms
+10 packets transmitted, 10 packets received, 0% packet loss
+round-trip min/avg/max = 10.474/11.322/12.652 ms
+166:          0          0          0          0          0          0          0          0 smp2p-mpss   0 Edge      q6v5 fatal
+[   12.939307] ath10k_snoc 18800000.wifi: failed to fetch board data for bus=snoc,qmi-board-id=ff,qmi-chip-id=320 from ath10k/WCN3990/hw1.0/board-2.bin
+
+STEP_DONE_033925=0
+miatoll-wifi3# [6n
+### 2026-10-27T03:40:58 cleanup-credentials
+$ wifi-disconnect; n=0; for p in /proc/[0-9]*; do case "$(tr "\000" " " < $p/cmdline 2>/dev/null)" in wpa_supplicant*) n=$((n+1));; esac; done; echo "remaining=$n"; ls /run/wifi-connect
+wifi-disconnect; n=0; for p in /proc/[0-9]*; do case "$(tr "\000"
+ " " < $p/cmdline 2>/dev/null)" in wpa_supplicant*) n=$((n+1));; esac; done; ech
+o "remaining=$n"; ls /run/wifi-connect; printf "\nSTEP_DONE_034046=%s\n" "$?"
+OK
+Diagnostic supplicant stopped and RAM credential file removed.
+remaining=0
+[0;0mdhcp.log[m    [0;0mgateway[m     [0;0mjoin.log[m    [0;0mlease.txt[m   [0;0mstatus.txt[m  [0;0mwpa.log[m
+
+STEP_DONE_034046=0
+miatoll-wifi3# [6n

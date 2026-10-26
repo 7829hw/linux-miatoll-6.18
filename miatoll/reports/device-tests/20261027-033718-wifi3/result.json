@@ -1,0 +1,124 @@
+{
+  "capture_id": "20261027-033718",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-wifi3+",
+  "boot_profile": "wifi3-ram-only",
+  "image": "boot-curtana-6.18.58-wifi3.img",
+  "image_sha256": "db01ea70c21c5eadbed5a1f689f35b894925ec74d3c9377ad970da5c7f18c3aa",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-wifi3/boot-curtana-6.18.58-wifi3.img"
+  ],
+  "physical_display_confirmed": true,
+  "user_observation": {
+    "screen": "WIFI TEST 3 banner; display normal",
+    "backlight": "on",
+    "notes": ""
+  },
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "WIFI3_BANNER_WRITTEN",
+      "WIFI3_PROBE_BEGIN",
+      "WIFI3_PROBE_END",
+      "WIFI3_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "wifi3-fastboot-20261027-033718.txt": {
+      "bytes": 583,
+      "sha256": "617043cdf13ca9986c485105b70e6dd26073987a3d690e5d473966078b0e13e0"
+    },
+    "wifi3-serial-20261027-033718.txt": {
+      "bytes": 153916,
+      "sha256": "f3f754eba1c3c10af32b2e4c80db9f4829341f1a8fa7ed7661026171c2ef4420"
+    },
+    "steps-private-redacted.txt": {
+      "bytes": 2897,
+      "sha256": "f20a39d5348c9921079670463dc30dcd414df823f832ef4ef7f0e6d6bf16bc54"
+    },
+    "steps.txt": {
+      "bytes": 1491,
+      "sha256": "4ccc4efd17d1e07441069e7307c0f58ae0d0a3bc7d711b81ce3f2033d8505259"
+    }
+  },
+  "step_observations": {
+    "wifi-join": {
+      "screen": "user typed SSID and hidden password with the OTG keyboard; screen showed WIFI_JOIN_DONE",
+      "backlight": "on",
+      "notes": ""
+    }
+  },
+  "private_logs": {
+    "kept_outside_git": "dist/miatoll-wifi3/private-logs/steps.txt",
+    "sha256": "f20a39d5348c9921079670463dc30dcd414df823f832ef4ef7f0e6d6bf16bc54",
+    "committed_copy": "steps-private-redacted.txt (MAC/BSSID and SSID removed)"
+  },
+  "wifi_association_confirmed": true,
+  "kernel_change": "ath10k WCN3990 PMF peer flag backport (commit e1cb32d9)",
+  "wifi": {
+    "join": "WIFI_JOIN_DONE on screen (fixed /tmp RAMdisk)",
+    "auth": "WPA3-SAE group 19, pmf=2, CCMP",
+    "freq_mhz": 5500,
+    "signal_dbm": -47,
+    "rx_bitrate": "650.0 MBit/s VHT-MCS 7 80MHz short GI NSS 2",
+    "gateway_rtt_ms": {
+      "power_save_on": {
+        "n": 30,
+        "loss_pct": 0,
+        "min": 18.271,
+        "avg": 22.769,
+        "max": 93.098
+      },
+      "power_save_off": {
+        "n": 30,
+        "loss_pct": 0,
+        "min": 4.502,
+        "avg": 8.018,
+        "max": 67.85
+      }
+    },
+    "external_1.1.1.1_rtt_ms": {
+      "n": 10,
+      "loss_pct": 0,
+      "min": 10.474,
+      "avg": 11.322,
+      "max": 12.652
+    },
+    "baseline_wifi2": {
+      "n": 5,
+      "gateway_avg_ms": 224.6,
+      "rx_bitrate": "6.0 MBit/s",
+      "power_save": "default (not recorded)"
+    },
+    "mpss_fatal_irq": 0,
+    "cleanup": "wifi-disconnect stopped the supplicant and removed the RAM credential file"
+  }
+}
