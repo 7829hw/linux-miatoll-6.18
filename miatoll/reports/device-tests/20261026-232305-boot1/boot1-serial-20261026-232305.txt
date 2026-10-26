@@ -1,0 +1,137 @@
+﻿
+miatoll-boot1# uname -r
+6.18.58-miatoll-boot1+
+miatoll-boot1# boot-probe
+BOOT1_PROBE_BEGIN
+Linux (none) 6.18.58-miatoll-boot1+ #6 SMP PREEMPT 2026-10-26 00:00:00 +0000 aarch64 Linux
+--- profile ---
+boot1-ram-only
+--- command line ---
+rcupdate.rcu_expedited=1 rcu_nocbs=0-7 noirqdebug rdinit=/init console=tty0 loglevel=8 ignore_loglevel clk_ignore_unused pd_ignore_unused no_console_suspend deferred_probe_timeout=30 panic=0 enforcing=0 miatoll_boot=boot1 androidboot.verifiedbootstate=orange androidboot.keymaster=1  androidboot.bootdevice=1d84000.ufshc androidboot.fstab_suffix=default androidboot.boot_devices=soc/1d84000.ufshc androidboot.serialno=REDACTED androidboot.cpuid=0xd7896932 androidboot.multisim_config=dsds androidboot.dp=0x0 androidboot.baseband=msm msm_drm.dsi_display0=dsi_ft8756_huaxing_vid_display: androidboot.fpsensor=fpc androidboot.lcmtype=dsi_nt36672c_huaxing_fhd_video_display androidboot.dtbo_idx=0 androidboot.dtb_idx=0 androidboot.secureboot=1 androidboot.hwc=Global_TWO androidboot.hwversion=1.91.0 androidboot.hwlevel=MP androidboot.hwname=curtana androidboot.AdcVol1=182 androidboot.AdcVol2=1400
+--- uptime / CPU / RAM ---
+3.34 26.01
+0-7
+MemTotal:        5643080 kB
+MemFree:         5569240 kB
+MemAvailable:    5489336 kB
+Buffers:               0 kB
+Cached:             1112 kB
+--- mounts (RAM and pseudo filesystems only) ---
+rootfs / rootfs rw,size=2689632k,nr_inodes=672408 0 0
+devtmpfs /dev devtmpfs rw,relatime,size=2689632k,nr_inodes=672408,mode=755 0 0
+proc /proc proc rw,relatime 0 0
+sysfs /sys sysfs rw,relatime 0 0
+tmpfs /run tmpfs rw,relatime,mode=755 0 0
+configfs /sys/kernel/config configfs rw,relatime 0 0
+debugfs /sys/kernel/debug debugfs rw,relatime 0 0
+none /sys/fs/pstore pstore rw,relatime 0 0
+--- storage enumeration (no reads or mounts) ---
+major minor  #blocks  name
+
+   8        0  120479744 sda
+   8        1          8 sda1
+   8        2      32768 sda2
+   8        3       1024 sda3
+   8        4        512 sda4
+   8        5        512 sda5
+   8        6     131072 sda6
+   8        7    1048576 sda7
+   8        8     131072 sda8
+   8        9     131072 sda9
+   8       10         64 sda10
+   8       11         64 sda11
+   8       12      16384 sda12
+   8       13     393216 sda13
+   8       14     393216 sda14
+   8       15      16384 sda15
+ 259        0       8192 sda16
+ 259        1    8388608 sda17
+ 259        2  109786956 sda18
+   8       16       8192 sdb
+   8       17       7168 sdb1
+   8       18        128 sdb2
+   8       32       8192 sdc
+   8       33       7168 sdc1
+   8       34        128 sdc2
+   8       64    4194304 sde
+   8       65        512 sde1
+   8       66       4096 sde2
+   8       67        512 sde3
+   8       68     262144 sde4
+   8       69       1024 sde5
+   8       70       4096 sde6
+   8       71      32768 sde7
+   8       72       8192 sde8
+   8       73      32768 sde9
+   8       74        512 sde10
+   8       75        512 sde11
+   8       76        512 sde12
+   8       77        128 sde13
+   8       78         64 sde14
+   8       79       2048 sde15
+ 259        3       2048 sde16
+ 259        4        512 sde17
+ 259        5       4096 sde18
+ 259        6        512 sde19
+ 259        7     262144 sde20
+ 259        8       1024 sde21
+ 259        9       4096 sde22
+ 259       10      32768 sde23
+ 259       11       8192 sde24
+ 259       12      32768 sde25
+ 259       13        512 sde26
+ 259       14        512 sde27
+ 259       15        512 sde28
+ 259       16        128 sde29
+ 259       17         64 sde30
+ 259       18       2048 sde31
+ 259       19       2048 sde32
+ 259       20          4 sde33
+ 259       21       1024 sde34
+ 259       22        256 sde35
+ 259       23       8192 sde36
+ 259       24      33424 sde37
+ 259       25          4 sde38
+ 259       26       1024 sde39
+ 259       27       8192 sde40
+ 259       28       2048 sde41
+ 259       29      65536 sde42
+ 259       30        128 sde43
+ 259       31         32 sde44
+ 259       32         32 sde45
+ 259       33        512 sde46
+ 259       34         28 sde47
+ 259       35        512 sde48
+ 259       36       1024 sde49
+ 259       37         64 sde50
+ 259       38     131072 sde51
+ 259       39      24576 sde52
+ 259       40         64 sde53
+ 259       41      24576 sde54
+ 259       42     131072 sde55
+   8       48     131072 sdd
+   8       49        104 sdd1
+   8       50        128 sdd2
+   8       51       1024 sdd3
+   8       80     131072 sdf
+   8       81        104 sdf1
+   8       82       2048 sdf2
+   8       83       2048 sdf3
+   8       84      10240 sdf4
+   8       85        128 sdf5
+sda read-only=1
+sdb read-only=1
+sdc read-only=1
+sdd read-only=1
+sde read-only=1
+sdf read-only=1
+--- USB ---
+USB: ACM function configured; waiting for a device controller
+USB: bound ACM gadget to a600000.usb
+configured
+--- loaded modules (expected empty) ---
+--- deferred probes ---
+--- kernel log ---
+/bin/boot-probe: line 31: dmesg: not found
+BOOT1_PROBE_END
+miatoll-boot1# [6n

@@ -1,0 +1,12 @@
+{
+  "host_diagnostic_checks_passed": true,
+  "arm64_busybox_dmesg_help_executed": true,
+  "ramdisk_dmesg_symlink_verified": true,
+  "shell_scripts_and_serial_command_syntax_verified": true,
+  "new_windows_capture_path_executed": false,
+  "new_ramdisk_device_tested": false,
+  "kernel_rebuild_required_for_running_image_log_capture": false,
+  "original_boot_image_and_zip_hashes_preserved": true,
+  "ramdisk_sha256": "01317956d12ee148b7377c87f99737d20d930d1d64a0e995ad6eb08ee4966b93",
+  "capture_script_sha256": "fdc9cbee29d3f9cabf6cccf31ccca5b0382fefcdec5597abc9ae77c47e285bf0"
+}

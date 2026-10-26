@@ -37,6 +37,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Test-Boot1.ps1 -Fastbo
 스크립트는 이미지 SHA256과 제품명 `curtana`를 확인하고, 새 bootloader 세션에서
 `fastboot boot`를 **한 번만** 실행한다. flash/erase/format/unlock 명령은 실행하지 않는다.
 새 Linux COM 포트가 나타나면 115200 baud로 열고 `uname -r`, `boot-probe`를 수집한다.
+현재 Git의 스크립트는 이어서 `/bin/busybox dmesg`도 수집한다.
+최초 배포 ZIP과 그 안의 스크립트는 시험 증거 보존을 위해 변경하지 않았다.
 
 성공 출력:
 
@@ -53,6 +55,11 @@ BOOT1_CONFIRMED: 6.18.58-miatoll-boot1+ reached a RAM userspace and USB shell.
 이미 boot1이 실행 중이면 이미지를 다시 보내지 않고 다음처럼 COM 포트만 연다.
 `COM5`는 장치 관리자에서 확인한 실제 포트로 바꾼다.
 
+2026-10-26 첫 실기기 로그에서 커널/USB 셸 진입을 확인했지만 `/bin/dmesg` 링크 누락으로
+커널 상세 로그 수집이 실패했다. 현재 스크립트 파일을 기존 압축 해제 폴더에 복사하고
+`-CaptureOnly`로 실행하면 실행 중인 최초 이미지에서도 BusyBox applet으로 로그를 얻는다.
+포트를 지정하지 않으면 기존과 같이 Linux COM 포트를 자동 검색한다.
+
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Test-Boot1.ps1 -CaptureOnly -Port COM5
 ```
@@ -67,8 +74,11 @@ COM 포트가 없거나 `The system has been destroyed` 등이 나타나면 같�
 ARM64 BusyBox 실행/셸 문법, 로더의 실제 ARM64 모의 entry 실행, 잘못된 FDT/initrd 입력 거부,
 Image 실행 영역, AVB 해시, AOSP 독립 재추출을 확인했다.
 
-QEMU에서 Linux 전체를 부팅한 검사는 아니다. PowerShell/Windows COM 동작과 실제
-Xiaomi 부팅은 사용자 실행 결과를 기다린다. 장치 시험 전에는 `device_boot_confirmed=false`다.
+QEMU에서 Linux 전체를 부팅한 검사는 아니다. 최초 배포 스크립트의 Windows COM 통신과
+실제 curtana 부팅은 사용자가 전달한 `20261026-232305` 로그로 확인했다.
+기록은 `miatoll/reports/device-tests/20261026-232305-boot1/`에 있다.
+추가한 BusyBox dmesg 캡처 경로는 Windows에서 아직 실행하지 않았다.
+패키지 생성 시점의 `device_boot_confirmed=false` 기록은 보존한다.
 
 ## 재현
 

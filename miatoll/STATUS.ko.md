@@ -1,12 +1,14 @@
 # Linux 6.18 기반 miatoll 지원 현황
 
-2026-10-26 KST. 현재 개발 브랜치: **`miatoll/6.18-sm7125`**.
+2026-10-26 KST. 하드웨어 이식 기준: **`miatoll/6.18-sm7125`**.
+현재 실기기 시험 브랜치: **`miatoll/6.18-boot1`**.
 공식 Linux **v6.18.58**을 기반으로, 6.14.7 포크의 Xiaomi 하드웨어 구현을 직접 선별 이식했다.
 기존 로컬 커널 수정은 보존 브랜치와 백업에 남겼다.
 
-**확인한 단계는 소스 이식·컴파일·정적 검사다. 이 새 커널의 실기기 동작과 LineageOS 부팅은 미검증이다.**
+**curtana에서 새 6.18.58 커널의 단독 RAM 부팅과 USB 진단 셸 진입을 실기기로 확인했다.**
+아래 boot1 최소 프로필의 결과이며, 전체 하드웨어와 LineageOS 부팅은 미검증이다.
 
-## 검증 결과
+## 기본 하드웨어 빌드의 호스트 검증
 
 빌드/검증 커밋: `820e88dce8314e351f3e23fb9e9362c0efb77e76`.
 이후 결과 보고서만 별도 커밋했다. 빌드의 실제 값은 `reports/build-validation.json`에 있다.
@@ -23,7 +25,7 @@
 | DT 정적 검사 | 4개 모두 패널↔DSI endpoint, 터치→패널 연결, QUP 등 부모 활성 상태 통과 |
 | Binder UAPI | 4.14와 6.18의 64-bit protocol 8, transaction 64 bytes, write/read 48 bytes와 주요 ioctl 값 일치 |
 | 빌드 로그 | 최종 빌드 성공, 오류/경고 없음. 컴파일 중 발견한 API 오류와 터치 경고는 수정 |
-| 미수행 | 실기기 부팅/플래시, Android framework/HAL 실행, DT schema 전체 검사, 장기/부하/절전 검증 |
+| 미수행 | 이 전체 하드웨어 프로필의 실기기 부팅, Android framework/HAL 실행, DT schema 전체 검사, 장기/부하/절전 검증. 플래시는 수행하지 않음 |
 
 Image SHA256:
 
@@ -32,16 +34,46 @@ Image SHA256:
 다른 SoC용 pinctrl/클록/interconnect 제외 항목 130개를 6.14.7 설정에서 선별했다.
 CPU 수 8, NUMA/Xen/네트워크 파일시스템 제외, 1 MiB 커널 로그 버퍼 등의 설정으로
 실행 영역을 최초 약 51.2 MB에서 약 31.6 MB로 줄였다. Android 핵심 인터페이스와
-필수 하드웨어는 유지했다. 기존 원본 커널의 실행 영역 기준 40,615,936 bytes보다 작지만,
-중간 로더·DTB·ramdisk를 포함한 새 boot.img의 실제 부팅 호환성은 아직 검증하지 않았다.
+필수 하드웨어는 유지했다. 기존 원본 커널의 실행 영역 기준 40,615,936 bytes보다 작다.
+이 기본 빌드와 아래 실기기 시험 빌드는 구분한다. boot1에서는 QUSB2 PHY를 내장하고
+주변장치를 제한한 DT·RAM initramfs·중간 로더를 통합해 실제 부팅을 확인했다.
+
+## curtana 단독 RAM 부팅: 실기기 확인
+
+Windows PC에 연결된 기존 curtana에서 사용자가 실행하고 전달한
+`20261026-232305` Fastboot/serial 로그를 검토했다.
+원본과 해시·판정 근거는 [실기기 기록](reports/device-tests/20261026-232305-boot1/README.ko.md)에 있다.
+
+| 확인 항목 | 로그에서 확인한 내용 |
+| --- | --- |
+| 실제 커널/프로필 | `6.18.58-miatoll-boot1+`, `boot1-ram-only` |
+| RAM 사용자 공간 | 대화형 셸에서 `uname -r`와 `boot-probe` 실행, `BOOT1_PROBE_END` 도달 |
+| CPU/RAM | CPU `0-7` online, MemTotal `5,643,080 kB` |
+| USB | ACM gadget이 `a600000.usb`에 연결되고 상태 `configured`; Windows와 명령/응답 교환 |
+| UFS | `sda`–`sdf` 및 파티션 열거, 6개 디스크 모두 read-only=1. 파일 읽기/성능 검증은 아님 |
+| 마운트/모듈 | RAM·가상 파일시스템만 마운트, 로드된 모듈 없음 |
+| 관측 시간 | probe 시점 uptime 3.34초. 장기 안정성/부하/절전 검증은 아님 |
+| 커널 상세 로그 | RAMdisk의 `/bin/dmesg` 링크 누락으로 수집 실패. 드라이버 경고/오류 판정은 보류 |
+
+시험 boot.img SHA256:
+`ca100f9ebb5cba93608ff755e79ec2e9f7ffcc34e024eba8b5100671e3c9ff75`.
+Fastboot의 `Booting OKAY`와 별도로 실제 USB 셸의 버전·프로필·probe 완료를 확인했다.
+패키지 생성 당시 `boot1-host-validation.json`의 `device_boot_confirmed=false`는
+과거 호스트 검증 기록으로 유지하며, 이후 실기기 판정은 위 기록의 `result.json`에 있다.
+
+디스플레이/터치/GPU/카메라/오디오/모뎀/무선/충전·절전과 Android는 이번 시험 대상이 아니다.
+화면 출력은 serial 로그만으로 검증할 수 없다. 모뎀·ADSP·GPU 등은 시험 DT에서 비활성화했다.
+RAMdisk 생성기에 `dmesg` 링크를 추가하고 캡처 스크립트가 BusyBox applet을 직접 호출하도록
+수정했다. 시험에 사용한 기존 이미지/ZIP은 결과 추적을 위해 그대로 보존했다.
 
 ## 하드웨어별 상태
 
-아래의 '반영'은 새 브랜치의 소스·설정·컴파일 결과다. 모든 행의 새 실기기 검증은 남아 있다.
+아래의 '반영'은 새 브랜치의 소스·설정·컴파일 결과다. boot1에서 확인한 기본 기능 외의
+실기기 검증은 남아 있다.
 
 | 기능 | upstream 6.18 재사용 | 6.14.7에서 반영한 부분 | 남은 확인 |
 | --- | --- | --- | --- |
-| CPU/RAM/UFS/SD/USB/버튼 | 기존 SM7125/SC7180, PMIC, UFS/MMC/GENI 드라이버 | 보드 DT와 추가 주변장치 연결 | 새 부팅, UFS 읽기, SD CMD48 재발 여부, USB role, 입력 |
+| CPU/RAM/UFS/SD/USB/버튼 | 기존 SM7125/SC7180, PMIC, UFS/MMC/GENI/QUSB2 드라이버 | 보드 DT와 추가 주변장치 연결 | boot1에서 CPU/RAM/USB ACM/UFS 열거 확인. UFS 파일 읽기, SD CMD48 재발 여부, USB role, 입력은 미검증 |
 | 디스플레이 | DRM/MSM DPU/DSI, PHY, WLED | Huaxing FT8756 및 Tianma NT36675 패널, DT, WLED 수정. DSI API 변환 | 부트로더 화면 인계, 실제 표시/밝기/절전. 이전 로컬 DPU 우회는 포함하지 않음 |
 | 터치 | SPI/GENI/input | FT8756 및 NT36xxx SPI 드라이버, 패널 연동과 firmware 이름 | RAM firmware 제공, IRQ/좌표/멀티터치, suspend/resume |
 | GPU | Adreno A618/GMU/DRM | ZAP 이름, HWCG, fuse 0x9f/bin 3. OPP는 SM7125에 한정 | firmware, GMU/GPU 초기화, 렌더링/Android GPU userspace |
@@ -100,12 +132,15 @@ Clang/LLD 18.1.3과 호스트 도구는 작업 공간의 `tools/`에만 준비�
 
 ## 우선 남은 작업
 
-1. 새 DT/모듈/firmware와 boot header v2·메모리 인계를 통합한 Android 부팅 구성을 준비한다.
-2. 별도 허용된 실기기 시험에서 새 기준의 부팅·화면·터치·SD·무선을 재검증한다.
+1. 실행 중인 boot1에서 BusyBox `dmesg`를 수집해 초기화 경고/오류를 확인하고 반복 부팅·안정성을 검증한다.
+2. 화면·터치·SD·무선을 기능별 RAM 시험으로 재검증한다. 새 DT/모듈/firmware와
+   boot header v2·메모리 인계를 Android 부팅 구성에도 연결한다.
 3. 카메라/오디오/모뎀/충전·절전은 기능별로 probe와 실제 동작을 분리해 검증한다.
 4. KGSL/ION/vendor IPA ioctl·카메라/오디오·TEE/RIL의 실제 바이너리 의존성을 추적하고
    mainline용 HAL 교체와 호환층의 범위를 결정한다. Binder 검사만으로 해결되지 않는다.
 5. 기존 `wrappedkey_v0` userdata의 복호화/키 관리, SELinux/VINTF, framework/앱/통화/IMS와
    장기 안정성까지 확인해야 LineageOS 구동 목표가 완료된다.
 
-원본 작업·모뎀 보정 데이터·파티션은 변경하지 않았고 실기기 플래시/부팅 명령을 실행하지 않았다.
+원본 작업은 보존했다. 사용자에게 허용된 `fastboot boot` RAM 시험만 수행했으며,
+전달된 로그에 플래시/파티션 마운트 명령은 없고 UFS 디스크는 read-only=1이다.
+모뎀 보정 데이터 변경이나 파티션 쓰기 작업은 수행하지 않았다.

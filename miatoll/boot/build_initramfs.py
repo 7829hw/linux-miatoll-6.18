@@ -27,7 +27,7 @@ def build(output):
                for i in range(count)), 'BusyBox must be static'
     qemu = ROOT.parent / 'tools/qemu/qemu-aarch64-static'
     required = {'sh', 'mount', 'uname', 'mkdir', 'cat', 'head', 'tail', 'grep',
-                'blockdev', 'watchdog', 'tr', 'setsid', 'sleep', 'ln', 'ls'}
+                'blockdev', 'watchdog', 'tr', 'setsid', 'sleep', 'ln', 'ls', 'dmesg'}
     with tempfile.TemporaryDirectory(prefix='boot1-busybox-') as temporary:
         executable = Path(temporary) / 'busybox'
         executable.write_bytes(binary)

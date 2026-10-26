@@ -1,0 +1,107 @@
+{
+  "test_date_kst": "2026-10-26",
+  "capture_id_from_filenames": "20261026-232305",
+  "evidence_origin": "User-supplied logs from existing curtana attached to Windows PC",
+  "device_boot_confirmed": true,
+  "scope": "Standalone RAM userspace and USB diagnostic shell; no Android boot",
+  "kernel_release": "6.18.58-miatoll-boot1+",
+  "boot_profile": "boot1-ram-only",
+  "expected_distributed_image_sha256": "ca100f9ebb5cba93608ff755e79ec2e9f7ffcc34e024eba8b5100671e3c9ff75",
+  "expected_distributed_zip_sha256": "878ae3f80c48128d22a2e59304bdddf832716342eac4f51b838a410dbf297015",
+  "artifact_attribution": "Fastboot filename and serial release/profile match the preserved candidate; no image hash is printed in the device logs",
+  "kernel_build_commit": "5e565fbef12c653e237a6897518af54641c48821",
+  "tested_packaging_source_commit": "3d56ca6e0f2d30069e18465059d8f163200d60ed",
+  "checks": {
+    "fastboot_product_curtana": true,
+    "single_fastboot_boot_request": true,
+    "fastboot_booting_okay": true,
+    "expected_kernel_release": true,
+    "expected_dt_profile": true,
+    "probe_completed": true,
+    "usb_acm_bound_and_configured": true,
+    "no_flash_command_in_fastboot_log": true
+  },
+  "observations": {
+    "cpu_online": "0-7",
+    "memtotal_kib": 5643080,
+    "probe_uptime_seconds": 3.34,
+    "ufs_disks_read_only": {
+      "sda": 1,
+      "sdb": 1,
+      "sdc": 1,
+      "sdd": 1,
+      "sde": 1,
+      "sdf": 1
+    },
+    "mounts": [
+      [
+        "rootfs",
+        "/",
+        "rootfs"
+      ],
+      [
+        "devtmpfs",
+        "/dev",
+        "devtmpfs"
+      ],
+      [
+        "proc",
+        "/proc",
+        "proc"
+      ],
+      [
+        "sysfs",
+        "/sys",
+        "sysfs"
+      ],
+      [
+        "tmpfs",
+        "/run",
+        "tmpfs"
+      ],
+      [
+        "configfs",
+        "/sys/kernel/config",
+        "configfs"
+      ],
+      [
+        "debugfs",
+        "/sys/kernel/debug",
+        "debugfs"
+      ],
+      [
+        "none",
+        "/sys/fs/pstore",
+        "pstore"
+      ]
+    ],
+    "loaded_modules": [],
+    "deferred_probes_at_snapshot": []
+  },
+  "kernel_log_collected": false,
+  "diagnostic_issue": "Missing /bin/dmesg symlink in the first RAMdisk; BusyBox applet remains available",
+  "unverified": [
+    "Kernel initialization warnings/errors (dmesg missing)",
+    "Repeated boot and long-term stability",
+    "UFS file/data reads or throughput",
+    "Display output and touch",
+    "SD",
+    "GPU",
+    "Camera",
+    "Audio",
+    "Modem/RIL",
+    "Wi-Fi/Bluetooth",
+    "Charging/power management",
+    "Android/LineageOS and vendor HALs"
+  ],
+  "log_files": {
+    "boot1-fastboot-20261026-232305.txt": {
+      "bytes": 582,
+      "sha256": "46fb372232f3bd3a18d00d2a86f2bd6a7d4792dfcfab8d36b2e71cbc062b7a40"
+    },
+    "boot1-serial-20261026-232305.txt": {
+      "bytes": 5121,
+      "sha256": "e8705a9d078153244bc19e2b778769b86fb4aa965edac7e7eb7187e2331e6ee4"
+    }
+  }
+}

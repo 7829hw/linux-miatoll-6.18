@@ -71,6 +71,9 @@ try {
     $serialConnection.WriteLine('')
     $serialConnection.WriteLine('uname -r')
     $serialConnection.WriteLine('boot-probe')
+    # The first tested RAMdisk omitted /bin/dmesg; BusyBox contains the applet.
+    # This also works with that already running image, without another boot.
+    $serialConnection.WriteLine('/bin/busybox dmesg; printf "\nBOOT1_KERNELLOG_EXIT=%s\n" "$?"')
     $captureDeadline = [DateTime]::UtcNow.AddSeconds(90)
     while ([DateTime]::UtcNow -lt $captureDeadline) {
         $chunk = $serialConnection.ReadExisting()
@@ -78,7 +81,8 @@ try {
             $capturedText += $chunk
             [System.IO.File]::AppendAllText($serialLog, $chunk, [System.Text.Encoding]::UTF8)
         }
-        if ($capturedText.Contains('BOOT1_PROBE_END')) { break }
+        # Match a result line, never the command echoed by the interactive shell.
+        if ($capturedText -match '(?m)^BOOT1_KERNELLOG_EXIT=\d+\r?$') { break }
         if ($capturedText.Length -gt 8388608) { throw 'Serial output exceeded 8 MiB; keep the captured log.' }
         Start-Sleep -Milliseconds 200
     }
@@ -91,6 +95,11 @@ if ($capturedText -match $releasePattern -and $capturedText.Contains('boot1-ram-
     Write-Host "BOOT1_CONFIRMED: $($bootReport.kernel_release) reached a RAM userspace and USB shell."
 } else {
     Write-Host 'Boot is not confirmed. Return the logs for inspection.'
+}
+if ($capturedText -match '(?m)^BOOT1_KERNELLOG_EXIT=0\r?$') {
+    Write-Host 'Kernel log collected using the BusyBox dmesg applet.'
+} else {
+    Write-Host 'Kernel log collection is incomplete; boot confirmation above is separate.'
 }
 if (Test-Path -LiteralPath $fastbootLog) { Write-Host "Fastboot log: $fastbootLog" }
 Write-Host "Serial log: $serialLog"
