@@ -1,0 +1,110 @@
+{
+  "capture_id": "20261027-030830",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-wifi1+",
+  "boot_profile": "wifi1-ram-only",
+  "image": "boot-curtana-6.18.58-wifi1.img",
+  "image_sha256": "4db275b3b8eda14134329e2306769589ef9adda4b4237308f84c7e70b4bf67e0",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-wifi1/boot-curtana-6.18.58-wifi1.img"
+  ],
+  "physical_display_confirmed": true,
+  "user_observation": {
+    "screen": "WIFI TEST 1 banner; display and touch normal, no reboot during MPSS start and scan",
+    "backlight": "on",
+    "notes": ""
+  },
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "WIFI1_BANNER_WRITTEN",
+      "WIFI1_PROBE_BEGIN",
+      "WIFI1_PROBE_END",
+      "WIFI1_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "wifi1-fastboot-20261027-030830.txt": {
+      "bytes": 583,
+      "sha256": "31b69a8ef77b1b28e7047845d4d41cd6f687626e3e7ecf9afc0464b70fb369cd"
+    },
+    "wifi1-serial-20261027-030830.txt": {
+      "bytes": 153916,
+      "sha256": "306d88aab15335bb00d81f8c185c6a7202c557ce9f0bcc3fc2cc8cd756534192"
+    },
+    "steps.txt": {
+      "bytes": 35941,
+      "sha256": "8eb4296f3bbc9ea090150e675a2c8845a14322157e0b1843973e1cff8961b26b"
+    }
+  },
+  "redaction": {
+    "file": "steps.txt",
+    "original_kept_outside_git": "dist/miatoll-wifi1/private-logs/steps-original.txt",
+    "original_sha256": "696859ec40cc9f2cba4266101293c4a70ed79343c3e0845e504f5496aacae7ac",
+    "replaced": "MAC/BSSID addresses (numbered), SSID and mesh ID values"
+  },
+  "wifi": {
+    "bdf": {
+      "source": "modem partition image/bdwlan.bin via read-only VFAT, unmounted after copy",
+      "bytes": 26328,
+      "sha256": "902d380c3a59f5af480d5e4f748a5b577dadcb99b602d27a54ddc88724fe8fd9"
+    },
+    "rmtfs_sources": [
+      "modemst1",
+      "modemst2",
+      "fsg",
+      "fsc"
+    ],
+    "rmtfs_mode": "O_RDONLY with RAM shadow; block devices ro=1",
+    "mpss": "running, q6v5 fatal IRQ 0",
+    "qmi": "chip_id 0x320 board_id 0xff soc_id 0x400c0000",
+    "firmware": "WLAN.HL.3.2.2-00947, api 5",
+    "board_data": "board-2.bin has no 0x320/0xff entry; device BDF (cal file) used",
+    "mac": "invalid MAC; random address chosen (factory MAC not provided)",
+    "interface": "wlan0",
+    "passive_scan": {
+      "exit": 0,
+      "bss": 7,
+      "2.4GHz": 6,
+      "5GHz": 1,
+      "signal_dBm": [
+        -81,
+        -27
+      ]
+    },
+    "regulatory": "country US: DFS-FCC (iw reg get)"
+  },
+  "wifi_confirmed": {
+    "mpss_wlan_firmware_and_interface": true,
+    "passive_scan": true,
+    "association": false
+  }
+}

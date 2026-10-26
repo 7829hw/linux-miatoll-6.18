@@ -1,0 +1,676 @@
+### 2026-10-27T03:09:17 wifi-start
+$ timeout 30 wifi-start; echo "start_exit=$?"; cat /run/rmtfs.log | head -20
+timeout 30 wifi-start; echo "start_exit=$?"; cat /run/rmtfs.log |
+ head -20; printf "\nSTEP_DONE_030913=%s\n" "$?"
+MPSS: /sys/class/remoteproc/remoteproc0
+name: modem
+firmware: qcom/sm7125/miatoll/modem.mbn
+WIFI BOARD: modem source /dev/sde4 (block read-only=1)
+WIFI BOARD: installed firmware board files:
+bdwlan.102 bytes=26328
+bdwlan.104 bytes=26328
+bdwlan.105 bytes=26328
+bdwlan.106 bytes=26328
+bdwlan.107 bytes=26328
+bdwlan.108 bytes=26328
+bdwlan.109 bytes=26328
+bdwlan.10e bytes=26328
+bdwlan.10f bytes=26328
+bdwlan.111 bytes=26328
+bdwlan.202 bytes=26328
+bdwlan.b04 bytes=26328
+bdwlan.b07 bytes=26328
+bdwlan.b09 bytes=26328
+bdwlan.b0a bytes=26328
+bdwlan.b0b bytes=26328
+bdwlan.b0d bytes=26328
+bdwlan.b0e bytes=26328
+bdwlan.b0f bytes=26328
+bdwlan.b14 bytes=26328
+bdwlan.b15 bytes=26328
+bdwlan.b30 bytes=26328
+bdwlan.b31 bytes=26328
+bdwlan.b32 bytes=26328
+bdwlan.b33 bytes=26328
+bdwlan.b34 bytes=26328
+bdwlan.b35 bytes=26328
+bdwlan.b36 bytes=26328
+bdwlan.b37 bytes=26328
+bdwlan.b38 bytes=26328
+bdwlan.b58 bytes=26328
+bdwlan.b59 bytes=26328
+bdwlan.b5b bytes=26328
+bdwlan.b5d bytes=26328
+bdwlan.b5f bytes=26328
+bdwlan.bin bytes=26328
+bdwlanu.b58 bytes=26328
+bdwlanu.b59 bytes=26328
+bdwlanu.b5b bytes=26328
+bdwlanu.b5f bytes=26328
+WIFI BOARD: staged 26328 bytes in RAM, sha256=902d380c3a59f5af480d5e4f748a5b577dadcb99b602d27a54ddc88724fe8fd9
+WIFI BOARD: source unmounted; ath10k API-1 fallback is ready.
+RMTFS source modemst1: /dev/sdf2 (read-only)
+RMTFS source modemst2: /dev/sdf3 (read-only)
+RMTFS source fsg: /dev/sdf4 (read-only)
+RMTFS source fsc: /dev/sdf5 (read-only)
+MPSS automatic recovery disabled for this diagnostic start.
+Starting MPSS; collect wifi-probe afterward.
+state: running
+start_exit=0
+[RMTFS] RFSA RAM base 0xfa601000 size 0x200000
+registering services
+
+STEP_DONE_030913=0
+miatoll-wifi1# [6n
+### 2026-10-27T03:10:19 wifi-probe-50s
+$ sleep 50; wifi-probe
+sleep 50; wifi-probe; printf "\nSTEP_DONE_030929=%s\n" "$?"
+===== WIFI PROBE VERSION =====
+Linux (none) 6.18.58-miatoll-wifi1+ #1 SMP PREEMPT 2026-10-26 00:00:00 +0000 aarch64 Linux
+===== REMOTEPROC =====
+/sys/class/remoteproc/remoteproc0
+name: modem
+firmware: qcom/sm7125/miatoll/modem.mbn
+state: running
+lrwxrwxrwx    1 0        0                0 Jan  1 00:01 [1;36m/sys/class/remoteproc/remoteproc0/device[m -> [1;34m../../../4080000.remoteproc[m
+===== INSTALLED BOARD DATA =====
+WIFI BOARD: modem source /dev/sde4 (block read-only=1)
+WIFI BOARD: installed firmware board files:
+bdwlan.102 bytes=26328
+bdwlan.104 bytes=26328
+bdwlan.105 bytes=26328
+bdwlan.106 bytes=26328
+bdwlan.107 bytes=26328
+bdwlan.108 bytes=26328
+bdwlan.109 bytes=26328
+bdwlan.10e bytes=26328
+bdwlan.10f bytes=26328
+bdwlan.111 bytes=26328
+bdwlan.202 bytes=26328
+bdwlan.b04 bytes=26328
+bdwlan.b07 bytes=26328
+bdwlan.b09 bytes=26328
+bdwlan.b0a bytes=26328
+bdwlan.b0b bytes=26328
+bdwlan.b0d bytes=26328
+bdwlan.b0e bytes=26328
+bdwlan.b0f bytes=26328
+bdwlan.b14 bytes=26328
+bdwlan.b15 bytes=26328
+bdwlan.b30 bytes=26328
+bdwlan.b31 bytes=26328
+bdwlan.b32 bytes=26328
+bdwlan.b33 bytes=26328
+bdwlan.b34 bytes=26328
+bdwlan.b35 bytes=26328
+bdwlan.b36 bytes=26328
+bdwlan.b37 bytes=26328
+bdwlan.b38 bytes=26328
+bdwlan.b58 bytes=26328
+bdwlan.b59 bytes=26328
+bdwlan.b5b bytes=26328
+bdwlan.b5d bytes=26328
+bdwlan.b5f bytes=26328
+bdwlan.bin bytes=26328
+bdwlanu.b58 bytes=26328
+bdwlanu.b59 bytes=26328
+bdwlanu.b5b bytes=26328
+bdwlanu.b5f bytes=26328
+WIFI BOARD: staged 26328 bytes in RAM, sha256=902d380c3a59f5af480d5e4f748a5b577dadcb99b602d27a54ddc88724fe8fd9
+WIFI BOARD: source unmounted; ath10k API-1 fallback is ready.
+source_partition=/dev/sde4
+source_file=image/bdwlan.bin
+bytes=26328
+sha256=902d380c3a59f5af480d5e4f748a5b577dadcb99b602d27a54ddc88724fe8fd9
+target=/lib/firmware/ath10k/WCN3990/hw1.0/board-snoc-18800000.wifi.bin
+===== WIFI PLATFORM =====
+/sys/bus/platform/devices/18800000.wifi
+lrwxrwxrwx    1 0        0                0 Jan  1 00:01 [1;36m/sys/bus/platform/devices/18800000.wifi/driver[m -> [1;34m../../../../bus/platform/drivers/ath10k_snoc[m
+===== NETWORK / PHY =====
+[1;36mlo[m     [1;36mwlan0[m
+[1;36mphy0[m
+===== WIFI / MPSS IRQS =====
+ 17:          5          0          0          0          0          0          0          0    GICv3 483 Edge      smp2p-mpss
+100:          3          0          0          0          0          0          0          0    GICv3 446 Level     WLAN_CE_0
+101:          1          0          0          0          0          0          0          0    GICv3 447 Level     WLAN_CE_1
+102:          6          0          0          0          0          0          0          0    GICv3 448 Level     WLAN_CE_2
+103:          2          0          0          0          0          0          0          0    GICv3 449 Level     WLAN_CE_3
+104:          0          0          0          0          0          0          0          0    GICv3 450 Level     WLAN_CE_4
+105:          0          0          0          0          0          0          0          0    GICv3 451 Level     WLAN_CE_5
+106:          0          0          0          0          0          0          0          0    GICv3 452 Level     WLAN_CE_6
+107:          0          0          0          0          0          0          0          0    GICv3 453 Level     WLAN_CE_7
+108:          0          0          0          0          0          0          0          0    GICv3 454 Level     WLAN_CE_8
+109:          0          0          0          0          0          0          0          0    GICv3 455 Level     WLAN_CE_9
+110:          0          0          0          0          0          0          0          0    GICv3 456 Level     WLAN_CE_10
+111:          0          0          0          0          0          0          0          0    GICv3 457 Level     WLAN_CE_11
+166:          0          0          0          0          0          0          0          0 smp2p-mpss   0 Edge      q6v5 fatal
+167:          1          0          0          0          0          0          0          0 smp2p-mpss   1 Edge      q6v5 ready
+168:          1          0          0          0          0          0          0          0 smp2p-mpss   2 Edge      q6v5 handover
+169:          0          0          0          0          0          0          0          0 smp2p-mpss   3 Edge      q6v5 stop
+170:          0          0          0          0          0          0          0          0 smp2p-mpss   7 Edge      q6v5 shutdown-ack
+178:        999          0          0          0          0          0          0          0    GICv3 481 Edge      glink-smem
+===== DEFERRED PROBES =====
+===== WIFI / MPSS LOG =====
+[    0.000000] Linux version 6.18.58-miatoll-wifi1+ (miatoll@lts) (Ubuntu clang version 18.1.3 (1ubuntu1), Ubuntu LLD 18.1.3) #1 SMP PREEMPT 2026-10-26 00:00:00 +0000
+[    0.000000] Machine model: Xiaomi Redmi Note 9S (Huaxing wifi1 test)
+[    0.000000] OF: reserved mem: 0x000000009d700000..0x000000009d7fffff (1024 KiB) map non-reusable firmware-reserved@9d700000
+[    0.000000] OF: reserved mem: 0x000000009c9e3400..0x000000009d6fffff (13427 KiB) map non-reusable firmware-reserved@9c9e3400
+[    0.000000] OF: reserved mem: 0x000000009f400000..0x00000000a11fffff (30720 KiB) nomap non-reusable firmware-reserved@9f400000
+[    0.000000] OF: reserved mem: 0x000000009e000000..0x000000009f3fffff (20480 KiB) nomap non-reusable firmware-reserved@9e000000
+[    0.000000] OF: reserved mem: 0x0000000093b10000..0x0000000093b14fff (20 KiB) nomap non-reusable firmware-reserved@93b10000
+[    0.000000] OF: reserved mem: 0x000000008e900000..0x000000008edfffff (5120 KiB) nomap non-reusable firmware-reserved@8e900000
+[    0.000000] OF: reserved mem: 0x000000008e400000..0x000000008e8fffff (5120 KiB) nomap non-reusable firmware-reserved@8e400000
+[    0.000000] psci: PSCIv1.1 detected in firmware.
+[    0.000000] psci: [Firmware Bug]: failed to set PC mode: -3
+[    0.000000] Kernel command line: rcupdate.rcu_expedited=1 rcu_nocbs=0-7 noirqdebug rdinit=/init console=tty0 loglevel=8 ignore_loglevel clk_ignore_unused pd_ignore_unused no_console_suspend deferred_probe_timeout=30 panic=0 enforcing=0 miatoll_boot=wifi1 consoleblank=0 drm.debug=0x06 androidboot.verifiedbootstate=orange androidboot.keymaster=1  androidboot.bootdevice=1d84000.ufshc androidboot.fstab_suffix=default androidboot.boot_devices=soc/1d84000.ufshc androidboot.serialno=REDACTED androidboot.cpuid=0xd7896932 androidboot.multisim_config=dsds androidboot.dp=0x0 androidboot.baseband=msm msm_drm.dsi_display0=dsi_ft8756_huaxing_vid_display: androidboot.fpsensor=fpc androidboot.lcmtype=dsi_nt36672c_huaxing_fhd_video_display androidboot.dtbo_idx=0 androidboot.dtb_idx=0 androidboot.secureboot=1 androidboot.hwc=Global_TWO androidboot.hwversion=1.91.0 androidboot.hwlevel=MP androidboot.hwname=curtana androidboot.AdcVol1=183 androidboot.AdcVol2=1400
+[    0.000000] Unknown kernel command line parameters "rcu_nocbs=0-7 miatoll_boot=wifi1", will be passed to user space.
+[    0.079193] qcom_scm firmware:scm: qseecom: found qseecom with version 0x1400000
+[    0.079222] qcom_scm firmware:scm: qseecom: untested machine, skipping
+[    0.171517] platform 18800000.wifi: Adding to iommu group 5
+[    0.418889] remoteproc remoteproc0: modem is available
+[    0.462984] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] Not using firmware configuration
+[    0.654876] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] Not using firmware configuration
+[    0.923376]     miatoll_boot=wifi1
+[   21.027683] remoteproc remoteproc0: powering up modem
+[   21.115452] remoteproc remoteproc0: Booting fw image qcom/sm7125/miatoll/modem.mbn, size 62183024
+[   21.460793] remoteproc remoteproc0: remote processor modem is now up
+[   22.590533] ath10k_snoc 18800000.wifi: qmi chip_id 0x320 chip_family 0x4001 board_id 0xff soc_id 0x400c0000
+[   22.590769] ath10k_snoc 18800000.wifi: qmi fw_version 0x322183b3 fw_build_timestamp 2023-03-03 11:36 fw_build_id QC_IMAGE_VERSION_STRING=WLAN.HL.3.2.2-00947-QCAHLSWMTPLZ-1.24884.5.26445.2
+[   22.592665] ath10k_snoc 18800000.wifi: failed to fetch board data for bus=snoc,qmi-board-id=ff,qmi-chip-id=320 from ath10k/WCN3990/hw1.0/board-2.bin
+[   25.701316] ath10k_snoc 18800000.wifi: wcn3990 hw1.0 target 0x00000008 chip_id 0x00000000 sub 0000:0000
+[   25.701515] ath10k_snoc 18800000.wifi: kconfig debug 0 debugfs 0 tracing 0 dfs 0 testmode 0
+[   25.701593] ath10k_snoc 18800000.wifi: firmware ver  api 5 features wowlan,mgmt-tx-by-reference,non-bmi crc32 b3d4b790
+[   25.739870] ath10k_snoc 18800000.wifi: htt-ver 3.89 wmi-op 4 htt-op 3 cal file max-sta 32 raw 0 hwcrypto 1
+[   25.886467] ath10k_snoc 18800000.wifi: invalid MAC address; choosing random
+===== RECENT FULL LOG =====
+[    0.609224] [drm:dpu_encoder_phys_vid_enable] enc33 intf1 
+[    0.609241] [drm:dpu_encoder_phys_vid_enable] enc33 intf1 enabling mode:
+[    0.609253] [drm:drm_mode_debug_printmodeline] Modeline "1080x2400": 60 164823 1080 1100 1104 1124 2400 2408 2412 2444 0x48 0x0
+[    0.609302] [drm:dpu_encoder_phys_vid_enable] enc33 intf1 fmt_fourcc 0x34324752
+[    0.609341] [drm:dpu_encoder_phys_vid_enable] enc33 intf1 prog fetch is not needed, large vbp+vsw
+[    0.609353] [drm:dpu_encoder_phys_vid_enable] enc33 intf1 v_front_porch 8 v_back_porch 32 vsync_pulse_width 4
+[    0.609366] [drm:dpu_encoder_phys_vid_enable] enc33 intf1 wc_lines 24 needed_vfp_lines 4294967284 actual_vfp_lines 0
+[    0.609380] [drm:dpu_encoder_phys_vid_enable] enc33 intf1 vfp_fetch_lines 0 vfp_fetch_start_vsync_counter 0
+[    0.609396] [drm:dpu_encoder_phys_vid_enable] enc33 intf1 update pending flush ctl 0 intf 2
+[    0.609582] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    0.609921] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    0.626462] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    0.634575] Console: switching to colour frame buffer device 135x150
+[    0.634725] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    0.643126] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    0.653994] msm_dpu ae01000.display-controller: [drm] fb0: msmdrmfb frame buffer device
+[    0.654438] msm_dpu ae01000.display-controller: [drm:drm_fb_helper_hotplug_event] 
+[    0.654510] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] 
+[    0.654567] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:34:DSI-1]
+[    0.654680] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:34:DSI-1] probed modes:
+[    0.654740] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1080x2400": 60 164823 1080 1100 1104 1124 2400 2408 2412 2444 0x48 0x0
+[    0.654817] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] [CONNECTOR:34:DSI-1] enabled? yes
+[    0.654876] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] Not using firmware configuration
+[    0.654934] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] [CONNECTOR:34:DSI-1] found preferred mode: 1080x2400
+[    0.654993] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] picking CRTCs for 1080x2400 config
+[    0.655052] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] [CRTC:65:crtc-0] desired mode 1080x2400 set (0,0)
+[    0.655247] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    0.655410] [drm:dsi_host_attach] id=0
+[    0.656016] Freeing initrd memory: 37660K
+[    0.659601] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    0.659788] msm_dpu ae01000.display-controller: [drm:drm_client_dev_hotplug] fbdev: ret=0
+[    0.669645] ft8756-spi spi11.0: enter ft8756_spi_probe
+[    0.669928] ft8756-spi spi11.0: Interrupts GPIO: 0xaf
+[    0.689622] mmc2: SDHCI controller on 8804000.mmc [8804000.mmc] using ADMA 64-bit
+[    0.905463] input: Focaltech FT8756 Touchscreen as /devices/platform/soc@0/ac0000.geniqup/a94000.spi/spi_master/spi11/spi11.0/input/input2
+[    0.908485] ft8756-spi spi11.0: FT8756 touchscreen initialized
+[    0.909959] input: gpio-keys as /devices/platform/gpio-keys/input/input3
+[    0.911355] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[    0.913600] Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[    0.914156] Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+[    0.916205] clk: Not disabling unused clocks
+[    0.916238] PM: genpd: Not disabling unused power domains
+[    0.922120] ALSA device list:
+[    0.922261]   No soundcards found.
+[    0.922949] Freeing unused kernel memory: 1024K
+[    0.923174] Run /init as init process
+[    0.923212]   with arguments:
+[    0.923240]     /init
+[    0.923266]   with environment:
+[    0.923294]     HOME=/
+[    0.923321]     TERM=linux
+[    0.923348]     rcu_nocbs=0-7
+[    0.923376]     miatoll_boot=wifi1
+[    0.962790] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    0.976313] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    1.085020] mmc2: error -110 reading general info of SD ext reg
+[    1.085105] mmc2: error -110 whilst initialising SD card
+[    1.255396] ft8756-spi spi11.0: Touch IC FW loaded successfully
+[    1.255950] ft8756-spi spi11.0: Failed to read data status: 0xC3
+[    1.256498] ft8756-spi spi11.0: Failed to read data status: 0xC3
+[    1.257283] ft8756-spi spi11.0: Failed to read data status: 0xC3
+[    1.257933] ft8756-spi spi11.0: Cannot read touch point data: -5
+[    2.797996] dwc3 a600000.usb: remote wakeup not configured
+[   21.027683] remoteproc remoteproc0: powering up modem
+[   21.115452] remoteproc remoteproc0: Booting fw image qcom/sm7125/miatoll/modem.mbn, size 62183024
+[   21.460793] remoteproc remoteproc0: remote processor modem is now up
+[   22.590533] ath10k_snoc 18800000.wifi: qmi chip_id 0x320 chip_family 0x4001 board_id 0xff soc_id 0x400c0000
+[   22.590769] ath10k_snoc 18800000.wifi: qmi fw_version 0x322183b3 fw_build_timestamp 2023-03-03 11:36 fw_build_id QC_IMAGE_VERSION_STRING=WLAN.HL.3.2.2-00947-QCAHLSWMTPLZ-1.24884.5.26445.2
+[   22.592665] ath10k_snoc 18800000.wifi: failed to fetch board data for bus=snoc,qmi-board-id=ff,qmi-chip-id=320 from ath10k/WCN3990/hw1.0/board-2.bin
+[   25.701316] ath10k_snoc 18800000.wifi: wcn3990 hw1.0 target 0x00000008 chip_id 0x00000000 sub 0000:0000
+[   25.701515] ath10k_snoc 18800000.wifi: kconfig debug 0 debugfs 0 tracing 0 dfs 0 testmode 0
+[   25.701593] ath10k_snoc 18800000.wifi: firmware ver  api 5 features wowlan,mgmt-tx-by-reference,non-bmi crc32 b3d4b790
+[   25.739870] ath10k_snoc 18800000.wifi: htt-ver 3.89 wmi-op 4 htt-op 3 cal file max-sta 32 raw 0 hwcrypto 1
+[   25.886467] ath10k_snoc 18800000.wifi: invalid MAC address; choosing random
+[   25.886714] ath: EEPROM regdomain: 0x0
+[   25.886754] ath: EEPROM indicates default country code should be used
+[   25.886790] ath: doing EEPROM country->regdmn map search
+[   25.886827] ath: country maps to regdmn code: 0x3a
+[   25.886859] ath: Country alpha2 being used: US
+[   25.886888] ath: Regpair used: 0x3a
+===== QRTR SERVICES =====
+  Service Version Instance Node  Port
+       43       2       18    0     1 Subsystem control service
+       66       1      180    0     3 Service registry notification service
+       15       1        0    0    17 Test service
+       51       1        2    0    18 CoreSight remote tracing service
+       21       1        0    0    20 Modem embedded file system service
+       24       1        0    0    21 Thermal mitigation device service
+       23       1        0    0    22 Thermal sensors service
+       22       1        0    0    24 Time service
+       36       1        0    0    25 Persistent device configuration service
+       49       1        2    0    27 IPA control service
+       17       1        0    0    32 Specific absorption rate service
+       74       1        0    0    33 <unknown>
+     4098       0        0    0    34 <unknown>
+       34       1        0    0    36 Coexistence service
+       41       1        1    0    37 RF radiated performance enhancement service
+       55       1        2    0    39 QMI-SLIM service
+       50       1        0    0    40 UIMRMT service
+       12       1        0    0    42 Phonebook Management service
+        9       2        0    0    43 Voice service
+        3       1        0    0    44 Network Access Service
+       10       2        0    0    45 Card Application Toolkit service (v2)
+       47       1        0    0    46 Data Port Mapper service
+        1       1        0    0    47 Wireless Data Service
+        4       1        0    0    48 Quality Of Service service
+       26       1        0    0    49 Wireless data administrative service
+        7       1        0    0    50 Authentication service
+        8       1        0    0    51 AT service
+       29       1        0    0    52 Circuit switched videotelephony service
+       71       1        0    0    53 UIMHTTP service
+       11       1        0    0    55 User Identity Module service
+       77       1        0    0    57 IMS QMI Priv service
+       42       1        0    0    58 Data system determination service
+        2       1        0    0    59 Device Management Service
+        5       1        0    0    61 Wireless Messaging Service
+       48       1        0    0    66 QMI DFS service
+       68       1        0    0    67 <unknown>
+       16       2        0    0    68 Location service (~ PDS v2)
+       75       1        0    0    70 QDMA service
+       33       1        0    0    71 IMS application service
+       18       1        0    0    72 IMS settings service
+       51       1        3    0    77 CoreSight remote tracing service
+       69       1        0    0    78 ATH10k WLAN firmware service
+       14       1        0    1    14 Remote file system service
+     4096       1        0    1 16386 TFTP
+       64       1        1    1 16387 Service registry locator service
+===== tqftpserv LOG =====
+Sent block 476 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 477 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 478 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 479 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 480 of 7684 to 0:62
+Got ack for 480 from 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 481 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 482 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 483 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 484 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 485 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 486 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 487 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 488 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 489 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 490 of 7684 to 0:62
+Got ack for 490 from 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 491 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 492 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 493 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 494 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 495 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 496 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 497 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 498 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 499 of 7684 to 0:62
+Sending 7684 bytes of DATA to 0:62
+Sent block 500 of 7684 to 0:62
+Got ack for 500 from 0:62
+Sending 4704 bytes of DATA to 0:62
+Sent block 501 of 4704 to 0:62
+Got ack for 501 from 0:62
+got del_client for 1:16388
+got del_client for 0:62
+read request for /readwrite/lctoem.tmp (mode: octet, rsize: 0, seek: -1) from 0:82
+tqftpserv: failed to open lctoem.tmp: No such file or directory
+unable to open /readwrite/lctoem.tmp (2), reject
+got del_client for 1:16388
+write request for /readwrite/lctoem.tmp (octet) from 0:83
+got del_client for 0:82
+got del_client for 1:16388
+read request for /readwrite/lctoem.tmp (mode: octet, rsize: 0, seek: -1) from 0:84
+got del_client for 0:83
+got del_client for 0:84
+got del_client for 1:16388
+write request for /readwrite/lctoem.tmp (octet) from 0:85
+Ignoring unknown option 'unlink' with value '0'
+got del_client for 0:85
+got del_client for 0:86
+got del_client for 0:80
+got del_client for 0:87
+got del_client for 0:91
+got del_client for 0:89
+got del_client for 0:92
+read request for /readwrite/mcfg.tmp (mode: octet, rsize: 0, seek: -1) from 0:93
+tqftpserv: failed to open mcfg.tmp: No such file or directory
+unable to open /readwrite/mcfg.tmp (2), reject
+got del_client for 1:16389
+write request for /readwrite/mcfg.tmp (octet) from 0:94
+got del_client for 0:93
+got del_client for 1:16389
+read request for /readwrite/mcfg.tmp (mode: octet, rsize: 0, seek: -1) from 0:95
+got del_client for 0:94
+got del_client for 0:95
+write request for /readwrite/mcfg.tmp (octet) from 0:96
+Ignoring unknown option 'unlink' with value '0'
+got del_client for 1:16389
+got del_client for 0:96
+read request for /readonly/firmware/image/modem_pr/mcfg/configs/mcfg_hw/mbn_hw.dig (mode: octet, rsize: 0, seek: -1) from 0:97
+unable to open /readonly/firmware/image/modem_pr/mcfg/configs/mcfg_hw/mbn_hw.dig (2), reject
+got del_client for 1:16390
+got del_client for 0:97
+read request for /readonly/firmware/image/modem_pr/mcfg/configs/mcfg_sw/mbn_sw.dig (mode: octet, rsize: 0, seek: -1) from 0:98
+unable to open /readonly/firmware/image/modem_pr/mcfg/configs/mcfg_sw/mbn_sw.dig (2), reject
+got del_client for 1:16390
+got del_client for 0:98
+got del_client for 1:16390
+===== rmtfs LOG =====
+[RMTFS] packet; from: 0:13
+[RMTFS] alloc 0, 2097152 => 0xfa601000 (0:0)
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:13
+[RMTFS] packet; from: 0:14
+[RMTFS] iovec 0, not forced => (0:0)
+[RMTFS]       read 1:1 0xfa601200
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:14
+[RMTFS] packet; from: 0:15
+[RMTFS] iovec 1, not forced => (0:0)
+[RMTFS]       read 1:1 0xfa601200
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:15
+[RMTFS] packet; from: 0:16
+[RMTFS] iovec 0, not forced => (0:0)
+[RMTFS]       read 2:4094 0xfa601400
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:16
+[RMTFS] packet; from: 0:19
+[RMTFS] iovec 1, not forced => (0:0)
+[RMTFS]       write 0:4096 0xfa601000
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:19
+[RMTFS] packet; from: 0:26
+[RMTFS] iovec 0, not forced => (0:0)
+[RMTFS]       write 0:4096 0xfa601000
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:26
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16388
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:29
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16388
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:30
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16388
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:31
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16388
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:56
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:60
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16388
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16388
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:62
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16388
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:82
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16388
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:83
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:84
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16388
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:85
+[RMTFS] packet; from: 0:86
+[RMTFS] iovec 1, not forced => (0:0)
+[RMTFS]       write 0:4096 0xfa601000
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:86
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:80
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:87
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:91
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:89
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:92
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16389
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:93
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16389
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:94
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:95
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16389
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 0:96
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16390
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 
+STEP_DONE_030929=0
+miatoll-wifi1# [6n
+### 2026-10-27T03:10:39 wifi-scan-passive
+$ wifi-scan; echo "scan_rc=$?"
+wifi-scan; echo "scan_rc=$?"; printf "\nSTEP_DONE_031033=%s\n" "$
+?"
+===== WIFI SCAN revision 1 =====
+iw version 6.9
+Interface wlan0
+	ifindex 2
+	wdev 0x1
+	addr xx:xx:xx:xx:xx:01
+	type managed
+	wiphy 0
+	multicast TXQ:
+		qsz-byt	qsz-pkt	flows	drops	marks	overlmt	hashcol	tx-bytes	tx-packets
+		0	0	0	0	0	0	0	0		0
+===== REGULATORY STATE =====
+global
+country US: DFS-FCC
+	(902 - 904 @ 2), (N/A, 30), (N/A)
+	(904 - 920 @ 16), (N/A, 30), (N/A)
+	(920 - 928 @ 8), (N/A, 30), (N/A)
+	(2400 - 2472 @ 40), (N/A, 30), (N/A)
+	(5150 - 5250 @ 80), (N/A, 23), (N/A), AUTO-BW
+	(5250 - 5350 @ 80), (N/A, 24), (0 ms), DFS, AUTO-BW
+	(5470 - 5730 @ 160), (N/A, 24), (0 ms), DFS
+	(5730 - 5850 @ 80), (N/A, 30), (N/A), AUTO-BW
+	(5850 - 5895 @ 40), (N/A, 27), (N/A), NO-OUTDOOR, AUTO-BW, PASSIVE-SCAN
+	(5925 - 7125 @ 320), (N/A, 12), (N/A), NO-OUTDOOR, PASSIVE-SCAN
+	(57240 - 71000 @ 2160), (N/A, 40), (N/A)
+
+phy#0
+country US: DFS-FCC
+	(902 - 904 @ 2), (N/A, 30), (N/A)
+	(904 - 920 @ 16), (N/A, 30), (N/A)
+	(920 - 928 @ 8), (N/A, 30), (N/A)
+	(2400 - 2472 @ 40), (N/A, 30), (N/A)
+	(5150 - 5250 @ 80), (N/A, 23), (N/A), AUTO-BW
+	(5250 - 5350 @ 80), (N/A, 24), (0 ms), DFS, AUTO-BW
+	(5470 - 5730 @ 160), (N/A, 24), (0 ms), DFS
+	(5730 - 5850 @ 80), (N/A, 30), (N/A), AUTO-BW
+	(5850 - 5895 @ 40), (N/A, 27), (N/A), NO-OUTDOOR, AUTO-BW, PASSIVE-SCAN
+	(5925 - 7125 @ 320), (N/A, 12), (N/A), NO-OUTDOOR, PASSIVE-SCAN
+	(57240 - 71000 @ 2160), (N/A, 40), (N/A)
+
+===== INTERFACE UP =====
+2: wlan0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN qlen 1000
+    link/ether xx:xx:xx:xx:xx:01 brd xx:xx:xx:xx:xx:02
+===== PASSIVE SCAN (45 second limit) =====
+scan_exit=0
+BSS xx:xx:xx:xx:xx:03(on wlan0)
+	freq: 2412.0
+	signal: -63.00 dBm
+	SSID: <redacted>
+BSS xx:xx:xx:xx:xx:04(on wlan0)
+	freq: 2417.0
+	signal: -81.00 dBm
+	SSID: <redacted>
+BSS xx:xx:xx:xx:xx:05(on wlan0)
+	freq: 2452.0
+	signal: -65.00 dBm
+	SSID: <redacted>
+BSS xx:xx:xx:xx:xx:06(on wlan0)
+	freq: 2452.0
+	signal: -73.00 dBm
+BSS xx:xx:xx:xx:xx:07(on wlan0)
+	freq: 2462.0
+	signal: -30.00 dBm
+	SSID: <redacted>
+BSS xx:xx:xx:xx:xx:08(on wlan0)
+	freq: 2462.0
+	signal: -27.00 dBm
+BSS xx:xx:xx:xx:xx:09(on wlan0)
+	freq: 5500.0
+	signal: -51.00 dBm
+	SSID: <redacted>
+===== LINK STATE =====
+Not connected.
+===== MPSS STATE =====
+running
+===== WLAN / MPSS IRQS =====
+100:          6          0          0          0          0          0          0          0    GICv3 446 Level     WLAN_CE_0
+101:          2          0          0          0          0          0          0          0    GICv3 447 Level     WLAN_CE_1
+102:        147          0          0          0          0          0          0          0    GICv3 448 Level     WLAN_CE_2
+103:         47          0          0          0          0          0          0          0    GICv3 449 Level     WLAN_CE_3
+104:          0          0          0          0          0          0          0          0    GICv3 450 Level     WLAN_CE_4
+105:          0          0          0          0          0          0          0          0    GICv3 451 Level     WLAN_CE_5
+106:          0          0          0          0          0          0          0          0    GICv3 452 Level     WLAN_CE_6
+107:          0          0          0          0          0          0          0          0    GICv3 453 Level     WLAN_CE_7
+108:          0          0          0          0          0          0          0          0    GICv3 454 Level     WLAN_CE_8
+109:          0          0          0          0          0          0          0          0    GICv3 455 Level     WLAN_CE_9
+110:          0          0          0          0          0          0          0          0    GICv3 456 Level     WLAN_CE_10
+111:          0          0          0          0          0          0          0          0    GICv3 457 Level     WLAN_CE_11
+166:          0          0          0          0          0          0          0          0 smp2p-mpss   0 Edge      q6v5 fatal
+167:          1          0          0          0          0          0          0          0 smp2p-mpss   1 Edge      q6v5 ready
+178:       1009          0          0          0          0          0          0          0    GICv3 481 Edge      glink-smem
+===== RECENT KERNEL LOG =====
+[    0.654876] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] Not using firmware configuration
+[    0.654934] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] [CONNECTOR:34:DSI-1] found preferred mode: 1080x2400
+[    0.654993] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] picking CRTCs for 1080x2400 config
+[    0.655052] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] [CRTC:65:crtc-0] desired mode 1080x2400 set (0,0)
+[    0.655247] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    0.655410] [drm:dsi_host_attach] id=0
+[    0.656016] Freeing initrd memory: 37660K
+[    0.659601] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    0.659788] msm_dpu ae01000.display-controller: [drm:drm_client_dev_hotplug] fbdev: ret=0
+[    0.669645] ft8756-spi spi11.0: enter ft8756_spi_probe
+[    0.669928] ft8756-spi spi11.0: Interrupts GPIO: 0xaf
+[    0.689622] mmc2: SDHCI controller on 8804000.mmc [8804000.mmc] using ADMA 64-bit
+[    0.905463] input: Focaltech FT8756 Touchscreen as /devices/platform/soc@0/ac0000.geniqup/a94000.spi/spi_master/spi11/spi11.0/input/input2
+[    0.908485] ft8756-spi spi11.0: FT8756 touchscreen initialized
+[    0.909959] input: gpio-keys as /devices/platform/gpio-keys/input/input3
+[    0.911355] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[    0.913600] Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[    0.914156] Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+[    0.916205] clk: Not disabling unused clocks
+[    0.916238] PM: genpd: Not disabling unused power domains
+[    0.922120] ALSA device list:
+[    0.922261]   No soundcards found.
+[    0.922949] Freeing unused kernel memory: 1024K
+[    0.923174] Run /init as init process
+[    0.923212]   with arguments:
+[    0.923240]     /init
+[    0.923266]   with environment:
+[    0.923294]     HOME=/
+[    0.923321]     TERM=linux
+[    0.923348]     rcu_nocbs=0-7
+[    0.923376]     miatoll_boot=wifi1
+[    0.962790] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    0.976313] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    1.085020] mmc2: error -110 reading general info of SD ext reg
+[    1.085105] mmc2: error -110 whilst initialising SD card
+[    1.255396] ft8756-spi spi11.0: Touch IC FW loaded successfully
+[    1.255950] ft8756-spi spi11.0: Failed to read data status: 0xC3
+[    1.256498] ft8756-spi spi11.0: Failed to read data status: 0xC3
+[    1.257283] ft8756-spi spi11.0: Failed to read data status: 0xC3
+[    1.257933] ft8756-spi spi11.0: Cannot read touch point data: -5
+[    2.797996] dwc3 a600000.usb: remote wakeup not configured
+[   21.027683] remoteproc remoteproc0: powering up modem
+[   21.115452] remoteproc remoteproc0: Booting fw image qcom/sm7125/miatoll/modem.mbn, size 62183024
+[   21.460793] remoteproc remoteproc0: remote processor modem is now up
+[   22.590533] ath10k_snoc 18800000.wifi: qmi chip_id 0x320 chip_family 0x4001 board_id 0xff soc_id 0x400c0000
+[   22.590769] ath10k_snoc 18800000.wifi: qmi fw_version 0x322183b3 fw_build_timestamp 2023-03-03 11:36 fw_build_id QC_IMAGE_VERSION_STRING=WLAN.HL.3.2.2-00947-QCAHLSWMTPLZ-1.24884.5.26445.2
+[   22.592665] ath10k_snoc 18800000.wifi: failed to fetch board data for bus=snoc,qmi-board-id=ff,qmi-chip-id=320 from ath10k/WCN3990/hw1.0/board-2.bin
+[   25.701316] ath10k_snoc 18800000.wifi: wcn3990 hw1.0 target 0x00000008 chip_id 0x00000000 sub 0000:0000
+[   25.701515] ath10k_snoc 18800000.wifi: kconfig debug 0 debugfs 0 tracing 0 dfs 0 testmode 0
+[   25.701593] ath10k_snoc 18800000.wifi: firmware ver  api 5 features wowlan,mgmt-tx-by-reference,non-bmi crc32 b3d4b790
+[   25.739870] ath10k_snoc 18800000.wifi: htt-ver 3.89 wmi-op 4 htt-op 3 cal file max-sta 32 raw 0 hwcrypto 1
+[   25.886467] ath10k_snoc 18800000.wifi: invalid MAC address; choosing random
+[   25.886714] ath: EEPROM regdomain: 0x0
+[   25.886754] ath: EEPROM indicates default country code should be used
+[   25.886790] ath: doing EEPROM country->regdmn map search
+[   25.886827] ath: country maps to regdmn code: 0x3a
+[   25.886859] ath: Country alpha2 being used: US
+[   25.886888] ath: Regpair used: 0x3a
+[   99.607321] ath10k_snoc 18800000.wifi: chan info: invalid frequency 0 (idx 41 out of bounds)
+[  103.651655] ath10k_snoc 18800000.wifi: chan info: invalid frequency 0 (idx 41 out of bounds)
+scan_rc=0
+
+STEP_DONE_031033=0
+miatoll-wifi1# [6n

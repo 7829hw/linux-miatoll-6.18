@@ -34,6 +34,7 @@ display1의 실제 화면 실패 로그를 보존하고 수정 후보는 `miatol
 | `miatoll/6.18-touch1` | 화면이 확인된 display2에 QUP1/SPI11과 FT8756 RAM firmware를 더한 터치 시험 |
 | `miatoll/6.18-storage1` | touch1에 SD 컨트롤러를 더한 UFS/SD 읽기 전용 시험 |
 | `miatoll/6.18-usb2` | storage1에 PM6150 Type-C·VBUS·DWC3 dual-role을 복구한 USB 역할 전환·host 시험 |
+| `miatoll/6.18-wifi1` | usb2에 MPSS·WCN3990과 read-only rmtfs/BDF 복사를 더한 Wi-Fi 시험 |
 
 최초 Git 보존 bundle은 백업 디렉터리의 `legacy-kernel.bundle`이다.
 공식 태그는 shallow fetch로 고정했으므로 모든 과거 upstream 이력을 보유한 전체 clone은 아니다.

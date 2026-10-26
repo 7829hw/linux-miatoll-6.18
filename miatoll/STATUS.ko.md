@@ -6,6 +6,7 @@
 터치 입력을 실기기로 확인한 브랜치: **`miatoll/6.18-touch1`**(display2 기반).
 UFS·SD 읽기를 실기기로 확인한 브랜치: **`miatoll/6.18-storage1`**(touch1 기반).
 USB-C 역할 전환·host를 실기기로 확인한 브랜치: **`miatoll/6.18-usb2`**(storage1 기반).
+Wi-Fi firmware·검색을 실기기로 확인한 브랜치: **`miatoll/6.18-wifi1`**(usb2 기반).
 공식 Linux **v6.18.58**을 기반으로, 6.14.7 포크의 Xiaomi 하드웨어 구현을 직접 선별 이식했다.
 기존 로컬 커널 수정은 보존 브랜치와 백업에 남겼다.
 
@@ -157,6 +158,16 @@ PC(USB-A 케이블)에서는 기본 device 역할로 ACM이 동작했다. OTG �
 충전/PD, USB-C DRP 상대, 절전은 미검증이다.
 [usb2 실기기 기록](reports/device-tests/20261027-025327-usb2-retry/README.ko.md)
 
+## wifi1 실기기 결과: MPSS·WCN3990·수동 검색 확인
+
+`20261027-030830` 회차는 usb2에 MPSS·WLAN 노드와 ath10k 내장을 더했다.
+아카이브에서 검증한 고정 firmware·정적 도구·스크립트를 해시로 확인해 사용했다.
+사용자 허가에 따라 rmtfs는 EFS 파티션을 read-only로 열고 NV 쓰기는 RAM shadow에만 반영했다.
+`modem` 파티션은 read-only로 잠시 마운트해 `bdwlan.bin`만 RAM에 복사했다.
+MPSS running(fatal 0), WLAN.HL.3.2.2 firmware, `wlan0`, 45초 수동 검색으로 BSS 7개(2.4/5 GHz)를 확인했다.
+공장 MAC은 제공하지 않아 임의 MAC이 쓰였다. AP 연결·IP 통신·절전은 미검증이다.
+[wifi1 실기기 기록](reports/device-tests/20261027-030830-wifi1/README.ko.md)
+
 ## 하드웨어별 상태
 
 아래의 '반영'은 새 브랜치의 소스·설정·컴파일 결과다. boot1에서 확인한 기본 기능 외의
@@ -171,7 +182,7 @@ PC(USB-A 케이블)에서는 기본 device 역할로 ACM이 동작했다. OTG �
 | 카메라 | CAMSS 공통 코드, OV8856/DW9714 | SC7180 CAMSS/CCI/PHY/DT, S5KGM2/S5K5E9/OV16A1Q/DW9800, 기존 센서/VCM 확장 | ID/전원/스트림/초점/영상 품질. DW9800은 원본도 WIP. joyeuse DT에는 S5K5E9/OV16A1Q만 있고 주카메라 경로가 완성되지 않음 |
 | 오디오 | QDSP6/APR, sm8250 machine, TAS2562, WCD937x, SoundWire/LPASS | ADSP 및 스피커/헤드폰/마이크 DT 경로, 드라이버 설정 | ALSA 열거, 스피커 소리, 녹음/마이크/통화, 기존 ACDB/HAL 대응 |
 | LTE 모뎀 | MPSS remoteproc, QRTR/QMI, IPA/RMNET | 보드 firmware/메모리/IPA DT, SM7125 PD mapper | MPSS/QMI/SIM/망 등록, 데이터, RIL/IMS/음성 호환성 |
-| Wi-Fi/Bluetooth | ath10k SNOC, QCA UART/HCI | 전원/버스/펌웨어 DT | BDF·RFSA/RMTFS 등의 서비스, 연결/전송/공존/주소 처리. 기존 로컬 PMF 패치는 포함하지 않음 |
+| Wi-Fi/Bluetooth | ath10k SNOC, QCA UART/HCI | 전원/버스/펌웨어 DT | wifi1에서 MPSS·WLAN firmware·wlan0·수동 검색 실기기 확인(read-only rmtfs, 기기 BDF). 연결/전송/공존/공장 MAC, Bluetooth 미검증. 기존 로컬 PMF 패치는 포함하지 않음 |
 | 배터리/충전 | ADC5, SPMI SDAM, regulator, Type-C | 실험적 QGauge와 PM6150 DT. 6.18 fwnode API 변환 | QGauge 잔량은 선형 전압 추정이며 STATUS_UNKNOWN. 충전 제어·정확한 SOC·건강 HAL은 미완성. SM5714는 Samsung용이므로 제외 |
 | 전력 관리 | RPMh/CPUfreq/thermal/PSCI | 보드 전원 DT와 Android wakelock/autosleep 설정 | 실제 idle/suspend/resume/열 보호/소비 전류/USB 전력 역할 |
 | 추가 기능 | Venus/IR SPI | 기존 드라이버 모듈 설정, 보드 DT; AW8695/DRV2624 진동 드라이버 | 영상 가속/IR/진동은 실행 미검증. DRV2624 GPIO API 변환 |
@@ -227,7 +238,7 @@ Clang/LLD 18.1.3과 호스트 도구는 작업 공간의 `tools/`에만 준비�
 
 ## 우선 남은 작업
 
-1. display2 화면, touch1 터치, storage1 UFS/SD 읽기, usb2 USB 역할 전환·host는 확인했다. 다음 단계는 GPU·오디오·Wi-Fi/BT·충전이며,
+1. display2 화면, touch1 터치, storage1 UFS/SD 읽기, usb2 USB 역할 전환·host, wifi1 Wi-Fi 검색은 확인했다. 다음 단계는 Wi-Fi 연결·BT·GPU·오디오·충전이며,
    반복 부팅·부하·idle/suspend/resume와 장시간 표시는 별도로 검증한다. BWMON/Venus는 화면 시험 DT에서 비활성화했다.
 2. 화면·터치·SD·무선을 기능별 RAM 시험으로 재검증한다. 새 DT/모듈/firmware와
    boot header v2·메모리 인계를 Android 부팅 구성에도 연결한다.
