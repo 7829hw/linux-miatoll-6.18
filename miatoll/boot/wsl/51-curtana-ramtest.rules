@@ -1,0 +1,4 @@
+# WSL access for curtana RAM boot tests without root.
+# Bootloader fastboot (Google 18d1:d00d) and the RAM test Linux ACM console (1d6b:0104).
+SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="d00d", MODE="0660", GROUP="plugdev"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1d6b", ATTRS{idProduct}=="0104", MODE="0660", GROUP="plugdev"
