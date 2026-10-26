@@ -10,10 +10,10 @@ $bootImage = Join-Path $PSScriptRoot $bootReport.image
 $testName = 'boot1'
 $probeCommand = 'boot-probe'
 $probeEnd = 'BOOT1_PROBE_END'
-if ($bootReport.boot_profile -eq 'display1-ram-only') {
-    $testName = 'display1'
+if ($bootReport.boot_profile -match '^(display[12])-ram-only$') {
+    $testName = $Matches[1]
     $probeCommand = 'display-probe'
-    $probeEnd = 'DISPLAY1_PROBE_END'
+    $probeEnd = $testName.ToUpperInvariant() + '_PROBE_END'
 } elseif ($bootReport.boot_profile -ne 'boot1-ram-only') {
     throw 'Unknown RAM boot profile.'
 }
@@ -48,6 +48,7 @@ $productOutput = Invoke-Boot1Fastboot -CommandArguments @('-s', $deviceSerial, '
 if ($productOutput -notmatch 'product:\s*curtana\b') { throw 'Expected product curtana. Keep the log and stop here.' }
 
 # Start a fresh bootloader session; this command does not flash a partition.
+Write-Host 'Restarting the bootloader for a fresh Fastboot session. No partition is written.'
 $null = Invoke-Boot1Fastboot -CommandArguments @('-s', $deviceSerial, 'reboot', 'bootloader')
 $reconnectDeadline = [DateTime]::UtcNow.AddSeconds(40)
 do {
@@ -58,6 +59,7 @@ do {
 if (-not $reconnected) { throw "Bootloader did not reconnect. Log: $fastbootLog" }
 
 # Exactly one RAM boot request. No flash, erase, format, unlock or set_active.
+Write-Host 'Sending the image once with fastboot boot for RAM execution. This does not flash it.'
 $null = Invoke-Boot1Fastboot -CommandArguments @('-s', $deviceSerial, 'boot', $bootImage)
 }
 Write-Host 'Waiting for the Linux USB serial device...'
@@ -103,8 +105,9 @@ try {
 }
 $releasePattern = [regex]::Escape($bootReport.kernel_release)
 if ($capturedText -match $releasePattern -and $capturedText.Contains($bootReport.boot_profile) -and $capturedText.Contains($probeEnd)) {
-    if ($testName -eq 'display1') {
-        Write-Host "DISPLAY1_LOG_CAPTURED: $($bootReport.kernel_release) reached the USB shell. Report whether the screen shows the test banner."
+    if ($testName -match '^display[12]$') {
+        $captureTag = $testName.ToUpperInvariant() + '_LOG_CAPTURED'
+        Write-Host "${captureTag}: $($bootReport.kernel_release) reached the USB shell. Report whether the screen shows the test banner."
     } else {
         Write-Host "BOOT1_CONFIRMED: $($bootReport.kernel_release) reached a RAM userspace and USB shell."
     }

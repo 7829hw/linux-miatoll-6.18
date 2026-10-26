@@ -4,6 +4,10 @@
 시험 브랜치는 `miatoll/6.18-display1`, 실행 버전은 `6.18.58-miatoll-display1+`다.
 검증된 boot1 브랜치·이미지·ZIP과 원본 로그는 그대로 보존한다.
 
+2026-10-27 실기기 결과: 부팅/USB 셸과 native DRM 모드 등록은 성공했으나 실제 화면·백라이트는
+실패했다. [원본 분석](../reports/device-tests/20261027-000237-display1/README.ko.md)을 보존하고
+후속 수정 후보는 [DISPLAY2.ko.md](DISPLAY2.ko.md)에 정리했다.
+
 ## 시험 배경과 범위
 
 사용자는 boot1 실행 중 화면이 보이지 않고 백라이트만 켜져 있다고 보고했다.

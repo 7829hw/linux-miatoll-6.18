@@ -15,9 +15,9 @@ BOOT = ROOT / 'miatoll/boot'
 APK_SHA256 = 'ee469aee2958feffd7f64dd96655704025ff60af614f77a1d7323dc237c34da2'
 
 def build(output, profile='boot1'):
-    assert profile in ('boot1', 'display1')
+    assert profile in ('boot1', 'display1', 'display2')
     script_names = ['init', 'usb-gadget', 'boot-probe']
-    if profile == 'display1':
+    if profile in ('display1', 'display2'):
         script_names += ['display-banner', 'display-probe']
     package = ROOT.parent / 'downloads/busybox-static-1.37.0-r20.apk'
     assert hashlib.sha256(package.read_bytes()).hexdigest() == APK_SHA256

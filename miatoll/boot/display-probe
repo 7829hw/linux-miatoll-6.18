@@ -1,5 +1,9 @@
 #!/bin/sh
-echo 'DISPLAY1_PROBE_BEGIN'
+tag=DISPLAY1
+if [ "$(tr '\000' '\n' </sys/firmware/devicetree/base/chosen/miatoll,boot-profile)" = 'display2-ram-only' ]; then
+    tag=DISPLAY2
+fi
+echo "${tag}_PROBE_BEGIN"
 /bin/boot-probe
 echo '--- native framebuffer ---'
 for fb in /sys/class/graphics/fb*; do
@@ -43,4 +47,9 @@ echo '--- interrupts ---'
 cat /proc/interrupts
 echo '--- regulator state ---'
 cat /sys/kernel/debug/regulator/regulator_summary 2>/dev/null
-echo 'DISPLAY1_PROBE_END'
+echo '--- display clocks ---'
+if [ -r /sys/kernel/debug/clk/clk_summary ]; then
+    head -n 2 /sys/kernel/debug/clk/clk_summary
+    grep -Ei 'disp_cc|dsi.*pll|dsi_phy' /sys/kernel/debug/clk/clk_summary
+fi
+echo "${tag}_PROBE_END"

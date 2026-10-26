@@ -33,8 +33,17 @@ def check(dtb, config):
     for node in ('/soc@0/video-codec@aa00000', '/soc@0/pmu@90b6300', '/soc@0/pmu@90cd000'):
         require(fdt(dtb, node, 'status') == 'disabled', 'Unused consumer is active: ' + node)
     require('CONFIG_DRM_CLIENT_DEFAULT="fbdev"\n' in config, 'fbdev console must be the DRM client')
+    reset_connected = False
+    if fdt(dtb, '/chosen', 'miatoll,boot-profile') == 'display2-ram-only':
+        dispcc = '/soc@0/clock-controller@af00000'
+        available(dtb, dispcc)
+        require(fdt(dtb, dispcc, '#reset-cells', 'u') == '1', 'Invalid reset provider')
+        require(fdt(dtb, mdss, 'resets', 'x').split() ==
+                [fdt(dtb, dispcc, 'phandle', 'x'), '0'], 'MDSS_CORE reset not connected')
+        reset_connected = True
     return dict(passed=True, panel='huaxing,ft8756', expected_mode='1080x2400@60',
                 display_graph_bidirectional=True, enabled_ancestry_checked=list(nodes),
                 reset_gpio='PM6150L GPIO3 active-low', backlight_default=256,
                 display_iommu_binding_preserved=True, unused_bwmon_venus_disabled=True,
+                upstream_mdss_core_reset_connected=reset_connected,
                 physical_display_confirmed=False)

@@ -10,6 +10,10 @@ boot_prompt=miatoll-boot1
 if [ -x /bin/display-banner ]; then
     boot_tag=DISPLAY1
     boot_prompt=miatoll-display1
+    if [ "$(tr '\000' '\n' </sys/firmware/devicetree/base/chosen/miatoll,boot-profile)" = 'display2-ram-only' ]; then
+        boot_tag=DISPLAY2
+        boot_prompt=miatoll-display2
+    fi
 fi
 echo "${boot_tag}_INIT_OK: standalone RAM userspace reached"
 uname -r

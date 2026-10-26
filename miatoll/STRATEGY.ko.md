@@ -4,6 +4,7 @@
 `miatoll/6.18-sm7125`와 그 기반 기능 브랜치에서 진행한다.
 현재 단독 RAM 부팅 시험은 `miatoll/6.18-boot1`에서 진행한다.
 단독 부팅 확인 이후의 화면 RAM 시험은 그 위의 `miatoll/6.18-display1`에서 진행한다.
+display1의 실제 화면 실패 로그를 보존하고 수정 후보는 `miatoll/6.18-display2`에서 진행한다.
 
 ## 기준과 보존
 
@@ -29,6 +30,7 @@
 | `miatoll/6.18-sm7125` | 공식 6.18.58에서 새로 시작한 현재 개발 |
 | `miatoll/6.18-boot1` | 위 브랜치에서 분기한 최소 RAM 부팅·실기기 증거 및 진단 도구 |
 | `miatoll/6.18-display1` | 확인된 boot1을 보존하고 네이티브 화면 경로를 활성화한 RAM 시험 후보 |
+| `miatoll/6.18-display2` | display1의 SMMU/화면 실패를 보존하고 기존 upstream MDSS reset 연결과 fbdev 플래그를 수정한 후보 |
 
 최초 Git 보존 bundle은 백업 디렉터리의 `legacy-kernel.bundle`이다.
 공식 태그는 shallow fetch로 고정했으므로 모든 과거 upstream 이력을 보유한 전체 clone은 아니다.
@@ -132,9 +134,14 @@ CPU 8개 online과 UFS 열거도 확인했다. 이는 주변장치를 제한한 
 후속 `20261026-233342-boot1-kernel-log/` 기록으로 상세 dmesg 수집도 확인했다.
 PSCI PC mode 경고 뒤 OSI topology 초기화 성공, BWMON/Venus consumer 대기,
 ICE raw key 전용 경로와 QSEE allowlist 제외를 구분해 기록했다.
+display1 실기기에서는 새 커널/USB 셸과 DRM 모드가 확인됐지만 물리 화면·백라이트는 실패했다.
+기존 scanout 주소의 SID 0x800 fault와 fbdev 플래그 경고를 근거로 display2를 준비한다.
+6.18에 이미 있는 MDSS reset을 DT에 연결하므로 기존 로컬 DPU reset helper는 새로 이식하지 않는다.
+로그와 소스 근거는 `reports/device-tests/20261027-000237-display1/`에 있다.
 
-1. boot1의 단독 부팅·상세 로그 수집은 확인했다. 최소 DT의 불필요한 BWMON/Venus consumer를
-   정리하고 반복 부팅·부하·절전 상태를 검증한다. 메시지를 숨기는 공통 드라이버 우회는 적용하지 않는다.
+1. boot1의 단독 부팅·상세 로그 수집은 확인했다. 화면 시험 DT의 BWMON/Venus는 비활성화했다.
+   display2의 표준 MDSS reset·fbdev 수정으로 화면 인계를 재시험하고 반복 부팅·부하·절전 상태를 검증한다.
+   메시지를 숨기는 공통 드라이버 우회는 적용하지 않는다.
 2. RAM 시험에서 패널/터치/SD부터 재검증하고 firmware·모듈 공급 경로를 맞춘다.
    이전 SD CMD48·DPU 인계·Wi-Fi PMF 문제가 재현될 때만 기존 수정의 필요한 부분을 검토한다.
 3. GPU/카메라/오디오/무선/충전/절전은 기능별 probe→최소 동작→반복/부하 순서로 검증한다.

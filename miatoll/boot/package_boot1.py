@@ -51,7 +51,7 @@ def analyze_avb(module, path):
             'properties': properties}
 
 def main(profile='boot1'):
-    require(profile in ('boot1', 'display1'), 'Unknown RAM test profile')
+    require(profile in ('boot1', 'display1', 'display2'), 'Unknown RAM test profile')
     DIST = WORKSPACE / ('dist/miatoll-' + profile)
     OUT = WORKSPACE / ('out-miatoll-' + profile)
     DIST.mkdir(parents=True, exist_ok=True)
@@ -75,7 +75,7 @@ def main(profile='boot1'):
     for symbol in ('BLK_DEV_INITRD', 'RD_GZIP', 'DEVTMPFS', 'USB_CONFIGFS_ACM',
                    'USB_DWC3_GADGET', 'PHY_QCOM_QUSB2', 'DRM_SIMPLEDRM'):
         require('CONFIG_' + symbol + '=y\n' in config, 'Missing built-in: ' + symbol)
-    if profile == 'display1':
+    if profile in ('display1', 'display2'):
         for symbol in ('DRM_MSM', 'DRM_MSM_DPU', 'DRM_MSM_DSI', 'DRM_MSM_DSI_10NM_PHY',
                        'DRM_PANEL_HUAXING_FT8756', 'BACKLIGHT_QCOM_WLED', 'SC_DISPCC_7180',
                        'DRM_FBDEV_EMULATION', 'DRM_CLIENT_DEFAULT_FBDEV', 'FRAMEBUFFER_CONSOLE'):
@@ -111,7 +111,7 @@ def main(profile='boot1'):
     command_line = ('rdinit=/init console=tty0 loglevel=8 ignore_loglevel clk_ignore_unused '
                     'pd_ignore_unused no_console_suspend deferred_probe_timeout=30 panic=0 '
                     'enforcing=0 miatoll_boot=' + profile)
-    if profile == 'display1':
+    if profile in ('display1', 'display2'):
         command_line += ' consoleblank=0 drm.debug=0x06'
     plain = DIST / (profile + '-plain.img')
     mkbootimg = TOOLS / 'aosp-mkbootimg/mkbootimg.py'
@@ -168,24 +168,26 @@ def main(profile='boot1'):
               'reference_container': str(reference), 'reference_container_is_stock_image': False,
               'original_uploaded_boot_image_available': False,
               'hardware_scope': 'CPU/RAM, inherited framebuffer, UFS enumeration and USB console only'}
-    if profile == 'display1':
+    if profile in ('display1', 'display2'):
         result.update(hardware_scope='Native Huaxing DPU/DSI/WLED display, USB console and read-only UFS enumeration',
                       display_validation=display_validation, physical_display_confirmed=False)
     result['packaging_source_commit'] = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], text=True).strip()
     checked_sources = [*BOOT.glob('*.py'), *BOOT.glob('*.ps1'), *BOOT.glob('shim/*'),
                        *(BOOT / name for name in ('init', 'boot-probe', 'usb-gadget', 'display-banner', 'display-probe')),
                        ROOT / ('arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-' + profile + '.dts'),
+                       ROOT / 'arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-display1.dts',
                        ROOT / 'arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-boot1.dts',
                        ROOT / ('miatoll/configs/' + profile + '.config'), ROOT / 'miatoll/configs/miatoll.config']
     result['packaging_sources'] = {str(path.relative_to(ROOT)): digest(path.read_bytes())
                                     for path in checked_sources if path.is_file()}
     (DIST / (profile + '-report.json')).write_text(json.dumps(result, indent=2) + '\n')
     shutil.copy2(BOOT / 'Test-Boot1.ps1', DIST / 'Test-Boot1.ps1')
-    if profile == 'display1':
-        shutil.copy2(BOOT / 'Test-Display1.ps1', DIST / 'Test-Display1.ps1')
+    if profile in ('display1', 'display2'):
+        launcher = 'Test-' + profile.capitalize() + '.ps1'
+        shutil.copy2(BOOT / launcher, DIST / launcher)
     print(json.dumps({key: value for key, value in result.items() if key != 'ramdisk'}, indent=2))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--profile', choices=('boot1', 'display1'), default='boot1')
+    parser.add_argument('--profile', choices=('boot1', 'display1', 'display2'), default='boot1')
     main(parser.parse_args().profile)
