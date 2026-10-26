@@ -1,0 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0
+// WCN3990 PMF peer flag comparison; hardware description identical to wifi2.
+#include "sm7125-xiaomi-curtana-wifi2.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing wifi3 test)";
+	chosen {
+		miatoll,boot-profile = "wifi3-ram-only";
+	};
+};
