@@ -1,0 +1,81 @@
+{
+  "capture_id": "20261027-015644",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-display2+",
+  "boot_profile": "display2-ram-only",
+  "image": "boot-curtana-6.18.58-display2.img",
+  "image_sha256": "dea36fe4117b3eb53e85912da145eb15680019e006af10a54252d71e4448681c",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-display2/boot-curtana-6.18.58-display2.img"
+  ],
+  "physical_display_confirmed": true,
+  "user_observation": {
+    "screen": "banner visible after boot; all display3 steps passed",
+    "backlight": "on",
+    "notes": ""
+  },
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "DISPLAY2_BANNER_WRITTEN",
+      "DISPLAY2_PROBE_BEGIN",
+      "DISPLAY2_PROBE_END",
+      "DISPLAY2_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "113:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "114:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "display2-fastboot-20261027-015644.txt": {
+      "bytes": 589,
+      "sha256": "e91c078e0c8237883937a531d6417ea20732f822489a6ed45ffbeac74a63e11d"
+    },
+    "display2-serial-20261027-015644.txt": {
+      "bytes": 138774,
+      "sha256": "191c7b57165fbd5a8f04c48343a41579e1560f57529355213d1447d1cbb3d5d4"
+    },
+    "steps.txt": {
+      "bytes": 9623,
+      "sha256": "45af760b37d74202f1a265a3a213c7de837a8d5c2ace97e7a4a1d4dd87b765ab"
+    }
+  },
+  "step_observations": {
+    "brightness-cycle": {
+      "screen": "brightness changed bright->dim->off three times, then medium with banner",
+      "backlight": "followed 4095/200/0, settled at 1024",
+      "notes": ""
+    },
+    "blank-cycle": {
+      "screen": "off/on three times, image restored, green UNBLANK CYCLE DONE line visible",
+      "backlight": "off while blanked, on after unblank",
+      "notes": ""
+    },
+    "hold-120s": {
+      "screen": "counter updated every 10 s to HOLD 120s DONE; no flicker or artefacts",
+      "backlight": "on",
+      "notes": ""
+    }
+  }
+}

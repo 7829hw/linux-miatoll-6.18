@@ -1,0 +1,133 @@
+### 2026-10-27T01:58:09 brightness-cycle
+$ b=$(ls -d /sys/class/backlight/* | head -1); echo $b; for i in 1 2 3; do for v in 4095 200 0; do echo $v >$b/brightness; echo "set $v actual=$(cat $b/actual_brightness)"; sleep 4; done; done; echo 1024 >$b/brightness; cat $b/brightness; dmesg | tail -5
+b=$(ls -d /sys/class/backlight/* | head -1); echo $b; for i in
+ 1 2 3; do for v in 4095 200 0; do echo $v >$b/brightness; echo "set $v actual=$
+(cat $b/actual_brightness)"; sleep 4; done; done; echo 1024 >$b/brightness; cat 
+$b/brightness; dmesg | tail -5; printf "\nSTEP_DONE_015733=%s\n" "$?"
+/sys/class/backlight/backlight
+set 4095 actual=4095
+set 200 actual=200
+set 0 actual=0
+set 4095 actual=4095
+set 200 actual=200
+set 0 actual=0
+set 4095 actual=4095
+set 200 actual=200
+set 0 actual=0
+1024
+[    0.662871]     rcu_nocbs=0-7
+[    0.662888]     miatoll_boot=display2
+[    0.694421] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    0.702812] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    2.100613] dwc3 a600000.usb: remote wakeup not configured
+
+STEP_DONE_015733=0
+miatoll-display2# [6n
+### 2026-10-27T01:59:17 blank-cycle
+$ f=/sys/class/graphics/fb0; for i in 1 2 3; do echo 4 >$f/blank; echo "blank=4 rc=$? crtc=$(grep -m1 active= /sys/kernel/debug/dri/*/state 2>/dev/null)"; sleep 5; echo 0 >$f/blank; echo "blank=0 rc=$? crtc=$(grep -m1 active= /sys/kernel/debug/dri/*/state 2>/dev/null)"; sleep 5; done; printf "\033[1;32m  UNBLANK CYCLE DONE  \033[0m\n" >/dev/tty1; dmesg | grep -vE "drm:|^\s*$" | tail -15
+f=/sys/class/graphics/fb0; for i in 1 2 3; do echo 4 >$f/blank
+; echo "blank=4 rc=$? crtc=$(grep -m1 active= /sys/kernel/debug/dri/*/state 2>/d
+ev/null)"; sleep 5; echo 0 >$f/blank; echo "blank=0 rc=$? crtc=$(grep -m1 active
+= /sys/kernel/debug/dri/*/state 2>/dev/null)"; sleep 5; done; printf "\033[1;32m
+  UNBLANK CYCLE DONE  \033[0m\n" >/dev/tty1; dmesg | grep -vE "drm:|^\s*$" | tai
+l -15; printf "\nSTEP_DONE_015846=%s\n" "$?"
+blank=4 rc=0 crtc=/sys/kernel/debug/dri/0/state:	active=0
+/sys/kernel/debug/dri/128/state:	active=0
+/sys/kernel/debug/dri/ae01000.display-controller/state:	active=0
+blank=0 rc=0 crtc=/sys/kernel/debug/dri/0/state:	active=1
+/sys/kernel/debug/dri/128/state:	active=1
+/sys/kernel/debug/dri/ae01000.display-controller/state:	active=1
+blank=4 rc=0 crtc=/sys/kernel/debug/dri/0/state:	active=0
+/sys/kernel/debug/dri/128/state:	active=0
+/sys/kernel/debug/dri/ae01000.display-controller/state:	active=0
+blank=0 rc=0 crtc=/sys/kernel/debug/dri/0/state:	active=1
+/sys/kernel/debug/dri/128/state:	active=1
+/sys/kernel/debug/dri/ae01000.display-controller/state:	active=1
+blank=4 rc=0 crtc=/sys/kernel/debug/dri/0/state:	active=0
+/sys/kernel/debug/dri/128/state:	active=0
+/sys/kernel/debug/dri/ae01000.display-controller/state:	active=0
+blank=0 rc=0 crtc=/sys/kernel/debug/dri/0/state:	active=1
+/sys/kernel/debug/dri/128/state:	active=1
+/sys/kernel/debug/dri/ae01000.display-controller/state:	active=1
+[    0.662760] Run /init as init process
+[    0.662787]   with arguments:
+[    0.662805]     /init
+[    0.662820]   with environment:
+[    0.662837]     HOME=/
+[    0.662854]     TERM=linux
+[    0.662871]     rcu_nocbs=0-7
+[    0.662888]     miatoll_boot=display2
+[    2.100613] dwc3 a600000.usb: remote wakeup not configured
+[  102.157899] 
+[  102.159558] 
+[  112.586077] 
+[  112.587737] 
+[  123.171157] 
+[  123.172862] 
+
+STEP_DONE_015846=0
+miatoll-display2# [6n
+### 2026-10-27T01:59:36 hold-120s
+$ for i in $(seq 1 12); do printf "\r  HOLD %3ss  uptime %s " $((i*10)) "$(cut -d" " -f1 /proc/uptime)" >/dev/tty1; sleep 10; done; printf "\n\033[1;36m  HOLD 120s DONE  \033[0m\n" >/dev/tty1; cat /proc/uptime; grep -E "smmu|wled|dpu|dsi|mdss" /proc/interrupts; dmesg | grep -iE "error|fail|warn|fault|timeout|underrun|overflow" | grep -v "^.\{0,20\}\[drm:" | tail -20
+for i in $(seq 1 12); do printf "\r  HOLD %3ss  uptime %s " $(
+(i*10)) "$(cut -d" " -f1 /proc/uptime)" >/dev/tty1; sleep 10; done; printf "\n\0
+33[1;36m  HOLD 120s DONE  \033[0m\n" >/dev/tty1; cat /proc/uptime; grep -E "smmu
+|wled|dpu|dsi|mdss" /proc/interrupts; dmesg | grep -iE "error|fail|warn|fault|ti
+meout|underrun|overflow" | grep -v "^.\{0,20\}\[drm:" | tail -20; printf "\nSTEP
+_DONE_015936=%s\n" "$?"
+/bin/sh: seq: not found
+147.26 1175.53
+ 18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault
+ 19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault
+ 20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault
+ 21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault
+ 22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault
+113:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault
+114:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault
+124:          0          0          0          0          0          0          0          0 pmic_arb 1568800980 Edge      wled_short_irq
+125:          0          0          0          0          0          0          0          0 pmic_arb 1568735444 Edge      wled_ovp_irq
+130:       2066          0          0          0          0          0          0          0 msm_mdss   0 Edge      msm
+131:         26          0          0          0          0          0          0          0 msm_mdss   4 Edge      dsi_isr
+[    0.000000] psci: [Firmware Bug]: failed to set PC mode: -3
+[    0.000000] Kernel command line: rcupdate.rcu_expedited=1 rcu_nocbs=0-7 noirqdebug rdinit=/init console=tty0 loglevel=8 ignore_loglevel clk_ignore_unused pd_ignore_unused no_console_suspend deferred_probe_timeout=30 panic=0 enforcing=0 miatoll_boot=display2 consoleblank=0 drm.debug=0x06 androidboot.verifiedbootstate=orange androidboot.keymaster=1  androidboot.bootdevice=1d84000.ufshc androidboot.fstab_suffix=default androidboot.boot_devices=soc/1d84000.ufshc androidboot.serialno=REDACTED androidboot.cpuid=0xd7896932 androidboot.multisim_config=dsds androidboot.dp=0x0 androidboot.baseband=msm msm_drm.dsi_display0=dsi_ft8756_huaxing_vid_display: androidboot.fpsensor=fpc androidboot.lcmtype=dsi_nt36672c_huaxing_fhd_video_display androidboot.dtbo_idx=0 androidboot.dtb_idx=0 androidboot.secureboot=1 androidboot.hwc=Global_TWO androidboot.hwversion=1.91.0 androidboot.hwlevel=MP androidboot.hwname=curtana androidboot.AdcVol1=183 androidboot.AdcVol2=1400
+[    0.000951] pid_max: default: 32768 minimum: 301
+[    0.073544] iommu: Default domain type: Translated
+[    0.644234] faux_driver regulatory: Direct firmware load for regulatory.db failed with error -2
+[    0.644252] cfg80211: failed to load regulatory.db
+
+STEP_DONE_015936=0
+miatoll-display2# [6n
+### 2026-10-27T02:01:43 hold-120s
+$ i=1; while [ $i -le 12 ]; do printf "\r  HOLD %3ss  uptime %s " $((i*10)) "$(cut -d" " -f1 /proc/uptime)" >/dev/tty1; sleep 10; i=$((i+1)); done; printf "\n\033[1;36m  HOLD 120s DONE  \033[0m\n" >/dev/tty1; cat /proc/uptime; grep -E "smmu-context|wled|msm_mdss" /proc/interrupts; dmesg | grep -iE "error|fail|warn|fault|timeout|underrun|overflow" | grep -vE "\[drm:|regulatory|PC mode|Kernel command|Default domain" | tail -20
+i=1; while [ $i -le 12 ]; do printf "\r  HOLD %3ss  uptime %s 
+" $((i*10)) "$(cut -d" " -f1 /proc/uptime)" >/dev/tty1; sleep 10; i=$((i+1)); do
+ne; printf "\n\033[1;36m  HOLD 120s DONE  \033[0m\n" >/dev/tty1; cat /proc/uptim
+e; grep -E "smmu-context|wled|msm_mdss" /proc/interrupts; dmesg | grep -iE "erro
+r|fail|warn|fault|timeout|underrun|overflow" | grep -vE "\[drm:|regulatory|PC mo
+de|Kernel command|Default domain" | tail -20; printf "\nSTEP_DONE_015943=%s\n" "
+$?"
+/bin/sh: cut: not found
+/bin/sh: cut: not found
+/bin/sh: cut: not found
+/bin/sh: cut: not found
+/bin/sh: cut: not found
+/bin/sh: cut: not found
+/bin/sh: cut: not found
+/bin/sh: cut: not found
+/bin/sh: cut: not found
+/bin/sh: cut: not found
+/bin/sh: cut: not found
+/bin/sh: cut: not found
+273.97 2187.56
+ 19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault
+ 20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault
+ 21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault
+ 22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault
+124:          0          0          0          0          0          0          0          0 pmic_arb 1568800980 Edge      wled_short_irq
+125:          0          0          0          0          0          0          0          0 pmic_arb 1568735444 Edge      wled_ovp_irq
+130:       9668          0          0          0          0          0          0          0 msm_mdss   0 Edge      msm
+131:         26          0          0          0          0          0          0          0 msm_mdss   4 Edge      dsi_isr
+[    0.000951] pid_max: default: 32768 minimum: 301
+
+STEP_DONE_015943=0
+miatoll-display2# [6n

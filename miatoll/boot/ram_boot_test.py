@@ -131,7 +131,7 @@ def run(args):
     if sha256(image) != report['image_sha256']:
         raise Stop('Image SHA256 does not match the report.')
     stamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-    out = REPORTS / f'{stamp}-{profile}'
+    out = REPORTS / (f'{stamp}-{profile}' + (f'-{args.label}' if args.label else ''))
     out.mkdir(parents=True)
     fastboot_log = out / f'{profile}-fastboot-{stamp}.txt'
     serial_log = out / f'{profile}-serial-{stamp}.txt'
@@ -151,6 +151,8 @@ def run(args):
 
     try:
         if not args.capture_only:
+            usbipd_attach(FASTBOOT_ID)
+            time.sleep(2)
             serials = fastboot_serials(fastboot)
             if len(serials) != 1:
                 raise Stop('Connect exactly one curtana in bootloader fastboot mode.')
@@ -202,11 +204,39 @@ def run(args):
         print('Boot is not confirmed. Inspect the logs.')
 
 
+def shell(args):
+    """Run one step on the running RAM shell and append it to steps.txt."""
+    import serial
+    ports = [Path(args.port)] if args.port else list(find_acm())
+    if len(ports) != 1:
+        raise Stop('Expected exactly one Linux ACM port; nothing was sent.')
+    marker = 'STEP_DONE_' + datetime.datetime.now().strftime('%H%M%S')
+    done = re.compile(r'^%s=(\d+)\r?$' % marker, re.M)
+    text = ''
+    with serial.Serial(str(ports[0]), 115200, timeout=0.2, write_timeout=3) as console:
+        console.dtr = console.rts = True
+        console.reset_input_buffer()
+        console.write(f'{args.cmdline}; printf "\\n{marker}=%s\\n" "$?"\n'.encode())
+        deadline = time.monotonic() + args.timeout
+        while time.monotonic() < deadline and not done.search(text):
+            text += console.read(65536).decode('utf-8', 'replace')
+    with (Path(args.directory) / 'steps.txt').open('a', encoding='utf-8', newline='') as stream:
+        stream.write(f'### {datetime.datetime.now().isoformat(timespec="seconds")} {args.step}\n'
+                     f'$ {args.cmdline}\n{text}\n')
+    print(text)
+    if not done.search(text):
+        raise Stop('Step did not finish within the timeout; output kept in steps.txt.')
+
+
 def observe(args):
     path = Path(args.directory) / 'result.json'
     result = json.loads(path.read_text())
-    result['user_observation'] = {'screen': args.screen, 'backlight': args.backlight,
-                                  'notes': args.notes}
+    entry = {'screen': args.screen, 'backlight': args.backlight, 'notes': args.notes}
+    if args.step:
+        result.setdefault('step_observations', {})[args.step] = entry
+        path.write_text(json.dumps(result, indent=2, ensure_ascii=False) + '\n')
+        return
+    result['user_observation'] = entry
     result['physical_display_confirmed'] = args.confirmed
     path.write_text(json.dumps(result, indent=2, ensure_ascii=False) + '\n')
 
@@ -221,15 +251,23 @@ def main():
     boot.add_argument('--reconnect-timeout', type=int, default=60)
     boot.add_argument('--port-timeout', type=int, default=120)
     boot.add_argument('--capture-timeout', type=int, default=120)
+    boot.add_argument('--label', help='suffix for the report directory name')
+    step = commands.add_parser('shell', help='run one diagnostic step on the running RAM shell')
+    step.add_argument('directory')
+    step.add_argument('step', help='short step name recorded in steps.txt')
+    step.add_argument('cmdline', metavar='command')
+    step.add_argument('--port')
+    step.add_argument('--timeout', type=int, default=60)
     note = commands.add_parser('observe', help="record the user's physical observation")
     note.add_argument('directory')
     note.add_argument('--screen', required=True)
     note.add_argument('--backlight', required=True)
     note.add_argument('--notes', default='')
+    note.add_argument('--step', help='record against a shell step instead of the whole boot')
     note.add_argument('--confirmed', action='store_true', help='banner text and colours seen')
     args = parser.parse_args()
     try:
-        run(args) if args.command == 'boot' else observe(args)
+        {'boot': run, 'shell': shell, 'observe': observe}[args.command](args)
     except Stop as error:
         sys.exit('STOPPED: ' + str(error))
 

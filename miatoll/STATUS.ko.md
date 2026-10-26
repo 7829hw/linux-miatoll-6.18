@@ -114,6 +114,12 @@ upstream `msm_mdss_reset()`을 사용한다. framebuffer 시스템 RAM에는 `FB
 확인 범위는 부팅 직후 정지 화면 1회이며 밝기 조절·blank 반복·장시간·절전·Tianma 패널은 미검증이다.
 [display2 실기기 기록](reports/device-tests/20261027-015228-display2/README.ko.md)
 
+이어진 display3 시험(`20261027-015644`, 같은 display2 이미지, 커널 수정 없음)에서
+WLED 밝기 4095/200/0 반복, `fb0/blank` 4↔0 3회(CRTC·DSI·패널 재활성화), 2분 연속 갱신을
+사용자가 모두 확인했다. 그동안 SMMU/WLED fault IRQ는 0이었고 MDSS IRQ는 약 60/s였다.
+suspend/resume, 장시간 표시, Tianma 패널은 미검증이다.
+[display3 시험 기록](reports/device-tests/20261027-015644-display2-display3-cycle/README.ko.md)
+
 ## 하드웨어별 상태
 
 아래의 '반영'은 새 브랜치의 소스·설정·컴파일 결과다. boot1에서 확인한 기본 기능 외의
@@ -122,7 +128,7 @@ upstream `msm_mdss_reset()`을 사용한다. framebuffer 시스템 RAM에는 `FB
 | 기능 | upstream 6.18 재사용 | 6.14.7에서 반영한 부분 | 남은 확인 |
 | --- | --- | --- | --- |
 | CPU/RAM/UFS/SD/USB/버튼 | 기존 SM7125/SC7180, PMIC, UFS/MMC/GENI/QUSB2 드라이버 | 보드 DT와 추가 주변장치 연결 | boot1에서 CPU/RAM/USB ACM/UFS 열거 확인. UFS 파일 읽기, SD CMD48 재발 여부, USB role, 입력은 미검증 |
-| 디스플레이 | DRM/MSM DPU/DSI, PHY, WLED, 표준 MDSS reset | Huaxing FT8756 및 Tianma NT36675 패널, DT, WLED 수정. DSI API 변환 | display2(Huaxing)에서 부팅 직후 VT 문구·색상과 백라이트를 실기기 확인. 밝기 조절, blank 반복, 절전, Tianma 패널, 안정성은 미검증 |
+| 디스플레이 | DRM/MSM DPU/DSI, PHY, WLED, 표준 MDSS reset | Huaxing FT8756 및 Tianma NT36675 패널, DT, WLED 수정. DSI API 변환 | display2(Huaxing)에서 VT 표시·색상, WLED 밝기 0–4095, blank/unblank 3회, 2분 유지를 실기기 확인. 절전, 장시간, Tianma 패널은 미검증 |
 | 터치 | SPI/GENI/input | FT8756 및 NT36xxx SPI 드라이버, 패널 연동과 firmware 이름 | RAM firmware 제공, IRQ/좌표/멀티터치, suspend/resume |
 | GPU | Adreno A618/GMU/DRM | ZAP 이름, HWCG, fuse 0x9f/bin 3. OPP는 SM7125에 한정 | firmware, GMU/GPU 초기화, 렌더링/Android GPU userspace |
 | 카메라 | CAMSS 공통 코드, OV8856/DW9714 | SC7180 CAMSS/CCI/PHY/DT, S5KGM2/S5K5E9/OV16A1Q/DW9800, 기존 센서/VCM 확장 | ID/전원/스트림/초점/영상 품질. DW9800은 원본도 WIP. joyeuse DT에는 S5K5E9/OV16A1Q만 있고 주카메라 경로가 완성되지 않음 |
@@ -184,8 +190,8 @@ Clang/LLD 18.1.3과 호스트 도구는 작업 공간의 `tools/`에만 준비�
 
 ## 우선 남은 작업
 
-1. display2 화면 표시는 확인했다. 밝기 조절·blank/unblank 반복·장시간 표시를 확인하고
-   반복 부팅·부하·idle/suspend/resume를 별도로 검증한다. BWMON/Venus는 화면 시험 DT에서 비활성화했다.
+1. display2 화면 표시·밝기·blank 반복·2분 유지는 확인했다. 다음 단계는 터치·USB·저장장치이며,
+   반복 부팅·부하·idle/suspend/resume와 장시간 표시는 별도로 검증한다. BWMON/Venus는 화면 시험 DT에서 비활성화했다.
 2. 화면·터치·SD·무선을 기능별 RAM 시험으로 재검증한다. 새 DT/모듈/firmware와
    boot header v2·메모리 인계를 Android 부팅 구성에도 연결한다.
 3. 카메라/오디오/모뎀/충전·절전은 기능별로 probe와 실제 동작을 분리해 검증한다.
