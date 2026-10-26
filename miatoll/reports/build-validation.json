@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "source_commit": "820e88dce8314e351f3e23fb9e9362c0efb77e76",
+  "kernel_source_and_config_clean": true,
+  "official_base": "v6.18.58",
+  "official_makefile_unchanged": true,
+  "kernelrelease": "6.18.58-miatoll+",
+  "image_bytes": 29124616,
+  "image_sha256": "670c97d8abda747e760b5af6bbf649fd970b6462c08e8410b5b9b8753077b18b",
+  "image_runtime_bytes": 31588352,
+  "previous_downstream_runtime_reference_bytes": 40615936,
+  "module_count": 211,
+  "all_modules_aarch64_and_matching_vermagic": true,
+  "dtbs": [
+    {
+      "name": "sm7125-xiaomi-curtana-huaxing.dtb",
+      "bytes": 108352,
+      "sha256": "449d0fc281ac036270a53425ad8cefbb113761657e0d97ae27247101390500a7"
+    },
+    {
+      "name": "sm7125-xiaomi-curtana-tianma.dtb",
+      "bytes": 108348,
+      "sha256": "66b097243f413c1ab26a5fc6f9c7356ad9f6b5c05e611f900565fe332612752b"
+    },
+    {
+      "name": "sm7125-xiaomi-joyeuse-huaxing.dtb",
+      "bytes": 106343,
+      "sha256": "0c2c54a8603eb5955f945c593798612ba66f16a9d9eb41d12d2b5e3ee1149cd4"
+    },
+    {
+      "name": "sm7125-xiaomi-joyeuse-tianma.dtb",
+      "bytes": 106339,
+      "sha256": "f029543a683670ad33c29de9e5a03a8f565d2f29b6ed79611932af3f346d6171"
+    }
+  ],
+  "device_runtime_tested": false,
+  "lineageos_boot_tested": false,
+  "dt_schema_validation_performed": false
+}
