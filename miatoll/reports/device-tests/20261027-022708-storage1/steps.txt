@@ -1,0 +1,355 @@
+### 2026-10-27T02:27:48 storage-probe
+$ storage-probe 64
+storage-probe 64; printf "\nSTEP_DONE_022746=%s\n" "$?"
+STORAGE_PROBE_BEGIN
+--- block devices: name size(512B) ro partname ---
+loop0 0 1 
+loop1 0 1 
+loop2 0 1 
+loop3 0 1 
+loop4 0 1 
+loop5 0 1 
+loop6 0 1 
+loop7 0 1 
+sda 240959488 1 
+sda1 16 1 ssd
+sda10 128 1 vbmeta_system
+sda11 128 1 vbmeta_systembak
+sda12 32768 1 metadata
+sda13 786432 1 cache
+sda14 786432 1 exaid
+sda15 32768 1 gsort
+sda16 16384 1 ffu
+sda17 16777216 1 super
+sda18 219573912 1 userdata
+sda2 65536 1 persist
+sda3 2048 1 misc
+sda4 1024 1 keystore
+sda5 1024 1 frp
+sda6 262144 1 minidump
+sda7 2097152 1 cust
+sda8 262144 1 recovery
+sda9 262144 1 recoverybak
+sdb 16384 1 
+sdb1 14336 1 xbl
+sdb2 256 1 xbl_config
+sdc 16384 1 
+sdc1 14336 1 xblbak
+sdc2 256 1 xbl_configbak
+sdd 262144 1 
+sdd1 208 1 ALIGN_TO_128K_1
+sdd2 256 1 cdt
+sdd3 2048 1 ddr
+sde 8388608 1 
+sde1 1024 1 aop
+sde10 1024 1 keymaster
+sde11 1024 1 cmnlib
+sde12 1024 1 cmnlib64
+sde13 256 1 devcfg
+sde14 128 1 qupfw
+sde15 4096 1 imagefv
+sde16 4096 1 uefisecapp
+sde17 1024 1 aopbak
+sde18 8192 1 tzbak
+sde19 1024 1 hypbak
+sde2 8192 1 tz
+sde20 524288 1 modembak
+sde21 2048 1 bluetoothbak
+sde22 8192 1 mdtpsecappbak
+sde23 65536 1 mdtpbak
+sde24 16384 1 ablbak
+sde25 65536 1 dspbak
+sde26 1024 1 keymasterbak
+sde27 1024 1 cmnlibbak
+sde28 1024 1 cmnlib64bak
+sde29 256 1 devcfgbak
+sde3 1024 1 hyp
+sde30 128 1 qupfwbak
+sde31 4096 1 imagefvbak
+sde32 4096 1 uefisecappbak
+sde33 8 1 devinfo
+sde34 2048 1 dip
+sde35 512 1 apdp
+sde36 16384 1 spunvm
+sde37 66848 1 splash
+sde38 8 1 limits
+sde39 2048 1 toolsfv
+sde4 524288 1 modem
+sde40 16384 1 logfs
+sde41 4096 1 cateloader
+sde42 131072 1 logdump
+sde43 256 1 storsec
+sde44 64 1 multiimgoem
+sde45 64 1 multiimgqti
+sde46 1024 1 uefivarstore
+sde47 56 1 secdata
+sde48 1024 1 catefv
+sde49 2048 1 catecontentfv
+sde5 2048 1 bluetooth
+sde50 128 1 vbmeta
+sde51 262144 1 boot
+sde52 49152 1 dtbo
+sde53 128 1 vbmetabak
+sde54 49152 1 dtbobak
+sde55 262144 1 bootbak
+sde6 8192 1 mdtpsecapp
+sde7 65536 1 mdtp
+sde8 16384 1 abl
+sde9 65536 1 dsp
+sdf 262144 1 
+sdf1 208 1 ALIGN_TO_128K_2
+sdf2 4096 1 modemst1
+sdf3 4096 1 modemst2
+sdf4 20480 1 fsg
+sdf5 256 1 fsc
+/bin/storage-probe: line 19: sync: not found
+STORAGE_READ ufs-super(/dev/sda17) pass=1 bytes=67108864 sha256=def6374fac69e45999a2b0f305695b7dd730d479091e9bf8699770cdfd4052a8
+64+0 records in
+64+0 records out
+67108864 bytes (64.0MB) copied, 0.533257 seconds, 120.0MB/s
+/bin/storage-probe: line 19: sync: not found
+STORAGE_READ ufs-super(/dev/sda17) pass=2 bytes=67108864 sha256=def6374fac69e45999a2b0f305695b7dd730d479091e9bf8699770cdfd4052a8
+64+0 records in
+64+0 records out
+67108864 bytes (64.0MB) copied, 0.560688 seconds, 114.1MB/s
+--- SD card ---
+STORAGE_SD_ABSENT: no mmcblk device
+--- storage kernel messages ---
+[    0.000000] Kernel command line: rcupdate.rcu_expedited=1 rcu_nocbs=0-7 noirqdebug rdinit=/init console=tty0 loglevel=8 ignore_loglevel clk_ignore_unused pd_ignore_unused no_console_suspend deferred_probe_timeout=30 panic=0 enforcing=0 miatoll_boot=storage1 consoleblank=0 drm.debug=0x06 androidboot.verifiedbootstate=orange androidboot.keymaster=1  androidboot.bootdevice=1d84000.ufshc androidboot.fstab_suffix=default androidboot.boot_devices=soc/1d84000.ufshc androidboot.serialno=REDACTED androidboot.cpuid=0xd7896932 androidboot.multisim_config=dsds androidboot.dp=0x0 androidboot.baseband=msm msm_drm.dsi_display0=dsi_ft8756_huaxing_vid_display: androidboot.fpsensor=fpc androidboot.lcmtype=dsi_nt36672c_huaxing_fhd_video_display androidboot.dtbo_idx=0 androidboot.dtb_idx=0 androidboot.secureboot=1 androidboot.hwc=Global_TWO androidboot.hwversion=1.91.0 androidboot.hwlevel=MP androidboot.hwname=curtana androidboot.AdcVol1=183 androidboot.AdcVol2=1400
+[    0.050884] /soc@0/ufshc@1d84000: Fixed dependency cycle(s) with /soc@0/phy@1d87000
+[    0.050923] /soc@0/phy@1d87000: Fixed dependency cycle(s) with /soc@0/ufshc@1d84000
+[    0.054492] /soc@0/ufshc@1d84000: Fixed dependency cycle(s) with /soc@0/phy@1d87000
+[    0.054649] /soc@0/ufshc@1d84000: Fixed dependency cycle(s) with /soc@0/phy@1d87000
+[    0.054707] /soc@0/phy@1d87000: Fixed dependency cycle(s) with /soc@0/ufshc@1d84000
+[    0.074176] SCSI subsystem initialized
+[    0.140705] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 241)
+[    0.161907] platform 1d84000.ufshc: Adding to iommu group 2
+[    0.162064] platform 8804000.mmc: Adding to iommu group 3
+[    0.205816] sdhci: Secure Digital Host Controller Interface driver
+[    0.205837] sdhci: Copyright(c) Pierre Ossman
+[    0.206654] sdhci-pltfm: SDHCI platform and OF driver helper
+[    0.313635] sdhci_msm 8804000.mmc: Got CD GPIO
+[    0.313981] ufshcd-qcom 1d84000.ufshc: ufshcd_populate_vreg: Unable to find vdd-hba-supply regulator, assuming enabled
+[    0.314020] ufshcd-qcom 1d84000.ufshc: ufshcd_populate_vreg: Unable to find vccq-supply regulator, assuming enabled
+[    0.355333] mmc2: SDHCI controller on 8804000.mmc [8804000.mmc] using ADMA 64-bit
+[    0.397462] scsi host0: ufshcd
+[    0.399263] scsi 0:0:0:49488: Well-known LUN    SKhynix  H9HQ15AECMADAR   A102 PQ: 0 ANSI: 6
+[    0.403864] scsi 0:0:0:49476: Well-known LUN    SKhynix  H9HQ15AECMADAR   A102 PQ: 0 ANSI: 6
+[    0.406194] scsi 0:0:0:49456: Well-known LUN    SKhynix  H9HQ15AECMADAR   A102 PQ: 0 ANSI: 6
+[    0.408617] scsi 0:0:0:0: Direct-Access     SKhynix  H9HQ15AECMADAR   A102 PQ: 0 ANSI: 6
+[    0.411600] sd 0:0:0:0: [sda] 30119936 4096-byte logical blocks: (123 GB/115 GiB)
+[    0.411777] sd 0:0:0:0: [sda] Write Protect is off
+[    0.411782] scsi 0:0:0:1: Direct-Access     SKhynix  H9HQ15AECMADAR   A102 PQ: 0 ANSI: 6
+[    0.411816] sd 0:0:0:0: [sda] Mode Sense: 00 32 00 10
+[    0.411970] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, supports DPO and FUA
+[    0.412080] sd 0:0:0:0: [sda] Preferred minimum I/O size 524288 bytes
+[    0.412102] sd 0:0:0:0: [sda] Optimal transfer size 524288 bytes
+[    0.413582] scsi 0:0:0:2: Direct-Access     SKhynix  H9HQ15AECMADAR   A102 PQ: 0 ANSI: 6
+[    0.414031] sd 0:0:0:1: [sdb] 2048 4096-byte logical blocks: (8.39 MB/8.00 MiB)
+[    0.414398] sd 0:0:0:1: [sdb] Write Protect is off
+[    0.414420] sd 0:0:0:1: [sdb] Mode Sense: 00 32 00 10
+[    0.415078] sd 0:0:0:1: [sdb] Write cache: enabled, read cache: enabled, supports DPO and FUA
+[    0.415292] sd 0:0:0:1: [sdb] Preferred minimum I/O size 524288 bytes
+[    0.415310] sd 0:0:0:1: [sdb] Optimal transfer size 524288 bytes
+[    0.416489] scsi 0:0:0:3: Direct-Access     SKhynix  H9HQ15AECMADAR   A102 PQ: 0 ANSI: 6
+[    0.417040] sd 0:0:0:2: [sdc] 2048 4096-byte logical blocks: (8.39 MB/8.00 MiB)
+[    0.417292] sd 0:0:0:2: [sdc] Write Protect is off
+[    0.417311] sd 0:0:0:2: [sdc] Mode Sense: 00 32 00 10
+[    0.417846] sd 0:0:0:2: [sdc] Write cache: enabled, read cache: enabled, supports DPO and FUA
+[    0.418078] sd 0:0:0:2: [sdc] Preferred minimum I/O size 524288 bytes
+[    0.418096] sd 0:0:0:2: [sdc] Optimal transfer size 524288 bytes
+[    0.418112] scsi 0:0:0:4: Direct-Access     SKhynix  H9HQ15AECMADAR   A102 PQ: 0 ANSI: 6
+[    0.418648] sd 0:0:0:3: [sdd] 32768 4096-byte logical blocks: (134 MB/128 MiB)
+[    0.418773] sd 0:0:0:3: [sdd] Write Protect is off
+[    0.418792] sd 0:0:0:3: [sdd] Mode Sense: 00 32 00 10
+[    0.418970] sd 0:0:0:3: [sdd] Write cache: enabled, read cache: enabled, supports DPO and FUA
+[    0.419220] sd 0:0:0:3: [sdd] Preferred minimum I/O size 524288 bytes
+[    0.419262] sd 0:0:0:3: [sdd] Optimal transfer size 524288 bytes
+[    0.419849] scsi 0:0:0:5: Direct-Access     SKhynix  H9HQ15AECMADAR   A102 PQ: 0 ANSI: 6
+[    0.420405] sd 0:0:0:4: [sde] 1048576 4096-byte logical blocks: (4.29 GB/4.00 GiB)
+[    0.420534] sd 0:0:0:4: [sde] Write Protect is off
+[    0.420553] sd 0:0:0:4: [sde] Mode Sense: 00 32 00 10
+[    0.420739] sd 0:0:0:4: [sde] Write cache: enabled, read cache: enabled, supports DPO and FUA
+[    0.420867] sd 0:0:0:4: [sde] Preferred minimum I/O size 524288 bytes
+[    0.420885] sd 0:0:0:4: [sde] Optimal transfer size 524288 bytes
+[    0.423301] sd 0:0:0:5: [sdf] 32768 4096-byte logical blocks: (134 MB/128 MiB)
+[    0.423381] sd 0:0:0:5: [sdf] Write Protect is off
+[    0.423389] sd 0:0:0:5: [sdf] Mode Sense: 00 32 00 10
+[    0.423487] sd 0:0:0:5: [sdf] Write cache: enabled, read cache: enabled, supports DPO and FUA
+[    0.423535] sd 0:0:0:5: [sdf] Preferred minimum I/O size 524288 bytes
+[    0.423542] sd 0:0:0:5: [sdf] Optimal transfer size 524288 bytes
+[    0.443863]  sda: sda1 sda2 sda3 sda4 sda5 sda6 sda7 sda8 sda9 sda10 sda11 sda12 sda13 sda14 sda15 sda16 sda17 sda18
+[    0.448120]  sdb: sdb1 sdb2
+[    0.448124]  sdc: sdc1 sdc2
+[    0.448401]  sdd: sdd1 sdd2 sdd3
+[    0.448642] sd 0:0:0:1: [sdb] Attached SCSI disk
+[    0.449101] sd 0:0:0:2: [sdc] Attached SCSI disk
+[    0.449604] sd 0:0:0:3: [sdd] Attached SCSI disk
+[    0.450609]  sde: sde1 sde2 sde3 sde4 sde5 sde6 sde7 sde8 sde9 sde10 sde11 sde12 sde13 sde14 sde15 sde16 sde17 sde18 sde19 sde20 sde21 sde22 sde23 sde24 sde25 sde26 sde27 sde28 sde29 sde30 sde31 sde32 sde33 sde34 sde35 sde36 sde37 sde38 sde39 sde40 sde41 sde42 sde43 sde44 sde45 sde46 sde47 sde48 sde49 sde50 sde51 sde52 sde53 sde54 sde55
+[    0.450868] sd 0:0:0:0: [sda] Attached SCSI disk
+[    0.456828]  sdf: sdf1 sdf2 sdf3 sdf4 sdf5
+[    0.458284] sd 0:0:0:5: [sdf] Attached SCSI disk
+[    0.462688] sd 0:0:0:4: [sde] Attached SCSI disk
+[    0.788227] mmc2: error -110 reading general info of SD ext reg
+[    0.788271] mmc2: error -110 whilst initialising SD card
+STORAGE_PROBE_END
+
+STEP_DONE_022746=0
+miatoll-storage1# [6n
+### 2026-10-27T02:27:56 sd-diagnose
+$ ls -l /sys/bus/platform/devices/ | grep -i 8804000; d=/sys/bus/platform/devices/8804000.mmc; ls $d; readlink $d/driver; cat /sys/kernel/debug/devices_deferred; cat $d/waiting_for_supplier 2>/dev/null; ls /sys/class/mmc_host; dmesg | grep -iE "8804000|sdhc|mmc|l9c|l6c|vreg_l9c|vreg_l6c" | head -20; cat /sys/kernel/debug/gpio | grep -iE "gpio69|-69 |cd"
+ls -l /sys/bus/platform/devices/ | grep -i 8804000; d=/sys/bus
+/platform/devices/8804000.mmc; ls $d; readlink $d/driver; cat /sys/kernel/debug/
+devices_deferred; cat $d/waiting_for_supplier 2>/dev/null; ls /sys/class/mmc_hos
+t; dmesg | grep -iE "8804000|sdhc|mmc|l9c|l6c|vreg_l9c|vreg_l6c" | head -20; cat
+ /sys/kernel/debug/gpio | grep -iE "gpio69|-69 |cd"; printf "\nSTEP_DONE_022756=
+%s\n" "$?"
+lrwxrwxrwx    1 0        0                0 Jan  1 00:00 8804000.mmc -> ../../../devices/platform/soc@0/8804000.mmc
+[1;36mdriver[m
+[0;0mdriver_override[m
+[1;36miommu[m
+[1;36miommu_group[m
+[1;34mleds[m
+[1;34mmmc_host[m
+[0;0mmodalias[m
+[1;36mof_node[m
+[1;34mpower[m
+[1;36msubsystem[m
+[1;36msupplier:platform:100000.clock-controller[m
+[1;36msupplier:platform:1500000.interconnect[m
+[1;36msupplier:platform:15000000.iommu[m
+[1;36msupplier:platform:1638000.interconnect[m
+[1;36msupplier:platform:16e0000.interconnect[m
+[1;36msupplier:platform:18200000.rsc:clock-controller[m
+[1;36msupplier:platform:18200000.rsc:power-controller[m
+[1;36msupplier:platform:18200000.rsc:regulators-1[m
+[1;36msupplier:platform:3500000.pinctrl[m
+[1;36msupplier:platform:9680000.interconnect[m
+[1;36msupplier:regulator:regulator.14[m
+[1;36msupplier:regulator:regulator.21[m
+[0;0muevent[m
+../../../../bus/platform/drivers/sdhci_msm
+[1;36mmmc2[m
+[    0.162064] platform 8804000.mmc: Adding to iommu group 3
+[    0.205816] sdhci: Secure Digital Host Controller Interface driver
+[    0.205837] sdhci: Copyright(c) Pierre Ossman
+[    0.206654] sdhci-pltfm: SDHCI platform and OF driver helper
+[    0.313635] sdhci_msm 8804000.mmc: Got CD GPIO
+[    0.355333] mmc2: SDHCI controller on 8804000.mmc [8804000.mmc] using ADMA 64-bit
+[    0.788227] mmc2: error -110 reading general info of SD ext reg
+[    0.788271] mmc2: error -110 whilst initialising SD card
+ gpio69  : in  high func0 2mA pull up
+
+STEP_DONE_022756=0
+miatoll-storage1# [6n
+### 2026-10-27T02:31:03 sd-hotswap-second-card
+$ sleep 3; dmesg | grep -iE "mmc|sdhc" | tail -15; ls /sys/block | grep mmc
+sleep 3; dmesg | grep -iE "mmc|sdhc" | tail -15; ls /sys/block
+ | grep mmc; printf "\nSTEP_DONE_023100=%s\n" "$?"
+[    0.162064] platform 8804000.mmc: Adding to iommu group 3
+[    0.205816] sdhci: Secure Digital Host Controller Interface driver
+[    0.205837] sdhci: Copyright(c) Pierre Ossman
+[    0.206654] sdhci-pltfm: SDHCI platform and OF driver helper
+[    0.313635] sdhci_msm 8804000.mmc: Got CD GPIO
+[    0.355333] mmc2: SDHCI controller on 8804000.mmc [8804000.mmc] using ADMA 64-bit
+[    0.788227] mmc2: error -110 reading general info of SD ext reg
+[    0.788271] mmc2: error -110 whilst initialising SD card
+[  191.251676] mmc2: new SDHC card at address e624
+[  191.253960] mmcblk2: mmc2:e624 SU08G 7.40 GiB
+[  191.270133]  mmcblk2: p1
+mmcblk2
+
+STEP_DONE_023100=0
+miatoll-storage1# [6n
+### 2026-10-27T02:31:29 storage-probe-second-card
+$ d=/sys/block/mmcblk2/device; for f in name manfid oemid date scr ssr type; do echo "$f=$(cat $d/$f 2>/dev/null)"; done; storage-probe 64 | grep -E "STORAGE_|copied|timing|clock:|bus width|signal|^mmcblk"
+d=/sys/block/mmcblk2/device; for f in name manfid oemid date s
+cr ssr type; do echo "$f=$(cat $d/$f 2>/dev/null)"; done; storage-probe 64 | gre
+p -E "STORAGE_|copied|timing|clock:|bus width|signal|^mmcblk"; printf "\nSTEP_DO
+NE_023115=%s\n" "$?"
+name=SU08G
+manfid=0x000003
+oemid=0x5344
+date=12/2010
+scr=0235800100000000
+ssr=0000000003000000020290000b050000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+type=SD
+STORAGE_PROBE_BEGIN
+mmcblk2 15523840 1 
+mmcblk2p1 524288 1 
+/bin/storage-probe: line 19: sync: not found
+STORAGE_READ ufs-super(/dev/sda17) pass=1 bytes=67108864 sha256=def6374fac69e45999a2b0f305695b7dd730d479091e9bf8699770cdfd4052a8
+67108864 bytes (64.0MB) copied, 0.581170 seconds, 110.1MB/s
+/bin/storage-probe: line 19: sync: not found
+STORAGE_READ ufs-super(/dev/sda17) pass=2 bytes=67108864 sha256=def6374fac69e45999a2b0f305695b7dd730d479091e9bf8699770cdfd4052a8
+67108864 bytes (64.0MB) copied, 0.458166 seconds, 139.7MB/s
+clock:		25000000 Hz
+actual clock:	25000000 Hz
+bus width:	2 (4 bits)
+timing spec:	0 (legacy)
+signal voltage:	0 (3.30 V)
+/bin/storage-probe: line 19: sync: not found
+STORAGE_READ sd(/dev/mmcblk2) pass=1 bytes=67108864 sha256=32e2c1f57a2c7f8cbbddcf914d00f3de3a2106b1527b489f038410117342bf6e
+67108864 bytes (64.0MB) copied, 5.821448 seconds, 11.0MB/s
+/bin/storage-probe: line 19: sync: not found
+STORAGE_READ sd(/dev/mmcblk2) pass=2 bytes=67108864 sha256=32e2c1f57a2c7f8cbbddcf914d00f3de3a2106b1527b489f038410117342bf6e
+67108864 bytes (64.0MB) copied, 5.877645 seconds, 10.9MB/s
+STORAGE_PROBE_END
+
+STEP_DONE_023115=0
+miatoll-storage1# [6n
+### 2026-10-27T02:35:41 sd-hotswap-third-card
+$ sleep 3; dmesg | grep -iE "mmc|sdhc" | tail -8; d=/sys/block/mmcblk2/device; for f in name manfid oemid date scr type; do echo "card_$f=$(cat $d/$f 2>/dev/null)"; done; cat /sys/kernel/debug/mmc2/ios
+sleep 3; dmesg | grep -iE "mmc|sdhc" | tail -8; d=/sys/block/m
+mcblk2/device; for f in name manfid oemid date scr type; do echo "card_$f=$(cat 
+$d/$f 2>/dev/null)"; done; cat /sys/kernel/debug/mmc2/ios; printf "\nSTEP_DONE_0
+23538=%s\n" "$?"
+[    0.788271] mmc2: error -110 whilst initialising SD card
+[  191.251676] mmc2: new SDHC card at address e624
+[  191.253960] mmcblk2: mmc2:e624 SU08G 7.40 GiB
+[  191.270133]  mmcblk2: p1
+[  454.332048] mmc2: card e624 removed
+[  471.804117] mmc2: new UHS-I speed SDR104 SDHC card at address aaaa
+[  471.805672] mmcblk2: mmc2:aaaa SM32G 29.7 GiB
+[  471.808406]  mmcblk2: p1 p2
+card_name=SM32G
+card_manfid=0x000003
+card_oemid=0x5344
+card_date=10/2020
+card_scr=0235848700000000
+card_type=SD
+clock:		202000000 Hz
+actual clock:	201999975 Hz
+vdd:		21 (3.3 ~ 3.4 V)
+bus mode:	2 (push-pull)
+chip select:	0 (don't care)
+power mode:	2 (on)
+bus width:	2 (4 bits)
+timing spec:	6 (sd uhs SDR104)
+signal voltage:	1 (1.80 V)
+driver type:	0 (driver type B)
+
+STEP_DONE_023538=0
+miatoll-storage1# [6n
+### 2026-10-27T02:36:06 storage-probe-third-card
+$ storage-probe 256 | grep -E "STORAGE_READ sd|copied|^mmcblk|I/O error|blk_update"; dmesg | grep -ciE "mmc2.*(error|timeout)|I/O error"
+storage-probe 256 | grep -E "STORAGE_READ sd|copied|^mmcblk|I/
+O error|blk_update"; dmesg | grep -ciE "mmc2.*(error|timeout)|I/O error"; printf
+ "\nSTEP_DONE_023550=%s\n" "$?"
+mmcblk2 62333952 1 
+mmcblk2p1 1048576 1 
+mmcblk2p2 61283295 1 
+/bin/storage-probe: line 19: sync: not found
+268435456 bytes (256.0MB) copied, 1.892543 seconds, 135.3MB/s
+/bin/storage-probe: line 19: sync: not found
+268435456 bytes (256.0MB) copied, 1.769642 seconds, 144.7MB/s
+/bin/storage-probe: line 19: sync: not found
+STORAGE_READ sd(/dev/mmcblk2) pass=1 bytes=268435456 sha256=49959735bfdd133a9e20a1a3ebbd0af1a76f54f26e397ef04331f57efb4730d2
+268435456 bytes (256.0MB) copied, 5.460788 seconds, 46.9MB/s
+/bin/storage-probe: line 19: sync: not found
+STORAGE_READ sd(/dev/mmcblk2) pass=2 bytes=268435456 sha256=49959735bfdd133a9e20a1a3ebbd0af1a76f54f26e397ef04331f57efb4730d2
+268435456 bytes (256.0MB) copied, 6.055378 seconds, 42.3MB/s
+2
+
+STEP_DONE_023550=0
+miatoll-storage1# [6n

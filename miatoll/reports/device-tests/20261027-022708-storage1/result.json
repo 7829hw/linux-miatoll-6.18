@@ -1,0 +1,111 @@
+{
+  "capture_id": "20261027-022708",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-storage1+",
+  "boot_profile": "storage1-ram-only",
+  "image": "boot-curtana-6.18.58-storage1.img",
+  "image_sha256": "f7d928304f507fbcf1b751e43d14a25cf354ef266384e7000e17529c20526119",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-storage1/boot-curtana-6.18.58-storage1.img"
+  ],
+  "physical_display_confirmed": true,
+  "user_observation": {
+    "screen": "STORAGE TEST 1 banner; display and touch normal through card swaps and reads",
+    "backlight": "on",
+    "notes": ""
+  },
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "STORAGE1_BANNER_WRITTEN",
+      "STORAGE1_PROBE_BEGIN",
+      "STORAGE1_PROBE_END",
+      "STORAGE1_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "119:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "120:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "storage1-fastboot-20261027-022708.txt": {
+      "bytes": 589,
+      "sha256": "c905df4f3ea8a195268f1dc0b4925d7753fec8060c80c3daea8b5c1aff9d2c77"
+    },
+    "storage1-serial-20261027-022708.txt": {
+      "bytes": 147366,
+      "sha256": "b5cae0c51a9f459057ea508e5ba5822d104051f3575d4f397bdf020188eee3e2"
+    },
+    "steps.txt": {
+      "bytes": 17469,
+      "sha256": "8d76fec6a6474f6f62422aa90e8962a2b7b41697982d5fc7b56a021a046cb969"
+    }
+  },
+  "step_observations": {
+    "sd-hotswap-second-card": {
+      "screen": "user swapped SH64G for an 8 GB SU08G card; display normal",
+      "backlight": "on",
+      "notes": ""
+    },
+    "sd-hotswap-third-card": {
+      "screen": "user swapped in a 32 GB SM32G card; display normal",
+      "backlight": "on",
+      "notes": ""
+    }
+  },
+  "storage_read_confirmed": {
+    "ufs_super_64MiB_x2_and_256MiB_x2": true,
+    "sd_SU08G_64MiB_x2": true,
+    "sd_SM32G_SDR104_256MiB_x2": true,
+    "sd_SH64G": false
+  },
+  "sd_cards": {
+    "SH64G": {
+      "rca": "aaaa",
+      "result": "CMD48 general-info read timed out (-110); card initialisation aborted by upstream mmc core",
+      "reproduces_archive": true
+    },
+    "SU08G": {
+      "manfid": "0x000003",
+      "oemid": "0x5344",
+      "date": "12/2010",
+      "scr": "0235800100000000",
+      "cmd48_supported": false,
+      "timing": "legacy 25 MHz 3.3 V",
+      "read_MBps": 11
+    },
+    "SM32G": {
+      "manfid": "0x000003",
+      "oemid": "0x5344",
+      "date": "10/2020",
+      "scr": "0235848700000000",
+      "cmd48_supported": true,
+      "timing": "UHS-I SDR104 202 MHz 1.8 V",
+      "read_MBps": 45
+    }
+  },
+  "conclusion": "Host CMD48/ext-reg path works (SM32G); the SH64G failure is card-specific."
+}

@@ -4,6 +4,7 @@
 확인된 단독 부팅 브랜치: **`miatoll/6.18-boot1`**.
 화면 표시를 실기기로 확인한 브랜치: **`miatoll/6.18-display2`**.
 터치 입력을 실기기로 확인한 브랜치: **`miatoll/6.18-touch1`**(display2 기반).
+UFS·SD 읽기를 실기기로 확인한 브랜치: **`miatoll/6.18-storage1`**(touch1 기반).
 공식 Linux **v6.18.58**을 기반으로, 6.14.7 포크의 Xiaomi 하드웨어 구현을 직접 선별 이식했다.
 기존 로컬 커널 수정은 보존 브랜치와 백업에 남겼다.
 
@@ -132,6 +133,18 @@ evdev 원본에서 x 30–1071, y 0–2396 좌표, 최대 5개 동시 접촉, �
 suspend/blank 중 터치 전원 처리와 Tianma 터치는 미검증이다.
 [touch1 실기기 기록](reports/device-tests/20261027-021331-touch1/README.ko.md)
 
+## storage1 실기기 결과: UFS·SD 읽기 전용 확인
+
+`20261027-022708` 회차는 touch1 DT에 SD 컨트롤러만 포크 설정 그대로 추가했다.
+모든 블록 장치를 read-only로 설정한 뒤 마운트 없이 읽었다.
+UFS `super` 64 MiB를 2회 읽어 해시가 일치했다(110–140 MB/s).
+SD는 아카이브의 `SH64G` CMD48(ext reg) -110 초기화 실패가 upstream mmc core 그대로 재현됐다.
+사용자가 실행 중 카드를 교체했다. CMD48 미지원 SU08G는 legacy 25 MHz로,
+CMD48 지원 SM32G는 UHS-I SDR104 202 MHz/1.8 V로 정상 초기화됐다. 두 카드 모두 반복 읽기 해시가 일치했다.
+따라서 호스트 CMD48 경로는 동작하며 SH64G 실패는 카드 고유 문제로 판단한다.
+아카이브의 로컬 SD 우회는 이식하지 않았다. 쓰기·마운트·절전 중 카드 처리는 미검증이다.
+[storage1 실기기 기록](reports/device-tests/20261027-022708-storage1/README.ko.md)
+
 ## 하드웨어별 상태
 
 아래의 '반영'은 새 브랜치의 소스·설정·컴파일 결과다. boot1에서 확인한 기본 기능 외의
@@ -139,7 +152,7 @@ suspend/blank 중 터치 전원 처리와 Tianma 터치는 미검증이다.
 
 | 기능 | upstream 6.18 재사용 | 6.14.7에서 반영한 부분 | 남은 확인 |
 | --- | --- | --- | --- |
-| CPU/RAM/UFS/SD/USB/버튼 | 기존 SM7125/SC7180, PMIC, UFS/MMC/GENI/QUSB2 드라이버 | 보드 DT와 추가 주변장치 연결 | boot1에서 CPU/RAM/USB ACM/UFS 열거 확인. UFS 파일 읽기, SD CMD48 재발 여부, USB role, 입력은 미검증 |
+| CPU/RAM/UFS/SD/USB/버튼 | 기존 SM7125/SC7180, PMIC, UFS/MMC/GENI/QUSB2 드라이버 | 보드 DT와 추가 주변장치 연결 | boot1에서 CPU/RAM/USB ACM/UFS 열거 확인. storage1에서 UFS·SD(SDR104 포함) read-only 블록 읽기 확인, SH64G 카드는 CMD48 단계 실패(카드 고유). 쓰기/마운트, USB role, 입력은 미검증 |
 | 디스플레이 | DRM/MSM DPU/DSI, PHY, WLED, 표준 MDSS reset | Huaxing FT8756 및 Tianma NT36675 패널, DT, WLED 수정. DSI API 변환 | display2(Huaxing)에서 VT 표시·색상, WLED 밝기 0–4095, blank/unblank 3회, 2분 유지를 실기기 확인. 절전, 장시간, Tianma 패널은 미검증 |
 | 터치 | SPI/GENI/input | FT8756 및 NT36xxx SPI 드라이버, 패널 연동과 firmware 이름 | touch1(Huaxing FT8756)에서 RAM firmware·IRQ·좌표·5점 멀티터치 실기기 확인. suspend/blank 중 처리, Tianma NT36xxx 미검증 |
 | GPU | Adreno A618/GMU/DRM | ZAP 이름, HWCG, fuse 0x9f/bin 3. OPP는 SM7125에 한정 | firmware, GMU/GPU 초기화, 렌더링/Android GPU userspace |
@@ -202,7 +215,7 @@ Clang/LLD 18.1.3과 호스트 도구는 작업 공간의 `tools/`에만 준비�
 
 ## 우선 남은 작업
 
-1. display2 화면과 touch1 터치 입력은 확인했다. 다음 단계는 USB(role/host)·저장장치(UFS 읽기, SD)이며,
+1. display2 화면, touch1 터치, storage1 UFS/SD 읽기는 확인했다. 다음 단계는 USB role/host이며,
    반복 부팅·부하·idle/suspend/resume와 장시간 표시는 별도로 검증한다. BWMON/Venus는 화면 시험 DT에서 비활성화했다.
 2. 화면·터치·SD·무선을 기능별 RAM 시험으로 재검증한다. 새 DT/모듈/firmware와
    boot header v2·메모리 인계를 Android 부팅 구성에도 연결한다.
