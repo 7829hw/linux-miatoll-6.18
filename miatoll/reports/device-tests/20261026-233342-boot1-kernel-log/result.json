@@ -1,0 +1,432 @@
+{
+  "capture_id_from_filename": "20261026-233342",
+  "test_date_kst": "2026-10-26",
+  "evidence_origin": "User-supplied serial log from existing curtana attached to Windows",
+  "source_analysis_commit": "5c6a8393f9eff10beae4b0a23b0ee4bde8544ae6",
+  "previous_boot_evidence": "../20261026-232305-boot1/result.json",
+  "device_boot_confirmed": true,
+  "kernel_release": "6.18.58-miatoll-boot1+",
+  "boot_profile": "boot1-ram-only",
+  "kernel_log_collected": true,
+  "busybox_dmesg_exit_status": 0,
+  "diagnostic_fix_command_observed_on_device": true,
+  "capture_script_reference_sha256": "fdc9cbee29d3f9cabf6cccf31ccca5b0382fefcdec5597abc9ae77c47e285bf0",
+  "new_ramdisk_dmesg_symlink_device_tested": false,
+  "expected_distributed_image_sha256": "ca100f9ebb5cba93608ff755e79ec2e9f7ffcc34e024eba8b5100671e3c9ff75",
+  "artifact_attribution": "Kernel release/profile match the previous candidate; no binary hash or new Fastboot log in this upload",
+  "boot_session_continuity_with_first_upload_established": false,
+  "observations": {
+    "probe_uptime_seconds": 486.86,
+    "cpu_online": "0-7",
+    "memtotal_kib": 5643080,
+    "usb_acm_bound_and_configured": true,
+    "ufs_disks_read_only": {
+      "sda": 1,
+      "sdb": 1,
+      "sdc": 1,
+      "sdd": 1,
+      "sde": 1,
+      "sdf": 1
+    },
+    "mounts": [
+      [
+        "rootfs",
+        "/",
+        "rootfs"
+      ],
+      [
+        "devtmpfs",
+        "/dev",
+        "devtmpfs"
+      ],
+      [
+        "proc",
+        "/proc",
+        "proc"
+      ],
+      [
+        "sysfs",
+        "/sys",
+        "sysfs"
+      ],
+      [
+        "tmpfs",
+        "/run",
+        "tmpfs"
+      ],
+      [
+        "configfs",
+        "/sys/kernel/config",
+        "configfs"
+      ],
+      [
+        "debugfs",
+        "/sys/kernel/debug",
+        "debugfs"
+      ],
+      [
+        "none",
+        "/sys/fs/pstore",
+        "pstore"
+      ]
+    ],
+    "loaded_modules": [],
+    "deferred_probes_at_snapshot": [],
+    "init_exec_seconds_since_kernel_start": 0.472615,
+    "ufs_identity": "SKhynix H9HQ15AECMADAR A102"
+  },
+  "kernel_log": {
+    "timestamped_messages": 458,
+    "first_message_line": 138,
+    "last_message_line": 595,
+    "last_message_time_seconds": 31.712831,
+    "crash_or_kernel_warn_signature_pattern": "Kernel panic|\\bOops:|\\bBUG:|\\bWARNING:|Call trace:|Unable to handle kernel|rcu:.*stall|soft lockup|hard LOCKUP",
+    "crash_or_kernel_warn_signature_matches": [],
+    "absence_scope": "Captured dmesg only; not proof of stress/suspend/long-term stability"
+  },
+  "findings": [
+    {
+      "id": "psci-pc-mode",
+      "category": "power-management-followup",
+      "assessment": "Firmware rejects the default PC suspend mode (-3); later CPUidle PSCI OSI topology initialization succeeds. Idle/suspend/resume remains untested.",
+      "source_references": [
+        "drivers/firmware/psci/psci.c:psci_set_osi_mode, psci_1_0_init",
+        "drivers/cpuidle/cpuidle-psci-domain.c"
+      ],
+      "later_initialization": [
+        {
+          "line": 271,
+          "seconds": 0.045013,
+          "message": "CPUidle PSCI: Initialized CPU PM domain topology using OSI mode"
+        }
+      ],
+      "message_count": 1,
+      "log_lines": [
+        197
+      ],
+      "sample_messages": [
+        {
+          "line": 197,
+          "seconds": 0.0,
+          "message": "psci: [Firmware Bug]: failed to set PC mode: -3"
+        }
+      ]
+    },
+    {
+      "id": "unbound-consumers",
+      "category": "minimal-profile-cleanup",
+      "assessment": "Two BWMON DT devices are enabled with CONFIG_QCOM_ICC_BWMON=n. Venus is enabled with CONFIG_VIDEO_QCOM_VENUS=m and no modules in RAMdisk. Disable unused consumers in a future minimum profile or provide drivers when testing them. Do not force sync to hide messages.",
+      "source_references": [
+        "drivers/base/core.c:fw_devlink_dev_sync_state",
+        "arch/arm64/boot/dts/qcom/sc7180.dtsi:pmu@90b6300, pmu@90cd000",
+        "arch/arm64/boot/dts/qcom/sm7125-xiaomi-common.dtsi:venus"
+      ],
+      "message_count": 8,
+      "log_lines": [
+        588,
+        589,
+        590,
+        591,
+        592,
+        593,
+        594,
+        595
+      ],
+      "sample_messages": [
+        {
+          "line": 588,
+          "seconds": 31.712569,
+          "message": "qnoc-sc7180 1638000.interconnect: sync_state() pending due to 90cd000.pmu"
+        },
+        {
+          "line": 589,
+          "seconds": 31.71263,
+          "message": "qnoc-sc7180 9680000.interconnect: sync_state() pending due to 90b6300.pmu"
+        },
+        {
+          "line": 590,
+          "seconds": 31.712665,
+          "message": "qnoc-sc7180 1500000.interconnect: sync_state() pending due to aa00000.video-codec"
+        }
+      ]
+    },
+    {
+      "id": "regulatory-db",
+      "category": "expected-firmware-omission",
+      "assessment": "Firmware-free RAMdisk lacks regulatory.db (-ENOENT); Wi-Fi is disabled. A later Wi-Fi test needs the signed database and its signature.",
+      "source_references": [
+        "net/wireless/reg.c:regdb_fw_cb, query_regdb_file"
+      ],
+      "message_count": 2,
+      "log_lines": [
+        565,
+        566
+      ],
+      "sample_messages": [
+        {
+          "line": 565,
+          "seconds": 0.419234,
+          "message": "faux_driver regulatory: Direct firmware load for regulatory.db failed with error -2"
+        },
+        {
+          "line": 566,
+          "seconds": 0.419247,
+          "message": "cfg80211: failed to load regulatory.db"
+        }
+      ]
+    },
+    {
+      "id": "ufs-optional-supplies",
+      "category": "board-power-review",
+      "assessment": "vdd-hba/vccq phandles are absent; the UFS driver logs an assumption and continues. Board DT already provides vcc/vccq2. Inspect board/vendor wiring before adding supply references; enumeration does not verify power management.",
+      "source_references": [
+        "drivers/ufs/host/ufshcd-pltfrm.c:ufshcd_populate_vreg",
+        "arch/arm64/boot/dts/qcom/sm7125-xiaomi-common.dtsi:ufs_mem_hc"
+      ],
+      "message_count": 2,
+      "log_lines": [
+        507,
+        508
+      ],
+      "sample_messages": [
+        {
+          "line": 507,
+          "seconds": 0.29013,
+          "message": "ufshcd-qcom 1d84000.ufshc: ufshcd_populate_vreg: Unable to find vdd-hba-supply regulator, assuming enabled"
+        },
+        {
+          "line": 508,
+          "seconds": 0.290168,
+          "message": "ufshcd-qcom 1d84000.ufshc: ufshcd_populate_vreg: Unable to find vccq-supply regulator, assuming enabled"
+        }
+      ]
+    },
+    {
+      "id": "ice-wrapped-keys",
+      "category": "android-compatibility-gap",
+      "assessment": "ICE v3.1.75 is detected and this upstream driver advertises raw keys only. Existing wrappedkey_v0 userdata compatibility remains unresolved; no userdata mount, decryption or key changes attempted.",
+      "source_references": [
+        "drivers/soc/qcom/ice.c:qcom_ice_check_supported"
+      ],
+      "message_count": 2,
+      "log_lines": [
+        493,
+        494
+      ],
+      "sample_messages": [
+        {
+          "line": 493,
+          "seconds": 0.278401,
+          "message": "qcom-ice 1d90000.crypto: Found QC Inline Crypto Engine (ICE) v3.1.75"
+        },
+        {
+          "line": 494,
+          "seconds": 0.278443,
+          "message": "qcom-ice 1d90000.crypto: A supported HWKM is not present. Supporting raw keys only."
+        }
+      ]
+    },
+    {
+      "id": "qseecom-allowlist",
+      "category": "android-compatibility-gap",
+      "assessment": "SCM query returns QSEE version 0x1400000, but QSEE interface creation is skipped because the machine is outside the allowlist. Version query success does not establish vendor TEE/key-service compatibility or justify an allowlist change.",
+      "source_references": [
+        "drivers/firmware/qcom/qcom_scm.c:qcom_scm_qseecom_init, qcom_scm_qseecom_machine_is_allowed"
+      ],
+      "message_count": 2,
+      "log_lines": [
+        390,
+        391
+      ],
+      "sample_messages": [
+        {
+          "line": 390,
+          "seconds": 0.073861,
+          "message": "qcom_scm firmware:scm: qseecom: found qseecom with version 0x1400000"
+        },
+        {
+          "line": 391,
+          "seconds": 0.073893,
+          "message": "qcom_scm firmware:scm: qseecom: untested machine, skipping"
+        }
+      ]
+    },
+    {
+      "id": "inherited-command-line",
+      "category": "informational",
+      "assessment": "rcu_nocbs=0-7 and miatoll_boot=boot1 are passed to init as environment variables. The latter is an intentional marker. Audit inherited RCU/IRQ parameters for production.",
+      "source_references": [],
+      "message_count": 1,
+      "log_lines": [
+        209
+      ],
+      "sample_messages": [
+        {
+          "line": 209,
+          "seconds": 0.0,
+          "message": "Unknown kernel command line parameters \"rcu_nocbs=0-7 miatoll_boot=boot1\", will be passed to user space."
+        }
+      ]
+    },
+    {
+      "id": "dependency-cycle-relaxation",
+      "category": "informational",
+      "assessment": "fw_devlink automatically relaxed dependency cycles, including UFS/PHY and trace graph links. These messages alone do not mean an unresolved dependency or boot failure.",
+      "source_references": [
+        "drivers/base/core.c:2209"
+      ],
+      "message_count": 96,
+      "log_lines": [
+        272,
+        273,
+        274,
+        275,
+        276,
+        277,
+        278,
+        279,
+        280,
+        281,
+        282,
+        283,
+        284,
+        285,
+        286,
+        287,
+        288,
+        289,
+        290,
+        291,
+        292,
+        293,
+        294,
+        295,
+        296,
+        297,
+        298,
+        299,
+        300,
+        301,
+        302,
+        303,
+        304,
+        305,
+        306,
+        307,
+        308,
+        309,
+        310,
+        311,
+        312,
+        313,
+        314,
+        315,
+        316,
+        317,
+        318,
+        319,
+        320,
+        321,
+        322,
+        323,
+        324,
+        325,
+        326,
+        327,
+        328,
+        329,
+        330,
+        331,
+        332,
+        333,
+        334,
+        335,
+        336,
+        337,
+        338,
+        339,
+        340,
+        341,
+        342,
+        343,
+        344,
+        345,
+        346,
+        347,
+        348,
+        349,
+        350,
+        351,
+        352,
+        353,
+        354,
+        355,
+        356,
+        357,
+        358,
+        359,
+        360,
+        361,
+        362,
+        363,
+        364,
+        365,
+        366,
+        367
+      ],
+      "sample_messages": [
+        {
+          "line": 272,
+          "seconds": 0.050229,
+          "message": "/soc@0/ufshc@1d84000: Fixed dependency cycle(s) with /soc@0/phy@1d87000"
+        },
+        {
+          "line": 273,
+          "seconds": 0.050269,
+          "message": "/soc@0/phy@1d87000: Fixed dependency cycle(s) with /soc@0/ufshc@1d84000"
+        },
+        {
+          "line": 274,
+          "seconds": 0.050432,
+          "message": "/soc@0/stm@6002000: Fixed dependency cycle(s) with /soc@0/funnel@6041000"
+        }
+      ]
+    },
+    {
+      "id": "sound-disabled",
+      "category": "expected-test-profile",
+      "assessment": "boot1 disables sound/ADSP. ALSA framework initialization alone does not verify audio hardware.",
+      "source_references": [
+        "arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-boot1.dts"
+      ],
+      "message_count": 1,
+      "log_lines": [
+        564
+      ],
+      "sample_messages": [
+        {
+          "line": 564,
+          "seconds": 0.419157,
+          "message": "  No soundcards found."
+        }
+      ]
+    }
+  ],
+  "unverified": [
+    "Display and touch",
+    "UFS file reads, throughput and suspend/resume",
+    "SD/GPU/camera/audio/modem/Wi-Fi/Bluetooth",
+    "Charging, thermal protection and power consumption",
+    "Android/LineageOS, vendor HAL/RIL/TEE/key compatibility",
+    "Repeated boot, load tests and long-term stability"
+  ],
+  "log_files": {
+    "boot1-serial-20261026-233342.txt": {
+      "bytes": 40728,
+      "sha256": "38142710cf9e9562db6daf8c2a836ca09b29c12cdd89d530f60a241fd3072c40",
+      "lines": 598
+    }
+  },
+  "existing_boot_image_and_zip_hashes_preserved": true,
+  "kernel_or_dtb_changes_in_this_analysis": false
+}

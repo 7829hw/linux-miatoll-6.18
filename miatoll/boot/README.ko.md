@@ -77,7 +77,9 @@ Image 실행 영역, AVB 해시, AOSP 독립 재추출을 확인했다.
 QEMU에서 Linux 전체를 부팅한 검사는 아니다. 최초 배포 스크립트의 Windows COM 통신과
 실제 curtana 부팅은 사용자가 전달한 `20261026-232305` 로그로 확인했다.
 기록은 `miatoll/reports/device-tests/20261026-232305-boot1/`에 있다.
-추가한 BusyBox dmesg 캡처 경로는 Windows에서 아직 실행하지 않았다.
+추가한 BusyBox dmesg 캡처 경로도 후속 `20261026-233342` 로그의 종료 코드 0으로 확인했다.
+그 결과는 `miatoll/reports/device-tests/20261026-233342-boot1-kernel-log/`에 있다.
+새 RAMdisk의 dmesg 링크 자체를 실기기로 검증한 결과는 아니다.
 패키지 생성 시점의 `device_boot_confirmed=false` 기록은 보존한다.
 
 ## 재현

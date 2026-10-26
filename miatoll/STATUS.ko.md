@@ -43,6 +43,8 @@ CPU 수 8, NUMA/Xen/네트워크 파일시스템 제외, 1 MiB 커널 로그 버
 Windows PC에 연결된 기존 curtana에서 사용자가 실행하고 전달한
 `20261026-232305` Fastboot/serial 로그를 검토했다.
 원본과 해시·판정 근거는 [실기기 기록](reports/device-tests/20261026-232305-boot1/README.ko.md)에 있다.
+후속 `20261026-233342` serial 로그에서 BusyBox dmesg 수집까지 확인했다.
+[상세 커널 로그 분석](reports/device-tests/20261026-233342-boot1-kernel-log/README.ko.md)에 원본·분류·코드 근거를 보존했다.
 
 | 확인 항목 | 로그에서 확인한 내용 |
 | --- | --- |
@@ -52,8 +54,9 @@ Windows PC에 연결된 기존 curtana에서 사용자가 실행하고 전달한
 | USB | ACM gadget이 `a600000.usb`에 연결되고 상태 `configured`; Windows와 명령/응답 교환 |
 | UFS | `sda`–`sdf` 및 파티션 열거, 6개 디스크 모두 read-only=1. 파일 읽기/성능 검증은 아님 |
 | 마운트/모듈 | RAM·가상 파일시스템만 마운트, 로드된 모듈 없음 |
-| 관측 시간 | probe 시점 uptime 3.34초. 장기 안정성/부하/절전 검증은 아님 |
-| 커널 상세 로그 | RAMdisk의 `/bin/dmesg` 링크 누락으로 수집 실패. 드라이버 경고/오류 판정은 보류 |
+| 관측 시간 | 최초 probe uptime 3.34초, 후속 캡처 uptime 486.86초에서 셸 응답. 장기 안정성/부하/절전 검증은 아님 |
+| 커널 상세 로그 | 후속 BusyBox dmesg 종료 코드 0. 커널 시작 메시지부터 458개 메시지 수집; 수집 범위에 panic/Oops/커널 WARN 스택 없음 |
+| `/init` 실행 | 커널 시작 후 0.472615초. 전원 인가부터의 전체 시간은 아님 |
 
 시험 boot.img SHA256:
 `ca100f9ebb5cba93608ff755e79ec2e9f7ffcc34e024eba8b5100671e3c9ff75`.
@@ -65,6 +68,14 @@ Fastboot의 `Booting OKAY`와 별도로 실제 USB 셸의 버전·프로필·pro
 화면 출력은 serial 로그만으로 검증할 수 없다. 모뎀·ADSP·GPU 등은 시험 DT에서 비활성화했다.
 RAMdisk 생성기에 `dmesg` 링크를 추가하고 캡처 스크립트가 BusyBox applet을 직접 호출하도록
 수정했다. 시험에 사용한 기존 이미지/ZIP은 결과 추적을 위해 그대로 보존했다.
+
+상세 로그의 PSCI PC mode 전환 경고 뒤 OSI topology 초기화는 성공했다. 실제 절전은 미검증이다.
+`sync_state()` 대기 8건은 드라이버가 꺼진 BWMON 두 노드와 모듈을 공급하지 않은 Venus
+노드가 최소 DT에 남은 것과 대응한다. 후속 시험에서 해당 consumer 구성을 정리해야 한다.
+`regulatory.db` 누락은 firmware 없는 구성과 대응하며, UFS 공급 전원 두 항목은
+드라이버가 이미 켜진 것으로 가정하고 열거를 계속한다. 임의 전원 배선 패치는 적용하지 않았다.
+또한 ICE의 raw key 전용 경로와 QSEE allowlist 제외가 실기기에서도 확인돼, 기존
+`wrappedkey_v0` 데이터·TEE 서비스와의 Android 호환성은 계속 미해결이다.
 
 ## 하드웨어별 상태
 
@@ -132,7 +143,7 @@ Clang/LLD 18.1.3과 호스트 도구는 작업 공간의 `tools/`에만 준비�
 
 ## 우선 남은 작업
 
-1. 실행 중인 boot1에서 BusyBox `dmesg`를 수집해 초기화 경고/오류를 확인하고 반복 부팅·안정성을 검증한다.
+1. 최소 DT의 BWMON/Venus consumer 구성을 정리하고 반복 부팅·부하·idle/suspend/resume를 검증한다.
 2. 화면·터치·SD·무선을 기능별 RAM 시험으로 재검증한다. 새 DT/모듈/firmware와
    boot header v2·메모리 인계를 Android 부팅 구성에도 연결한다.
 3. 카메라/오디오/모뎀/충전·절전은 기능별로 probe와 실제 동작을 분리해 검증한다.

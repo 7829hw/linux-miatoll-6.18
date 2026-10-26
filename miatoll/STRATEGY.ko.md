@@ -127,9 +127,12 @@ DMA-BUF heaps 등은 6.18 설정을 켜서 사용한다. Android 부팅 성공�
 2026-10-26의 사용자 승인 RAM 시험에서 새 커널 버전·최소 DT 프로필·USB 셸을 확인했다.
 CPU 8개 online과 UFS 열거도 확인했다. 이는 주변장치를 제한한 boot1의 결과다.
 로그와 한계는 `reports/device-tests/20261026-232305-boot1/`에 보존했다.
+후속 `20261026-233342-boot1-kernel-log/` 기록으로 상세 dmesg 수집도 확인했다.
+PSCI PC mode 경고 뒤 OSI topology 초기화 성공, BWMON/Venus consumer 대기,
+ICE raw key 전용 경로와 QSEE allowlist 제외를 구분해 기록했다.
 
-1. boot1에서 누락된 상세 커널 로그를 BusyBox applet으로 수집하고 초기화 오류와
-   반복 부팅·안정성을 확인한다. 현재 실행 중인 커널에서는 재부팅 없이 수집할 수 있다.
+1. boot1의 단독 부팅·상세 로그 수집은 확인했다. 최소 DT의 불필요한 BWMON/Venus consumer를
+   정리하고 반복 부팅·부하·절전 상태를 검증한다. 메시지를 숨기는 공통 드라이버 우회는 적용하지 않는다.
 2. RAM 시험에서 패널/터치/SD부터 재검증하고 firmware·모듈 공급 경로를 맞춘다.
    이전 SD CMD48·DPU 인계·Wi-Fi PMF 문제가 재현될 때만 기존 수정의 필요한 부분을 검토한다.
 3. GPU/카메라/오디오/무선/충전/절전은 기능별 probe→최소 동작→반복/부하 순서로 검증한다.
