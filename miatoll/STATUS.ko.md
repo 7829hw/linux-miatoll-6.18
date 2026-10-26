@@ -1,6 +1,6 @@
 # Linux 6.18 기반 miatoll 지원 현황
 
-2026-10-26 KST. 하드웨어 이식 기준: **`miatoll/6.18-sm7125`**.
+2026-10-27 KST. 하드웨어 이식 기준: **`miatoll/6.18-sm7125`**.
 확인된 단독 부팅 브랜치: **`miatoll/6.18-boot1`**.
 현재 화면 시험 준비 브랜치: **`miatoll/6.18-display1`**.
 공식 Linux **v6.18.58**을 기반으로, 6.14.7 포크의 Xiaomi 하드웨어 구현을 직접 선별 이식했다.
@@ -88,6 +88,9 @@ RAMdisk 생성기에 `dmesg` 링크를 추가하고 캡처 스크립트가 BusyB
 `6.18.58-miatoll-display1+`다. 시험 문구를 VT에 쓰고 DRM/DSI/fb/WLED/IRQ/dmesg를 수집한다.
 현재 후보의 실제 부팅·화면 표시는 **미검증**이다.
 실행 절차와 범위는 [DISPLAY1.ko.md](boot/DISPLAY1.ko.md)를 참고한다.
+Image/DTB와 211개 모듈 빌드, 내장 의존성·DT graph·ARM64 로더·RAMdisk·AVB·재추출 및
+Windows ZIP의 CRC/파일 해시 검사는 통과했다. 로더 포함 실행 영역은 33,550,336 bytes다.
+정확한 이미지/ZIP 해시와 소스 커밋은 [호스트 검증 기록](reports/display1-host-validation.json)에 있다.
 
 ## 하드웨어별 상태
 
