@@ -1,0 +1,17 @@
+#!/bin/sh
+# Dump raw FT8756 evdev records for $1 seconds (default 15).
+# Each 24-byte input_event prints: sec lo/hi, usec lo/hi, type, code, value.
+seconds=${1:-15}
+event=
+for dir in /sys/class/input/event*; do
+    if grep -q 'FT8756' "$dir/device/name" 2>/dev/null; then
+        event=/dev/input/${dir##*/}
+    fi
+done
+if [ -z "$event" ]; then
+    echo 'TOUCH_EVENTS_UNAVAILABLE: no FT8756 input device'
+    exit 1
+fi
+echo "TOUCH_EVENTS_BEGIN: $event for ${seconds}s"
+timeout "$seconds" cat "$event" | hexdump -v -e '4/4 "%08x " 1/2 " type=%u" 1/2 " code=%u" 1/4 " value=%d\n"'
+echo 'TOUCH_EVENTS_END'

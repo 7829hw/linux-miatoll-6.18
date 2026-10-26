@@ -34,16 +34,38 @@ def check(dtb, config):
         require(fdt(dtb, node, 'status') == 'disabled', 'Unused consumer is active: ' + node)
     require('CONFIG_DRM_CLIENT_DEFAULT="fbdev"\n' in config, 'fbdev console must be the DRM client')
     reset_connected = False
-    if fdt(dtb, '/chosen', 'miatoll,boot-profile') == 'display2-ram-only':
+    profile = fdt(dtb, '/chosen', 'miatoll,boot-profile')
+    if profile in ('display2-ram-only', 'touch1-ram-only'):
         dispcc = '/soc@0/clock-controller@af00000'
         available(dtb, dispcc)
         require(fdt(dtb, dispcc, '#reset-cells', 'u') == '1', 'Invalid reset provider')
         require(fdt(dtb, mdss, 'resets', 'x').split() ==
                 [fdt(dtb, dispcc, 'phandle', 'x'), '0'], 'MDSS_CORE reset not connected')
         reset_connected = True
-    return dict(passed=True, panel='huaxing,ft8756', expected_mode='1080x2400@60',
+    touch = check_touch(dtb, panel, wled) if profile == 'touch1-ram-only' else None
+    return dict(passed=True, panel='huaxing,ft8756', touch=touch, expected_mode='1080x2400@60',
                 display_graph_bidirectional=True, enabled_ancestry_checked=list(nodes),
                 reset_gpio='PM6150L GPIO3 active-low', backlight_default=256,
                 display_iommu_binding_preserved=True, unused_bwmon_venus_disabled=True,
                 upstream_mdss_core_reset_connected=reset_connected,
                 physical_display_confirmed=False)
+
+
+def check_touch(dtb, panel, wled):
+    """FT8756 on SPI11 with every ancestor enabled; touch1 found QUP1 off before."""
+    touch = '/soc@0/geniqup@ac0000/spi@a94000/touchscreen@0'
+    available(dtb, touch)
+    available(dtb, '/soc@0/dma-controller@a00000')
+    require(fdt(dtb, touch, 'compatible') == 'focaltech,ft8756-spi', 'Wrong touch controller')
+    require(fdt(dtb, touch, 'firmware-name') == 'focaltech_ts_fw_huaxing.bin', 'Wrong touch firmware')
+    require(fdt(dtb, touch, 'panel', 'x') == fdt(dtb, panel, 'phandle', 'x'), 'Touch must follow the panel')
+    tlmm = fdt(dtb, '/soc@0/pinctrl@3500000', 'phandle', 'x')
+    require(fdt(dtb, touch, 'reset-gpio', 'x').split() == [tlmm, '8', '0'], 'Wrong touch reset GPIO')
+    require(fdt(dtb, touch, 'irq-gpio', 'x').split() == [tlmm, '9', '2'], 'Wrong touch IRQ GPIO')
+    require(fdt(dtb, '/soc@0/geniqup@ac0000/spi@a94000', 'dmas', 'x').split()[0] ==
+            fdt(dtb, '/soc@0/dma-controller@a00000', 'phandle', 'x'), 'SPI11 must use GPI DMA1')
+    for node in ('/soc@0/geniqup@ac0000/spi@a90000',):
+        require(fdt(dtb, node, 'status') == 'disabled', 'Unused SPI10 is active')
+    return dict(node=touch, compatible='focaltech,ft8756-spi', spi_hz=8000000,
+                firmware='focaltech_ts_fw_huaxing.bin', reset_gpio='TLMM 8', irq_gpio='TLMM 9 falling',
+                panel_follower=True, ancestors_and_gpi_dma1_enabled=True, touch_input_confirmed=False)

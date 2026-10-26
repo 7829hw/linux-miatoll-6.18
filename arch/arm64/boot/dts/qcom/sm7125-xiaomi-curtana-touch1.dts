@@ -1,0 +1,16 @@
+// SPDX-License-Identifier: GPL-2.0
+// FT8756 SPI touch on top of the verified display2 RAM test.
+#include "sm7125-xiaomi-curtana-display2.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing touch1 test)";
+	chosen {
+		miatoll,boot-profile = "touch1-ram-only";
+	};
+};
+
+// Restore the common-board state of the QUP1 wrapper, its GPI DMA and SPI11.
+// SPI10 (IR LED) stays disabled.
+&qupv3_id_1 { status = "okay"; };
+&gpi_dma1 { status = "okay"; };
+&spi11 { status = "okay"; };

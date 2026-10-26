@@ -1,4 +1,7 @@
-"""Build a firmware-free, module-free ARM64 RAM diagnostic initramfs."""
+"""Build a module-free ARM64 RAM diagnostic initramfs.
+
+Only the touch1 profile carries firmware: the pinned Huaxing FT8756 RAM image.
+"""
 import gzip
 import hashlib
 import io
@@ -13,12 +16,17 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[2]
 BOOT = ROOT / 'miatoll/boot'
 APK_SHA256 = 'ee469aee2958feffd7f64dd96655704025ff60af614f77a1d7323dc237c34da2'
+# sm7125-mainline/firmware-xiaomi-miatoll blob e4fb163b71b430156b4134b7a311fc939addb838
+TOUCH_FIRMWARE = 'focaltech_ts_fw_huaxing.bin'
+TOUCH_FIRMWARE_SHA256 = '83e7fb01d3a0595984c2b701633db83db4eb71eb4fd613aa635437a768ad6c9b'
 
 def build(output, profile='boot1'):
-    assert profile in ('boot1', 'display1', 'display2')
+    assert profile in ('boot1', 'display1', 'display2', 'touch1')
     script_names = ['init', 'usb-gadget', 'boot-probe']
-    if profile in ('display1', 'display2'):
+    if profile != 'boot1':
         script_names += ['display-banner', 'display-probe']
+    if profile == 'touch1':
+        script_names += ['touch-probe', 'touch-events']
     package = ROOT.parent / 'downloads/busybox-static-1.37.0-r20.apk'
     assert hashlib.sha256(package.read_bytes()).hexdigest() == APK_SHA256
     with tarfile.open(package, 'r:gz', ignore_zeros=True) as archive:
@@ -32,6 +40,8 @@ def build(output, profile='boot1'):
     qemu = ROOT.parent / 'tools/qemu/qemu-aarch64-static'
     required = {'sh', 'mount', 'uname', 'mkdir', 'cat', 'head', 'tail', 'grep',
                 'blockdev', 'watchdog', 'tr', 'setsid', 'sleep', 'ln', 'ls', 'dmesg'}
+    if profile == 'touch1':
+        required |= {'hexdump', 'timeout', 'seq', 'cut', 'basename', 'readlink'}
     with tempfile.TemporaryDirectory(prefix='boot1-busybox-') as temporary:
         executable = Path(temporary) / 'busybox'
         executable.write_bytes(binary)
@@ -67,14 +77,25 @@ def build(output, profile='boot1'):
     add('init', stat.S_IFREG | 0o755, (BOOT / 'init').read_bytes())
     for name in script_names[1:]:
         add('bin/' + name, stat.S_IFREG | 0o755, (BOOT / name).read_bytes())
+    firmware = None
+    if profile == 'touch1':
+        firmware = (ROOT.parent / 'downloads' / TOUCH_FIRMWARE).read_bytes()
+        assert hashlib.sha256(firmware).hexdigest() == TOUCH_FIRMWARE_SHA256
+        for name in ('lib', 'lib/firmware'):
+            add(name, stat.S_IFDIR | 0o755)
+        add('lib/firmware/' + TOUCH_FIRMWARE, stat.S_IFREG | 0o644, firmware)
     add('TRAILER!!!', 0)
-    assert not any(name.startswith(('lib/', 'vendor/', 'system/')) for name in members)
+    allowed = {'lib', 'lib/firmware', 'lib/firmware/' + TOUCH_FIRMWARE} if firmware else set()
+    assert not any(name.startswith(('lib', 'vendor/', 'system/')) and name not in allowed
+                   for name in members)
     compressed = gzip.compress(stream.getvalue(), mtime=0)
     output.write_bytes(compressed)
     result = {'bytes': len(compressed), 'sha256': hashlib.sha256(compressed).hexdigest(),
               'busybox_apk_sha256': APK_SHA256, 'members': members,
               'arm64_static_busybox_and_shell_syntax_passed': True,
-              'contains_firmware': False, 'contains_modules': False,
+              'contains_firmware': [TOUCH_FIRMWARE] if firmware else False,
+              'firmware_sha256': TOUCH_FIRMWARE_SHA256 if firmware else None,
+              'contains_modules': False,
               'mounts_android_filesystems': False, 'profile': profile}
     output.with_suffix('.json').write_text(json.dumps(result, indent=2) + '\n')
     return result

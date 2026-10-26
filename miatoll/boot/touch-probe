@@ -1,0 +1,16 @@
+#!/bin/sh
+# Report the FT8756 SPI binding, firmware start and input device state.
+echo '--- touch: SPI devices ---'
+for dev in /sys/bus/spi/devices/*; do
+    [ -e "$dev" ] || continue
+    printf '%s modalias=%s driver=%s\n' "${dev##*/}" "$(cat "$dev/modalias")" \
+        "$(basename "$(readlink "$dev/driver" 2>/dev/null)" 2>/dev/null)"
+done
+echo '--- touch: input devices ---'
+cat /proc/bus/input/devices
+echo '--- touch: interrupts ---'
+grep -Ei 'ft8756|spi|gpi|a94000' /proc/interrupts
+echo '--- touch: deferred probes ---'
+cat /sys/kernel/debug/devices_deferred 2>/dev/null
+echo '--- touch: kernel messages ---'
+dmesg | grep -Ei 'ft8756|spi|gpi|focaltech|firmware|touch'

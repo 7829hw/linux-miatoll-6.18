@@ -5,16 +5,11 @@ mount -t proc proc /proc
 mount -t sysfs sysfs /sys
 mount -t tmpfs -o mode=0755 tmpfs /run
 exec </dev/console >/dev/console 2>&1
-boot_tag=BOOT1
-boot_prompt=miatoll-boot1
-if [ -x /bin/display-banner ]; then
-    boot_tag=DISPLAY1
-    boot_prompt=miatoll-display1
-    if [ "$(tr '\000' '\n' </sys/firmware/devicetree/base/chosen/miatoll,boot-profile)" = 'display2-ram-only' ]; then
-        boot_tag=DISPLAY2
-        boot_prompt=miatoll-display2
-    fi
-fi
+# The DT profile (for example display2-ram-only) names this RAM test.
+boot_name=$(tr -d '\000' </sys/firmware/devicetree/base/chosen/miatoll,boot-profile)
+boot_name=${boot_name%-ram-only}
+boot_tag=$(echo "$boot_name" | tr a-z A-Z)
+boot_prompt=miatoll-$boot_name
 echo "${boot_tag}_INIT_OK: standalone RAM userspace reached"
 uname -r
 echo 'No Android filesystems are mounted; firmware and module loaders are absent.'

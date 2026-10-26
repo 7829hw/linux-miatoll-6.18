@@ -1,8 +1,6 @@
 #!/bin/sh
-tag=DISPLAY1
-if [ "$(tr '\000' '\n' </sys/firmware/devicetree/base/chosen/miatoll,boot-profile)" = 'display2-ram-only' ]; then
-    tag=DISPLAY2
-fi
+tag=$(tr -d '\000' </sys/firmware/devicetree/base/chosen/miatoll,boot-profile)
+tag=$(echo "${tag%-ram-only}" | tr a-z A-Z)
 echo "${tag}_PROBE_BEGIN"
 /bin/boot-probe
 echo '--- native framebuffer ---'
@@ -52,4 +50,5 @@ if [ -r /sys/kernel/debug/clk/clk_summary ]; then
     head -n 2 /sys/kernel/debug/clk/clk_summary
     grep -Ei 'disp_cc|dsi.*pll|dsi_phy' /sys/kernel/debug/clk/clk_summary
 fi
+[ -x /bin/touch-probe ] && /bin/touch-probe
 echo "${tag}_PROBE_END"
