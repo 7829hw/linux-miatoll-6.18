@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0
+// Use the existing upstream MDSS reset before the DPU takes over scanout.
+#include "sm7125-xiaomi-curtana-display1.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing display2 reset test)";
+	chosen {
+		miatoll,boot-profile = "display2-ram-only";
+	};
+};
+
+&mdss {
+	resets = <&dispcc DISP_CC_MDSS_CORE_BCR>;
+};
