@@ -1,0 +1,12 @@
+{
+  "downstream": "LineageOS/android_kernel_xiaomi_sm6250 803b55865869df8558ef07f51bfb8182d95d08ed",
+  "files": {
+    "include/linux/input/qpnp-power-on.h": {"sha256": "2b1af3ba569066696eee05c56d084592fcb6f0b1750366689095081bef408ffa",
+      "used": "PON_RESTART_REASON_BOOTLOADER = 0x02, RECOVERY = 0x01"},
+    "drivers/input/misc/qpnp-power-on.c": {"sha256": "44ee08902fc515945fe8d9a2671e0581a2c8ce1928a8e31c8de7c625ad80cfc6",
+      "used": "gen2: masked write GENMASK(7, 1) of reason << 1 to PON + 0x8F (SOFT_RB_SPARE)"},
+    "drivers/power/reset/msm-poweroff.c": {"sha256": "a0ebf54d4693354bda864ddbb5dc5ce00e348f4302812331e0b143d1ae883db9",
+      "used": "\"bootloader\" also writes IMEM restart_reason 0x77665500; not needed on curtana in the device test"}
+  },
+  "upstream_match": "v6.18.58 drivers/power/reset/qcom-pon.c (qcom,pm8998-pon, GEN2_REASON_SHIFT 1, PON_SOFT_RB_SPARE 0x8f) with pm6150.dtsi mode-bootloader = <0x2>"
+}

@@ -1,0 +1,19 @@
+{
+  "capture_id": "20261027-120000",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-battery2+",
+  "boot_profile": "battery2-ram-only",
+  "session": "the running battery2 RAM test of 20261027-114455; no new fastboot boot",
+  "tool": {
+    "name": "reboot-mode revision 1",
+    "source": "miatoll/boot/reboot-mode.c",
+    "sha256": "481c210cbba83488867bd6e8f03c002258631a7c7dcba8a1938af7cf899f614b",
+    "delivery": "gzip+base64 over the ACM shell into /run, SHA-256 checked on the device"
+  },
+  "command": "/run/reboot-mode bootloader",
+  "output": "REBOOT_MODE_REQUESTED: bootloader, then the ACM port closed",
+  "result": "fastboot devices listed REDACTED about 4 s after usbipd re-attach polling started",
+  "mechanism": "upstream qcom-pon reboot-mode: PON SOFT_RB_SPARE (0x8F) bits 7:1 = 0x2, same as downstream qpnp_pon_set_restart_reason; no IMEM magic written",
+  "partitions_written": false,
+  "fastboot_restart_confirmed": true
+}

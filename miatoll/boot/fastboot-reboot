@@ -1,0 +1,3 @@
+#!/bin/sh
+# Restart this RAM test into the bootloader (Fastboot) via the PMIC PON reboot reason.
+exec /bin/reboot-mode bootloader

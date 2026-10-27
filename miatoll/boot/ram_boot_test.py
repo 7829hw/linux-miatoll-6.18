@@ -85,6 +85,38 @@ def find_acm():
             yield Path('/dev') / tty.name
 
 
+def shell_to_bootloader(log, timeout=60):
+    """Ask a running RAM test to restart into Fastboot through its USB shell."""
+    import serial
+    ports = list(find_acm())
+    if len(ports) != 1:
+        raise Stop('Expected exactly one Linux ACM port for the shell reboot.')
+    command = ('for t in /bin/reboot-mode /run/reboot-mode; do [ -x "$t" ] && exec "$t" bootloader; done; '
+               # The split marker keeps the shell's echo of this line from matching.
+               'echo REBOOT_MODE_UNAVAIL""ABLE\n')
+    text = ''
+    try:
+        with serial.Serial(str(ports[0]), 115200, timeout=0.2, write_timeout=3) as console:
+            console.reset_input_buffer()
+            console.write(command.encode())
+            deadline = time.monotonic() + 10
+            while time.monotonic() < deadline and 'REBOOT_MODE_UNAVAILABLE\r' not in text:
+                text += console.read(4096).decode('utf-8', 'replace')
+    except serial.SerialException:
+        text += '\n[ACM closed by the restart]\n'
+    with log.open('a', encoding='utf-8') as stream:
+        stream.write('shell: reboot-mode bootloader\n' + text + '\n')
+    if 'REBOOT_MODE_REQUESTED: bootloader' not in text:
+        raise Stop('The RAM shell did not accept the bootloader restart; nothing else was tried.')
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        usbipd_attach(FASTBOOT_ID)
+        time.sleep(2)
+        if Fastboot(log).run('devices').strip():
+            return
+    raise Stop(f'No Fastboot device {timeout} s after the shell restart.')
+
+
 def capture(port, probe, log, timeout):
     import serial
     text = ''
@@ -157,6 +189,10 @@ def run(args):
         (out / 'result.json').write_text(json.dumps(result, indent=2, ensure_ascii=False) + '\n')
 
     try:
+        if args.from_shell and not args.capture_only:
+            print('Restarting the running RAM test into Fastboot from its USB shell.')
+            shell_to_bootloader(fastboot_log)
+            result['restarted_from_shell'] = True
         if not args.capture_only:
             usbipd_attach(FASTBOOT_ID)
             time.sleep(2)
@@ -242,6 +278,13 @@ def shell(args):
         raise Stop('Step did not finish within the timeout; output kept in steps.txt.')
 
 
+def reboot_bootloader(args):
+    """Restart the running RAM test into Fastboot and wait for the device."""
+    log = Path(args.directory) / 'reboot-bootloader.txt'
+    shell_to_bootloader(log)
+    print('Fastboot device is back; see', log)
+
+
 def observe(args):
     path = Path(args.directory) / 'result.json'
     result = json.loads(path.read_text())
@@ -266,6 +309,10 @@ def main():
     boot.add_argument('--port-timeout', type=int, default=120)
     boot.add_argument('--capture-timeout', type=int, default=120)
     boot.add_argument('--label', help='suffix for the report directory name')
+    boot.add_argument('--from-shell', action='store_true',
+                      help='first restart the running RAM test into Fastboot through its USB shell')
+    rb = commands.add_parser('reboot-bootloader', help='restart the running RAM test into Fastboot')
+    rb.add_argument('directory', help='report directory for the log')
     step = commands.add_parser('shell', help='run one diagnostic step on the running RAM shell')
     step.add_argument('directory')
     step.add_argument('step', help='short step name recorded in steps.txt')
@@ -283,7 +330,8 @@ def main():
     note.add_argument('--confirmed', action='store_true', help='banner text and colours seen')
     args = parser.parse_args()
     try:
-        {'boot': run, 'shell': shell, 'observe': observe}[args.command](args)
+        {'boot': run, 'shell': shell, 'observe': observe,
+         'reboot-bootloader': reboot_bootloader}[args.command](args)
     except Stop as error:
         sys.exit('STOPPED: ' + str(error))
 

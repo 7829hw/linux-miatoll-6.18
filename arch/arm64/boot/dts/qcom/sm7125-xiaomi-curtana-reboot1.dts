@@ -1,0 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0
+// Shell-initiated restart to Fastboot; hardware description identical to battery2.
+#include "sm7125-xiaomi-curtana-battery2.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing reboot1 test)";
+	chosen {
+		miatoll,boot-profile = "reboot1-ram-only";
+	};
+};

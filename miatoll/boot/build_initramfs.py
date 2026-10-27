@@ -20,26 +20,46 @@ APK_SHA256 = 'ee469aee2958feffd7f64dd96655704025ff60af614f77a1d7323dc237c34da2'
 TOUCH_FIRMWARE = 'focaltech_ts_fw_huaxing.bin'
 TOUCH_FIRMWARE_SHA256 = '83e7fb01d3a0595984c2b701633db83db4eb71eb4fd613aa635437a768ad6c9b'
 
+def build_reboot_mode():
+    """Compile the static ARM64 reboot-mode helper from source with the pinned toolchain."""
+    tools = ROOT.parent / 'tools'
+    sysroot = tools / 'sysroot-aarch64'
+    builtins = next(sysroot.rglob('libclang_rt.builtins-aarch64.a'))
+    clang = tools / 'llvm18/usr/lib/llvm-18/bin/clang'
+    with tempfile.TemporaryDirectory(prefix='reboot-mode-') as temporary:
+        output = Path(temporary) / 'reboot-mode'
+        subprocess.run([str(clang), '--target=aarch64-linux-musl', '--sysroot=' + str(sysroot), '-O2',
+                        '-Wall', '-Wextra', '-Werror', '-mno-outline-atomics', '-fuse-ld=lld', '-static',
+                        '-nostdlib', str(sysroot / 'usr/lib/crt1.o'), str(sysroot / 'usr/lib/crti.o'),
+                        str(BOOT / 'reboot-mode.c'), '-L' + str(sysroot / 'usr/lib'), '-Wl,--start-group',
+                        '-lc', str(builtins), '-Wl,--end-group', str(sysroot / 'usr/lib/crtn.o'),
+                        '-o', str(output)], check=True)
+        return output.read_bytes()
+
+
 def build(output, profile='boot1'):
-    assert profile in ('boot1', 'display1', 'display2', 'touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2')
+    assert profile in ('boot1', 'display1', 'display2', 'touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1')
     script_names = ['init', 'usb-gadget', 'boot-probe']
     if profile != 'boot1':
         script_names += ['display-banner', 'display-probe']
-    touch = profile in ('touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2')
+    touch = profile in ('touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1')
     if touch:
         script_names += ['touch-probe', 'touch-events']
-    if profile in ('storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2'):
+    if profile in ('storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
         script_names += ['storage-probe']
-    if profile in ('usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2'):
+    if profile in ('usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
         script_names += ['usb-host-watch']
-    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2'):
+    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
         script_names += ['wifi-start', 'wifi-services', 'wifi-board', 'wifi-probe', 'wifi-scan']
-    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2'):
+    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
         script_names += ['wifi-join', 'wifi-udhcpc', 'wifi-link-probe', 'wifi-disconnect']
-    if profile in ('bt1', 'battery1', 'battery2'):
+    if profile in ('bt1', 'battery1', 'battery2', 'reboot1'):
         script_names += ['bt-start', 'bt-probe']
-    if profile in ('battery1', 'battery2'):
+    if profile in ('battery1', 'battery2', 'reboot1'):
         script_names += ['battery-probe']
+    reboot_tool = profile == 'reboot1'
+    if reboot_tool:
+        script_names += ['fastboot-reboot']
     package = ROOT.parent / 'downloads/busybox-static-1.37.0-r20.apk'
     assert hashlib.sha256(package.read_bytes()).hexdigest() == APK_SHA256
     with tarfile.open(package, 'r:gz', ignore_zeros=True) as archive:
@@ -55,11 +75,11 @@ def build(output, profile='boot1'):
                 'blockdev', 'watchdog', 'tr', 'setsid', 'sleep', 'ln', 'ls', 'dmesg'}
     if touch:
         required |= {'hexdump', 'timeout', 'seq', 'cut', 'basename', 'readlink'}
-    if profile in ('storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2'):
+    if profile in ('storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
         required |= {'dd', 'sha256sum', 'sync', 'chmod', 'uniq'}
-    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2'):
+    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
         required |= {'sed', 'awk', 'mktemp', 'stat', 'mount', 'umount', 'cp', 'mv', 'rm', 'kill', 'ip'}
-    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2'):
+    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
         required |= {'stty', 'tee', 'ifconfig', 'udhcpc', 'ping'}
     with tempfile.TemporaryDirectory(prefix='boot1-busybox-') as temporary:
         executable = Path(temporary) / 'busybox'
@@ -89,7 +109,7 @@ def build(output, profile='boot1'):
         members.append(name)
     for name in ('.', 'bin', 'sbin', 'dev', 'proc', 'sys', 'run', 'etc', 'root'):
         add(name, stat.S_IFDIR | 0o755)
-    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2'):
+    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
         # wpa_cli binds its client socket in /tmp.
         add('tmp', stat.S_IFDIR | 0o1777)
     add('dev/console', stat.S_IFCHR | 0o600, major=5, minor=1)
@@ -107,10 +127,10 @@ def build(output, profile='boot1'):
             add(name, stat.S_IFDIR | 0o755)
         add('lib/firmware/' + TOUCH_FIRMWARE, stat.S_IFREG | 0o644, firmware)
     wifi = {}
-    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2'):
+    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
         import wifi_payload
-        wifi, wifi_summary = wifi_payload.load(ROOT.parent, connect=profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2'))
-        if profile in ('bt1', 'battery1', 'battery2'):
+        wifi, wifi_summary = wifi_payload.load(ROOT.parent, connect=profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'))
+        if profile in ('bt1', 'battery1', 'battery2', 'reboot1'):
             import bluetooth_payload
             bluetooth, bluetooth_summary = bluetooth_payload.load(ROOT.parent)
             wifi.update(bluetooth)
@@ -125,9 +145,14 @@ def build(output, profile='boot1'):
                     made.add(directory)
             data, mode = wifi[name]
             add(name, stat.S_IFREG | mode, data)
+    reboot_mode = None
+    if reboot_tool:
+        reboot_mode = build_reboot_mode()
+        assert reboot_mode[:4] == b'\x7fELF'
+        add('bin/reboot-mode', stat.S_IFREG | 0o755, reboot_mode)
     add('TRAILER!!!', 0)
     allowed = {'lib', 'lib/firmware', 'lib/firmware/' + TOUCH_FIRMWARE} if firmware else set()
-    allowed |= {name for name in members if name.startswith('lib/firmware/') and profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2')}
+    allowed |= {name for name in members if name.startswith('lib/firmware/') and profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1')}
     assert not any(name.startswith(('lib', 'vendor/', 'system/')) and name not in allowed
                    for name in members)
     compressed = gzip.compress(stream.getvalue(), mtime=0)
@@ -138,6 +163,7 @@ def build(output, profile='boot1'):
               'contains_firmware': [TOUCH_FIRMWARE] if firmware else False,
               'firmware_sha256': TOUCH_FIRMWARE_SHA256 if firmware else None,
               'wifi_payload': wifi_summary if wifi else None,
+              'reboot_mode_sha256': hashlib.sha256(reboot_mode).hexdigest() if reboot_mode else None,
               'contains_modules': False,
               'mounts_android_filesystems': False, 'profile': profile}
     output.with_suffix('.json').write_text(json.dumps(result, indent=2) + '\n')
