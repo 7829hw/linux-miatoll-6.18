@@ -137,3 +137,35 @@ STEP_DONE_193247=0
 miatoll-audio13# [6n
 ### 2026-10-27T19:33:57 pull
 pulled /tmp/headset-mic-10s.wav bytes=960044 sha256=a50b49be017e5e605b5e9e5527cb335d21bc1840677a6dfbc8e79109074e841b chunk_retries=0
+### 2026-10-27T19:35:53 power-nodes
+$ for d in /sys/class/power_supply/*; do echo "== $d"; for f in type status capacity current_now voltage_now online; do [ -r $d/$f ] && echo "$f=$(cat $d/$f)"; done; done; ls /sys/class/backlight; cat /sys/class/backlight/*/brightness; ls /sys/class/graphics; ps | grep -E "wpa|hostapd|bt|dhcp|udhcpc|rmtfs|tqftp|pd-mapper" | grep -v grep; cat /proc/loadavg; for d in /sys/bus/soundwire/devices/*; do echo "${d##*/} $(cat $d/power/runtime_status)"; done
+for d in /sys/class/power_supply/*; do echo "== $d"; for f in t
+ype status capacity current_now voltage_now online; do [ -r $d/$f ] && echo "$f=
+$(cat $d/$f)"; done; done; ls /sys/class/backlight; cat /sys/class/backlight/*/b
+rightness; ls /sys/class/graphics; ps | grep -E "wpa|hostapd|bt|dhcp|udhcpc|rmtf
+s|tqftp|pd-mapper" | grep -v grep; cat /proc/loadavg; for d in /sys/bus/soundwir
+e/devices/*; do echo "${d##*/} $(cat $d/power/runtime_status)"; done; printf "\n
+STEP_DONE_193553=%s\n" "$?"
+== /sys/class/power_supply/qcom_qg
+type=Battery
+status=Unknown
+capacity=100
+current_now=0
+voltage_now=4446287
+== /sys/class/power_supply/tcpm-source-psy-c440000.spmi:pmic@0:typec@1500
+type=USB
+current_now=0
+voltage_now=0
+online=0
+[1;36mbacklight[m
+256
+[1;36mfb0[m    [1;36mfbcon[m
+/bin/sh: ps: not found
+0.03 0.07 0.05 1/167 10929
+sdw-master-2-0 suspended
+sdw-master-3-0 active
+sdw:2:0:0217:010a:00:4 suspended
+sdw:3:0:0217:010a:00:3 active
+
+STEP_DONE_193553=0
+miatoll-audio13# [6n

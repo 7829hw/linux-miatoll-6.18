@@ -1,0 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0
+// Idle power comparison only: audio12 DT on a kernel without the WCD937x
+// TX Slave runtime PM hold, so the TX SoundWire bus can enter clock stop.
+// Headset insertion is not expected to be detected after boot here.
+#include "sm7125-xiaomi-curtana-audio12.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing audio14 test)";
+	chosen {
+		miatoll,boot-profile = "audio14-ram-only";
+	};
+};
