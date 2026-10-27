@@ -1,0 +1,17 @@
+// SPDX-License-Identifier: GPL-2.0
+// Headset button measurement only: split the range above the 237 mV
+// volume up threshold into bins so the latched MBHC button result shows
+// where the volume down button reads. BTN_4 and above have no key, so
+// presses in those bins produce no input event in this test.
+#include "sm7125-xiaomi-curtana-audio12.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing audio13 test)";
+	chosen {
+		miatoll,boot-profile = "audio13-ram-only";
+	};
+};
+
+&wcd937x {
+	qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 400000 450000 500000 575000 650000>;
+};

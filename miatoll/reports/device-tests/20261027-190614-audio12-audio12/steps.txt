@@ -34,3 +34,167 @@ On
 
 STEP_DONE_190729=0
 miatoll-audio12# [6n
+### 2026-10-27T19:08:55 input-list
+$ for d in /sys/class/input/event*; do echo "${d##*/} $(cat $d/device/name) key=$(cat $d/device/capabilities/key)"; done; grep -E "Button|mbhc sw" /proc/interrupts | awk "{print \$1,\$2,\$(NF-1),\$NF}"; tinymix -D 0 get "Headphone Jack"
+for d in /sys/class/input/event*; do echo "${d##*/} $(cat $d/de
+vice/name) key=$(cat $d/device/capabilities/key)"; done; grep -E "Button|mbhc sw
+" /proc/interrupts | awk "{print \$1,\$2,\$(NF-1),\$NF}"; tinymix -D 0 get "Head
+phone Jack"; printf "\nSTEP_DONE_190855=%s\n" "$?"
+event0 pm8941_pwrkey key=10000000000000 0
+event1 pm8941_resin key=4000000000000 0
+event2 Focaltech FT8756 Touchscreen key=400 0 0 0 0 0
+event3 gpio-keys key=8000000000000 0
+event4 Xiaomi-miatoll Headset Jack key=40 0 0 0 0 30 400000000 0 c000000000000 0
+194: 3 sw intr
+195: 0 Press detect
+196: 0 Release detect
+On
+
+STEP_DONE_190855=0
+miatoll-audio12# [6n
+### 2026-10-27T19:09:59 button-events-1
+$ echo BTN_CAPTURE_BEGIN; timeout 45 cat /dev/input/event4 | hexdump -v -e "4/4 \"%08x \" 1/2 \" type=%u\" 1/2 \" code=%u\" 1/4 \" value=%d\n\""; echo BTN_CAPTURE_END; grep -E "Press|Release|mbhc sw" /proc/interrupts | awk "{print \$1,\$2,\$(NF-1),\$NF}"
+echo BTN_CAPTURE_BEGIN; timeout 45 cat /dev/input/event4 | hexd
+ump -v -e "4/4 \"%08x \" 1/2 \" type=%u\" 1/2 \" code=%u\" 1/4 \" value=%d\n\"";
+ echo BTN_CAPTURE_END; grep -E "Press|Release|mbhc sw" /proc/interrupts | awk "{
+print \$1,\$2,\$(NF-1),\$NF}"; printf "\nSTEP_DONE_190914=%s\n" "$?"
+BTN_CAPTURE_BEGIN
+00000098 00000000 0001931e 00000000 type=1 code=226 value=1
+00000098 00000000 0001931e 00000000 type=0 code=0 value=0
+00000098 00000000 00019379 00000000 type=1 code=226 value=0
+00000098 00000000 00019379 00000000 type=0 code=0 value=0
+00000098 00000000 00077096 00000000 type=1 code=226 value=1
+00000098 00000000 00077096 00000000 type=0 code=0 value=0
+00000098 00000000 000770de 00000000 type=1 code=226 value=0
+00000098 00000000 000770de 00000000 type=0 code=0 value=0
+00000098 00000000 000d1051 00000000 type=1 code=226 value=1
+00000098 00000000 000d1051 00000000 type=0 code=0 value=0
+00000098 00000000 000d1095 00000000 type=1 code=226 value=0
+00000098 00000000 000d1095 00000000 type=0 code=0 value=0
+0000009a 00000000 00041926 00000000 type=1 code=226 value=1
+0000009a 00000000 00041926 00000000 type=0 code=0 value=0
+0000009a 00000000 0004196e 00000000 type=1 code=226 value=0
+0000009a 00000000 0004196e 00000000 type=0 code=0 value=0
+0000009b 00000000 000d57af 00000000 type=1 code=226 value=1
+0000009b 00000000 000d57af 00000000 type=0 code=0 value=0
+0000009b 00000000 000d5832 00000000 type=1 code=226 value=0
+0000009b 00000000 000d5832 00000000 type=0 code=0 value=0
+0000009e 00000000 0001c651 00000000 type=1 code=226 value=1
+0000009e 00000000 0001c651 00000000 type=0 code=0 value=0
+0000009e 00000000 0001c69f 00000000 type=1 code=226 value=0
+0000009e 00000000 0001c69f 00000000 type=0 code=0 value=0
+000000a0 00000000 00095f1d 00000000 type=1 code=114 value=1
+000000a0 00000000 00095f1d 00000000 type=0 code=0 value=0
+000000a0 00000000 00095f44 00000000 type=1 code=114 value=0
+000000a0 00000000 00095f44 00000000 type=0 code=0 value=0
+000000a0 00000000 000e69b0 00000000 type=1 code=114 value=1
+000000a0 00000000 000e69b0 00000000 type=0 code=0 value=0
+000000a0 00000000 000e69d7 00000000 type=1 code=114 value=0
+000000a0 00000000 000e69d7 00000000 type=0 code=0 value=0
+000000a1 00000000 000e66c0 00000000 type=1 code=115 value=1
+000000a1 00000000 000e66c0 00000000 type=0 code=0 value=0
+000000a1 00000000 000e6707 00000000 type=1 code=115 value=0
+000000a1 00000000 000e6707 00000000 type=0 code=0 value=0
+000000a2 00000000 00040299 00000000 type=1 code=115 value=1
+000000a2 00000000 00040299 00000000 type=0 code=0 value=0
+000000a2 00000000 000402cf 00000000 type=1 code=115 value=0
+000000a2 00000000 000402cf 00000000 type=0 code=0 value=0
+000000a3 00000000 000d8025 00000000 type=1 code=114 value=1
+000000a3 00000000 000d8025 00000000 type=0 code=0 value=0
+000000a3 00000000 000d80b2 00000000 type=1 code=114 value=0
+000000a3 00000000 000d80b2 00000000 type=0 code=0 value=0
+000000a4 00000000 0002c857 00000000 type=1 code=114 value=1
+000000a4 00000000 0002c857 00000000 type=0 code=0 value=0
+000000a4 00000000 0002c899 00000000 type=1 code=114 value=0
+000000a4 00000000 0002c899 00000000 type=0 code=0 value=0
+000000a5 00000000 00023b90 00000000 type=1 code=115 value=1
+000000a5 00000000 00023b90 00000000 type=0 code=0 value=0
+000000a5 00000000 00023bd8 00000000 type=1 code=115 value=0
+000000a5 00000000 00023bd8 00000000 type=0 code=0 value=0
+000000a5 00000000 0006737f 00000000 type=1 code=115 value=1
+000000a5 00000000 0006737f 00000000 type=0 code=0 value=0
+000000a5 00000000 0006740b 00000000 type=1 code=115 value=0
+000000a5 00000000 0006740b 00000000 type=0 code=0 value=0
+Terminated
+BTN_CAPTURE_END
+194: 3 sw intr
+195: 14 Press detect
+196: 14 Release detect
+
+STEP_DONE_190914=0
+miatoll-audio12# [6n
+### 2026-10-27T19:10:51 button-volup
+$ echo BTN_CAPTURE_BEGIN; timeout 25 cat /dev/input/event4 | hexdump -v -e "4/4 \"%08x \" 1/2 \" type=%u\" 1/2 \" code=%u\" 1/4 \" value=%d\n\""; echo BTN_CAPTURE_END
+echo BTN_CAPTURE_BEGIN; timeout 25 cat /dev/input/event4 | hexd
+ump -v -e "4/4 \"%08x \" 1/2 \" type=%u\" 1/2 \" code=%u\" 1/4 \" value=%d\n\"";
+ echo BTN_CAPTURE_END; printf "\nSTEP_DONE_191026=%s\n" "$?"
+BTN_CAPTURE_BEGIN
+000000df 00000000 000088cd 00000000 type=1 code=115 value=1
+000000df 00000000 000088cd 00000000 type=0 code=0 value=0
+000000df 00000000 0000890b 00000000 type=1 code=115 value=0
+000000df 00000000 0000890b 00000000 type=0 code=0 value=0
+000000e0 00000000 000998fe 00000000 type=1 code=115 value=1
+000000e0 00000000 000998fe 00000000 type=0 code=0 value=0
+000000e0 00000000 00099940 00000000 type=1 code=115 value=0
+000000e0 00000000 00099940 00000000 type=0 code=0 value=0
+Terminated
+BTN_CAPTURE_END
+
+STEP_DONE_191026=0
+miatoll-audio12# [6n
+### 2026-10-27T19:11:31 button-voldown
+$ echo BTN_CAPTURE_BEGIN; timeout 25 cat /dev/input/event4 | hexdump -v -e "4/4 \"%08x \" 1/2 \" type=%u\" 1/2 \" code=%u\" 1/4 \" value=%d\n\""; echo BTN_CAPTURE_END
+echo BTN_CAPTURE_BEGIN; timeout 25 cat /dev/input/event4 | hexd
+ump -v -e "4/4 \"%08x \" 1/2 \" type=%u\" 1/2 \" code=%u\" 1/4 \" value=%d\n\"";
+ echo BTN_CAPTURE_END; printf "\nSTEP_DONE_191106=%s\n" "$?"
+BTN_CAPTURE_BEGIN
+Terminated
+BTN_CAPTURE_END
+
+STEP_DONE_191106=0
+miatoll-audio12# [6n
+### 2026-10-27T19:11:54 btn-irq-count
+$ grep -E "Press|Release|mbhc sw" /proc/interrupts | awk "{print \$1,\$2,\$(NF-1),\$NF}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | tail -5
+grep -E "Press|Release|mbhc sw" /proc/interrupts | awk "{print 
+\$1,\$2,\$(NF-1),\$NF}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mi
+c Jack"; dmesg | tail -5; printf "\nSTEP_DONE_191154=%s\n" "$?"
+194: 3 sw intr
+195: 18 Press detect
+196: 18 Release detect
+On
+On
+[    3.719005] dwc3 a600000.usb: remote wakeup not configured
+[   33.799776] wcd937x_codec codec: cross connection found, Plug type 4
+[   36.834436] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x22e2, z_val=49848 (milliohm)
+[   36.880248] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x23db, z_val=47745 (milliohm)
+[   36.926326] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2343, z_val=49007 (milliohm)
+
+STEP_DONE_191154=0
+miatoll-audio12# [6n
+### 2026-10-27T19:13:17 button-hold-regs
+$ R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr); grep -E "^30(1a|1b|1c|1d|1e|15|23):" $R/registers | tr "\n" " "; echo; (timeout 32 cat /dev/input/event4 | hexdump -v -e "4/4 \"%08x \" 1/2 \" type=%u\" 1/2 \" code=%u\" 1/4 \" value=%d\n\"" > /tmp/btn.txt) & i=0; last=; while [ $i -lt 150 ]; do v="$(grep -E "^30(19|15|23):" $R/registers | tr "\n" " ")"; if [ "$v" != "$last" ]; then echo "R $(cut -d" " -f1 /proc/uptime) $v"; last="$v"; fi; sleep 0.2; i=$((i+1)); done; wait; grep "type=1 " /tmp/btn.txt
+R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr); grep -E "^30(
+1a|1b|1c|1d|1e|15|23):" $R/registers | tr "\n" " "; echo; (timeout 32 cat /dev/i
+nput/event4 | hexdump -v -e "4/4 \"%08x \" 1/2 \" type=%u\" 1/2 \" code=%u\" 1/4
+ \" value=%d\n\"" > /tmp/btn.txt) & i=0; last=; while [ $i -lt 150 ]; do v="$(gr
+ep -E "^30(19|15|23):" $R/registers | tr "\n" " ")"; if [ "$v" != "$last" ]; the
+n echo "R $(cut -d" " -f1 /proc/uptime) $v"; last="$v"; fi; sleep 0.2; i=$((i+1)
+); done; wait; grep "type=1 " /tmp/btn.txt; printf "\nSTEP_DONE_191243=%s\n" "$?
+"
+3015: b9 301a: 18 301b: 30 301c: 48 301d: a0 301e: a0 3023: 22 
+R 356.62 3015: b9 3019: 03 3023: 22 
+R 370.58 3015: b9 3019: 02 3023: 22 
+R 374.86 3015: b9 3019: 00 3023: 22 
+Terminated
+0000016a 00000000 000690e8 00000000 type=1 code=114 value=1
+0000016c 00000000 00065f9e 00000000 type=1 code=114 value=0
+0000016e 00000000 00070df3 00000000 type=1 code=114 value=1
+00000170 00000000 0003ce28 00000000 type=1 code=114 value=0
+00000172 00000000 000d61bb 00000000 type=1 code=115 value=1
+00000174 00000000 00059223 00000000 type=1 code=115 value=0
+00000177 00000000 00010d12 00000000 type=1 code=226 value=1
+00000178 00000000 000ce9f8 00000000 type=1 code=226 value=0
+
+STEP_DONE_191243=0
+[1]+  Done                       (timeout 32 cat /dev/input/event4 | hexdump -v -e "4/4 "%08x " 1/2 " type=%u" 1/2 " code=%u" 1/4 " value=%d\n"" 1>/tmp/btn.txt)
+miatoll-audio12# [6n
