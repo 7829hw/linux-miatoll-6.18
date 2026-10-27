@@ -52,6 +52,7 @@ display1의 실제 화면 실패 로그를 보존하고 수정 후보는 `miatol
 | `miatoll/6.18-audio13` | audio12에 측정 전용 버튼 구간 DT. 3버튼 짧게 누름 15/15 확인 |
 | `miatoll/6.18-audio14` | audio12에서 TX Slave 유지를 뺀 유휴 전력 비교 전용 빌드 |
 | `miatoll/6.18-gpu1` | audio12에 GPU/GMU와 고정 firmware, `gpu-probe`(CP_MEM_WRITE)를 더한 A618 시험 |
+| `miatoll/6.18-gpu2` | gpu1에 교차 빌드한 Mesa 25.1.9 freedreno·kmscube를 더한 렌더링 시험 |
 
 최초 Git 보존 bundle은 백업 디렉터리의 `legacy-kernel.bundle`이다.
 공식 태그는 shallow fetch로 고정했으므로 모든 과거 upstream 이력을 보유한 전체 clone은 아니다.
