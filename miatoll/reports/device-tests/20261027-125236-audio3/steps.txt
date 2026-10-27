@@ -660,3 +660,13 @@ rms_db_0.2s: -77 -79 -80 -83 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84
 
 STEP_DONE_132136=0
 miatoll-audio3# [6n
+### 2026-10-27T13:24:36 regmap-list
+$ ls /sys/kernel/debug/regmap/ | grep -iE "sdw|codec|wcd"; grep -n "MICB2\|MICB_2\|MICB2_\|MBHC_MECH\|MICB2 " /dev/null
+ls /sys/kernel/debug/regmap/ | grep -iE "sdw|codec|wcd"; grep -n
+ "MICB2\|MICB_2\|MICB2_\|MBHC_MECH\|MICB2 " /dev/null; printf "\nSTEP_DONE_13243
+5=%s\n" "$?"
+62770000.codec-va_macro
+sdw:3:0:0217:010a:00:3-wcd937x_csr
+
+STEP_DONE_132435=1
+miatoll-audio3# [6n
