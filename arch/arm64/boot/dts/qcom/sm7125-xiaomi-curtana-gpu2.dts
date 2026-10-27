@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0
+// Mesa freedreno rendering check: gpu1 DT, with Mesa and kmscube added to
+// the RAM disk only.
+#include "sm7125-xiaomi-curtana-gpu1.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing gpu2 test)";
+	chosen {
+		miatoll,boot-profile = "gpu2-ram-only";
+	};
+};

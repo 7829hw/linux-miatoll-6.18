@@ -1,0 +1,82 @@
+{
+  "mesa": {
+    "version": "25.1.9",
+    "tarball_sha256": "412df33a1bb3c785ed698555a3972118a37c458e7accf6ae53f4bb87b3db454a"
+  },
+  "kmscube": {
+    "commit": "2c1f2646c5e58d11b279b610a8509116c02b067b",
+    "tarball_sha256": "27f61c74f724fdc584d7575772d09a19817628b30faca072855f4c3ebeaf3f36"
+  },
+  "sysroot_packages_sha256": "6f970d374bcbab426508bfdab6ec529930c1cb4d2b0445d13eb718360df936bc",
+  "build_script_sha256": "e223729b6a3978ed8a125f71e8f7169704aa265d8b94c46109d9131d6ad29769",
+  "files": {
+    "usr/lib/libgallium-25.1.9.so": {
+      "from": "stage",
+      "sha256": "75df6a89106c2fa5dc96bd797c47c42454aa2214ba0be8aee521a1071615c529"
+    },
+    "usr/lib/libEGL.so.1.0.0": {
+      "from": "stage",
+      "sha256": "955534b767c42b98e66b4279936fba3b6afaf148846ec16c5a697e1d4d194812"
+    },
+    "usr/lib/libGLESv2.so.2.0.0": {
+      "from": "stage",
+      "sha256": "04cb45091d5efe65cb951f75e9ce8770da0e112c4190f1deb3882dcea24d1b20"
+    },
+    "usr/lib/libgbm.so.1.0.0": {
+      "from": "stage",
+      "sha256": "d95ad25706438fea07443e62cebff93431759f6088f8532c410878594b627103"
+    },
+    "usr/lib/gbm/dri_gbm.so": {
+      "from": "stage",
+      "sha256": "ce732e699621afbec8b0929c914377856b1e8402301a97522a94372769c51e49"
+    },
+    "usr/bin/kmscube": {
+      "from": "stage",
+      "sha256": "92f73f0b42a0e726ba86c94e9e8d0773c5c5718cdd54a0b6494ee984e5c8fd4e"
+    },
+    "lib/ld-musl-aarch64.so.1": {
+      "from": "sysroot",
+      "sha256": "42fb025bc758b76e60e7b3b0fcdcfab93b6ba1694b363244c2e8e6f51847e28c"
+    },
+    "usr/lib/libdrm.so.2.124.0": {
+      "from": "sysroot",
+      "sha256": "a6f7b31feec2b1a28b0e88827c215bd7828db0fe7b86e44ae1a9558fff1b3ebd"
+    },
+    "usr/lib/libpciaccess.so.0.11.1": {
+      "from": "sysroot",
+      "sha256": "2dfbcbafbb856872afb84626c5a6dda0f1b59756288676c73fde9d262f1491ab"
+    },
+    "usr/lib/libz.so.1.3.2": {
+      "from": "sysroot",
+      "sha256": "ceb6a1bb9ae4f99b87e4dc8a70e9df45f6586139c314e06eac0ce85d999e11cb"
+    },
+    "usr/lib/libstdc++.so.6.0.33": {
+      "from": "sysroot",
+      "sha256": "85f2cd6db79578ab58be4d12b7df7482ebc003a37496c7544956d9157f8a2b3f"
+    },
+    "usr/lib/libgcc_s.so.1": {
+      "from": "sysroot",
+      "sha256": "2d945d6ce360769b41fbffc652c2440014bbd69416f13fe206fbac19d32c9431"
+    }
+  },
+  "links": {
+    "lib/libc.musl-aarch64.so.1": "ld-musl-aarch64.so.1",
+    "usr/lib/libEGL.so.1": "libEGL.so.1.0.0",
+    "usr/lib/libGLESv2.so.2": "libGLESv2.so.2.0.0",
+    "usr/lib/libgbm.so.1": "libgbm.so.1.0.0",
+    "usr/lib/libdrm.so.2": "libdrm.so.2.124.0",
+    "usr/lib/libpciaccess.so.0": "libpciaccess.so.0.11.1",
+    "usr/lib/libz.so.1": "libz.so.1.3.2",
+    "usr/lib/libstdc++.so.6": "libstdc++.so.6.0.33"
+  },
+  "licenses": {
+    "usr/share/licenses/mesa/license.rst": {
+      "source": "mesa-src/docs/license.rst",
+      "sha256": "0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615"
+    },
+    "usr/share/licenses/kmscube/COPYING": {
+      "source": "kmscube-src/COPYING",
+      "sha256": "f622099ab0d274133f6e62d5fccfe970b61134d80ed036f45f8cf1e90c3d5a05"
+    }
+  }
+}
