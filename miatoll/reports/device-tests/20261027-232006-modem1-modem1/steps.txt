@@ -338,3 +338,60 @@ QMI_RC=0
 
 STEP_DONE_233400=0
 miatoll-modem1# [6n
+### 2026-10-27T23:44:11 sd-info
+$ for b in /sys/class/block/mmcblk*; do echo "${b##*/} size_sectors=$(cat $b/size) ro=$(cat $b/ro 2>/dev/null) dev=$(readlink -f $b/device | sed "s|/sys/devices/||")"; done; cat /sys/class/block/mmcblk0/device/name /sys/class/block/mmcblk0/device/type 2>/dev/null; grep -E "mmcblk" /proc/mounts; ls /sys/kernel/config/usb_gadget/*/functions 2>/dev/null
+for b in /sys/class/block/mmcblk*; do echo "${b##*/} size_sector
+s=$(cat $b/size) ro=$(cat $b/ro 2>/dev/null) dev=$(readlink -f $b/device | sed "
+s|/sys/devices/||")"; done; cat /sys/class/block/mmcblk0/device/name /sys/class/
+block/mmcblk0/device/type 2>/dev/null; grep -E "mmcblk" /proc/mounts; ls /sys/ke
+rnel/config/usb_gadget/*/functions 2>/dev/null; printf "\nSTEP_DONE_234410=%s\n"
+ "$?"
+cat: can't open '/sys/class/block/mmcblk*/size': No such file or directory
+mmcblk* size_sectors= ro= dev=
+[1;34macm.usb0[m
+
+STEP_DONE_234410=0
+miatoll-modem1# [6n
+### 2026-10-27T23:44:24 sd-dmesg
+$ dmesg | grep -iE "mmc2|8804000|sdhci" | tail -12
+dmesg | grep -iE "mmc2|8804000|sdhci" | tail -12; printf "\nSTEP
+_DONE_234424=%s\n" "$?"
+[    0.173997] platform 8804000.mmc: Adding to iommu group 4
+[    0.226605] sdhci: Secure Digital Host Controller Interface driver
+[    0.226626] sdhci: Copyright(c) Pierre Ossman
+[    0.227614] sdhci-pltfm: SDHCI platform and OF driver helper
+[    0.342619] sdhci_msm 8804000.mmc: Got CD GPIO
+[    1.007000] mmc2: SDHCI controller on 8804000.mmc [8804000.mmc] using ADMA 64-bit
+[    1.443436] mmc2: error -110 reading general info of SD ext reg
+[    1.443479] mmc2: error -110 whilst initialising SD card
+
+STEP_DONE_234424=0
+miatoll-modem1# [6n
+### 2026-10-27T23:51:38 sd-info-sm32g
+$ sleep 2; dmesg | grep -iE "mmc2|mmcblk" | tail -6; for b in /sys/class/block/mmcblk*; do echo "${b##*/} size=$(cat $b/size) ro=$(cat $b/ro)"; done; d=/sys/class/block/mmcblk0/device; echo "name=$(cat $d/name) manfid=$(cat $d/manfid) oemid=$(cat $d/oemid) date=$(cat $d/date) type=$(cat $d/type)"; readlink -f /sys/class/block/mmcblk0
+^[[6nsleep 2; dmesg | grep -iE "mmc2|mmcblk" | t
+ail -6; for b in /sys/class/block/mmcblk*; do echo "${b##*/} size=$(cat $b/size)
+ ro=$(cat $b/ro)"; done; d=/sys/class/block/mmcblk0/device; echo "name=$(cat $d/
+name) manfid=$(cat $d/manfid) oemid=$(cat $d/oemid) date=$(cat $d/date) type=$(c
+at $d/type)"; readlink -f /sys/class/block/mmcblk0; printf "\nSTEP_DONE_235138=%
+s\n" "$?"
+/bin/sh: miatoll-modem1#: not found
+[    1.007000] mmc2: SDHCI controller on 8804000.mmc [8804000.mmc] using ADMA 64-bit
+[    1.443436] mmc2: error -110 reading general info of SD ext reg
+[    1.443479] mmc2: error -110 whilst initialising SD card
+[ 1801.084603] mmc2: new UHS-I speed SDR104 SDHC card at address aaaa
+[ 1801.086522] mmcblk2: mmc2:aaaa SM32G 29.7 GiB
+[ 1801.091023]  mmcblk2: p1 p2
+mmcblk2 size=62333952 ro=0
+mmcblk2p1 size=1048576 ro=0
+mmcblk2p2 size=61283295 ro=0
+cat: can't open '/sys/class/block/mmcblk0/device/name': No such file or directory
+cat: can't open '/sys/class/block/mmcblk0/device/manfid': No such file or directory
+cat: can't open '/sys/class/block/mmcblk0/device/oemid': No such file or directory
+cat: can't open '/sys/class/block/mmcblk0/device/date': No such file or directory
+cat: can't open '/sys/class/block/mmcblk0/device/type': No such file or directory
+name= manfid= oemid= date= type=
+/sys/class/block/mmcblk0
+
+STEP_DONE_235138=0
+miatoll-modem1# [6n

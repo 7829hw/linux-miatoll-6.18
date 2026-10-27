@@ -1,0 +1,88 @@
+#!/bin/sh
+# Expose the authorised microSD card (SM32G on the 8804000.mmc controller) to
+# the PC as a USB mass-storage LUN next to the ACM console, so it can be
+# partitioned and written from WSL. The internal UFS is never exported: the
+# script only accepts an mmcblk device under the SD controller whose card
+# name is SM32G and none of whose partitions are mounted.
+# usage: sd-export on|off|status
+# "on" and "off" rebind the gadget, so the console drops for a few seconds;
+# start them with setsid and reconnect the serial port afterwards.
+sysfs=${USB_SYSFS_ROOT:-/sys}
+gadget="$sysfs/kernel/config/usb_gadget/miatoll-boot1"
+function="$gadget/functions/mass_storage.sd"
+link="$gadget/configs/c.1/mass_storage.sd"
+log=/run/sd-export.log
+fail() { echo "SD-EXPORT: $*" | tee -a "$log" >&2; exit 1; }
+
+find_card() {
+    card=
+    for block in "$sysfs"/class/block/mmcblk[0-9]; do
+        [ -e "$block" ] || continue
+        path=$(readlink -f "$block")
+        case "$path" in
+            */8804000.mmc/*) ;;
+            *) continue ;;
+        esac
+        [ "$(cat "$block/device/name" 2>/dev/null)" = SM32G ] || continue
+        [ -z "$card" ] || fail 'more than one SM32G card'
+        card=/dev/${block##*/}
+    done
+    [ -n "$card" ] || fail 'no SM32G card on 8804000.mmc'
+    if grep -q "^${card}" /proc/mounts; then
+        fail "$card has mounted partitions"
+    fi
+}
+
+rebind() {
+    udc=$(cat "$gadget/UDC")
+    [ -n "$udc" ] || fail 'gadget is not bound'
+    printf '' >"$gadget/UDC" || fail 'unbind failed'
+    "$@"
+    printf '%s' "$udc" >"$gadget/UDC" || fail "rebind to $udc failed"
+}
+
+add_lun() {
+    mkdir -p "$function" || fail 'mass_storage function creation failed'
+    printf '1' >"$function/stall"
+    printf '0' >"$function/lun.0/cdrom"
+    printf '0' >"$function/lun.0/ro"
+    printf '1' >"$function/lun.0/removable"
+    printf 'CURTANA SM32G SD EXPORT' >"$function/lun.0/inquiry_string"
+    printf '%s' "$card" >"$function/lun.0/file" || fail "cannot export $card"
+    # Composite ACM + mass storage: Interface Association device class.
+    printf '0xef' >"$gadget/bDeviceClass"
+    printf '0x02' >"$gadget/bDeviceSubClass"
+    printf '0x01' >"$gadget/bDeviceProtocol"
+    [ -e "$link" ] || ln -s "$function" "$link" || fail 'mass_storage link failed'
+}
+
+remove_lun() {
+    rm -f "$link"
+    [ -d "$function" ] && printf '' >"$function/lun.0/file" 2>/dev/null
+    [ -d "$function" ] && rmdir "$function"
+    printf '0x02' >"$gadget/bDeviceClass"
+    printf '0x00' >"$gadget/bDeviceSubClass"
+    printf '0x00' >"$gadget/bDeviceProtocol"
+}
+
+case "$1" in
+    on)
+        find_card
+        echo "SD-EXPORT: exporting $card ($(cat "$sysfs/class/block/${card#/dev/}/size") sectors)" | tee -a "$log"
+        sleep 2
+        rebind add_lun
+        echo 'SD-EXPORT: on' >>"$log" ;;
+    off)
+        sleep 2
+        rebind remove_lun
+        echo 'SD-EXPORT: off' >>"$log" ;;
+    status)
+        if [ -e "$link" ]; then
+            echo "SD-EXPORT: on, file=$(cat "$function/lun.0/file")"
+        else
+            echo 'SD-EXPORT: off'
+        fi ;;
+    *)
+        echo 'usage: sd-export on|off|status'
+        exit 2 ;;
+esac

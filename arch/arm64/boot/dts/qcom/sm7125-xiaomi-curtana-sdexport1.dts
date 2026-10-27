@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0
+// SD export: modem1 DT, with the sd-export script added to the RAM disk to
+// expose the authorised SM32G microSD as USB mass storage.
+#include "sm7125-xiaomi-curtana-modem1.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing sdexport1 test)";
+	chosen {
+		miatoll,boot-profile = "sdexport1-ram-only";
+	};
+};
