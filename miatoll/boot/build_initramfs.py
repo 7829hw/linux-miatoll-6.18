@@ -112,8 +112,10 @@ def build(output, profile='boot1'):
         script_names += ['audio-init', 'audio-probe']
     if profile in ('audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1'):
         script_names += ['audio-path']
-    if profile == 'modem1':
+    if profile in ('modem1', 'sdexport1'):
         script_names += ['modem-query']
+    if profile == 'sdexport1':
+        script_names += ['sd-export']
     package = ROOT.parent / 'downloads/busybox-static-1.37.0-r20.apk'
     assert hashlib.sha256(package.read_bytes()).hexdigest() == APK_SHA256
     with tarfile.open(package, 'r:gz', ignore_zeros=True) as archive:
@@ -135,6 +137,8 @@ def build(output, profile='boot1'):
         required |= {'sed', 'awk', 'mktemp', 'stat', 'mount', 'umount', 'cp', 'mv', 'rm', 'kill', 'ip'}
     if profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1'):
         required |= {'stty', 'tee', 'ifconfig', 'udhcpc', 'ping'}
+    if profile == 'sdexport1':
+        required |= {'rmdir'}
     with tempfile.TemporaryDirectory(prefix='boot1-busybox-') as temporary:
         executable = Path(temporary) / 'busybox'
         executable.write_bytes(binary)
@@ -205,7 +209,7 @@ def build(output, profile='boot1'):
             mesa, mesa_links, mesa_summary = mesa_payload.load(ROOT.parent, 'vulkan' if profile in ('vulkan1', 'modem1', 'sdexport1') else 'gles')
             wifi.update(mesa)
             wifi_summary['mesa'] = mesa_summary
-        if profile == 'modem1':
+        if profile in ('modem1', 'sdexport1'):
             import qmi_payload
             qmi, qmi_links, qmi_summary = qmi_payload.load(ROOT.parent)
             for name, (data, mode) in qmi.items():
