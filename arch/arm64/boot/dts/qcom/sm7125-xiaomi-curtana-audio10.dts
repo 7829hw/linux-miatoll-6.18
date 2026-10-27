@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0
+// Headset detection diagnostics: audio9 DT with a kernel that logs the
+// WCD MBHC state machine ("mbhc-dbg:").
+#include "sm7125-xiaomi-curtana-audio9.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing audio10 test)";
+	chosen {
+		miatoll,boot-profile = "audio10-ram-only";
+	};
+};
