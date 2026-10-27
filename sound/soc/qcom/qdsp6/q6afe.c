@@ -367,6 +367,8 @@
 #define AFE_API_VERSION_CODEC_DMA_CONFIG	1
 
 #define TIMEOUT_MS 3000
+#define AFE_VOTE_RETRIES 50
+#define AFE_VOTE_RETRY_MS 100
 #define AFE_CMD_RESP_AVAIL	0
 #define AFE_CMD_RESP_NONE	1
 #define AFE_CLK_TOKEN		1024
@@ -991,6 +993,12 @@ static int q6afe_callback(struct apr_device *adev, struct apr_resp_pkt *data)
 				afe->result = *res;
 				wake_up(&afe->wait);
 			}
+			break;
+		case AFE_CMD_REMOTE_LPASS_CORE_HW_VOTE_REQUEST:
+			/* A rejected vote has no vote response; complete the wait here. */
+			afe->result.opcode = AFE_CMD_RSP_REMOTE_LPASS_CORE_HW_VOTE_REQUEST;
+			afe->result.status = res->status;
+			wake_up(&afe->wait);
 			break;
 		default:
 			dev_err(afe->dev, "Unknown cmd 0x%x\n",	res->opcode);
@@ -1883,6 +1891,7 @@ int q6afe_vote_lpass_core_hw(struct device *dev, uint32_t hw_block_id,
 	struct afe_cmd_remote_lpass_core_hw_vote_request *vote_cfg;
 	struct apr_pkt *pkt;
 	int ret = 0;
+	int attempt;
 	int pkt_size;
 	void *p;
 
@@ -1906,10 +1915,22 @@ int q6afe_vote_lpass_core_hw(struct device *dev, uint32_t hw_block_id,
 	strscpy(vote_cfg->client_name, client_name,
 			sizeof(vote_cfg->client_name));
 
-	ret = afe_apr_send_pkt(afe, pkt, NULL,
-			       AFE_CMD_RSP_REMOTE_LPASS_CORE_HW_VOTE_REQUEST);
+	/*
+	 * Shortly after the audio PD starts, the DSP rejects votes for a while
+	 * although later votes succeed; retry instead of failing the client.
+	 */
+	for (attempt = 0; ; attempt++) {
+		ret = afe_apr_send_pkt(afe, pkt, NULL,
+				       AFE_CMD_RSP_REMOTE_LPASS_CORE_HW_VOTE_REQUEST);
+		if (ret != -EINVAL || attempt >= AFE_VOTE_RETRIES)
+			break;
+		msleep(AFE_VOTE_RETRY_MS);
+	}
 	if (ret)
 		dev_err(afe->dev, "AFE failed to vote (%d)\n", hw_block_id);
+	else if (attempt)
+		dev_info(afe->dev, "AFE vote (%d) accepted after %d retries\n",
+			 hw_block_id, attempt);
 
 
 	kfree(pkt);
