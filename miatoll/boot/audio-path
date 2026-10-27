@@ -1,0 +1,103 @@
+#!/bin/sh
+# Apply one device of the sm7125-mainline miatoll UCM (alsa-ucm-conf 059aa77e,
+# ucm2/Xiaomi/miatoll) with tinymix, since the RAM test has no alsaucm.
+# usage: audio-path speaker|headphones|headset-mic|mic1|mic2 on|off
+#   speaker      MultiMedia1 (PCM 0) -> TERT_MI2S -> TAS2562
+#   headphones   MultiMedia2 (PCM 1) -> RX_CODEC_DMA_RX_0 -> RX macro -> WCD937x HPH
+#   headset-mic, mic1 (bottom), mic2 (top)
+#                TX macro DEC0 -> TX_CODEC_DMA_TX_3 -> MultiMedia3 (PCM 2)
+device=$1
+state=$2
+fail=0
+set_ctl() {
+    tinymix -D 0 set "$1" "$2" >/dev/null 2>&1 || { echo "AUDIO_PATH_SET_FAILED: '$1' '$2'"; fail=1; }
+}
+boot_volumes() {
+    # miatoll.conf BootSequence for the controls this device uses.
+    case "$device" in
+        speaker) set_ctl 'ASI1 Sel' LeftRightDiv2; set_ctl 'Digital Volume Control' 109 ;;
+        headphones) set_ctl 'HPHL Volume' 2; set_ctl 'HPHR Volume' 2
+                    set_ctl 'RX_RX0 Digital Volume' 84; set_ctl 'RX_RX1 Digital Volume' 84 ;;
+        *) set_ctl 'TX_DEC0 Volume' 84; set_ctl 'ADC1 Volume' 12; set_ctl 'ADC2 Volume' 12 ;;
+    esac
+}
+case "$device:$state" in
+    speaker:on) boot_volumes; set_ctl 'TERT_MI2S_RX Audio Mixer MultiMedia1' 1 ;;
+    speaker:off) set_ctl 'TERT_MI2S_RX Audio Mixer MultiMedia1' 0 ;;
+    headphones:on)
+        boot_volumes
+        set_ctl 'RX_CODEC_DMA_RX_0 Audio Mixer MultiMedia2' 1
+        set_ctl 'RX_HPH PWR Mode' LOHIFI
+        set_ctl 'RX HPH Mode' CLS_H_ULP
+        set_ctl 'RX_MACRO RX0 MUX' AIF1_PB
+        set_ctl 'RX_MACRO RX1 MUX' AIF1_PB
+        set_ctl 'RX INT0_1 MIX1 INP0' RX0
+        set_ctl 'RX INT1_1 MIX1 INP0' RX1
+        set_ctl 'RX INT0 DEM MUX' CLSH_DSM_OUT
+        set_ctl 'RX INT1 DEM MUX' CLSH_DSM_OUT
+        set_ctl 'RX_COMP1 Switch' 1
+        set_ctl 'RX_COMP2 Switch' 1
+        set_ctl 'HPHL_RDAC Switch' 1
+        set_ctl 'HPHR_RDAC Switch' 1
+        set_ctl 'HPHL Switch' 1
+        set_ctl 'HPHR Switch' 1 ;;
+    headphones:off)
+        set_ctl 'HPHL_RDAC Switch' 0
+        set_ctl 'HPHR_RDAC Switch' 0
+        set_ctl 'HPHL Switch' 0
+        set_ctl 'HPHR Switch' 0
+        set_ctl 'RX_MACRO RX0 MUX' ZERO
+        set_ctl 'RX_MACRO RX1 MUX' ZERO
+        set_ctl 'RX INT0_1 MIX1 INP0' ZERO
+        set_ctl 'RX INT1_1 MIX1 INP0' ZERO
+        set_ctl 'RX INT0 DEM MUX' NORMAL_DSM_OUT
+        set_ctl 'RX INT1 DEM MUX' NORMAL_DSM_OUT
+        set_ctl 'RX_COMP1 Switch' 0
+        set_ctl 'RX_COMP2 Switch' 0
+        set_ctl 'RX HPH Mode' CLS_H_INVALID
+        set_ctl 'RX_CODEC_DMA_RX_0 Audio Mixer MultiMedia2' 0 ;;
+    headset-mic:on)
+        boot_volumes
+        set_ctl 'MultiMedia3 Mixer TX_CODEC_DMA_TX_3' 1
+        set_ctl 'ADC2_MIXER Switch' 1
+        set_ctl 'ADC2 MUX' INP2
+        set_ctl 'ADC2 Switch' 1
+        set_ctl 'TX DEC0 MUX' SWR_MIC
+        set_ctl 'TX SMIC MUX0' ADC1
+        set_ctl 'TX_AIF1_CAP Mixer DEC0' 1
+        set_ctl 'TX_DEC0 Volume' 110 ;;
+    mic1:on)
+        boot_volumes
+        set_ctl 'MultiMedia3 Mixer TX_CODEC_DMA_TX_3' 1
+        set_ctl 'TX DEC0 MUX' SWR_MIC
+        set_ctl 'TX SMIC MUX0' ADC0
+        set_ctl 'TX_AIF1_CAP Mixer DEC0' 1
+        set_ctl 'ADC1_MIXER Switch' 1
+        set_ctl 'ADC1 Switch' 1 ;;
+    mic2:on)
+        boot_volumes
+        set_ctl 'MultiMedia3 Mixer TX_CODEC_DMA_TX_3' 1
+        set_ctl 'TX DEC0 MUX' SWR_MIC
+        set_ctl 'TX SMIC MUX0' ADC2
+        set_ctl 'TX_AIF1_CAP Mixer DEC0' 1
+        set_ctl 'ADC2_MIXER Switch' 1
+        set_ctl 'ADC2 Switch' 1
+        set_ctl 'ADC2 MUX' INP3 ;;
+    headset-mic:off|mic2:off)
+        set_ctl 'ADC2_MIXER Switch' 0
+        set_ctl 'ADC2 Switch' 0
+        set_ctl 'TX SMIC MUX0' ZERO
+        set_ctl 'TX_AIF1_CAP Mixer DEC0' 0
+        set_ctl 'MultiMedia3 Mixer TX_CODEC_DMA_TX_3' 0 ;;
+    mic1:off)
+        set_ctl 'ADC1_MIXER Switch' 0
+        set_ctl 'ADC1 Switch' 0
+        set_ctl 'TX SMIC MUX0' ZERO
+        set_ctl 'TX_AIF1_CAP Mixer DEC0' 0
+        set_ctl 'MultiMedia3 Mixer TX_CODEC_DMA_TX_3' 0 ;;
+    *)
+        echo 'usage: audio-path speaker|headphones|headset-mic|mic1|mic2 on|off'
+        exit 2 ;;
+esac
+echo "AUDIO_PATH $device $state failures=$fail"
+exit "$fail"

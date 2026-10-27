@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0
+// Full native audio card again (speaker and WCD937x headset/mic) with the
+// q6afe LPASS HW vote retry; hardware description identical to audio1.
+#include "sm7125-xiaomi-curtana-audio1.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing audio3 test)";
+	chosen {
+		miatoll,boot-profile = "audio3-ram-only";
+	};
+};

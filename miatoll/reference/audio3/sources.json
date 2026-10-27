@@ -1,0 +1,35 @@
+{
+  "ucm": {
+    "repository": "sm7125-mainline/alsa-ucm-conf",
+    "commit": "059aa77e6ebc78f10f1d160fd9c4f07d50080912",
+    "files": {
+      "ucm2/Xiaomi/miatoll/HiFi.conf": "14650de521a27b252464302fe79db851456fbf57e42a966fe621f2d36ad70f98",
+      "ucm2/Xiaomi/miatoll/miatoll.conf": "b0d06a93d4eca12b2ff24a94e5db594b1fd96a6cb3e0c02787ae17c44097b9cc",
+      "ucm2/codecs/qcom-lpass/rx-macro/HeadphoneDisableSeq.conf": "ea0a9c5239ca2478f5584bbfa5fe127e872bc34b45d3b24089749d125a6c61d8",
+      "ucm2/codecs/qcom-lpass/rx-macro/HeadphoneEnableSeq.conf": "d81b19b18947eb86ded397b8584868379946539e8e9ae01a6c4afd2eeab6b95d",
+      "ucm2/codecs/qcom-lpass/tx-macro/HeadphoneMicDisableSeq.conf": "2c5ea8138eb22dbcc0e6d6d393f2c86987d60d1795ac2ea032495c4b5cca7eae",
+      "ucm2/codecs/qcom-lpass/tx-macro/HeadphoneMicEnableSeq.conf": "3538455be6b2e5e951206a9a680c1ec091729eccf2a25f67a6e2bd35022d822e",
+      "ucm2/codecs/wcd937x/HeadphoneDisableSeq.conf": "a3da6dce35348e5d1ba9b4a12764ca50ca546c640f9b08f4965c1025aefe53c1",
+      "ucm2/codecs/wcd937x/HeadphoneEnableSeq.conf": "78a37b575a54facc080b4fbe2153cf5fdca9b071724872363e3ef74a8cef662c",
+      "ucm2/codecs/wcd937x/HeadphoneMicDisableSeq.conf": "84b05f0d3a15018c5f5e68e452ec89db7bd8b6aaa9b3c1b68acbedecff889a2e",
+      "ucm2/codecs/wcd937x/HeadphoneMicEnableSeq.conf": "5d513b8ef2b9a7b49d0d5fa39f49baccae314ce92b5b68ab09680cf753fd7136",
+      "ucm2/codecs/wcd937x/init.conf": "99e07e0bc117d22f4232308f9c837a05fe07b5a293ceaa3779d159ea346d8913"
+    }
+  },
+  "downstream": {
+    "repository": "LineageOS/android_kernel_xiaomi_sm6250",
+    "commit": "803b55865869df8558ef07f51bfb8182d95d08ed",
+    "files": {
+      "arch/arm64/boot/dts/qcom/atoll-audio-overlay.dtsi": "2522bff2a6f55f488106520c0428a0324239e2d366853f3029761bb3ee2bb087",
+      "techpack/audio/4.0/asoc/codecs/audio-ext-clk-up.c": "04625ef5a41727134b57d6441e07b5a2564303b00ddbec5be5bd9749d1333205"
+    },
+    "used": "VA/RX/TX macros use lpass_core_hw_vote / lpass_audio_hw_vote; afe_vote_lpass_core_hw sends the same AFE_CMD_REMOTE_LPASS_CORE_HW_VOTE_REQUEST without a readiness gate"
+  },
+  "tinyalsa": {
+    "release": "v2.0.0",
+    "commit": "1c5fb68ced57d838f2b7ecd0c00bc1fefc9ab60d",
+    "tarball": "https://github.com/tinyalsa/tinyalsa/archive/refs/tags/v2.0.0.tar.gz",
+    "sha256": "573ae0b2d3480851c1d2a12503ead2beea27f92d44ed47b74b553ba947994ef1",
+    "license": "BSD-3-Clause (NOTICE included in the RAMdisk)"
+  }
+}
