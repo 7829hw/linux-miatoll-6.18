@@ -169,3 +169,45 @@ sdw:3:0:0217:010a:00:3 active
 
 STEP_DONE_193553=0
 miatoll-audio13# [6n
+### 2026-10-27T19:42:26 idle-power-hold-start
+$ rm -f /tmp/pwr.txt /tmp/pwr.done; setsid sh -c 'B=/sys/class/power_supply/qcom_qg; echo 0 > /sys/class/backlight/backlight/brightness; echo 1 > /sys/class/graphics/fb0/blank; sleep 40; { echo "START $(cut -d" " -f1 /proc/uptime) load=$(cut -d" " -f1-3 /proc/loadavg)"; for d in /sys/bus/soundwire/devices/*; do echo "PM ${d##*/} $(cat $d/power/runtime_status)"; done; i=0; while [ $i -lt 360 ]; do echo "S $(cut -d" " -f1 /proc/uptime) $(cat $B/current_now) $(cat $B/voltage_now)"; sleep 0.5; i=$((i+1)); done; echo "END $(cut -d" " -f1 /proc/uptime) load=$(cut -d" " -f1-3 /proc/loadavg)"; for d in /sys/bus/soundwire/devices/*; do echo "PM ${d##*/} $(cat $d/power/runtime_status)"; done; } > /tmp/pwr.txt; echo 0 > /sys/class/graphics/fb0/blank; echo 256 > /sys/class/backlight/backlight/brightness; touch /tmp/pwr.done' </dev/null >/dev/null 2>&1 & echo PWR_SAMPLER_STARTED
+rm -f /tmp/pwr.txt /tmp/pwr.done; setsid sh -c 'B=/sys/class/po
+wer_supply/qcom_qg; echo 0 > /sys/class/backlight/backlight/brightness; echo 1 >
+ /sys/class/graphics/fb0/blank; sleep 40; { echo "START $(cut -d" " -f1 /proc/up
+time) load=$(cut -d" " -f1-3 /proc/loadavg)"; for d in /sys/bus/soundwire/device
+s/*; do echo "PM ${d##*/} $(cat $d/power/runtime_status)"; done; i=0; while [ $i
+ -lt 360 ]; do echo "S $(cut -d" " -f1 /proc/uptime) $(cat $B/current_now) $(cat
+ $B/voltage_now)"; sleep 0.5; i=$((i+1)); done; echo "END $(cut -d" " -f1 /proc/
+uptime) load=$(cut -d" " -f1-3 /proc/loadavg)"; for d in /sys/bus/soundwire/devi
+ces/*; do echo "PM ${d##*/} $(cat $d/power/runtime_status)"; done; } > /tmp/pwr.
+txt; echo 0 > /sys/class/graphics/fb0/blank; echo 256 > /sys/class/backlight/bac
+klight/brightness; touch /tmp/pwr.done' </dev/null >/dev/null 2>&1 & echo PWR_SA
+MPLER_STARTED; printf "\nSTEP_DONE_194226=%s\n" "$?"
+PWR_SAMPLER_STARTED
+
+STEP_DONE_194226=0
+miatoll-audio13# [6n
+### 2026-10-27T19:47:33 idle-power-hold-read
+$ ls /tmp/pwr.done; grep -vE "^S " /tmp/pwr.txt; awk "/^S /{n++; c+=\$3; v+=\$4; if(n==1||\$3<mn)mn=\$3; if(n==1||\$3>mx)mx=\$3} END{printf \"N=%d mean_current_ua=%.0f min=%d max=%d mean_voltage_uv=%.0f\n\", n, c/n, mn, mx, v/n}" /tmp/pwr.txt; awk "/^S /{n++; b=int((n-1)/60); c[b]+=\$3; k[b]++} END{for(i=0;i<6;i++) printf \"blk%d=%.0f \", i, c[i]/k[i]; print \"\"}" /tmp/pwr.txt
+^[[6nls /tmp/pwr.done; grep -vE "^S " /tmp/pwr.
+txt; awk "/^S /{n++; c+=\$3; v+=\$4; if(n==1||\$3<mn)mn=\$3; if(n==1||\$3>mx)mx=
+\$3} END{printf \"N=%d mean_current_ua=%.0f min=%d max=%d mean_voltage_uv=%.0f\n
+\", n, c/n, mn, mx, v/n}" /tmp/pwr.txt; awk "/^S /{n++; b=int((n-1)/60); c[b]+=\
+$3; k[b]++} END{for(i=0;i<6;i++) printf \"blk%d=%.0f \", i, c[i]/k[i]; print \"\
+"}" /tmp/pwr.txt; printf "\nSTEP_DONE_194733=%s\n" "$?"
+/bin/sh: miatoll-audio13#^[[6nls: not found
+START 1158.36 load=0.07 0.02 0.01
+PM sdw-master-2-0 suspended
+PM sdw-master-3-0 active
+PM sdw:2:0:0217:010a:00:4 suspended
+PM sdw:3:0:0217:010a:00:3 active
+END 1342.69 load=0.07 0.04 0.01
+PM sdw-master-2-0 suspended
+PM sdw-master-3-0 active
+PM sdw:2:0:0217:010a:00:4 suspended
+PM sdw:3:0:0217:010a:00:3 active
+N=360 mean_current_ua=-94455 min=-142517 max=-72326 mean_voltage_uv=4417303
+blk0=-94853 blk1=-93856 blk2=-94268 blk3=-93979 blk4=-95367 blk5=-94406 
+
+STEP_DONE_194733=0
+miatoll-audio13# [6n
