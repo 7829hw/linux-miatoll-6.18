@@ -1,0 +1,114 @@
+{
+  "capture_id": "20261027-114455",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-battery2+",
+  "boot_profile": "battery2-ram-only",
+  "image": "boot-curtana-6.18.58-battery2.img",
+  "image_sha256": "f9b7704d17a2f3b18611753828a14fbe92c38c27b6de2fd77059e0293ff81a81",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-battery2/boot-curtana-6.18.58-battery2.img"
+  ],
+  "physical_display_confirmed": true,
+  "user_observation": {
+    "screen": "BATTERY TEST 2 banner and BAT counter normal, no reboot",
+    "backlight": "on",
+    "notes": ""
+  },
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "BATTERY2_BANNER_WRITTEN",
+      "BATTERY2_PROBE_BEGIN",
+      "BATTERY2_PROBE_END",
+      "BATTERY2_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "27:          0          0          0          0          0          0          0          0    GICv3 134 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "battery2-fastboot-20261027-114455.txt": {
+      "bytes": 589,
+      "sha256": "d9a792ac5e74e731e32565b1e4f29fb569c5dfc39e75c7eaf3078e510557f117"
+    },
+    "battery2-serial-20261027-114455.txt": {
+      "bytes": 157858,
+      "sha256": "06242fea28f17d17c524e1ea7f5a550879d4093c3d4b012c4db2c6089ed1aeb9"
+    },
+    "battery-unplug-log-2.txt": {
+      "bytes": 3627,
+      "sha256": "ec1b6667fed56cc94369116fce664c2f227206f84708c83e937b4b0b54e87ec9"
+    },
+    "battery-unplug-log.txt": {
+      "bytes": 2765,
+      "sha256": "bb5925451f3b23c3e49d23406f7c3ab215cac4107c20cd0c86ea02e2c344e612"
+    },
+    "steps.txt": {
+      "bytes": 10426,
+      "sha256": "0c256e2d7762fecb87abd05bf0a21b555a081c5bfcef7edadbd953ec04b154c3"
+    }
+  },
+  "step_observations": {
+    "battery-unplug-log": {
+      "screen": "first 90 s logger missed the unplug (it happened after the logger ended)",
+      "backlight": "on",
+      "notes": ""
+    },
+    "battery-unplug-log-2": {
+      "screen": "user unplugged during the counter window and reconnected; display normal",
+      "backlight": "on",
+      "notes": ""
+    }
+  },
+  "battery_telemetry_confirmed": true,
+  "kernel_change": "qcom_qg: subtype-based current scale and power_supply ABI sign (commit a986acac)",
+  "battery": {
+    "qg_subtype": "0x04",
+    "scale_uA_per_lsb": 305.176,
+    "plugged_current_ua": [
+      144000,
+      167000
+    ],
+    "unplugged_current_ua": [
+      -163000,
+      -99000
+    ],
+    "unplugged_typical_ua": -112000,
+    "voltage_plugged_v": 4.479,
+    "voltage_unplugged_v": [
+      4.399,
+      4.408
+    ],
+    "voltage_ocv_v": 4.418,
+    "temp_decidegc": 277,
+    "comparison_battery1": "battery1 raw (fork) values were -81..-92 mA plugged and +48..+76 mA unplugged; battery2 shows the expected sign and about twice the magnitude",
+    "independent_current_reference": false,
+    "remaining": "capacity is voltage-linear and status is constant Unknown in the fork driver; no charger control driver"
+  }
+}

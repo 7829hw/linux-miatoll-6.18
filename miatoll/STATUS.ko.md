@@ -10,7 +10,7 @@ Wi-Fi firmware·검색을 실기기로 확인한 브랜치: **`miatoll/6.18-wifi
 WPA3 연결·IPv4 통신을 실기기로 확인한 브랜치: **`miatoll/6.18-wifi2`**(wifi1과 같은 커널).
 Wi-Fi 지연을 개선한 브랜치: **`miatoll/6.18-wifi3`**(wifi2 + ath10k WCN3990 PMF peer 비트 backport).
 Bluetooth 초기화·검색을 실기기로 확인한 브랜치: **`miatoll/6.18-bt1`**(wifi3 기반).
-배터리 계측을 실기기로 확인한 브랜치: **`miatoll/6.18-battery1`**(bt1 기반, 전류 배율·부호 수정 필요).
+배터리 계측을 실기기로 확인한 브랜치: **`miatoll/6.18-battery2`**(battery1 + QG 전류 배율·부호 수정).
 공식 Linux **v6.18.58**을 기반으로, 6.14.7 포크의 Xiaomi 하드웨어 구현을 직접 선별 이식했다.
 기존 로컬 커널 수정은 보존 브랜치와 백업에 남겼다.
 
@@ -208,6 +208,13 @@ USB 분리 시험에서 원시 부호가 충전 음수·방전 양수로 power_s
 충전 제어 드라이버는 없다. 다음 후보 battery2에서 SUBTYPE 기반 배율과 부호를 고친다.
 [battery1 실기기 기록](reports/device-tests/20261027-113421-battery1/README.ko.md)
 
+## battery2 실기기 결과: QG 전류 배율·부호 수정 확인
+
+`20261027-114455` 회차는 `qcom_qg`가 SUBTYPE으로 배율을 고르고 ABI 부호로 보고하도록 고친 뒤 같은 분리 시험을 했다.
+충전 +144~+167 mA, 배터리 단독 약 −112 mA로 부호와 크기가 예측과 일치했다. 독립 전류계 비교는 없다.
+capacity·status 계산과 충전 제어는 아직 포크 수준이다.
+[battery2 실기기 기록](reports/device-tests/20261027-114455-battery2/README.ko.md)
+
 ## 하드웨어별 상태
 
 아래의 '반영'은 새 브랜치의 소스·설정·컴파일 결과다. boot1에서 확인한 기본 기능 외의
@@ -223,7 +230,7 @@ USB 분리 시험에서 원시 부호가 충전 음수·방전 양수로 power_s
 | 오디오 | QDSP6/APR, sm8250 machine, TAS2562, WCD937x, SoundWire/LPASS | ADSP 및 스피커/헤드폰/마이크 DT 경로, 드라이버 설정 | ALSA 열거, 스피커 소리, 녹음/마이크/통화, 기존 ACDB/HAL 대응 |
 | LTE 모뎀 | MPSS remoteproc, QRTR/QMI, IPA/RMNET | 보드 firmware/메모리/IPA DT, SM7125 PD mapper | MPSS/QMI/SIM/망 등록, 데이터, RIL/IMS/음성 호환성 |
 | Wi-Fi/Bluetooth | ath10k SNOC, QCA UART/HCI | 전원/버스/펌웨어 DT | wifi1에서 MPSS·WLAN firmware·wlan0·수동 검색, wifi2에서 WPA3-SAE 연결·DHCPv4·ICMP, wifi3에서 PMF peer 비트 backport 후 지연 개선(평균 23 ms) 실기기 확인(read-only rmtfs, 기기 BDF). bt1에서 Bluetooth firmware·임시 주소 전원·LE/BR 검색 확인. Galaxy Buds Pro 페어링과 A2DP SBC 시험음 청취 확인. 공장 MAC/BD 주소, 처리량, 공존, 장시간 오디오·통화 미검증. PMF 패치는 wifi3 브랜치에만 포함 |
-| 배터리/충전 | ADC5, SPMI SDAM, regulator, Type-C | 실험적 QGauge와 PM6150 DT. 6.18 fwnode API 변환 | QGauge 잔량은 선형 전압 추정이며 STATUS_UNKNOWN. 충전 제어·정확한 SOC·건강 HAL은 미완성. SM5714는 Samsung용이므로 제외 |
+| 배터리/충전 | ADC5, SPMI SDAM, regulator, Type-C | 실험적 QGauge와 PM6150 DT. 6.18 fwnode API 변환. QG SUBTYPE 배율·ABI 부호 수정(battery2) | battery2에서 전압·OCV·온도·충전/방전 전류 부호와 크기 실기기 확인. 잔량은 선형 전압 추정이며 STATUS_UNKNOWN. 충전 제어·정확한 SOC·건강 HAL은 미완성. SM5714는 Samsung용이므로 제외 |
 | 전력 관리 | RPMh/CPUfreq/thermal/PSCI | 보드 전원 DT와 Android wakelock/autosleep 설정 | 실제 idle/suspend/resume/열 보호/소비 전류/USB 전력 역할 |
 | 추가 기능 | Venus/IR SPI | 기존 드라이버 모듈 설정, 보드 DT; AW8695/DRV2624 진동 드라이버 | 영상 가속/IR/진동은 실행 미검증. DRV2624 GPIO API 변환 |
 
