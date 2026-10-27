@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0
+// Headset candidate: audio11 DT (2.7 V mic bias, MBHC thresholds scaled
+// to it) on a kernel without the audio10 MBHC diagnostic logs.
+#include "sm7125-xiaomi-curtana-audio11.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing audio12 test)";
+	chosen {
+		miatoll,boot-profile = "audio12-ram-only";
+	};
+};

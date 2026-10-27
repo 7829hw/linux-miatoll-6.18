@@ -1675,17 +1675,6 @@ static void wcd937x_wcd_mbhc_calc_impedance(struct snd_soc_component *component,
 	};
 	s16 *d1 = NULL;
 
-	dev_info(component->dev,
-		 "mbhc-dbg: zdet bias=%02x rxsup=%02x anaclk=%02x digclk=%02x ctl1=%02x mech=%02x elect=%02x micb2=%02x hph=%02x\n",
-		 snd_soc_component_read(component, WCD937X_ANA_BIAS),
-		 snd_soc_component_read(component, WCD937X_ANA_RX_SUPPLIES),
-		 snd_soc_component_read(component, WCD937X_DIGITAL_CDC_ANA_CLK_CTL),
-		 snd_soc_component_read(component, WCD937X_DIGITAL_CDC_DIG_CLK_CTL),
-		 snd_soc_component_read(component, WCD937X_MBHC_NEW_CTL_1),
-		 snd_soc_component_read(component, WCD937X_ANA_MBHC_MECH),
-		 snd_soc_component_read(component, WCD937X_ANA_MBHC_ELECT),
-		 snd_soc_component_read(component, WCD937X_ANA_MICB2),
-		 snd_soc_component_read(component, WCD937X_ANA_HPH));
 	reg0 = snd_soc_component_read(component, WCD937X_ANA_MBHC_BTN5);
 	reg1 = snd_soc_component_read(component, WCD937X_ANA_MBHC_BTN6);
 	reg2 = snd_soc_component_read(component, WCD937X_ANA_MBHC_BTN7);

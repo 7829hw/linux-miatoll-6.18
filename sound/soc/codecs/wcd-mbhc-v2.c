@@ -306,8 +306,6 @@ static void wcd_mbhc_report_plug_removal(struct wcd_mbhc *mbhc,
 	mbhc->hph_type = WCD_MBHC_HPH_NONE;
 	mbhc->zl = mbhc->zr = 0;
 	snd_soc_jack_report(mbhc->jack, mbhc->hph_status, WCD_MBHC_JACK_MASK);
-	dev_info(mbhc->dev, "mbhc-dbg: report removal type=0x%x plug=%d status=0x%x\n",
-		 jack_type, mbhc->current_plug, mbhc->hph_status);
 	mbhc->current_plug = MBHC_PLUG_TYPE_NONE;
 	mbhc->force_linein = false;
 }
@@ -402,8 +400,6 @@ static void wcd_mbhc_report_plug_insertion(struct wcd_mbhc *mbhc,
 
 	snd_soc_jack_report(mbhc->jack, (mbhc->hph_status | SND_JACK_MECHANICAL),
 			    WCD_MBHC_JACK_MASK);
-	dev_info(mbhc->dev, "mbhc-dbg: report insertion type=0x%x plug=%d status=0x%x pa=%d zl=%u zr=%u\n",
-		 jack_type, mbhc->current_plug, mbhc->hph_status, is_pa_on, mbhc->zl, mbhc->zr);
 }
 
 static void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
@@ -459,7 +455,6 @@ static void wcd_mbhc_elec_hs_report_unplug(struct wcd_mbhc *mbhc)
 static void wcd_mbhc_find_plug_and_report(struct wcd_mbhc *mbhc,
 				   enum wcd_mbhc_plug_type plug_type)
 {
-	dev_info(mbhc->dev, "mbhc-dbg: find plug %d current %d\n", plug_type, mbhc->current_plug);
 	if (mbhc->current_plug == plug_type)
 		return;
 
@@ -529,8 +524,6 @@ static void mbhc_plug_detect_fn(struct work_struct *work)
 	wcd_mbhc_cancel_pending_work(mbhc);
 
 	detection_type = wcd_mbhc_read_field(mbhc, WCD_MBHC_MECH_DETECTION_TYPE);
-	dev_info(mbhc->dev, "mbhc-dbg: switch irq %s plug=%d status=0x%x\n",
-		 detection_type ? "insertion" : "removal", mbhc->current_plug, mbhc->hph_status);
 
 	/* Set the detection type appropriately */
 	wcd_mbhc_write_field(mbhc, WCD_MBHC_MECH_DETECTION_TYPE, !detection_type);
@@ -1186,7 +1179,6 @@ static void wcd_correct_swch_plug(struct work_struct *work)
 		try++;
 	} while (try < mbhc->swap_thr);
 
-	dev_info(mbhc->dev, "mbhc-dbg: cross_conn=%d\n", cross_conn);
 	if (cross_conn > 0) {
 		plug_type = MBHC_PLUG_TYPE_GND_MIC_SWAP;
 		dev_err(mbhc->dev, "cross connection found, Plug type %d\n",
@@ -1197,8 +1189,6 @@ static void wcd_correct_swch_plug(struct work_struct *work)
 	/* Find plug type */
 	output_mv = wcd_measure_adc_continuous(mbhc);
 	plug_type = wcd_mbhc_get_plug_from_adc(mbhc, output_mv);
-	dev_info(mbhc->dev, "mbhc-dbg: correct start mv=%d plug=%d hs_thr=%d micb=%d\n",
-		 output_mv, plug_type, hs_threshold, micbias_mv);
 
 	/*
 	 * Report plug type if it is either headset or headphone
@@ -1281,8 +1271,6 @@ correct_plug_type:
 	}
 
 	wcd_mbhc_bcs_enable(mbhc, plug_type, true);
-	dev_info(mbhc->dev, "mbhc-dbg: correct end mv=%d plug=%d spl=%d swap_cnt=%d\n",
-		 output_mv, plug_type, is_spl_hs, pt_gnd_mic_swap_cnt);
 
 	if (plug_type == MBHC_PLUG_TYPE_HIGH_HPH) {
 		if (is_spl_hs)
@@ -1353,12 +1341,9 @@ static irqreturn_t wcd_mbhc_adc_hs_rem_irq(int irq, void *data)
 		output_mv = wcd_measure_adc_once(mbhc, MUX_CTL_IN2P);
 
 		/* Check for fake removal */
-		if ((output_mv <= adc_threshold) && retry > FAKE_REM_RETRY_ATTEMPTS) {
-			dev_info(mbhc->dev, "mbhc-dbg: elect removal ignored mv=%d\n", output_mv);
+		if ((output_mv <= adc_threshold) && retry > FAKE_REM_RETRY_ATTEMPTS)
 			goto exit;
-		}
 	} while (!time_after(jiffies, timeout));
-	dev_info(mbhc->dev, "mbhc-dbg: elect removal plug=%d mv=%d\n", mbhc->current_plug, output_mv);
 
 	/*
 	 * ADC COMPLETE and ELEC_REM interrupts are both enabled for

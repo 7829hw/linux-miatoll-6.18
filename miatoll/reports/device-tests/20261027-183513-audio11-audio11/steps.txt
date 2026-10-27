@@ -1,0 +1,91 @@
+### 2026-10-27T18:36:03 boot-state
+$ sleep 3; dmesg | grep -E "mbhc-dbg|ramp|z_val|cross"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"
+sleep 3; dmesg | grep -E "mbhc-dbg|ramp|z_val|cross"; tinymix -
+D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; printf "\nSTEP_DONE_18360
+0=%s\n" "$?"
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+[    0.003847] Timer migration: 1 hierarchy levels; 8 children per group; 1 crossnode level
+[    1.427743] wcd937x_codec codec: mbhc-dbg: switch irq insertion plug=0 status=0x0
+[    1.444925] wcd937x_codec codec: mbhc-dbg: cross_conn=0
+[    1.455644] wcd937x_codec codec: mbhc-dbg: correct start mv=1762 plug=1 hs_thr=2550 micb=2700
+[    1.455735] wcd937x_codec codec: mbhc-dbg: find plug 1 current 0
+[    1.455829] wcd937x_codec codec: mbhc-dbg: zdet bias=80 rxsup=00 anaclk=10 digclk=f0 ctl1=92 mech=9d elect=89 micb2=62 hph=0c
+[    1.480075] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x22fc, z_val=49620 (milliohm)
+[    1.525940] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x23e6, z_val=47656 (milliohm)
+[    1.572234] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2315, z_val=49403 (milliohm)
+[    1.595350] wcd937x_codec codec: mbhc-dbg: report insertion type=0x3 plug=1 status=0x3 pa=0 zl=49 zr=48
+[    4.618573] wcd937x_codec codec: mbhc-dbg: correct end mv=2062 plug=1 spl=0 swap_cnt=0
+[    4.618779] wcd937x_codec codec: mbhc-dbg: find plug 1 current 1
+On
+On
+
+STEP_DONE_183600=0
+miatoll-audio11# [6n
+### 2026-10-27T18:58:06 after-unplug
+$ sleep 2; dmesg | grep -E "mbhc-dbg|ramp|z_val|cross|Swapped|Invalid" | awk -F"[][]" "\$2+0>5"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"
+sleep 2; dmesg | grep -E "mbhc-dbg|ramp|z_val|cross|Swapped|Inv
+alid" | awk -F"[][]" "\$2+0>5"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 
+get "Mic Jack"; printf "\nSTEP_DONE_185804=%s\n" "$?"
+[ 1328.022211] wcd937x_codec codec: mbhc-dbg: switch irq removal plug=1 status=0x3
+[ 1328.024487] wcd937x_codec codec: mbhc-dbg: report removal type=0x3 plug=1 status=0x0
+Off
+Off
+
+STEP_DONE_185804=0
+miatoll-audio11# [6n
+### 2026-10-27T18:58:40 after-plug
+$ sleep 4; dmesg | grep -E "mbhc-dbg|ramp|z_val|cross|Swapped|Invalid" | awk -F"[][]" "\$2+0>1329"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"
+sleep 4; dmesg | grep -E "mbhc-dbg|ramp|z_val|cross|Swapped|Inv
+alid" | awk -F"[][]" "\$2+0>1329"; tinymix -D 0 get "Headphone Jack"; tinymix -D
+ 0 get "Mic Jack"; printf "\nSTEP_DONE_185836=%s\n" "$?"
+[ 1361.461102] wcd937x_codec codec: mbhc-dbg: switch irq insertion plug=0 status=0x0
+[ 1361.479768] wcd937x_codec codec: mbhc-dbg: cross_conn=1
+[ 1361.479841] wcd937x_codec codec: cross connection found, Plug type 4
+[ 1364.506248] wcd937x_codec codec: mbhc-dbg: correct end mv=2043 plug=1 spl=0 swap_cnt=0
+[ 1364.506439] wcd937x_codec codec: mbhc-dbg: find plug 1 current 0
+[ 1364.506567] wcd937x_codec codec: mbhc-dbg: zdet bias=80 rxsup=00 anaclk=10 digclk=f0 ctl1=82 mech=9d elect=89 micb2=62 hph=0c
+[ 1364.530469] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2356, z_val=48846 (milliohm)
+[ 1364.576248] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2417, z_val=47265 (milliohm)
+[ 1364.622056] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2306, z_val=49533 (milliohm)
+[ 1364.645186] wcd937x_codec codec: mbhc-dbg: report insertion type=0x3 plug=1 status=0x3 pa=0 zl=48 zr=48
+On
+On
+
+STEP_DONE_185836=0
+miatoll-audio11# [6n
+### 2026-10-27T18:59:21 headset-mic-speech
+$ audio-path headset-mic on; /bin/pcm-test record 2 6 /tmp/hs.wav; audio-path headset-mic off; dd if=/tmp/hs.wav bs=44 skip=1 2>/dev/null | hexdump -v -e "1/2 \"%u\n\"" | awk "{v=\$1; if(v>32767)v-=65536; s+=v*v; n++; if(n==24000){printf \"%.1f \", 10*log(s/n/1073741824)/log(10); s=0;n=0}} END{print \"\"}"
+audio-path headset-mic on; /bin/pcm-test record 2 6 /tmp/hs.wav
+; audio-path headset-mic off; dd if=/tmp/hs.wav bs=44 skip=1 2>/dev/null | hexdu
+mp -v -e "1/2 \"%u\n\"" | awk "{v=\$1; if(v>32767)v-=65536; s+=v*v; n++; if(n==2
+4000){printf \"%.1f \", 10*log(s/n/1073741824)/log(10); s=0;n=0}} END{print \"\"
+}"; printf "\nSTEP_DONE_185914=%s\n" "$?"
+AUDIO_PATH headset-mic on failures=0
+pcm_configured=1 rate=48000 channels=1 format=S16_LE period_frames=960 buffer_frames=3840
+capture_start=1 seconds=6
+capture_frames=288000 peak_s16=1196 peak_dbfs=-28.8 rms_dbfs=-47.2
+capture_file=/tmp/hs.wav bytes=576044
+pcm_test_exit=0
+AUDIO_PATH headset-mic off failures=0
+-38.4 -44.4 -63.7 -66.7 -62.9 -60.9 -66.8 -46.6 -48.4 -52.7 -55.4 -59.9 
+
+STEP_DONE_185914=0
+miatoll-audio11# [6n
+### 2026-10-27T18:59:54 headset-mic-silence
+$ audio-path headset-mic on; /bin/pcm-test record 2 6 /tmp/hsq.wav; audio-path headset-mic off; dd if=/tmp/hsq.wav bs=44 skip=1 2>/dev/null | hexdump -v -e "1/2 \"%u\n\"" | awk "{v=\$1; if(v>32767)v-=65536; s+=v*v; n++; if(n==24000){printf \"%.1f \", 10*log(s/n/1073741824)/log(10); s=0;n=0}} END{print \"\"}"
+audio-path headset-mic on; /bin/pcm-test record 2 6 /tmp/hsq.wa
+v; audio-path headset-mic off; dd if=/tmp/hsq.wav bs=44 skip=1 2>/dev/null | hex
+dump -v -e "1/2 \"%u\n\"" | awk "{v=\$1; if(v>32767)v-=65536; s+=v*v; n++; if(n=
+=24000){printf \"%.1f \", 10*log(s/n/1073741824)/log(10); s=0;n=0}} END{print \"
+\"}"; printf "\nSTEP_DONE_185947=%s\n" "$?"
+AUDIO_PATH headset-mic on failures=0
+pcm_configured=1 rate=48000 channels=1 format=S16_LE period_frames=960 buffer_frames=3840
+capture_start=1 seconds=6
+capture_frames=288000 peak_s16=738 peak_dbfs=-32.9 rms_dbfs=-49.1
+capture_file=/tmp/hsq.wav bytes=576044
+pcm_test_exit=0
+AUDIO_PATH headset-mic off failures=0
+-39.3 -45.4 -68.1 -67.9 -67.8 -69.4 -69.3 -68.7 -69.2 -66.6 -69.1 -68.9 
+
+STEP_DONE_185947=0
+miatoll-audio11# [6n
