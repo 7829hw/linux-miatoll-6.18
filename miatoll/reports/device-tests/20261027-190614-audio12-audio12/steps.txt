@@ -1,0 +1,36 @@
+### 2026-10-27T19:07:01 boot-state
+$ sleep 5; dmesg | grep -E "ramp|z_val|cross|mbhc-dbg"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; for d in /sys/bus/soundwire/devices/*; do echo "${d##*/} $(cat $d/power/runtime_status)"; done
+sleep 5; dmesg | grep -E "ramp|z_val|cross|mbhc-dbg"; tinymix -
+D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; for d in /sys/bus/soundwi
+re/devices/*; do echo "${d##*/} $(cat $d/power/runtime_status)"; done; printf "\
+nSTEP_DONE_190656=%s\n" "$?"
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+[    0.003858] Timer migration: 1 hierarchy levels; 8 children per group; 1 crossnode level
+[    1.473714] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2325, z_val=49264 (milliohm)
+[    1.519965] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x23d6, z_val=47786 (milliohm)
+[    1.566170] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x22b4, z_val=50257 (milliohm)
+On
+On
+sdw-master-2-0 suspended
+sdw-master-3-0 active
+sdw:2:0:0217:010a:00:4 suspended
+sdw:3:0:0217:010a:00:3 active
+
+STEP_DONE_190656=0
+miatoll-audio12# [6n
+### 2026-10-27T19:07:32 replug
+$ sleep 3; dmesg | grep -E "ramp|z_val|cross" | awk -F"[][]" "\$2+0>5"; grep "mbhc sw" /proc/interrupts | awk "{print \$2}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"
+sleep 3; dmesg | grep -E "ramp|z_val|cross" | awk -F"[][]" "\$2
++0>5"; grep "mbhc sw" /proc/interrupts | awk "{print \$2}"; tinymix -D 0 get "He
+adphone Jack"; tinymix -D 0 get "Mic Jack"; printf "\nSTEP_DONE_190729=%s\n" "$?
+"
+[   33.799776] wcd937x_codec codec: cross connection found, Plug type 4
+[   36.834436] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x22e2, z_val=49848 (milliohm)
+[   36.880248] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x23db, z_val=47745 (milliohm)
+[   36.926326] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2343, z_val=49007 (milliohm)
+3
+On
+On
+
+STEP_DONE_190729=0
+miatoll-audio12# [6n

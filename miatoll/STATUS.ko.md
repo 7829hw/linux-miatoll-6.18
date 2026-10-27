@@ -14,6 +14,7 @@ Bluetooth 초기화·검색을 실기기로 확인한 브랜치: **`miatoll/6.18
 셸 명령 Fastboot 재부팅을 실기기로 확인한 브랜치: **`miatoll/6.18-reboot1`**(battery2 + `reboot-mode`).
 내장 스피커 재생을 실기기로 확인한 브랜치: **`miatoll/6.18-audio2`**(reboot1 + ADSP 스피커 전용 카드).
 전체 오디오 카드·이어폰·내장 마이크를 실기기로 확인한 브랜치: **`miatoll/6.18-audio3`**(q6afe vote 재시도).
+유선 헤드셋 감지(삽입·제거)와 이어폰 마이크 녹음을 실기기로 확인한 브랜치: **`miatoll/6.18-audio12`**(TX SoundWire 유지 + 2.7 V MBHC 임계값).
 공식 Linux **v6.18.58**을 기반으로, 6.14.7 포크의 Xiaomi 하드웨어 구현을 직접 선별 이식했다.
 기존 로컬 커널 수정은 보존 브랜치와 백업에 남겼다.
 
@@ -247,6 +248,29 @@ audio3(`20261027-125236`)는 q6afe가 거부 응답을 바로 전달하고 100 m
 [vote 재시도 실험](reports/device-tests/20261027-124318-audio1-vote-retry/README.ko.md),
 [audio3 기록](reports/device-tests/20261027-125236-audio3/README.ko.md)
 
+## audio4–audio12: 유선 헤드셋 감지와 이어폰 마이크
+
+- 마이크 바이어스: curtana Android DT의 2.7 V를 썼다(audio5).
+  - audio4에서 downstream `swh` 값을 upstream normally-closed 속성으로 옮기면 감지가 깨진다는 것을 확인했다.
+- 경로 확인(audio6): 버스를 셸에서 active로 고정하자 헤드셋이 감지됐다.
+  - Android amic2 경로(ADC2 INP2, DEC0_BCS)로 말소리가 침묵보다 10–20 dB 높게 녹음됐다.
+- 원인 1 — clock stop 중 알림 유실:
+  - WCD937x MBHC 인터럽트는 TX SoundWire Slave 알림으로 들어온다. TX 버스가 clock stop에 들어가면 이 알림이 CPU에 오지 않았다.
+  - 다음은 모두 효과가 없었다: downstream wake IRQ(SPI 555)를 GIC 직결(audio6)이나 PDC 핀 75(audio7)로 연결, Slave WakeUpEnable(audio8), LPASS macro 유지.
+  - audio9: `wcd937x_codec_set_jack()`이 jack을 등록한 동안 TX Slave의 runtime PM 참조를 잡아 해결했다. downstream TX master의 always-on과 같은 취지다. 유휴 전력 비용은 아직 측정하지 않았다.
+- 원인 2 — 임계값 오판(audio10 진단 로그로 확인):
+  - 2.7 V 바이어스에서 헤드셋 마이크선은 1.76–2.06 V로 읽힌다. 공통 DT의 1.8 V 기준 임계값 1.7 V와 비교돼 LINEOUT(연장 케이블)으로 오판됐고, Jack Off였다.
+  - audio11: DT 임계값을 2.7 V 기준(헤드셋 2550000 µV, 헤드폰 75000 µV)으로 바꿨다. downstream이 기본값을 바이어스 비율로 환산하는 방식과 같다.
+- audio11/audio12 실기기 결과:
+  - 꽂은 채 부팅, 제거, 재삽입 모두 HEADSET으로 보고됐다(z ≈ 48–50 Ω). Headphone/Mic Jack 상태가 따라 바뀌었다.
+  - 정상 runtime PM 경로에서 이어폰 마이크 말소리 RMS가 침묵보다 최대 약 20 dB 높았다.
+  - 삽입 직후 일시적인 `cross connection` 로그가 나오지만 3초 보정 뒤 헤드셋으로 정정된다.
+- 미검증: 녹음 청취, 버튼, 유휴 전력, system suspend 중 감지.
+- 기록: [audio6](reports/device-tests/20261027-135906-audio6/README.ko.md), [audio7](reports/device-tests/20261027-141835-audio7-audio7/README.ko.md),
+  [audio8](reports/device-tests/20261027-143024-audio8-audio8/README.ko.md), [audio9](reports/device-tests/20261027-144600-audio9-audio9/README.ko.md),
+  [audio10](reports/device-tests/20261027-182529-audio10-audio10/README.ko.md), [audio11](reports/device-tests/20261027-183513-audio11-audio11/README.ko.md),
+  [audio12](reports/device-tests/20261027-190614-audio12-audio12/README.ko.md)
+
 ## 하드웨어별 상태
 
 아래의 '반영'은 새 브랜치의 소스·설정·컴파일 결과다. boot1에서 확인한 기본 기능 외의
@@ -259,7 +283,7 @@ audio3(`20261027-125236`)는 q6afe가 거부 응답을 바로 전달하고 100 m
 | 터치 | SPI/GENI/input | FT8756 및 NT36xxx SPI 드라이버, 패널 연동과 firmware 이름 | touch1(Huaxing FT8756)에서 RAM firmware·IRQ·좌표·5점 멀티터치 실기기 확인. suspend/blank 중 처리, Tianma NT36xxx 미검증 |
 | GPU | Adreno A618/GMU/DRM | ZAP 이름, HWCG, fuse 0x9f/bin 3. OPP는 SM7125에 한정 | firmware, GMU/GPU 초기화, 렌더링/Android GPU userspace |
 | 카메라 | CAMSS 공통 코드, OV8856/DW9714 | SC7180 CAMSS/CCI/PHY/DT, S5KGM2/S5K5E9/OV16A1Q/DW9800, 기존 센서/VCM 확장 | ID/전원/스트림/초점/영상 품질. DW9800은 원본도 WIP. joyeuse DT에는 S5K5E9/OV16A1Q만 있고 주카메라 경로가 완성되지 않음 |
-| 오디오 | QDSP6/APR, sm8250 machine, TAS2562, WCD937x, SoundWire/LPASS | ADSP 및 스피커/헤드폰/마이크 DT 경로, 드라이버 설정. q6afe LPASS HW vote 재시도(audio3) | 스피커·유선 이어폰 출력 청취, 내장 마이크 2개 녹음 실기기 확인. 이어폰 마이크(MBHC 바이어스/극성), 통화, 음량 곡선, ACDB/HAL 대응 미검증 |
+| 오디오 | QDSP6/APR, sm8250 machine, TAS2562, WCD937x, SoundWire/LPASS | ADSP 및 스피커/헤드폰/마이크 DT 경로, 드라이버 설정. q6afe LPASS HW vote 재시도(audio3), WCD937x jack 등록 중 TX Slave 유지(audio9), 2.7 V MBHC 임계값 DT(audio11) | 스피커·유선 이어폰 출력 청취, 내장 마이크 2개 녹음, 헤드셋 삽입·제거 감지와 이어폰 마이크 녹음(audio12, TX SoundWire 유지·2.7 V 임계값) 실기기 확인. 헤드셋 버튼, 유휴 전력, 통화, 음량 곡선, ACDB/HAL 대응 미검증 |
 | LTE 모뎀 | MPSS remoteproc, QRTR/QMI, IPA/RMNET | 보드 firmware/메모리/IPA DT, SM7125 PD mapper | MPSS/QMI/SIM/망 등록, 데이터, RIL/IMS/음성 호환성 |
 | Wi-Fi/Bluetooth | ath10k SNOC, QCA UART/HCI | 전원/버스/펌웨어 DT | wifi1에서 MPSS·WLAN firmware·wlan0·수동 검색, wifi2에서 WPA3-SAE 연결·DHCPv4·ICMP, wifi3에서 PMF peer 비트 backport 후 지연 개선(평균 23 ms) 실기기 확인(read-only rmtfs, 기기 BDF). bt1에서 Bluetooth firmware·임시 주소 전원·LE/BR 검색 확인. Galaxy Buds Pro 페어링과 A2DP SBC 시험음 청취 확인. 공장 MAC/BD 주소, 처리량, 공존, 장시간 오디오·통화 미검증. PMF 패치는 wifi3 브랜치에만 포함 |
 | 배터리/충전 | ADC5, SPMI SDAM, regulator, Type-C | 실험적 QGauge와 PM6150 DT. 6.18 fwnode API 변환. QG SUBTYPE 배율·ABI 부호 수정(battery2) | battery2에서 전압·OCV·온도·충전/방전 전류 부호와 크기 실기기 확인. 잔량은 선형 전압 추정이며 STATUS_UNKNOWN. 충전 제어·정확한 SOC·건강 HAL은 미완성. SM5714는 Samsung용이므로 제외 |
