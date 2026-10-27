@@ -50,9 +50,9 @@ def analyze_avb(module, path):
             'rollback_index': header.rollback_index, 'rollback_index_location': header.rollback_index_location,
             'properties': properties}
 
-PROFILES = ('boot1', 'display1', 'display2', 'touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1')
+PROFILES = ('boot1', 'display1', 'display2', 'touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1', 'lineage1')
 
-def main(profile='boot1'):
+def main(profile='boot1', android_ramdisk=None):
     require(profile in PROFILES, 'Unknown RAM test profile')
     DIST = WORKSPACE / ('dist/miatoll-' + profile)
     OUT = WORKSPACE / ('out-miatoll-' + profile)
@@ -85,7 +85,7 @@ def main(profile='boot1'):
                        'DRM_PANEL_HUAXING_FT8756', 'BACKLIGHT_QCOM_WLED', 'SC_DISPCC_7180',
                        'DRM_FBDEV_EMULATION', 'DRM_CLIENT_DEFAULT_FBDEV', 'FRAMEBUFFER_CONSOLE'):
             require('CONFIG_' + symbol + '=y\n' in config, 'Missing display built-in: ' + symbol)
-    if profile in ('touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1'):
+    if profile in ('touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1', 'lineage1'):
         for symbol in ('SPI_QCOM_GENI', 'QCOM_GPI_DMA', 'TOUCHSCREEN_FT8756', 'INPUT_EVDEV'):
             require('CONFIG_' + symbol + '=y\n' in config, 'Missing touch built-in: ' + symbol)
     dtb = OUT / ('arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-' + profile + '.dtb')
@@ -94,7 +94,7 @@ def main(profile='boot1'):
     for node in ('/soc@0/usb@a6f8800/usb@a600000', '/soc@0/phy@88e3000'):
         available(dtb, node)
     dwc3 = '/soc@0/usb@a6f8800/usb@a600000'
-    if profile in ('usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1'):
+    if profile in ('usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1', 'lineage1'):
         for symbol in ('TYPEC_QCOM_PMIC', 'REGULATOR_QCOM_USB_VBUS', 'USB_DWC3_DUAL_ROLE', 'USB_ROLE_SWITCH',
                        'USB_XHCI_HCD', 'USB_STORAGE', 'USB_HID'):
             require('CONFIG_' + symbol + '=y\n' in config, 'Missing USB role built-in: ' + symbol)
@@ -112,7 +112,7 @@ def main(profile='boot1'):
     else:
         require(fdt(dtb, dwc3, 'dr_mode') == 'peripheral', 'USB must be peripheral')
     disabled = ('/soc@0/remoteproc@8300000', '/soc@0/camss@acb3000')
-    if profile in ('gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1'):
+    if profile in ('gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1', 'lineage1'):
         require('CONFIG_DRM_MSM=y\n' in config and 'CONFIG_QCOM_MDT_LOADER=y\n' in config, 'Missing GPU built-in')
         for node in ('/soc@0/gpu@5000000', '/soc@0/gmu@506a000'):
             available(dtb, node)
@@ -120,7 +120,7 @@ def main(profile='boot1'):
                 'Unexpected zap shader name')
     else:
         disabled += ('/soc@0/gpu@5000000',)
-    if profile in ('storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1'):
+    if profile in ('storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1', 'lineage1'):
         for symbol in ('MMC_SDHCI_MSM', 'MMC_BLOCK', 'SCSI_UFS_QCOM', 'BLK_DEV_SD', 'EFI_PARTITION'):
             require('CONFIG_' + symbol + '=y\n' in config, 'Missing storage built-in: ' + symbol)
         available(dtb, '/soc@0/mmc@8804000')
@@ -137,7 +137,7 @@ def main(profile='boot1'):
             available(dtb, node)
         require(fdt(dtb, '/soc@0/remoteproc@4080000', 'firmware-name') == 'qcom/sm7125/miatoll/modem.mbn',
                 'Unexpected MPSS firmware name')
-    if profile in ('bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1'):
+    if profile in ('bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1', 'lineage1'):
         for symbol in ('BT', 'BT_LE', 'BT_BREDR', 'BT_HCIUART', 'BT_HCIUART_SERDEV', 'BT_HCIUART_QCA', 'BT_QCA',
                        'SERIAL_QCOM_GENI', 'SERIAL_DEV_BUS'):
             require('CONFIG_' + symbol + '=y\n' in config, 'Missing Bluetooth built-in: ' + symbol)
@@ -146,13 +146,21 @@ def main(profile='boot1'):
         require(fdt(dtb, uart + '/bluetooth', 'compatible') == 'qcom,wcn3991-bt', 'Unexpected Bluetooth controller')
     else:
         disabled += ('/soc@0/remoteproc@4080000', '/soc@0/wifi@18800000')
-    if profile not in ('audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1'):
+    if profile not in ('audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1', 'lineage1'):
         disabled += ('/soc@0/remoteproc@62400000', '/sound')
     if profile == 'boot1':
         disabled += ('/soc@0/display-subsystem@ae00000',)
     else:
         from check_display import check as check_display
         display_validation = check_display(dtb, config)
+    if profile == 'lineage1':
+        # Android runs from the SM32G microSD only: the internal UFS, the modem
+        # and Wi-Fi must not be probed at all.
+        disabled += ('/soc@0/ufshc@1d84000', '/soc@0/phy@1d87000', '/soc@0/remoteproc@4080000',
+                     '/soc@0/wifi@18800000', '/soc@0/ipa@1e40000')
+        for symbol in ('EROFS_FS', 'F2FS_FS', 'BLK_DEV_DM', 'ANDROID_BINDERFS', 'USB_CONFIGFS_F_FS',
+                       'IP_NF_IPTABLES', 'IP6_NF_IPTABLES', 'UHID', 'ZRAM'):
+            require('CONFIG_' + symbol + '=y\n' in config, 'Missing Android built-in: ' + symbol)
     for node in disabled:
         require(fdt(dtb, node, 'status') == 'disabled', 'Unexpected active device: ' + node)
     validation_file = WORKSPACE / ('out-miatoll-' + profile + '-shim-test/test-result.json')
@@ -161,8 +169,15 @@ def main(profile='boot1'):
     require(validation['template_sha256'] == digest(dtb.read_bytes()), 'DT changed since shim test')
     for name, expected in validation['sources'].items():
         require(digest((ROOT / name).read_bytes()) == expected, 'Retest changed shim source: ' + name)
-    ramdisk = DIST / ('initramfs-' + profile + '.cpio.gz')
-    ramdisk_report = build_initramfs(ramdisk, profile=profile)
+    if profile == 'lineage1':
+        # First-stage Android ramdisk from the LineageOS build (curtana_ml).
+        require(android_ramdisk is not None, 'lineage1 needs --android-ramdisk')
+        ramdisk = Path(android_ramdisk)
+        ramdisk_report = {'android_ramdisk': str(ramdisk), 'bytes': ramdisk.stat().st_size,
+                          'sha256': digest(ramdisk.read_bytes()), 'profile': profile}
+    else:
+        ramdisk = DIST / ('initramfs-' + profile + '.cpio.gz')
+        ramdisk_report = build_initramfs(ramdisk, profile=profile)
     shim = build_shim.build(kernel, dtb, WORKSPACE / ('out-miatoll-' + profile + '-shim'))
     require(shim.stat().st_size < stock_runtime, 'Loader footprint exceeds the original kernel budget')
     shutil.copy2(dtb, DIST / dtb.name)
@@ -171,6 +186,14 @@ def main(profile='boot1'):
                     'enforcing=0 miatoll_boot=' + profile)
     if profile != 'boot1':
         command_line += ' consoleblank=0 drm.debug=0x06'
+    if profile == 'lineage1':
+        # The ramdisk's /init is Android's first stage; partitions come from the
+        # SD controller only (androidboot.boot_devices).
+        command_line = ('console=tty0 loglevel=7 clk_ignore_unused pd_ignore_unused deferred_probe_timeout=30 '
+                        'printk.devkmsg=on firmware_class.path=/vendor/firmware/ '
+                        'androidboot.boot_devices=soc@0/8804000.mmc androidboot.hardware=curtana_ml '
+                        'androidboot.selinux=permissive androidboot.verifiedbootstate=orange '
+                        'androidboot.console=tty0 miatoll_boot=lineage1')
     plain = DIST / (profile + '-plain.img')
     mkbootimg = TOOLS / 'aosp-mkbootimg/mkbootimg.py'
     command = [sys.executable, str(mkbootimg), '--kernel', str(shim), '--ramdisk', str(ramdisk),
@@ -235,7 +258,7 @@ def main(profile='boot1'):
     if profile in ('storage1', 'usb2'):
         result.update(hardware_scope=result['hardware_scope'] + ', read-only UFS and SD block reads',
                       storage_read_confirmed=False)
-    if profile in ('usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1'):
+    if profile in ('usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1', 'lineage1'):
         result.update(hardware_scope=result['hardware_scope'] + ', PM6150 Type-C role switch and USB host',
                       usb_host_confirmed=False)
     if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1'):
@@ -245,10 +268,10 @@ def main(profile='boot1'):
     if profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1'):
         result.update(hardware_scope=result['hardware_scope'] + ', WPA3-SAE association typed on the device console',
                       wifi_association_confirmed=False)
-    if profile in ('bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1'):
+    if profile in ('bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1', 'lineage1'):
         result.update(hardware_scope=result['hardware_scope'] + ', WCN3991 Bluetooth over UART3 with a temporary address',
                       bluetooth_confirmed=False)
-    if profile in ('audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1'):
+    if profile in ('audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1', 'lineage1'):
         for symbol in ('QCOM_Q6V5_PAS', 'QCOM_APR', 'SND_SOC_QDSP6', 'SND_SOC_SM8250', 'SND_SOC_TAS2562',
                        'SND_SOC_WCD937X', 'SND_SOC_WCD937X_SDW', 'SND_SOC_LPASS_RX_MACRO',
                        'SND_SOC_LPASS_TX_MACRO', 'SND_SOC_LPASS_VA_MACRO', 'SOUNDWIRE_QCOM', 'I2C_QCOM_GENI'):
@@ -259,7 +282,7 @@ def main(profile='boot1'):
                 'Unexpected ADSP firmware name')
         result.update(hardware_scope=result['hardware_scope'] + ', native ADSP audio card (TAS2562 speaker, WCD937x)',
                       audio_confirmed=False)
-    if profile in ('battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1'):
+    if profile in ('battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1', 'lineage1'):
         for symbol in ('BATTERY_QCOM_QG', 'NVMEM_SPMI_SDAM', 'QCOM_SPMI_ADC5'):
             require('CONFIG_' + symbol + '=y\n' in config, 'Missing battery built-in: ' + symbol)
         available(dtb, '/soc@0/spmi@c440000/pmic@0/qgauge@4800')
@@ -316,4 +339,6 @@ def main(profile='boot1'):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--profile', choices=PROFILES, default='boot1')
-    main(parser.parse_args().profile)
+    parser.add_argument('--android-ramdisk', help='LineageOS first-stage ramdisk.img for lineage1')
+    arguments = parser.parse_args()
+    main(arguments.profile, arguments.android_ramdisk)

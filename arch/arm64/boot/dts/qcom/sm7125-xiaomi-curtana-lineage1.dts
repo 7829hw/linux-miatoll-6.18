@@ -1,0 +1,19 @@
+// SPDX-License-Identifier: GPL-2.0
+// LineageOS SD-card boot: gpu1 DT (display, touch, USB, audio, Adreno) with
+// the internal UFS, the modem and Wi-Fi disabled. Android finds its
+// partitions on the SM32G microSD only; the internal storage is not even
+// probed, so it cannot be mounted or written.
+#include "sm7125-xiaomi-curtana-gpu1.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing lineage1)";
+	chosen {
+		miatoll,boot-profile = "lineage1-ram-only";
+	};
+};
+
+&ufs_mem_hc { status = "disabled"; };
+&ufs_mem_phy { status = "disabled"; };
+&remoteproc_mpss { status = "disabled"; };
+&ipa { status = "disabled"; };
+&wifi { status = "disabled"; };
