@@ -11,6 +11,7 @@ WPA3 연결·IPv4 통신을 실기기로 확인한 브랜치: **`miatoll/6.18-wi
 Wi-Fi 지연을 개선한 브랜치: **`miatoll/6.18-wifi3`**(wifi2 + ath10k WCN3990 PMF peer 비트 backport).
 Bluetooth 초기화·검색을 실기기로 확인한 브랜치: **`miatoll/6.18-bt1`**(wifi3 기반).
 배터리 계측을 실기기로 확인한 브랜치: **`miatoll/6.18-battery2`**(battery1 + QG 전류 배율·부호 수정).
+셸 명령 Fastboot 재부팅을 실기기로 확인한 브랜치: **`miatoll/6.18-reboot1`**(battery2 + `reboot-mode`).
 공식 Linux **v6.18.58**을 기반으로, 6.14.7 포크의 Xiaomi 하드웨어 구현을 직접 선별 이식했다.
 기존 로컬 커널 수정은 보존 브랜치와 백업에 남겼다.
 
@@ -214,6 +215,15 @@ USB 분리 시험에서 원시 부호가 충전 음수·방전 양수로 power_s
 충전 +144~+167 mA, 배터리 단독 약 −112 mA로 부호와 크기가 예측과 일치했다. 독립 전류계 비교는 없다.
 capacity·status 계산과 충전 제어는 아직 포크 수준이다.
 [battery2 실기기 기록](reports/device-tests/20261027-114455-battery2/README.ko.md)
+
+## reboot1: USB 셸에서 Fastboot로 재부팅
+
+BusyBox `reboot`는 재부팅 인자를 넘기지 못한다. 그래서 `reboot(RESTART2, "bootloader")`를 호출하는 정적 도구
+`reboot-mode`(`fastboot-reboot`)를 추가했다. 커널은 바꾸지 않았다. upstream `qcom-pon` reboot-mode가
+PON 재부팅 사유를 downstream과 같은 값(0x2, 7:1비트)으로 쓴다. 실행 중 battery2 세션과 reboot1 이미지에서
+Fastboot 복귀를 확인했다. 실행기의 `boot --from-shell`과 `reboot-bootloader`로 버튼 없이 회차를 반복할 수 있다.
+[셸 재부팅 확인](reports/device-tests/20261027-120000-battery2-reboot-mode/README.ko.md),
+[reboot1 순환 시험](reports/device-tests/20261027-120805-reboot1-from-shell/README.ko.md)
 
 ## 하드웨어별 상태
 

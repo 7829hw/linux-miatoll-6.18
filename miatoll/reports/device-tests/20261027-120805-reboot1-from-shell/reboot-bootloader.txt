@@ -1,0 +1,11 @@
+shell: reboot-mode bootloader
+for t in /bin/reboot-mode /run/reboot-mode; do [ -x "$t" ] && e
+xec "$t" bootloader; done; echo REBOOT_MODE_UNAVAIL""ABLE
+REBOOT_MODE_REQUESTED: bootloader
+
+[ACM closed by the restart]
+
+fastboot devices
+
+fastboot devices
+REDACTED	 fastboot

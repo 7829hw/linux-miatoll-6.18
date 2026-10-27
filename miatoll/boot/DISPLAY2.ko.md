@@ -38,6 +38,8 @@ python3 miatoll/boot/ram_boot_test.py observe miatoll/reports/device-tests/<회�
 ```
 
 실행기는 장치를 `usbipd.exe attach`로 WSL에 붙이고 Windows 절차와 같은 순서·명령 범위로 동작한다.
+reboot1 이후 이미지는 USB 셸에서 `fastboot-reboot`(또는 `reboot-mode bootloader`)로 Fastboot에 돌아간다.
+실행기에서는 `ram_boot_test.py reboot-bootloader <회차>`, 또는 다음 이미지를 바로 보내는 `boot --from-shell`을 쓴다.
 
 ## Windows 실행
 
