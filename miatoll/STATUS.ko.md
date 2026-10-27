@@ -12,6 +12,7 @@ Wi-Fi 지연을 개선한 브랜치: **`miatoll/6.18-wifi3`**(wifi2 + ath10k WCN
 Bluetooth 초기화·검색을 실기기로 확인한 브랜치: **`miatoll/6.18-bt1`**(wifi3 기반).
 배터리 계측을 실기기로 확인한 브랜치: **`miatoll/6.18-battery2`**(battery1 + QG 전류 배율·부호 수정).
 셸 명령 Fastboot 재부팅을 실기기로 확인한 브랜치: **`miatoll/6.18-reboot1`**(battery2 + `reboot-mode`).
+내장 스피커 재생을 실기기로 확인한 브랜치: **`miatoll/6.18-audio2`**(reboot1 + ADSP 스피커 전용 카드).
 공식 Linux **v6.18.58**을 기반으로, 6.14.7 포크의 Xiaomi 하드웨어 구현을 직접 선별 이식했다.
 기존 로컬 커널 수정은 보존 브랜치와 백업에 남겼다.
 
@@ -225,6 +226,16 @@ Fastboot 복귀를 확인했다. 실행기의 `boot --from-shell`과 `reboot-boo
 [셸 재부팅 확인](reports/device-tests/20261027-120000-battery2-reboot-mode/README.ko.md),
 [reboot1 순환 시험](reports/device-tests/20261027-120805-reboot1-from-shell/README.ko.md)
 
+## audio1/audio2: ADSP 오디오와 내장 스피커
+
+audio1(`20261027-121845`)은 포크의 전체 카드를 켰다. ADSP·Q6 APR·TAS2562는 동작했지만 ADSP가
+`AFE_CMD_REMOTE_LPASS_CORE_HW_VOTE_REQUEST`를 지원하지 않았다. 그래서 VA macro가 실패하고 WCD937x 경로가 카드 전체를 막았다.
+audio2(`20261027-122627`)는 스피커 전용 카드로 `Xiaomi-miatoll` 카드를 등록했다.
+수정한 speaker-tone(라우팅 후 PCM 열기, q6asm의 480 frame 단위 period)으로 1 kHz 시험음을 재생했고,
+사용자가 내장 스피커에서 들었다. 이어폰·마이크는 미해결이다.
+[audio1 기록](reports/device-tests/20261027-121845-audio1/README.ko.md),
+[audio2 기록](reports/device-tests/20261027-122627-audio2/README.ko.md)
+
 ## 하드웨어별 상태
 
 아래의 '반영'은 새 브랜치의 소스·설정·컴파일 결과다. boot1에서 확인한 기본 기능 외의
@@ -237,7 +248,7 @@ Fastboot 복귀를 확인했다. 실행기의 `boot --from-shell`과 `reboot-boo
 | 터치 | SPI/GENI/input | FT8756 및 NT36xxx SPI 드라이버, 패널 연동과 firmware 이름 | touch1(Huaxing FT8756)에서 RAM firmware·IRQ·좌표·5점 멀티터치 실기기 확인. suspend/blank 중 처리, Tianma NT36xxx 미검증 |
 | GPU | Adreno A618/GMU/DRM | ZAP 이름, HWCG, fuse 0x9f/bin 3. OPP는 SM7125에 한정 | firmware, GMU/GPU 초기화, 렌더링/Android GPU userspace |
 | 카메라 | CAMSS 공통 코드, OV8856/DW9714 | SC7180 CAMSS/CCI/PHY/DT, S5KGM2/S5K5E9/OV16A1Q/DW9800, 기존 센서/VCM 확장 | ID/전원/스트림/초점/영상 품질. DW9800은 원본도 WIP. joyeuse DT에는 S5K5E9/OV16A1Q만 있고 주카메라 경로가 완성되지 않음 |
-| 오디오 | QDSP6/APR, sm8250 machine, TAS2562, WCD937x, SoundWire/LPASS | ADSP 및 스피커/헤드폰/마이크 DT 경로, 드라이버 설정 | ALSA 열거, 스피커 소리, 녹음/마이크/통화, 기존 ACDB/HAL 대응 |
+| 오디오 | QDSP6/APR, sm8250 machine, TAS2562, WCD937x, SoundWire/LPASS | ADSP 및 스피커/헤드폰/마이크 DT 경로, 드라이버 설정 | audio2에서 스피커 전용 카드 등록·내장 스피커 시험음 청취 확인. WCD937x 이어폰/마이크는 ADSP의 LPASS HW vote 미지원으로 막힘. 통화, ACDB/HAL 대응 미검증 |
 | LTE 모뎀 | MPSS remoteproc, QRTR/QMI, IPA/RMNET | 보드 firmware/메모리/IPA DT, SM7125 PD mapper | MPSS/QMI/SIM/망 등록, 데이터, RIL/IMS/음성 호환성 |
 | Wi-Fi/Bluetooth | ath10k SNOC, QCA UART/HCI | 전원/버스/펌웨어 DT | wifi1에서 MPSS·WLAN firmware·wlan0·수동 검색, wifi2에서 WPA3-SAE 연결·DHCPv4·ICMP, wifi3에서 PMF peer 비트 backport 후 지연 개선(평균 23 ms) 실기기 확인(read-only rmtfs, 기기 BDF). bt1에서 Bluetooth firmware·임시 주소 전원·LE/BR 검색 확인. Galaxy Buds Pro 페어링과 A2DP SBC 시험음 청취 확인. 공장 MAC/BD 주소, 처리량, 공존, 장시간 오디오·통화 미검증. PMF 패치는 wifi3 브랜치에만 포함 |
 | 배터리/충전 | ADC5, SPMI SDAM, regulator, Type-C | 실험적 QGauge와 PM6150 DT. 6.18 fwnode API 변환. QG SUBTYPE 배율·ABI 부호 수정(battery2) | battery2에서 전압·OCV·온도·충전/방전 전류 부호와 크기 실기기 확인. 잔량은 선형 전압 추정이며 STATUS_UNKNOWN. 충전 제어·정확한 SOC·건강 HAL은 미완성. SM5714는 Samsung용이므로 제외 |

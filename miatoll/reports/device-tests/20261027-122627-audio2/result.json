@@ -1,0 +1,134 @@
+{
+  "capture_id": "20261027-122627",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-audio2+",
+  "boot_profile": "audio2-ram-only",
+  "image": "boot-curtana-6.18.58-audio2.img",
+  "image_sha256": "c374767ed74fc2f1f10697e5b746a2e4adebfee14e6c829c1a1d0f77961c7ee5",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-audio2/boot-curtana-6.18.58-audio2.img"
+  ],
+  "physical_display_confirmed": true,
+  "user_observation": {
+    "screen": "AUDIO TEST 2 banner; display normal",
+    "backlight": "on",
+    "notes": "screen not separately reported during the audio steps; boot, shell and tone steps completed normally"
+  },
+  "restarted_from_shell": true,
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "AUDIO2_BANNER_WRITTEN",
+      "AUDIO2_PROBE_BEGIN",
+      "AUDIO2_PROBE_END",
+      "AUDIO2_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "27:          0          0          0          0          0          0          0          0    GICv3 134 Level     arm-smmu-context-fault",
+      "28:          0          0          0          0          0          0          0          0    GICv3 135 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "audio2-fastboot-20261027-122627.txt": {
+      "bytes": 859,
+      "sha256": "aaa72b5c5a7bd3afbb1be225f8e2ccdc90ea63b308dc9f78fde3b0357c77fbcd"
+    },
+    "audio2-serial-20261027-122627.txt": {
+      "bytes": 161350,
+      "sha256": "279bdeb2ca3a2517040976dccf6760c5d94e4ec65852c7b5190d760384078d90"
+    },
+    "audio-probe.txt": {
+      "bytes": 11838,
+      "sha256": "d8b10a1307a0995c426dde1deb3433034ddd6d96bdbad94738ea5e5233da4d53"
+    },
+    "steps.txt": {
+      "bytes": 21501,
+      "sha256": "efc1f3a0425c61d7ae900f3daaff21b37367fde93eaaa110569ced1672becf76"
+    }
+  },
+  "step_observations": {
+    "speaker-tone-rev6": {
+      "screen": "user heard the quiet 1 kHz tone from the built-in speaker",
+      "backlight": "on",
+      "notes": ""
+    }
+  },
+  "audio_confirmed": {
+    "card_registered": true,
+    "speaker_playback": true,
+    "user_heard_tone": true,
+    "headset_mic": false
+  },
+  "audio": {
+    "card": "0 [Xiaomimiatoll]: sm8250 - Xiaomi-miatoll; MultiMedia1-3 PCMs; no deferred probes",
+    "adsp": "running, q6v5 fatal 0",
+    "dt": "speaker-only: WCD dai-links and routes removed; WCD937x, SoundWire and LPASS macros disabled",
+    "tone_tool_iterations": [
+      {
+        "revision": 2,
+        "image": "packaged in audio2",
+        "result": "EINVAL at PCM open: \"no backend DAIs enabled for MultiMedia1\"; the tool opened the frontend before routing it; mixer untouched"
+      },
+      {
+        "revision": 3,
+        "result": "route set first; HW_PARAMS EINVAL; mixer restored"
+      },
+      {
+        "revision": 4,
+        "result": "diagnostic: open refine showed ranges that include the request"
+      },
+      {
+        "revision": 5,
+        "result": "diagnostic: refine of the exact request itself failed"
+      },
+      {
+        "revision": 6,
+        "sha256": "a30ae7c368043e5c2ca7196362abb9c5e34876e758850c50307738b5154ef990",
+        "result": "period 960 / buffer 3840 frames (q6asm-dai steps period and buffer size by 480); played"
+      }
+    ],
+    "playback": {
+      "rate": 48000,
+      "channels": 2,
+      "format": "S16_LE",
+      "period_frames": 960,
+      "buffer_frames": 3840,
+      "frames": 144000,
+      "drain_ms": 2985,
+      "tone": "1 kHz, peak 256/32768 (-42.1 dBFS), 10 ms fades",
+      "amp_gain_during": "raw 0, restored to 16",
+      "route_restored": true,
+      "exit": 0
+    },
+    "delivery": "revisions 3-6 were pushed over the ACM shell into /run with SHA-256 checked on the device; the audio2 image itself carries revision 2",
+    "host_tests": "the earlier bring-up speaker-tone host tests were not re-run for revisions 2-6"
+  }
+}

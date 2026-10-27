@@ -15,10 +15,11 @@
 #include <unistd.h>
 #include <sound/asound.h>
 
-#define VERSION "curtana speaker-tone revision 2 (fixed quiet 3-second PCM tone, Xiaomi-miatoll card)"
+#define VERSION "curtana speaker-tone revision 6 (fixed quiet 3-second PCM tone, Xiaomi-miatoll card, route before open, 960-frame periods)"
 #define RATE 48000U
 #define TOTAL_FRAMES (RATE * 3U)
-#define PERIOD 1024U
+// q6asm-dai requires period and buffer sizes in multiples of 480 frames.
+#define PERIOD 960U
 #define BUFFER (PERIOD * 4U)
 #define ROUTE "TERT_MI2S_RX Audio Mixer MultiMedia1"
 
@@ -117,6 +118,40 @@ static void exact_mask(struct snd_pcm_hw_params *p, unsigned parameter, unsigned
     m->bits[bit / 32] = 1U << (bit % 32);
 }
 
+static void print_refine(const char *tag, const struct snd_pcm_hw_params *p)
+{
+    static const char *const names[] = {"sample_bits", "frame_bits", "channels", "rate",
+        "period_time", "period_size", "period_bytes", "periods", "buffer_time", "buffer_size",
+        "buffer_bytes", "tick_time"};
+    printf("%s format_mask=0x%08x%08x access_mask=0x%08x\n", tag,
+           p->masks[SNDRV_PCM_HW_PARAM_FORMAT].bits[1], p->masks[SNDRV_PCM_HW_PARAM_FORMAT].bits[0],
+           p->masks[SNDRV_PCM_HW_PARAM_ACCESS].bits[0]);
+    for (unsigned n = 0; n < sizeof(names) / sizeof(names[0]); n++)
+        printf("%s %s=%u..%u%s\n", tag, names[n], p->intervals[n].min, p->intervals[n].max,
+               p->intervals[n].empty ? " empty" : "");
+}
+
+// On a rejected configuration, print what the PCM would accept for the exact
+// request and for fully open parameters; HW_REFINE changes nothing.
+static void report_refine(int fd, const struct snd_pcm_hw_params *request)
+{
+    struct snd_pcm_hw_params exact = *request, open_params = {0};
+    exact.rmask = UINT_MAX;
+    if (ioctl(fd, SNDRV_PCM_IOCTL_HW_REFINE, &exact))
+        printf("refine_exact errno=%d\n", errno);
+    print_refine("refine_exact", &exact);
+    for (unsigned n = 0; n < sizeof(open_params.masks) / sizeof(open_params.masks[0]); n++)
+        memset(&open_params.masks[n], 0xff, sizeof(open_params.masks[n]));
+    for (unsigned n = 0; n < sizeof(open_params.intervals) / sizeof(open_params.intervals[0]); n++)
+        open_params.intervals[n].max = UINT_MAX;
+    open_params.rmask = UINT_MAX;
+    if (ioctl(fd, SNDRV_PCM_IOCTL_HW_REFINE, &open_params)) {
+        perror("PCM HW_REFINE");
+        return;
+    }
+    print_refine("refine_open", &open_params);
+}
+
 static int pcm_configure(int fd)
 {
     struct snd_pcm_hw_params p = {0};
@@ -135,7 +170,13 @@ static int pcm_configure(int fd)
     const unsigned values[] = {2, RATE, 16, 32, PERIOD, 4, BUFFER};
     for (unsigned n = 0; n < sizeof(parameters) / sizeof(parameters[0]); n++)
         exact_interval(&p, parameters[n], values[n]);
-    if (ioctl(fd, SNDRV_PCM_IOCTL_HW_PARAMS, &p)) return -1;
+    struct snd_pcm_hw_params request = p;
+    if (ioctl(fd, SNDRV_PCM_IOCTL_HW_PARAMS, &p)) {
+        int saved = errno;
+        report_refine(fd, &request);
+        errno = saved;
+        return -1;
+    }
     const unsigned masks[] = {SNDRV_PCM_ACCESS_RW_INTERLEAVED, SNDRV_PCM_FORMAT_S16_LE, SNDRV_PCM_SUBFORMAT_STD};
     for (unsigned n = 0; n < 3; n++)
         for (unsigned word = 0; word < sizeof(p.masks[n].bits) / sizeof(p.masks[n].bits[0]); word++)
@@ -261,6 +302,10 @@ static int play(void)
             fprintf(stderr, "Expected idle sense switches\n"); goto done;
         }
     if (stopped) goto done;
+    // DPCM refuses to open a frontend with no backend connected, so route first.
+    dirty = 1; // Even a failed write may have partially changed a control.
+    if (write_control(ctl_fd, &gain, 0) || stopped ||
+        write_control(ctl_fd, &source, 1) || stopped || write_control(ctl_fd, &route, 1) || stopped) goto done;
     pcm_fd = open("/dev/snd/pcmC0D0p", O_WRONLY | O_NONBLOCK | O_CLOEXEC | O_NOFOLLOW);
     if (pcm_fd < 0) goto done;
     struct snd_pcm_info info = {0};
@@ -268,10 +313,7 @@ static int play(void)
         info.stream != SNDRV_PCM_STREAM_PLAYBACK || strncmp((char *)info.id, "MultiMedia1", 11)) {
         fprintf(stderr, "Unexpected PCM playback endpoint\n"); goto done;
     }
-    dirty = 1; // Even a failed write may have partially changed a control.
-    if (stopped || write_control(ctl_fd, &gain, 0) || stopped ||
-        write_control(ctl_fd, &source, 1) || stopped || write_control(ctl_fd, &route, 1) ||
-        stopped || pcm_configure(pcm_fd) || stopped || playback(pcm_fd)) goto done;
+    if (stopped || pcm_configure(pcm_fd) || stopped || playback(pcm_fd)) goto done;
     result = 0;
 done:
     if (result) fprintf(stderr, "speaker trial stopped: signal=%d errno=%d (%s)\n", stopped, errno, strerror(errno));

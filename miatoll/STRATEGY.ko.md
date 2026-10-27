@@ -41,6 +41,8 @@ display1의 실제 화면 실패 로그를 보존하고 수정 후보는 `miatol
 | `miatoll/6.18-battery1` | bt1에 포크의 읽기 전용 PM6150 QG 계측을 더한 배터리 시험 |
 | `miatoll/6.18-battery2` | battery1에 QG SUBTYPE 기반 전류 배율·power_supply 부호 수정을 더한 시험 |
 | `miatoll/6.18-reboot1` | battery2에 셸 명령 Fastboot 재부팅 도구(`reboot-mode`)를 더한 기준 RAM 이미지 |
+| `miatoll/6.18-audio1` | reboot1에 포크 전체 오디오 카드(ADSP, TAS2562, WCD937x)를 켠 시험. HW vote 미지원으로 카드 실패 |
+| `miatoll/6.18-audio2` | audio1에서 WCD 경로를 뺀 스피커 전용 카드와 수정한 speaker-tone |
 
 최초 Git 보존 bundle은 백업 디렉터리의 `legacy-kernel.bundle`이다.
 공식 태그는 shallow fetch로 고정했으므로 모든 과거 upstream 이력을 보유한 전체 clone은 아니다.
