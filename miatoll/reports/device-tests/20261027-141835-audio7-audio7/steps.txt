@@ -1,0 +1,88 @@
+### 2026-10-27T14:19:26 boot-state
+$ cat /proc/uptime; grep -E "swr_wake|wcd937x|mbhc sw|Elect" /proc/interrupts | awk "{print \$1,\$2,\$(NF-1),\$NF}"; for d in /sys/bus/soundwire/devices/*; do echo "${d##*/} $(cat $d/power/runtime_status)"; done; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "swr|soundwire|z_val|ramp|pdc" | tail -8
+cat /proc/uptime; grep -E "swr_wake|wcd937x|mbhc sw|Elect" /proc
+/interrupts | awk "{print \$1,\$2,\$(NF-1),\$NF}"; for d in /sys/bus/soundwire/d
+evices/*; do echo "${d##*/} $(cat $d/power/runtime_status)"; done; tinymix -D 0 
+get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "swr|soundwi
+re|z_val|ramp|pdc" | tail -8; printf "\nSTEP_DONE_141926=%s\n" "$?"
+16.05 126.05
+190: 0 Level swr_wake_irq
+191: 1 Edge wcd937x
+192: 0 WDOG INT
+193: 0 WDOG INT
+194: 0 WDOG INT
+195: 1 sw intr
+196: 0 Press detect
+197: 0 Release detect
+198: 0 Elect Insert
+199: 0 Elect Remove
+200: 0 OCP detect
+201: 0 OCP detect
+sdw-master-2-0 suspended
+sdw-master-3-0 suspended
+sdw:2:0:0217:010a:00:4 suspended
+sdw:3:0:0217:010a:00:3 suspended
+Off
+Off
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+[    4.621832] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.624166] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.626455] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.628618] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_141926=0
+miatoll-audio7# [6n
+### 2026-10-27T14:20:01 replug-suspended
+$ grep -E "swr_wake|WCD937x|mbhc sw|Elect|GICv3 (328|329)" /proc/interrupts | awk "{print \$1,\$2,\$(NF-1),\$NF}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "z_val|ramp|swr|soundwire" | tail -8
+grep -E "swr_wake|WCD937x|mbhc sw|Elect|GICv3 (328|329)" /proc/i
+nterrupts | awk "{print \$1,\$2,\$(NF-1),\$NF}"; tinymix -D 0 get "Headphone Jac
+k"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "z_val|ramp|swr|soundwire" | t
+ail -8; printf "\nSTEP_DONE_142001=%s\n" "$?"
+188: 3 Edge soundwire
+189: 4 Edge soundwire
+190: 0 Level swr_wake_irq
+191: 1 Edge wcd937x
+195: 1 sw intr
+198: 0 Elect Insert
+199: 0 Elect Remove
+Off
+Off
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+[    4.621832] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.624166] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.626455] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.628618] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_142001=0
+miatoll-audio7# [6n
+### 2026-10-27T14:23:52 scp-regs
+$ R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr|head -1); head -3 $R/registers; grep -E "^00(40|41|42|44|45|46|50|51):" $R/registers; cat $R/range 2>/dev/null | head -5; ls /sys/kernel/debug/regmap/; grep -E "GICv3 (328|329)|swr_wake" /proc/interrupts
+R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr|head -1); head -
+3 $R/registers; grep -E "^00(40|41|42|44|45|46|50|51):" $R/registers; cat $R/ran
+ge 2>/dev/null | head -5; ls /sys/kernel/debug/regmap/; grep -E "GICv3 (328|329)
+|swr_wake" /proc/interrupts; printf "\nSTEP_DONE_142351=%s\n" "$?"
+3001: 80
+3008: 00
+3009: 0c
+3001-3001
+3008-300b
+300e-3025
+3028-3029
+3040-3041
+[1;34m0-00[m                                [1;34m9-004c[m
+[1;34m0-01[m                                [1;34mab00000.clock-controller[m
+[1;34m0-04[m                                [1;34mad00000.clock-controller[m
+[1;34m0-05[m                                [1;34maf00000.clock-controller[m
+[1;34m100000.clock-controller[m             [1;34mc263000.thermal-sensor-srot[m
+[1;34m17c00000.mailbox[m                    [1;34mc263000.thermal-sensor-tm[m
+[1;34m1f40000.hwlock[m                      [1;34mc265000.thermal-sensor-srot[m
+[1;34m5090000.clock-controller[m            [1;34mc265000.thermal-sensor-tm[m
+[1;34m62600000.rxmacro-rx_macro[m           [1;34msdw:3:0:0217:010a:00:3-wcd937x_csr[m
+[1;34m62620000.txmacro-tx_macro[m           [1;34mspi11.0[m
+[1;34m62770000.codec-va_macro[m
+188:          3          0          0          0          0          0          0          0    GICv3 329 Edge      soundwire
+189:          4          0          0          0          0          0          0          0    GICv3 328 Edge      soundwire
+190:          0          0          0          0          0          0          0          0      PDC  75 Level     swr_wake_irq
+
+STEP_DONE_142351=0
+miatoll-audio7# [6n

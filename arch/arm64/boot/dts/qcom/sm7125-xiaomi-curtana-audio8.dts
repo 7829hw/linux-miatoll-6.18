@@ -1,0 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0
+// Headset detection check: audio7 DT (TX SoundWire wake through PDC pin 75)
+// with a kernel that sets SCP_SystemCtrl WakeUpEnable on wake-capable
+// simple clock stop Slaves such as the WCD937x TX device.
+#include "sm7125-xiaomi-curtana-audio7.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing audio8 test)";
+	chosen {
+		miatoll,boot-profile = "audio8-ram-only";
+	};
+};

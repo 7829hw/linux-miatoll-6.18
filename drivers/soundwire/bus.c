@@ -1097,6 +1097,18 @@ int sdw_bus_prep_clk_stop(struct sdw_bus *bus)
 				dev_err(&slave->dev, "clock stop prepare failed:%d\n", ret);
 				return ret;
 			}
+		} else if (slave->prop.wake_capable) {
+			/*
+			 * A simple clock stop Slave needs no prepare handshake,
+			 * but it may only signal a wake from clock stop when
+			 * WakeUpEnable is set.
+			 */
+			ret = sdw_write_no_pm(slave, SDW_SCP_SYSTEMCTRL,
+					      SDW_SCP_SYSTEMCTRL_WAKE_UP_EN);
+			if (ret < 0 && ret != -ENODATA) {
+				dev_err(&slave->dev, "wake enable failed:%d\n", ret);
+				return ret;
+			}
 		}
 	}
 
