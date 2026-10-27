@@ -23,7 +23,16 @@
   - signal-info는 InformationUnavailable.
 - rmtfs가 RAM shadow로 모뎀 EFS 요청을 처리했다(rmtfs.log).
 
-## 해석·남은 일
-- 운영 모드 `shutting-down`의 원인은 확인하지 않았다. 확인하려면 조회가 아닌 모드 변경 요청이 필요하다(사용자 결정 사항).
-  - downstream Android는 RIL이 부팅 후 online을 요청한다.
-- SIM이 없어 망 등록·데이터(IPA/rmnet)·통화·SMS는 시험하지 않았다.
+## online 전환 (사용자 허락, 런타임 상태만)
+사용자가 SIM 없이 DMS 운영 모드 `online` 요청 1회를 허락했다. 기록은 AGENTS.md에 남겼다. SIM/PIN·통화·SMS·데이터·NV/EFS·파티션 쓰기는 하지 않았다.
+- `qmicli --dms-set-operating-mode=online`: 성공. 모드가 `shutting-down` → `online`으로 바뀌었다.
+  - 부팅 직후의 `shutting-down`은 호스트(RIL 역할)의 online 요청을 기다리는 상태로 보인다.
+- 60 s 뒤 NAS 상태:
+  - LTE service `limited`(SIM 없음 → 긴급 서비스용 camping), Service capability cs-ps.
+  - MCC 450 / MNC 08. Cell ID와 TAC는 가렸다.
+  - GSM/WCDMA는 none.
+- 신호(LTE): RSSI -54 dBm, RSRP -79~-85 dBm, RSRQ -9~-10 dB, SNR 8.2~12.6 dB.
+
+## 남은 일
+- SIM을 이용한 망 등록, 데이터(IPA/rmnet, WDS), 통화·SMS는 미시험이다.
+- RIL/Android 연동도 미시험이다.

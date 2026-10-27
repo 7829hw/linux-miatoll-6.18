@@ -223,3 +223,118 @@ QMI_RC=0
 
 STEP_DONE_232324=0
 miatoll-modem1# [6n
+### 2026-10-27T23:33:51 modem-set-online
+$ modem-query mode; echo "== qmicli --dms-set-operating-mode=online"; timeout 20 /usr/bin/qmicli -d qrtr://0 --dms-set-operating-mode=online 2>&1; echo SET_RC=$?; sleep 5; modem-query mode
+modem-query mode; echo "== qmicli --dms-set-operating-mode=onlin
+e"; timeout 20 /usr/bin/qmicli -d qrtr://0 --dms-set-operating-mode=online 2>&1;
+ echo SET_RC=$?; sleep 5; modem-query mode; printf "\nSTEP_DONE_233346=%s\n" "$?
+"
+== qmicli --dms-get-operating-mode
+[qrtr://0] Operating mode retrieved:
+	Mode: 'shutting-down'
+	HW restricted: 'no'
+QMI_RC=0
+== qmicli --dms-set-operating-mode=online
+[qrtr://0] Operating mode set successfully
+SET_RC=0
+== qmicli --dms-get-operating-mode
+[qrtr://0] Operating mode retrieved:
+	Mode: 'online'
+	HW restricted: 'no'
+QMI_RC=0
+
+STEP_DONE_233346=0
+miatoll-modem1# [6n
+### 2026-10-27T23:35:01 modem-online-network
+$ sleep 60; modem-query mode; modem-query network; modem-query signal
+sleep 60; modem-query mode; modem-query network; modem-query sig
+nal; printf "\nSTEP_DONE_233400=%s\n" "$?"
+== qmicli --dms-get-operating-mode
+[qrtr://0] Operating mode retrieved:
+	Mode: 'online'
+	HW restricted: 'no'
+QMI_RC=0
+== qmicli --nas-get-serving-system
+[qrtr://0] Successfully got serving system:
+	Registration state: 'not-registered-searching'
+	CS: 'detached'
+	PS: 'detached'
+	Selected network: '3gpp'
+	Radio interfaces: '1'
+		[0]: 'lte'
+	Roaming status: 'on'
+	Data service capabilities: '0'
+	Current PLMN:
+		MCC: '450'
+		MNC: '8'
+		Description: ''
+	Roaming indicators: '1'
+		[0]: 'on' (lte)
+	Detailed status:
+		Status: 'limited'
+		Capability: 'cs-ps'
+		HDR Status: 'none'
+		HDR Hybrid: 'no'
+		Forbidden: 'no'
+	Full operator code info:
+		MCC: '450'
+		MNC: '8'
+		MNC with PCS digit: 'no'
+QMI_RC=0
+== qmicli --nas-get-system-info
+[qrtr://0] Successfully got system info:
+	GSM service:
+		Status: 'none'
+		True Status: 'none'
+		Preferred data path: 'no'
+	WCDMA service:
+		Status: 'none'
+		True Status: 'none'
+		Preferred data path: 'no'
+	LTE service:
+		Status: 'limited'
+		True Status: 'none'
+		Preferred data path: 'no'
+		Domain: 'none'
+		Service capability: 'cs-ps'
+		Roaming status: 'on'
+		Forbidden: 'no'
+		Cell ID: <redacted>
+		MCC: '450'
+		MNC: '08'
+		Tracking Area Code: <redacted>
+		eMBMS coverage info support: 'no'
+		eMBMS coverage info trace ID: '65535'
+		Cell access: 'all-calls'
+		Registration restriction: 'unrestricted'
+		Registration domain: 'not-applicable'
+	SIM reject info: 'unavailable'
+QMI_RC=0
+== qmicli --nas-get-signal-info
+[qrtr://0] Successfully got signal info
+LTE:
+	RSSI: '-54 dBm'
+	RSRQ: '-10 dB'
+	RSRP: '-85 dBm'
+	SNR: '8.2 dB'
+QMI_RC=0
+== qmicli --nas-get-signal-strength
+[qrtr://0] Successfully got signal strength
+Current:
+	Network 'lte': '-54 dBm'
+RSSI:
+	Network 'lte': '-54 dBm'
+ECIO:
+	Network 'lte': '-2.5 dBm'
+IO: '-106 dBm'
+SINR (8): '9.0 dB'
+RSRQ:
+	Network 'lte': '-9 dB'
+SNR:
+	Network 'lte': '12.6 dB'
+RSRP:
+	Network 'lte': '-79 dBm'
+QMI_RC=0
+
+STEP_DONE_233400=0
+miatoll-modem1# [6n

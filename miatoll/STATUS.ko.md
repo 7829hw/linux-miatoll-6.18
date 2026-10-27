@@ -315,8 +315,8 @@ qmicli(libqmi 1.36.0, QRTR)와 읽기 전용 래퍼 `modem-query`(식별자·위
 - MPSS는 RAM-shadow rmtfs로 기동해 QRTR에 DMS/NAS/WDS/UIM/Voice/WMS/IPA 등 서비스를 노출했다.
 - 펌웨어 `MPSS.AT.4.4.c6-00071-RENNELL_GEN_PACK-3`, GSM/UMTS/LTE.
 - SIM 없음: UIM `no-atr-received`, NAS `not-registered-searching`, 수신 IO -106 dBm.
-- 운영 모드가 `shutting-down`으로 보고된다(원인 미확인, 모드 변경은 보내지 않았다).
-- 망 등록·데이터·통화·SMS는 미시험이다.
+- 부팅 직후 운영 모드는 `shutting-down`이다. 사용자 허락으로 런타임 `online` 요청을 1회 보냈고, 그 뒤 LTE limited service(SIM 없음, 긴급 camping)에 RSRP 약 -80 dBm으로 붙었다.
+- SIM 망 등록·데이터·통화·SMS는 미시험이다.
 [modem1 기록](reports/device-tests/20261027-232006-modem1-modem1/README.ko.md)
 
 ## 하드웨어별 상태
