@@ -36,9 +36,12 @@ find_card() {
 rebind() {
     udc=$(cat "$gadget/UDC")
     [ -n "$udc" ] || fail 'gadget is not bound'
-    printf '' >"$gadget/UDC" || fail 'unbind failed'
-    "$@"
+    echo >"$gadget/UDC" || fail 'unbind failed'
+    # Always rebind, even if the change failed, so the console comes back.
+    ( "$@" )
+    status=$?
     printf '%s' "$udc" >"$gadget/UDC" || fail "rebind to $udc failed"
+    [ "$status" = 0 ] || fail "gadget change failed ($status); console rebound"
 }
 
 add_lun() {
@@ -58,7 +61,7 @@ add_lun() {
 
 remove_lun() {
     rm -f "$link"
-    [ -d "$function" ] && printf '' >"$function/lun.0/file" 2>/dev/null
+    [ -d "$function" ] && echo >"$function/lun.0/file" 2>/dev/null
     [ -d "$function" ] && rmdir "$function"
     printf '0x02' >"$gadget/bDeviceClass"
     printf '0x00' >"$gadget/bDeviceSubClass"

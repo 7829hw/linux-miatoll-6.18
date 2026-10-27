@@ -1,0 +1,21 @@
+### 2026-10-28T00:10:29 sd-export-on
+$ sd-export status; setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1 & sleep 1; cat /run/sd-export.log
+sd-export status; setsid sh -c "sd-export on" </dev/null >/de
+v/null 2>&1 & sleep 1; cat /run/sd-export.log; printf "\nSTEP_DONE_001028=%s\n" 
+"$?"
+SD-EXPORT: off
+SD-EXPORT: exporting /dev/mmcblk2 (62333952 sectors)
+
+STEP_DONE_001028=0
+[1]+  Done                       setsid sh -c "sd-export on" 0</dev/null 1>/dev/null 2>&1
+miatoll-sdexport1# [6n
+### 2026-10-28T00:10:31 sd-export-status
+$ sd-export status; cat /run/sd-export.log
+sd-export status; cat /run/sd-export.log; printf "\nSTEP_DONE
+_001031=%s\n" "$?"
+SD-EXPORT: off
+SD-EXPORT: exporting /dev/mmcblk2 (62333952 sectors)
+SD-EXPORT: mass_storage link failed
+
+STEP_DONE_001031=0
+miatoll-sdexport1# [6n
