@@ -1,0 +1,22 @@
+// SPDX-License-Identifier: GPL-2.0
+// Native ADSP audio on top of the verified reboot1 RAM test.
+#include "sm7125-xiaomi-curtana-reboot1.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing audio1 test)";
+	chosen {
+		miatoll,boot-profile = "audio1-ram-only";
+	};
+};
+
+// Restore the common-board ADSP and the full sound card exactly as ported
+// from 6.14.7: TAS2562 speaker on I2C9 and the WCD937x headset/mic path.
+&remoteproc_adsp { status = "okay"; };
+&i2c9 { status = "okay"; };
+&sound { status = "okay"; };
+&wcd937x { status = "okay"; };
+&swr1 { status = "okay"; };
+&swr2 { status = "okay"; };
+&rxmacro { status = "okay"; };
+&txmacro { status = "okay"; };
+&vamacro { status = "okay"; };

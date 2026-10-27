@@ -28,6 +28,10 @@ export PS1="$boot_prompt# "
 if [ -x /bin/display-banner ]; then
     /bin/display-banner >/run/display-banner.log 2>&1 &
 fi
+if [ -x /bin/audio-init ]; then
+    # Serve ADSP file requests from RAM before the audio protection domain asks.
+    /bin/audio-init >/run/audio-init.log 2>&1
+fi
 if /bin/usb-gadget >/run/usb-setup.log 2>&1; then
     cat /run/usb-setup.log
     echo "${boot_tag}_USB_READY: open the Windows COM port at 115200 baud"

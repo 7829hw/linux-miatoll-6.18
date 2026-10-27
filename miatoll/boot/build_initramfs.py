@@ -38,28 +38,30 @@ def build_reboot_mode():
 
 
 def build(output, profile='boot1'):
-    assert profile in ('boot1', 'display1', 'display2', 'touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1')
+    assert profile in ('boot1', 'display1', 'display2', 'touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1')
     script_names = ['init', 'usb-gadget', 'boot-probe']
     if profile != 'boot1':
         script_names += ['display-banner', 'display-probe']
-    touch = profile in ('touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1')
+    touch = profile in ('touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1')
     if touch:
         script_names += ['touch-probe', 'touch-events']
-    if profile in ('storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
+    if profile in ('storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1'):
         script_names += ['storage-probe']
-    if profile in ('usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
+    if profile in ('usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1'):
         script_names += ['usb-host-watch']
-    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
+    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1'):
         script_names += ['wifi-start', 'wifi-services', 'wifi-board', 'wifi-probe', 'wifi-scan']
-    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
+    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1'):
         script_names += ['wifi-join', 'wifi-udhcpc', 'wifi-link-probe', 'wifi-disconnect']
-    if profile in ('bt1', 'battery1', 'battery2', 'reboot1'):
+    if profile in ('bt1', 'battery1', 'battery2', 'reboot1', 'audio1'):
         script_names += ['bt-start', 'bt-probe']
-    if profile in ('battery1', 'battery2', 'reboot1'):
+    if profile in ('battery1', 'battery2', 'reboot1', 'audio1'):
         script_names += ['battery-probe']
-    reboot_tool = profile == 'reboot1'
+    reboot_tool = profile in ('reboot1', 'audio1')
     if reboot_tool:
         script_names += ['fastboot-reboot']
+    if profile == 'audio1':
+        script_names += ['audio-init', 'audio-probe']
     package = ROOT.parent / 'downloads/busybox-static-1.37.0-r20.apk'
     assert hashlib.sha256(package.read_bytes()).hexdigest() == APK_SHA256
     with tarfile.open(package, 'r:gz', ignore_zeros=True) as archive:
@@ -75,11 +77,11 @@ def build(output, profile='boot1'):
                 'blockdev', 'watchdog', 'tr', 'setsid', 'sleep', 'ln', 'ls', 'dmesg'}
     if touch:
         required |= {'hexdump', 'timeout', 'seq', 'cut', 'basename', 'readlink'}
-    if profile in ('storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
+    if profile in ('storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1'):
         required |= {'dd', 'sha256sum', 'sync', 'chmod', 'uniq'}
-    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
+    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1'):
         required |= {'sed', 'awk', 'mktemp', 'stat', 'mount', 'umount', 'cp', 'mv', 'rm', 'kill', 'ip'}
-    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
+    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1'):
         required |= {'stty', 'tee', 'ifconfig', 'udhcpc', 'ping'}
     with tempfile.TemporaryDirectory(prefix='boot1-busybox-') as temporary:
         executable = Path(temporary) / 'busybox'
@@ -109,7 +111,7 @@ def build(output, profile='boot1'):
         members.append(name)
     for name in ('.', 'bin', 'sbin', 'dev', 'proc', 'sys', 'run', 'etc', 'root'):
         add(name, stat.S_IFDIR | 0o755)
-    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
+    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1'):
         # wpa_cli binds its client socket in /tmp.
         add('tmp', stat.S_IFDIR | 0o1777)
     add('dev/console', stat.S_IFCHR | 0o600, major=5, minor=1)
@@ -127,10 +129,15 @@ def build(output, profile='boot1'):
             add(name, stat.S_IFDIR | 0o755)
         add('lib/firmware/' + TOUCH_FIRMWARE, stat.S_IFREG | 0o644, firmware)
     wifi = {}
-    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'):
+    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1'):
         import wifi_payload
-        wifi, wifi_summary = wifi_payload.load(ROOT.parent, connect=profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1'))
-        if profile in ('bt1', 'battery1', 'battery2', 'reboot1'):
+        wifi, wifi_summary = wifi_payload.load(ROOT.parent, connect=profile in ('wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1'))
+        if profile == 'audio1':
+            import audio_payload
+            audio, audio_summary = audio_payload.load(ROOT.parent)
+            wifi.update(audio)
+            wifi_summary['audio'] = audio_summary
+        if profile in ('bt1', 'battery1', 'battery2', 'reboot1', 'audio1'):
             import bluetooth_payload
             bluetooth, bluetooth_summary = bluetooth_payload.load(ROOT.parent)
             wifi.update(bluetooth)
@@ -152,7 +159,7 @@ def build(output, profile='boot1'):
         add('bin/reboot-mode', stat.S_IFREG | 0o755, reboot_mode)
     add('TRAILER!!!', 0)
     allowed = {'lib', 'lib/firmware', 'lib/firmware/' + TOUCH_FIRMWARE} if firmware else set()
-    allowed |= {name for name in members if name.startswith('lib/firmware/') and profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1')}
+    allowed |= {name for name in members if name.startswith('lib/firmware/') and profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1')}
     assert not any(name.startswith(('lib', 'vendor/', 'system/')) and name not in allowed
                    for name in members)
     compressed = gzip.compress(stream.getvalue(), mtime=0)

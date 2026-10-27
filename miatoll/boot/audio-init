@@ -1,0 +1,30 @@
+#!/bin/sh
+# ADSP auto-boots through the existing PAS driver; service file requests from RAM.
+# Test-only path overrides support isolated BusyBox fixtures.
+audio_class=${CURTANA_AUDIO_REMOTEPROC_CLASS:-/sys/class/remoteproc}
+audio_run=${CURTANA_AUDIO_RUN_DIR:-/run}
+mkdir -p "$audio_run/tqftpserv" || exit 1
+for audio_rp in "$audio_class"/remoteproc*; do
+    [ -r "$audio_rp/firmware" ] || continue
+    [ "$(cat "$audio_rp/firmware")" = qcom/sm7125/miatoll/adsp.mbn ] || continue
+    printf 'disabled\n' > "$audio_rp/recovery" || exit 1
+    echo "ADSP automatic recovery disabled: $audio_rp"
+done
+if [ -r "$audio_run/tqftpserv.pid" ]; then
+    audio_pid=$(cat "$audio_run/tqftpserv.pid") || exit 1
+    case "$audio_pid" in ''|0|1|*[!0-9]*) echo 'Invalid tqftpserv PID record'; exit 1 ;; esac
+    if kill -0 "$audio_pid" 2>/dev/null; then
+        echo 'RAM file service already running'
+        exit 0
+    fi
+fi
+tqftpserv -d > "$audio_run/tqftpserv.log" 2>&1 &
+audio_pid=$!
+echo "$audio_pid" > "$audio_run/tqftpserv.pid"
+sleep 1
+if ! kill -0 "$audio_pid" 2>/dev/null; then
+    echo 'RAM file service exited'
+    cat "$audio_run/tqftpserv.log"
+    exit 1
+fi
+echo 'RAM file service ready; no NV partition shadows or playback started by audio-init'

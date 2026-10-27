@@ -1,0 +1,70 @@
+#!/bin/sh
+# Read native speaker/ADSP registration. Does not open PCM or change mixer gains.
+echo '===== NATIVE AUDIO VERSION ====='
+uname -a
+echo '===== AUDIO BOOT SERVICES ====='
+cat /run/audio-init.log 2>/dev/null
+[ ! -f /run/tqftpserv.pid ] || { printf 'tqftpserv_pid='; cat /run/tqftpserv.pid; }
+echo '===== REMOTEPROC ====='
+for audio_rp in /sys/class/remoteproc/remoteproc*; do
+    [ -d "$audio_rp" ] || continue
+    echo "$audio_rp"
+    for audio_attr in name firmware state recovery; do
+        printf '%s: ' "$audio_attr"
+        cat "$audio_rp/$audio_attr" 2>/dev/null
+    done
+done
+echo '===== ALSA ====='
+for audio_attr in cards pcm devices; do
+    echo "/proc/asound/$audio_attr"
+    cat "/proc/asound/$audio_attr" 2>/dev/null
+done
+ls -l /dev/snd 2>/dev/null
+for audio_id in /proc/asound/card*/id; do
+    [ ! -r "$audio_id" ] || { echo "$audio_id"; cat "$audio_id"; }
+done
+echo '===== AMP I2C CONTROLLER / ADAPTERS ====='
+for audio_ctrl in /sys/bus/platform/devices/a8c000.i2c; do
+    [ -d "$audio_ctrl" ] || continue
+    echo "$audio_ctrl"
+    cat "$audio_ctrl/uevent" 2>/dev/null
+    ls -l "$audio_ctrl/driver" 2>/dev/null
+    tr '\000' '\n' < "$audio_ctrl/of_node/compatible" 2>/dev/null
+    echo
+ done
+for audio_adapter in /sys/class/i2c-adapter/i2c-*; do
+    [ -d "$audio_adapter" ] || continue
+    echo "$audio_adapter"
+    cat "$audio_adapter/name" 2>/dev/null
+    ls -l "$audio_adapter/device" 2>/dev/null
+ done
+echo '===== AMP I2C DEVICE =====' 
+for audio_dev in /sys/bus/i2c/devices/*; do
+    [ -f "$audio_dev/name" ] || continue
+    [ "$(cat "$audio_dev/name")" = tas2562 ] || continue
+    echo "$audio_dev"
+    cat "$audio_dev/uevent"
+    ls -l "$audio_dev/driver" 2>/dev/null
+done
+echo '===== APR / RPMSG ====='
+for audio_dev in /sys/bus/apr/devices/* /sys/bus/aprbus/devices/* /sys/bus/rpmsg/devices/*; do
+    [ -e "$audio_dev" ] || continue
+    echo "$audio_dev"
+    cat "$audio_dev/name" 2>/dev/null
+    ls -l "$audio_dev/driver" 2>/dev/null
+done
+echo '===== ASoC COMPONENTS / DAIS ====='
+cat /sys/kernel/debug/asoc/components 2>/dev/null
+grep -Ei 'tas2562|TERT_MI2S|CODEC_DMA|wcd937x|rx_macro|tx_macro|va_macro|swr|MultiMedia' /sys/kernel/debug/asoc/dais 2>/dev/null
+echo '===== SOUNDWIRE / WCD937x ====='
+ls /sys/bus/soundwire/devices 2>/dev/null
+for d in /sys/bus/soundwire/devices/*; do [ -e "$d" ] && { echo "$d"; ls -l "$d/driver" 2>/dev/null; }; done
+echo '===== DEFERRED PROBES ====='
+cat /sys/kernel/debug/devices_deferred 2>/dev/null
+echo '===== ADSP IRQ ====='
+grep -Ei 'adsp|lpass|q6v5|glink|geni.*i2c' /proc/interrupts
+echo '===== AUDIO LOG ====='
+dmesg | grep -Ei 'adsp|lpass|apr|q6|snd|asoc|tas256|audio|remoteproc|smmu|i2c|geni|wcd|swr|soundwire|macro|lpi' | tail -n 120
+echo '===== RAM FILE SERVICE LOG ====='
+tail -n 20 /run/tqftpserv.log 2>/dev/null
+echo '===== AUDIO PROBE END ====='

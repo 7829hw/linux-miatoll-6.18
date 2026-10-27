@@ -1,0 +1,41 @@
+{
+  "repository": "sm7125-mainline/firmware-xiaomi-miatoll",
+  "commit": "a7073ad14a91a103d14effbc87a94e632e29011a",
+  "files": [
+    {
+      "source_path": "lib/firmware/qcom/sm7125/miatoll/adsp.mbn",
+      "cached_path": "downloads/audio-firmware/lib/firmware/qcom/sm7125/miatoll/adsp.mbn",
+      "url": "https://raw.githubusercontent.com/sm7125-mainline/firmware-xiaomi-miatoll/a7073ad14a91a103d14effbc87a94e632e29011a/lib/firmware/qcom/sm7125/miatoll/adsp.mbn",
+      "bytes": 16281748,
+      "git_blob_sha1": "804f2f83dcbe2544b0d393d4a7af391ee961a5bf",
+      "sha256": "3cecdd348ea3d2e9d4a3913a46fcc7ff7e9fdd16ed28c364a30216b6c6d79094"
+    },
+    {
+      "source_path": "lib/firmware/qcom/sm7125/miatoll/adspr.jsn",
+      "cached_path": "downloads/audio-firmware/lib/firmware/qcom/sm7125/miatoll/adspr.jsn",
+      "url": "https://raw.githubusercontent.com/sm7125-mainline/firmware-xiaomi-miatoll/a7073ad14a91a103d14effbc87a94e632e29011a/lib/firmware/qcom/sm7125/miatoll/adspr.jsn",
+      "bytes": 403,
+      "git_blob_sha1": "0964c15a7204f5b8868a0d91cb90da373f31a038",
+      "sha256": "4781dc9312fa017b0e611c752dae2183c0f205af8300b28417a496dae511b0a5"
+    },
+    {
+      "source_path": "lib/firmware/qcom/sm7125/miatoll/adsps.jsn",
+      "cached_path": "downloads/audio-firmware/lib/firmware/qcom/sm7125/miatoll/adsps.jsn",
+      "url": "https://raw.githubusercontent.com/sm7125-mainline/firmware-xiaomi-miatoll/a7073ad14a91a103d14effbc87a94e632e29011a/lib/firmware/qcom/sm7125/miatoll/adsps.jsn",
+      "bytes": 405,
+      "git_blob_sha1": "ac032cf62729d86a4aab1776f3ea7654c6f9455c",
+      "sha256": "9723d9873223f83464246a234bef61569c3d6a07112448e4e7da870d4ce5972a"
+    },
+    {
+      "source_path": "lib/firmware/qcom/sm7125/miatoll/adspua.jsn",
+      "cached_path": "downloads/audio-firmware/lib/firmware/qcom/sm7125/miatoll/adspua.jsn",
+      "url": "https://raw.githubusercontent.com/sm7125-mainline/firmware-xiaomi-miatoll/a7073ad14a91a103d14effbc87a94e632e29011a/lib/firmware/qcom/sm7125/miatoll/adspua.jsn",
+      "bytes": 555,
+      "git_blob_sha1": "2d6824e8fb9a7ec2e0c2197cb400f3772bcb3cba",
+      "sha256": "d6c6376f53e5449eb4f7b9e5a30679ebc2a9afaad28c13ff171f979e7b1af1f6"
+    }
+  ],
+  "verification": "Exact byte size and Git blob SHA1; SHA256 recorded locally. No OEM-signature authentication claim.",
+  "hardware_verified": false,
+  "upstream_license_file_at_repository_root": false
+}
