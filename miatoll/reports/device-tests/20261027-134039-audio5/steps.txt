@@ -1,0 +1,151 @@
+### 2026-10-27T13:43:10 jack-after-replug
+$ sleep 2; for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tinymix -D 0 get "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "z_val|mbhc" | tail -3; R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr | head -1); echo "regmap=$R"; dd if=$R/registers bs=9 skip=$((0x3023)) count=1 2>/dev/null
+sleep 2; for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tin
+ymix -D 0 get "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "z_val|mbhc" | tai
+l -3; R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr | head -1); echo "regmap=$
+R"; dd if=$R/registers bs=9 skip=$((0x3023)) count=1 2>/dev/null; printf "\nSTEP
+_DONE_134308=%s\n" "$?"
+Headphone Jack=Off
+Mic Jack=Off
+regmap=/sys/kernel/debug/regmap/sdw:3:0:0217:010a:00:3-wcd937x_csr
+
+STEP_DONE_134308=0
+miatoll-audio5# [6n
+### 2026-10-27T13:43:24 mbhc-regs
+$ R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr | head -1); grep -E "^(3014|3015|3023|3022|3024|3015|3016|3017|3018|3120|3121):" $R/registers; for c in "Headphone Jack" "Mic Jack" "MBHC Switch"; do echo "$c=$(tinymix -D 0 get "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "wcd937x|mbhc|jack|input:" | tail -12; cat /proc/interrupts | grep -iE "mbhc|wcd|hph|elect|mech|button"
+R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr | head -1); grep
+ -E "^(3014|3015|3023|3022|3024|3015|3016|3017|3018|3120|3121):" $R/registers; f
+or c in "Headphone Jack" "Mic Jack" "MBHC Switch"; do echo "$c=$(tinymix -D 0 ge
+t "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "wcd937x|mbhc|jack|input:" | t
+ail -12; cat /proc/interrupts | grep -iE "mbhc|wcd|hph|elect|mech|button"; print
+f "\nSTEP_DONE_134324=%s\n" "$?"
+3014: 9d
+3015: b9
+3016: 02
+3017: XX
+3018: XX
+3022: 22
+3023: 22
+3024: 90
+3120: 82
+3121: 06
+Headphone Jack=Off
+Mic Jack=Off
+MBHC Switch=Off
+[    0.213025] input: pm8941_pwrkey as /devices/platform/soc@0/c440000.spmi/spmi-0/0-00/c440000.spmi:pmic@0:pon@800/c440000.spmi:pmic@0:pon@800:pwrkey/input/input0
+[    0.214075] input: pm8941_resin as /devices/platform/soc@0/c440000.spmi/spmi-0/0-00/c440000.spmi:pmic@0:pon@800/c440000.spmi:pmic@0:pon@800:resin/input/input1
+[    0.923055] input: Focaltech FT8756 Touchscreen as /devices/platform/soc@0/ac0000.geniqup/a94000.spi/spi_master/spi11/spi11.0/input/input2
+[    0.932512] input: gpio-keys as /devices/platform/gpio-keys/input/input3
+[    1.268451] wcd937x_codec codec: bound sdw:2:0:0217:010a:00:4 (ops wcd_sdw_component_ops)
+[    1.268634] wcd937x_codec codec: bound sdw:3:0:0217:010a:00:3 (ops wcd_sdw_component_ops)
+[    1.370729] input: Xiaomi-miatoll Headset Jack as /devices/platform/sound/sound/card0/input4
+[    4.624629] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.626906] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.629135] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.631305] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+190:          1          0          0          0          0          0          0          0  WCD937x   0 Edge      wcd937x
+191:          0          0          0          0          0          0          0          0  wcd937x  14 Edge      HPHR PDM WDOG INT
+192:          0          0          0          0          0          0          0          0  wcd937x  13 Edge      HPHL PDM WDOG INT
+193:          0          0          0          0          0          0          0          0  wcd937x  15 Edge      AUX PDM WDOG INT
+194:          1          0          0          0          0          0          0          0  wcd937x   4 Edge      mbhc sw intr
+195:          0          0          0          0          0          0          0          0  wcd937x   0 Edge      Button Press detect
+196:          0          0          0          0          0          0          0          0  wcd937x   1 Edge      Button Release detect
+197:          0          0          0          0          0          0          0          0  wcd937x   3 Edge      Elect Insert
+198:          0          0          0          0          0          0          0          0  wcd937x   2 Edge      Elect Remove
+199:          0          0          0          0          0          0          0          0  wcd937x   7 Edge      HPH_L OCP detect
+200:          0          0          0          0          0          0          0          0  wcd937x   5 Edge      HPH_R OCP detect
+
+STEP_DONE_134324=0
+miatoll-audio5# [6n
+### 2026-10-27T13:43:48 replug-during-stream
+$ audio-path headset-mic on >/dev/null; printf "\033[2J\033[H\n\n\033[1;37;45m   REPLUG THE EARPHONES NOW   \033[0m\n" >/dev/tty1; /run/pcm-test record 2 10 /run/replug.wav >/dev/null 2>&1; printf "\n\n\033[1;37;44m   DONE   \033[0m\n" >/dev/tty1; audio-path headset-mic off >/dev/null; rm -f /run/replug.wav; for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tinymix -D 0 get "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "wcd937x|mbhc" | tail -6; grep -E " WCD937x " /proc/interrupts
+audio-path headset-mic on >/dev/null; printf "\033[2J\033[H\n\n\
+033[1;37;45m   REPLUG THE EARPHONES NOW   \033[0m\n" >/dev/tty1; /run/pcm-test r
+ecord 2 10 /run/replug.wav >/dev/null 2>&1; printf "\n\n\033[1;37;44m   DONE   \
+033[0m\n" >/dev/tty1; audio-path headset-mic off >/dev/null; rm -f /run/replug.w
+av; for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tinymix -D 0 get "$c" 2>
+&1 | head -n 1)"; done; dmesg | grep -iE "wcd937x|mbhc" | tail -6; grep -E " WCD
+937x " /proc/interrupts; printf "\nSTEP_DONE_134348=%s\n" "$?"
+Headphone Jack=Off
+Mic Jack=Off
+[    1.268451] wcd937x_codec codec: bound sdw:2:0:0217:010a:00:4 (ops wcd_sdw_component_ops)
+[    1.268634] wcd937x_codec codec: bound sdw:3:0:0217:010a:00:3 (ops wcd_sdw_component_ops)
+[    4.624629] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.626906] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.629135] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.631305] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+190:          1          0          0          0          0          0          0          0  WCD937x   0 Edge      wcd937x
+
+STEP_DONE_134348=0
+miatoll-audio5# [6n
+### 2026-10-27T13:50:21 replug-during-stream-30s
+$ audio-path headset-mic on >/dev/null; printf "\033[2J\033[H\n\n\033[1;37;45m   REPLUG THE EARPHONES NOW (30 s)   \033[0m\n" >/dev/tty1; /run/pcm-test record 2 10 /run/r1.wav >/dev/null 2>&1; /run/pcm-test record 2 10 /run/r2.wav >/dev/null 2>&1; /run/pcm-test record 2 10 /run/r3.wav >/dev/null 2>&1; printf "\n\n\033[1;37;44m   DONE   \033[0m\n" >/dev/tty1; audio-path headset-mic off >/dev/null; rm -f /run/r?.wav; for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tinymix -D 0 get "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "wcd937x|mbhc" | tail -8; grep -E " WCD937x " /proc/interrupts
+audio-path headset-mic on >/dev/null; printf "\033[2J\033[H\n\n\
+033[1;37;45m   REPLUG THE EARPHONES NOW (30 s)   \033[0m\n" >/dev/tty1; /run/pcm
+-test record 2 10 /run/r1.wav >/dev/null 2>&1; /run/pcm-test record 2 10 /run/r2
+.wav >/dev/null 2>&1; /run/pcm-test record 2 10 /run/r3.wav >/dev/null 2>&1; pri
+ntf "\n\n\033[1;37;44m   DONE   \033[0m\n" >/dev/tty1; audio-path headset-mic of
+f >/dev/null; rm -f /run/r?.wav; for c in "Headphone Jack" "Mic Jack"; do echo "
+$c=$(tinymix -D 0 get "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "wcd937x|m
+bhc" | tail -8; grep -E " WCD937x " /proc/interrupts; printf "\nSTEP_DONE_135020
+=%s\n" "$?"
+Headphone Jack=Off
+Mic Jack=Off
+[    1.268451] wcd937x_codec codec: bound sdw:2:0:0217:010a:00:4 (ops wcd_sdw_component_ops)
+[    1.268634] wcd937x_codec codec: bound sdw:3:0:0217:010a:00:3 (ops wcd_sdw_component_ops)
+[    4.624629] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.626906] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.629135] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.631305] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+190:          1          0          0          0          0          0          0          0  WCD937x   0 Edge      wcd937x
+
+STEP_DONE_135020=0
+miatoll-audio5# [6n
+### 2026-10-27T13:50:47 unplugged-state
+$ R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr | head -1); grep -E "^(3014|3015|3016|3023):" $R/registers; grep -E " WCD937x |soundwire|swr" /proc/interrupts; dmesg | grep -iE "wcd937x|mbhc" | tail -3
+R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr | head -1); grep
+ -E "^(3014|3015|3016|3023):" $R/registers; grep -E " WCD937x |soundwire|swr" /p
+roc/interrupts; dmesg | grep -iE "wcd937x|mbhc" | tail -3; printf "\nSTEP_DONE_1
+35047=%s\n" "$?"
+3014: 9d
+3015: b9
+3016: 02
+3023: 22
+188:          3          0          0          0          0          0          0          0    GICv3 329 Edge      soundwire
+189:          4          0          0          0          0          0          0          0    GICv3 328 Edge      soundwire
+190:          1          0          0          0          0          0          0          0  WCD937x   0 Edge      wcd937x
+[    4.626906] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.629135] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.631305] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_135047=0
+miatoll-audio5# [6n
+### 2026-10-27T13:51:55 wcd-irqs
+$ grep -iE "wcd937x" /proc/interrupts; ls /sys/kernel/irq | wc -l; for i in /sys/kernel/irq/*; do n=$(cat $i/actions 2>/dev/null); case "$n" in *mbhc*|*MBHC*|*button*|*Button*|*elect*|*mech*|*HPH*|*hph*) echo "$(basename $i) chip=$(cat $i/chip_name) hw=$(cat $i/hwirq) count=$(cat $i/per_cpu_count | tr , + ) actions=$n";; esac; done
+grep -iE "wcd937x" /proc/interrupts; ls /sys/kernel/irq | wc -l;
+ for i in /sys/kernel/irq/*; do n=$(cat $i/actions 2>/dev/null); case "$n" in *m
+bhc*|*MBHC*|*button*|*Button*|*elect*|*mech*|*HPH*|*hph*) echo "$(basename $i) c
+hip=$(cat $i/chip_name) hw=$(cat $i/hwirq) count=$(cat $i/per_cpu_count | tr , +
+ ) actions=$n";; esac; done; printf "\nSTEP_DONE_135155=%s\n" "$?"
+190:          1          0          0          0          0          0          0          0  WCD937x   0 Edge      wcd937x
+191:          0          0          0          0          0          0          0          0  wcd937x  14 Edge      HPHR PDM WDOG INT
+192:          0          0          0          0          0          0          0          0  wcd937x  13 Edge      HPHL PDM WDOG INT
+193:          0          0          0          0          0          0          0          0  wcd937x  15 Edge      AUX PDM WDOG INT
+194:          1          0          0          0          0          0          0          0  wcd937x   4 Edge      mbhc sw intr
+195:          0          0          0          0          0          0          0          0  wcd937x   0 Edge      Button Press detect
+196:          0          0          0          0          0          0          0          0  wcd937x   1 Edge      Button Release detect
+197:          0          0          0          0          0          0          0          0  wcd937x   3 Edge      Elect Insert
+198:          0          0          0          0          0          0          0          0  wcd937x   2 Edge      Elect Remove
+199:          0          0          0          0          0          0          0          0  wcd937x   7 Edge      HPH_L OCP detect
+200:          0          0          0          0          0          0          0          0  wcd937x   5 Edge      HPH_R OCP detect
+/bin/sh: wc: not found
+191 chip=wcd937x hw=14 count=0+0+0+0+0+0+0+0 actions=HPHR PDM WDOG INT
+192 chip=wcd937x hw=13 count=0+0+0+0+0+0+0+0 actions=HPHL PDM WDOG INT
+194 chip=wcd937x hw=4 count=1+0+0+0+0+0+0+0 actions=mbhc sw intr
+195 chip=wcd937x hw=0 count=0+0+0+0+0+0+0+0 actions=Button Press detect
+196 chip=wcd937x hw=1 count=0+0+0+0+0+0+0+0 actions=Button Release detect
+199 chip=wcd937x hw=7 count=0+0+0+0+0+0+0+0 actions=HPH_L OCP detect
+200 chip=wcd937x hw=5 count=0+0+0+0+0+0+0+0 actions=HPH_R OCP detect
+
+STEP_DONE_135155=0
+miatoll-audio5# [6n

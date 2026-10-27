@@ -1,0 +1,93 @@
+{
+  "capture_id": "20261027-134039",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-audio5+",
+  "boot_profile": "audio5-ram-only",
+  "image": "boot-curtana-6.18.58-audio5.img",
+  "image_sha256": "4e8cb8254fff3c7fa19f9d77cbd115020994d98ca97f3037b43b238a46212a49",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-audio5/boot-curtana-6.18.58-audio5.img"
+  ],
+  "physical_display_confirmed": null,
+  "user_observation": "pending",
+  "restarted_from_shell": true,
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "AUDIO5_BANNER_WRITTEN",
+      "AUDIO5_PROBE_BEGIN",
+      "AUDIO5_PROBE_END",
+      "AUDIO5_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "27:          0          0          0          0          0          0          0          0    GICv3 134 Level     arm-smmu-context-fault",
+      "28:          0          0          0          0          0          0          0          0    GICv3 135 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "audio5-fastboot-20261027-134039.txt": {
+      "bytes": 859,
+      "sha256": "54edd4d5d5edbfcda395807fb3cef3657b1d17090783bd9df3c9e71b4ff55954"
+    },
+    "audio5-serial-20261027-134039.txt": {
+      "bytes": 165415,
+      "sha256": "48a126a8115ff95025e3fe133d4912413d0e5d12bffdf8c94a2aef827bc78e87"
+    },
+    "steps.txt": {
+      "bytes": 12247,
+      "sha256": "083b9b7806114557f9301258a15070670318b58335ad1b4feced6073f49a3018"
+    }
+  },
+  "step_observations": {
+    "jack-after-replug": {
+      "screen": "user replugged/unplugged the earphones as asked",
+      "backlight": "on",
+      "notes": "no new MBHC interrupt"
+    },
+    "replug-during-stream-30s": {
+      "screen": "user replugged/unplugged the earphones as asked",
+      "backlight": "on",
+      "notes": "no new MBHC interrupt"
+    },
+    "unplugged-state": {
+      "screen": "user replugged/unplugged the earphones as asked",
+      "backlight": "on",
+      "notes": "no new MBHC interrupt"
+    }
+  },
+  "audio": {
+    "dt": "audio3 + WCD937x micbias1-3 2700 mV",
+    "micb2_idle": "0x22 (bias off, 2.7 V code)",
+    "boot": "earphones plugged at boot; mbhc sw intr fired once, impedance ramp error at 4.6 s",
+    "replug": "no further MBHC interrupt after unplug/replug, idle or during a 30 s capture; WCD937x parent IRQ count 1, Elect Insert/Remove 0",
+    "hypothesis": "swr2 (TX SoundWire) lacks the wakeup interrupt; alerts raised while the bus is in clock stop are lost and stay latched, so later events never edge. Downstream atoll TX master has swr_wake_irq <0 555 0>."
+  }
+}

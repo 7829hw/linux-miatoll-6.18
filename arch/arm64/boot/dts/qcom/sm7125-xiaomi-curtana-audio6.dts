@@ -1,0 +1,18 @@
+// SPDX-License-Identifier: GPL-2.0
+// Headset detection check: give the TX SoundWire master its wakeup
+// interrupt (downstream atoll-audio-overlay.dtsi: swr_wake_irq <0 555 0>)
+// so WCD937x MBHC alerts can wake the bus from clock stop.
+#include "sm7125-xiaomi-curtana-audio5.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing audio6 test)";
+	chosen {
+		miatoll,boot-profile = "audio6-ram-only";
+	};
+};
+
+&swr2 {
+	interrupts = <GIC_SPI 296 IRQ_TYPE_LEVEL_HIGH>,
+		     <GIC_SPI 555 IRQ_TYPE_LEVEL_HIGH>;
+	interrupt-names = "core", "wakeup";
+};
