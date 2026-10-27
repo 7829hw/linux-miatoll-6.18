@@ -1,0 +1,48 @@
+### 2026-10-27T21:42:20 vk-probe-start
+$ rm -f /tmp/vp.txt; setsid sh -c "/usr/bin/vk-display-probe 15 > /tmp/vp.txt 2>&1; echo VK_PROBE_RC=\$? >> /tmp/vp.txt" </dev/null >/dev/null 2>&1 & sleep 3; cat /tmp/vp.txt
+rm -f /tmp/vp.txt; setsid sh -c "/usr/bin/vk-display-probe 15 >
+ /tmp/vp.txt 2>&1; echo VK_PROBE_RC=\$? >> /tmp/vp.txt" </dev/null >/dev/null 2>
+&1 & sleep 3; cat /tmp/vp.txt; printf "\nSTEP_DONE_214217=%s\n" "$?"
+step instance
+gpu Turnip Adreno (TM) 618 api 1.3.311 driver 0x6401009
+step device
+step fill_buffer
+fill_buffer words=16384 mismatches=0
+VK_FILL_OK
+step displays
+display 0 name=monitor 1080x2400
+mode 0 1080x2400@60000
+planes=1 chosen=0
+step surface
+surface supported=1 images=2..0 extent=1080x2400 usage=0x8009f format0=50 formats=2
+step swapchain
+swapchain images=2
+step present 15s
+
+STEP_DONE_214217=0
+[1]+  Done                       setsid sh -c "/usr/bin/vk-display-probe 15 > /tmp/vp.txt 2>&1; echo VK_PROBE_RC=$? >> /tmp/vp.txt" 0</dev/null 1>/dev/null 2>&1
+miatoll-vulkan1# [6n
+### 2026-10-27T21:42:40 vk-probe-result
+$ tail -4 /tmp/vp.txt; /bin/gpu-probe | grep -E "faults|GPU_PROBE"; dmesg | grep -iE "fault|hang|recover|underrun" | grep -v "Kernel command" | tail -3
+tail -4 /tmp/vp.txt; /bin/gpu-probe | grep -E "faults|GPU_PROBE
+"; dmesg | grep -iE "fault|hang|recover|underrun" | grep -v "Kernel command" | t
+ail -3; printf "\nSTEP_DONE_214240=%s\n" "$?"
+step present 15s
+presented frames=900 in 15s (60.0 fps)
+VK_PROBE_OK
+VK_PROBE_RC=0
+gpu_param faults=0x0 (0)
+GPU_PROBE_OK CP_MEM_WRITE executed
+[    0.000939] pid_max: default: 32768 minimum: 301
+[    0.079362] iommu: Default domain type: Translated
+
+STEP_DONE_214240=0
+miatoll-vulkan1# [6n
+### 2026-10-27T21:42:47 vk-probe-frames
+$ grep presented /tmp/vp.txt
+grep presented /tmp/vp.txt; printf "\nSTEP_DONE_214246=%s\n" "$
+?"
+presented frames=900 in 15s (60.0 fps)
+
+STEP_DONE_214246=0
+miatoll-vulkan1# [6n

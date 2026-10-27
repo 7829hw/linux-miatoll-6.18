@@ -9,12 +9,17 @@
     "tarball_sha256": "27f61c74f724fdc584d7575772d09a19817628b30faca072855f4c3ebeaf3f36"
   },
   "sysroot_packages_sha256": "35b9b78f76192c658ca8fbcb7e1784635ad24872cbb59c615fcc129b91ff22a6",
-  "build_script_sha256": "66a210e0abfeb772ff4598c7d1615ca166624b8ad505bef2fc2cf7b8d816e600",
+  "build_script_sha256": "3ccfff1cc66072880d258b33907fe53f52921052b6a5733568c7b73d8a2eefd3",
   "vk_display_probe_source_sha256": "43667e3d00fc651f9f8a95e17389c6a91c96ec37c3c3f3a6cf005b8332e6c800",
+  "vk_shader_probe_sources_sha256": {
+    "vk-shader-probe.c": "bb637d65a1cd1b256e75f3635fea699df2c68bd4047802e53e53b28038eea6e3",
+    "triangle.vert": "9e1994b605f80e95e1160b2225a62d9c4cd17fbf3e9ec5b6503157d66260da0e",
+    "triangle.frag": "de39c0cd21f161d7d944a2b9ba0b220bac26399ca554d5b66ddf9d47431bee63"
+  },
   "files": {
     "usr/lib/libgallium-25.1.9.so": {
       "from": "stage",
-      "sha256": "796189c2b6682c8a931714b8c8b9523d723a6a460a6b5cd17ad32be043c89170"
+      "sha256": "27ad1ec0d9cc7d133227d54e3d2bbfe60efef2ff2596625d721a522ccb59c008"
     },
     "usr/lib/libEGL.so.1.0.0": {
       "from": "stage",
@@ -62,7 +67,7 @@
     },
     "usr/lib/libvulkan_freedreno.so": {
       "from": "stage",
-      "sha256": "0cac64b3c838ea1a17ae4e31f43e6498966dc96a8cfb0a2e3c4980f0e51438fa"
+      "sha256": "47cb2cde7befe4d222e8b903d30bf1d462a5cf5ab4ae5520ea6873e4655df84e"
     },
     "usr/share/vulkan/icd.d/freedreno_icd.cortex-a76.json": {
       "from": "stage",
@@ -71,6 +76,10 @@
     "usr/bin/vk-display-probe": {
       "from": "stage",
       "sha256": "2af4f7e1fa53f5bcc5a2238eada30902584370b9d3df41b9f2b0d6f6fdd4ba79"
+    },
+    "usr/bin/vk-shader-probe": {
+      "from": "stage",
+      "sha256": "55a8cd2f9aa33d8cc4169e9371d25f51e2229276824336607e1ba9d9a2255568"
     },
     "usr/lib/libvulkan.so.1.4.313": {
       "from": "sysroot",

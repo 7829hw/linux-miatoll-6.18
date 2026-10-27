@@ -32,6 +32,8 @@ def load(workspace, variant='gles'):
     if record.get('vk_display_probe_source_sha256'):
         assert record['vk_display_probe_source_sha256'] == sha256(BOOT.parent / 'gpu/vk-display-probe.c'), \
             'Rebuild Mesa: vk-display-probe.c changed'
+    for name, digest in (record.get('vk_shader_probe_sources_sha256') or {}).items():
+        assert digest == sha256(BOOT.parent / 'gpu' / name), 'Rebuild Mesa: changed ' + name
     files = {}
     for rel, info in record['files'].items():
         base = out / 'stage' if info['from'] == 'stage' else sysroot

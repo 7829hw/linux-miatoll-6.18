@@ -117,6 +117,14 @@ if [[ $variant == vulkan ]]; then
         -O2 -Wall -Wextra -Werror -fuse-ld=lld -rtlib=compiler-rt -unwindlib=libgcc \
         "$src/miatoll/gpu/vk-display-probe.c" -lvulkan -o "$out/stage/usr/bin/vk-display-probe"
     "$llvm/bin/llvm-strip" "$out/stage/usr/bin/vk-display-probe"
+    # Shader check: GLSL compiled to SPIR-V headers by the host glslangValidator.
+    mkdir -p "$out/shaders"
+    glslangValidator -V --vn triangle_vert -o "$out/shaders/triangle_vert.h" "$src/miatoll/gpu/triangle.vert"
+    glslangValidator -V --vn triangle_frag -o "$out/shaders/triangle_frag.h" "$src/miatoll/gpu/triangle.frag"
+    "$llvm/bin/clang" --target=aarch64-linux-musl --sysroot="$sysroot" -resource-dir "$resource" \
+        -O2 -Wall -Wextra -Werror -fuse-ld=lld -rtlib=compiler-rt -unwindlib=libgcc -I"$out/shaders" \
+        "$src/miatoll/gpu/vk-shader-probe.c" -lvulkan -lm -o "$out/stage/usr/bin/vk-shader-probe"
+    "$llvm/bin/llvm-strip" "$out/stage/usr/bin/vk-shader-probe"
 fi
 
 # Runtime manifest: the files the RAM test needs, with their hashes and the
@@ -141,7 +149,7 @@ links = {'lib/libc.musl-aarch64.so.1': 'ld-musl-aarch64.so.1', 'usr/lib/libEGL.s
          'usr/lib/libz.so.1': 'libz.so.1.3.2', 'usr/lib/libstdc++.so.6': 'libstdc++.so.6.0.33'}
 if variant == 'vulkan':
     for rel in ('usr/lib/libvulkan_freedreno.so', 'usr/share/vulkan/icd.d/freedreno_icd.cortex-a76.json',
-                'usr/bin/vk-display-probe'):
+                'usr/bin/vk-display-probe', 'usr/bin/vk-shader-probe'):
         files[rel] = {'from': 'stage', 'sha256': sha(out / 'stage' / rel)}
     sonames = {'libvulkan.so.1': 'libvulkan.so.1.4.313', 'libX11.so.6': 'libX11.so.6.4.0',
                'libxcb.so.1': 'libxcb.so.1.1.0', 'libXau.so.6': 'libXau.so.6.0.0',
@@ -160,6 +168,9 @@ result = {'variant': variant, 'mesa': {'version': '25.1.9', 'tarball_sha256': sy
           'sysroot_packages_sha256': sha(sysroot / 'sysroot-packages.json'),
           'build_script_sha256': sha(src / 'miatoll/gpu/build_mesa.sh'),
           'vk_display_probe_source_sha256': sha(src / 'miatoll/gpu/vk-display-probe.c') if variant == 'vulkan' else None,
+          'vk_shader_probe_sources_sha256': {name: sha(src / 'miatoll/gpu' / name) for name in
+                                             ('vk-shader-probe.c', 'triangle.vert', 'triangle.frag')}
+                                            if variant == 'vulkan' else None,
           'files': files, 'links': links,
           'licenses': {k: {'source': str(v.relative_to(out)), 'sha256': sha(v)} for k, v in licenses.items()}}
 (out / 'build-result.json').write_text(json.dumps(result, indent=2) + '\n')
