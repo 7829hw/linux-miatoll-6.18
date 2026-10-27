@@ -1,0 +1,24 @@
+// SPDX-License-Identifier: GPL-2.0
+// Speaker-only native audio: audio1 showed the ADSP rejects the LPASS HW
+// vote that the VA/RX/TX macros need, so the WCD937x links are left out.
+#include "sm7125-xiaomi-curtana-audio1.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing audio2 test)";
+	chosen {
+		miatoll,boot-profile = "audio2-ram-only";
+	};
+};
+
+&sound {
+	/delete-property/ audio-routing;
+	/delete-node/ wcd-playback-dai-link;
+	/delete-node/ wcd-capture-dai-link;
+};
+
+&wcd937x { status = "disabled"; };
+&swr1 { status = "disabled"; };
+&swr2 { status = "disabled"; };
+&rxmacro { status = "disabled"; };
+&txmacro { status = "disabled"; };
+&vamacro { status = "disabled"; };
