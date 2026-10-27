@@ -35,14 +35,14 @@ def check(dtb, config):
     require('CONFIG_DRM_CLIENT_DEFAULT="fbdev"\n' in config, 'fbdev console must be the DRM client')
     reset_connected = False
     profile = fdt(dtb, '/chosen', 'miatoll,boot-profile')
-    if profile in ('display2-ram-only', 'touch1-ram-only', 'storage1-ram-only', 'usb2-ram-only', 'wifi1-ram-only', 'wifi2-ram-only', 'wifi3-ram-only', 'bt1-ram-only', 'battery1-ram-only', 'battery2-ram-only', 'reboot1-ram-only', 'audio1-ram-only', 'audio2-ram-only', 'audio3-ram-only', 'audio4-ram-only', 'audio5-ram-only', 'audio6-ram-only', 'audio7-ram-only', 'audio8-ram-only', 'audio9-ram-only', 'audio10-ram-only', 'audio11-ram-only', 'audio12-ram-only', 'audio13-ram-only', 'audio14-ram-only'):
+    if profile in ('display2-ram-only', 'touch1-ram-only', 'storage1-ram-only', 'usb2-ram-only', 'wifi1-ram-only', 'wifi2-ram-only', 'wifi3-ram-only', 'bt1-ram-only', 'battery1-ram-only', 'battery2-ram-only', 'reboot1-ram-only', 'audio1-ram-only', 'audio2-ram-only', 'audio3-ram-only', 'audio4-ram-only', 'audio5-ram-only', 'audio6-ram-only', 'audio7-ram-only', 'audio8-ram-only', 'audio9-ram-only', 'audio10-ram-only', 'audio11-ram-only', 'audio12-ram-only', 'audio13-ram-only', 'audio14-ram-only', 'gpu1-ram-only'):
         dispcc = '/soc@0/clock-controller@af00000'
         available(dtb, dispcc)
         require(fdt(dtb, dispcc, '#reset-cells', 'u') == '1', 'Invalid reset provider')
         require(fdt(dtb, mdss, 'resets', 'x').split() ==
                 [fdt(dtb, dispcc, 'phandle', 'x'), '0'], 'MDSS_CORE reset not connected')
         reset_connected = True
-    touch = check_touch(dtb, panel, wled) if profile in ('touch1-ram-only', 'storage1-ram-only', 'usb2-ram-only', 'wifi1-ram-only', 'wifi2-ram-only', 'wifi3-ram-only', 'bt1-ram-only', 'battery1-ram-only', 'battery2-ram-only', 'reboot1-ram-only', 'audio1-ram-only', 'audio2-ram-only', 'audio3-ram-only', 'audio4-ram-only', 'audio5-ram-only', 'audio6-ram-only', 'audio7-ram-only', 'audio8-ram-only', 'audio9-ram-only', 'audio10-ram-only', 'audio11-ram-only', 'audio12-ram-only', 'audio13-ram-only', 'audio14-ram-only') else None
+    touch = check_touch(dtb, panel, wled) if profile in ('touch1-ram-only', 'storage1-ram-only', 'usb2-ram-only', 'wifi1-ram-only', 'wifi2-ram-only', 'wifi3-ram-only', 'bt1-ram-only', 'battery1-ram-only', 'battery2-ram-only', 'reboot1-ram-only', 'audio1-ram-only', 'audio2-ram-only', 'audio3-ram-only', 'audio4-ram-only', 'audio5-ram-only', 'audio6-ram-only', 'audio7-ram-only', 'audio8-ram-only', 'audio9-ram-only', 'audio10-ram-only', 'audio11-ram-only', 'audio12-ram-only', 'audio13-ram-only', 'audio14-ram-only', 'gpu1-ram-only') else None
     return dict(passed=True, panel='huaxing,ft8756', touch=touch, expected_mode='1080x2400@60',
                 display_graph_bidirectional=True, enabled_ancestry_checked=list(nodes),
                 reset_gpio='PM6150L GPIO3 active-low', backlight_default=256,

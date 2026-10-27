@@ -1,0 +1,19 @@
+// SPDX-License-Identifier: GPL-2.0
+// Adreno A618 check: the audio12 RAM test with the GPU and its GMU enabled.
+// The zap shader name and gpu_mem region come from sm7125-xiaomi-common.dtsi.
+#include "sm7125-xiaomi-curtana-audio12.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing gpu1 test)";
+	chosen {
+		miatoll,boot-profile = "gpu1-ram-only";
+	};
+};
+
+&gpu {
+	status = "okay";
+};
+
+&gmu {
+	status = "okay";
+};

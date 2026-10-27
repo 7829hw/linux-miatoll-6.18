@@ -1,0 +1,25 @@
+{
+  "linux_firmware_qcom": {
+    "url": "https://dl-cdn.alpinelinux.org/alpine/v3.22/main/aarch64/linux-firmware-qcom-20250509-r0.apk",
+    "bytes": 115509089,
+    "sha256": "80edeec02370ff7684f57a40a41ead3c13ba9aa6aeec7a89d8d21bee072c1533",
+    "apkindex_control_checksum": "Q1zn3gmuliANevh5t/5pO5tdz1WsI=",
+    "files": {
+      "lib/firmware/qcom/a630_sqe.fw": {"bytes": 34188, "sha256": "1c21b527d9183487cc550dabbb3f43e555df5a977a461934fc61f0635a9aa90c"},
+      "lib/firmware/qcom/a630_gmu.bin": {"bytes": 32768, "sha256": "da8d9b1b1f5c1a0b311f32567093b4828f3c80031dd8435f91ac13c664e173a6"}
+    },
+    "license": {"source": "https://gitlab.com/kernel-firmware/linux-firmware/-/raw/20250509/LICENSE.qcom", "sha256": "be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc"},
+    "whence": "linux-firmware 20250509 WHENCE lists qcom/a630_gmu.bin and qcom/a630_sqe.fw under LICENSE.qcom"
+  },
+  "zap_shader": {
+    "repository": "sm7125-mainline/firmware-xiaomi-miatoll",
+    "commit": "a7073ad14a91a103d14effbc87a94e632e29011a",
+    "source_path": "lib/firmware/qcom/sm7125/miatoll/a615_zap.mbn",
+    "url": "https://raw.githubusercontent.com/sm7125-mainline/firmware-xiaomi-miatoll/a7073ad14a91a103d14effbc87a94e632e29011a/lib/firmware/qcom/sm7125/miatoll/a615_zap.mbn",
+    "bytes": 14272,
+    "git_blob_sha1": "866ed58584de9e1a67e8cf98c4b3cafe5ecb7c31",
+    "sha256": "67d535d27ba2424e597a7bd8c54b723854d1c45666ad48270b564e995ac0e063",
+    "note": "OEM-signed image; the signature is checked by the secure world on load, not by this repository"
+  },
+  "hardware_verified": false
+}
