@@ -1,0 +1,764 @@
+### 2026-10-27T14:46:51 boot-state
+$ sleep 3; grep -E "WCD937x|mbhc sw|Elect|GICv3 (328|329)" /proc/interrupts | awk "{print \$1,\$2,\$NF}"; for d in /sys/bus/soundwire/devices/*; do echo "${d##*/} $(cat $d/power/runtime_status)"; done; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "z_val|ramp|wcd937x" | tail -6
+sleep 3; grep -E "WCD937x|mbhc sw|Elect|GICv3 (328|329)" /proc/i
+nterrupts | awk "{print \$1,\$2,\$NF}"; for d in /sys/bus/soundwire/devices/*; d
+o echo "${d##*/} $(cat $d/power/runtime_status)"; done; tinymix -D 0 get "Headph
+one Jack"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "z_val|ramp|wcd937x" | 
+tail -6; printf "\nSTEP_DONE_144648=%s\n" "$?"
+188: 3 soundwire
+189: 3 soundwire
+190: 1 wcd937x
+194: 1 intr
+197: 0 Insert
+198: 0 Remove
+sdw-master-2-0 suspended
+sdw-master-3-0 active
+sdw:2:0:0217:010a:00:4 suspended
+sdw:3:0:0217:010a:00:3 active
+Off
+Off
+[    1.177230] wcd937x_codec codec: bound sdw:2:0:0217:010a:00:4 (ops wcd_sdw_component_ops)
+[    1.177381] wcd937x_codec codec: bound sdw:3:0:0217:010a:00:3 (ops wcd_sdw_component_ops)
+[    4.543686] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.545896] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.548090] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.550369] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_144648=0
+miatoll-audio9# [6n
+### 2026-10-27T14:47:25 replug
+$ grep -E "WCD937x|mbhc sw|Elect" /proc/interrupts | awk "{print \$1,\$2,\$NF}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "z_val|ramp" | tail -5
+grep -E "WCD937x|mbhc sw|Elect" /proc/interrupts | awk "{print \
+$1,\$2,\$NF}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; d
+mesg | grep -iE "z_val|ramp" | tail -5; printf "\nSTEP_DONE_144725=%s\n" "$?"
+190: 3 wcd937x
+194: 3 intr
+197: 0 Insert
+198: 0 Remove
+Off
+Off
+[    4.550369] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[   45.561539] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[   45.563813] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[   45.565551] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[   45.567301] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_144725=0
+miatoll-audio9# [6n
+### 2026-10-27T14:47:38 rx-on
+$ echo on > "/sys/bus/soundwire/devices/sdw:2:0:0217:010a:00:4/power/control"; cat "/sys/bus/soundwire/devices/sdw:2:0:0217:010a:00:4/power/runtime_status"
+echo on > "/sys/bus/soundwire/devices/sdw:2:0:0217:010a:00:4/pow
+er/control"; cat "/sys/bus/soundwire/devices/sdw:2:0:0217:010a:00:4/power/runtim
+e_status"; printf "\nSTEP_DONE_144738=%s\n" "$?"
+active
+
+STEP_DONE_144738=0
+miatoll-audio9# [6n
+### 2026-10-27T14:48:29 replug-rx-on
+$ grep -E "mbhc sw|Elect" /proc/interrupts | awk "{print \$1,\$2,\$NF}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "z_val|ramp" | tail -4
+grep -E "mbhc sw|Elect" /proc/interrupts | awk "{print \$1,\$2,\
+$NF}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | g
+rep -iE "z_val|ramp" | tail -4; printf "\nSTEP_DONE_144829=%s\n" "$?"
+194: 5 intr
+197: 0 Insert
+198: 0 Remove
+Off
+Off
+[  109.085538] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  109.087813] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  109.089546] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  109.091302] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_144829=0
+miatoll-audio9# [6n
+### 2026-10-27T14:48:45 hp-play-once
+$ audio-path headphones on; /bin/pcm-test play 1 | grep -E "drain|exit"; audio-path headphones off
+audio-path headphones on; /bin/pcm-test play 1 | grep -E "drain|
+exit"; audio-path headphones off; printf "\nSTEP_DONE_144842=%s\n" "$?"
+AUDIO_PATH headphones on failures=0
+pcm_drain_complete=1 elapsed_ms=3034
+pcm_test_exit=0
+AUDIO_PATH headphones off failures=0
+
+STEP_DONE_144842=0
+miatoll-audio9# [6n
+### 2026-10-27T14:49:23 hp-play-again
+$ sleep 3; audio-path headphones on; /bin/pcm-test play 1 | grep -E "drain|exit"; audio-path headphones off
+sleep 3; audio-path headphones on; /bin/pcm-test play 1 | grep -
+E "drain|exit"; audio-path headphones off; printf "\nSTEP_DONE_144916=%s\n" "$?"
+AUDIO_PATH headphones on failures=0
+pcm_drain_complete=1 elapsed_ms=3037
+pcm_test_exit=0
+AUDIO_PATH headphones off failures=0
+
+STEP_DONE_144916=0
+miatoll-audio9# [6n
+### 2026-10-27T14:50:00 replug-after-play
+$ grep -E "mbhc sw|Elect" /proc/interrupts | awk "{print \$1,\$2,\$NF}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "z_val|ramp" | tail -4
+grep -E "mbhc sw|Elect" /proc/interrupts | awk "{print \$1,\$2,\
+$NF}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | g
+rep -iE "z_val|ramp" | tail -4; printf "\nSTEP_DONE_145000=%s\n" "$?"
+194: 7 intr
+197: 0 Insert
+198: 0 Remove
+On
+On
+[  201.533525] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  201.535798] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  201.537534] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  201.539288] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_145000=0
+miatoll-audio9# [6n
+### 2026-10-27T14:50:09 jack-timeline
+$ cat /proc/uptime; dmesg | grep -iE "z_val|ramp|jack|mbhc" | tail -14
+cat /proc/uptime; dmesg | grep -iE "z_val|ramp|jack|mbhc" | tail
+ -14; printf "\nSTEP_DONE_145008=%s\n" "$?"
+215.64 1720.57
+[   45.563813] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[   45.565551] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[   45.567301] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  109.085538] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  109.087813] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  109.089546] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  109.091302] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  198.217196] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x22f2, z_val=49708 (milliohm)
+[  198.262967] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x23c6, z_val=47916 (milliohm)
+[  198.309067] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2316, z_val=49394 (milliohm)
+[  201.533525] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  201.535798] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  201.537534] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  201.539288] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_145008=0
+miatoll-audio9# [6n
+### 2026-10-27T14:51:15 regdump-post-play
+$ cat /proc/uptime; cat /sys/kernel/debug/regmap/*wcd937x_csr/registers
+cat /proc/uptime; cat /sys/kernel/debug/regmap/*wcd937x_csr/regi
+sters; printf "\nSTEP_DONE_145114=%s\n" "$?"
+281.77 2249.23
+3001: 80
+3008: 02
+3009: 00
+300a: 00
+300b: 02
+300e: 20
+300f: 00
+3010: 20
+3011: 00
+3012: 00
+3013: 00
+3014: 9d
+3015: b9
+3016: 02
+3017: 00
+3018: 00
+3019: 00
+301a: 18
+301b: 30
+301c: 48
+301d: a0
+301e: a0
+301f: a0
+3020: a0
+3021: a0
+3022: 22
+3023: 22
+3024: 90
+3025: 22
+3028: 2a
+3029: 85
+3040: 01
+3041: 00
+3056: 00
+3057: 00
+3058: 00
+3059: 00
+305a: 00
+305b: 30
+305c: 00
+3067: 2b
+3068: 68
+3069: 00
+306a: 50
+306b: fa
+306c: 01
+306d: a4
+306e: fa
+306f: 01
+3070: a4
+3071: fa
+3072: 01
+3073: a4
+3077: 39
+3078: c0
+3079: 6f
+307a: 4f
+307b: 2e
+307c: 00
+307d: c7
+307e: ff
+307f: cc
+3080: 09
+3081: 0a
+3082: 38
+3083: ff
+3084: 00
+3085: 00
+3086: 00
+3087: cc
+3088: 09
+3089: 0a
+308a: 38
+308b: ff
+308c: 00
+308d: 00
+308e: 00
+3097: 40
+3098: 3a
+3099: 02
+309a: 70
+309b: 82
+309c: 31
+309d: 80
+309e: 80
+309f: 51
+30a0: 00
+30a1: 00
+30a2: 77
+30a3: 00
+30a4: 4e
+30a5: eb
+30a6: 45
+30a7: 74
+30a8: 7f
+30a9: 83
+30aa: 98
+30ab: a9
+30ac: 68
+30ad: 64
+30ae: ed
+30af: f0
+30b0: a6
+30b1: 65
+30b2: 00
+30b3: 00
+30b4: 00
+30b5: 32
+30b6: 1f
+30b7: 77
+30b8: a0
+30b9: aa
+30ba: a9
+30bb: aa
+30bc: 8a
+30bd: 88
+30be: 82
+30bf: 82
+30c0: a0
+30c1: aa
+30c2: 50
+30c3: 00
+30c4: 08
+30c5: 44
+30c6: 40
+30c7: aa
+30c8: 14
+30c9: 04
+30ca: 04
+30cb: 80
+30cc: 9a
+30cd: 14
+30ce: 28
+30cf: 16
+30d0: 83
+30d1: 46
+30d2: 50
+30d3: b2
+30d4: e0
+30d5: 50
+30d6: b2
+30d7: e0
+30d8: 54
+30d9: 19
+30da: 9b
+30db: 33
+30dc: 00
+30dd: a8
+30de: 0e
+30df: 20
+30e0: 20
+30e1: 55
+30e2: d9
+30e3: a0
+30e4: 00
+30e9: 22
+30ea: 44
+30eb: db
+30ec: 80
+30ed: b2
+30ee: 00
+30ef: 00
+30f0: 00
+3100: 00
+3101: 00
+3102: 00
+3103: d6
+3104: 00
+311f: 00
+3120: 82
+3121: 06
+3122: e6
+3123: 0f
+3124: 04
+3125: 20
+3126: 00
+3127: 00
+3128: 00
+3129: 0c
+312a: 00
+312c: 00
+312d: 00
+3132: 40
+3133: 81
+3134: 10
+3135: 00
+3136: 81
+3137: 22
+3138: 00
+3139: 00
+313a: fe
+313b: 02
+313c: 4e
+313d: 54
+313e: 00
+313f: 00
+3145: 62
+3146: 01
+3147: 11
+31af: 57
+31b0: 01
+31b1: 08
+31b2: 00
+31b7: a8
+31b8: 42
+31b9: 22
+31ba: 00
+31bd: 00
+31be: 06
+31bf: d2
+31c0: 80
+31c1: 50
+31c2: 00
+31c3: 00
+31c4: 00
+31c5: 6e
+31c6: 50
+31c7: 1c
+31c8: ff
+31c9: 1f
+31ca: 00
+31d0: 0a
+31d1: 0a
+31d3: 02
+31d4: 60
+3400: 00
+3401: 01
+3402: 00
+3403: 0a
+3404: 01
+3406: 03
+3407: 00
+3408: 00
+3409: f8
+340a: 00
+340b: 55
+340c: 00
+340d: bc
+340e: bc
+340f: bc
+3410: 55
+3411: 55
+3412: 55
+3413: 01
+3414: 00
+3417: 66
+3418: 00
+3419: 01
+341a: 63
+341b: 04
+341c: ac
+341d: 04
+341e: 1a
+341f: 03
+3420: bc
+3421: 02
+3422: c7
+3423: f8
+3424: 47
+3425: 43
+3426: b1
+3427: 17
+3428: 4b
+3429: 26
+342a: 32
+342b: 57
+342c: 63
+342d: 7c
+342e: 57
+342f: 00
+3430: 01
+3431: 96
+3432: 09
+3433: ab
+3434: 05
+3435: 1c
+3436: 02
+3437: 17
+3438: 02
+3439: aa
+343a: e3
+343b: 69
+343c: 54
+343d: 02
+343e: 15
+343f: a4
+3440: b5
+3441: 86
+3442: 85
+3443: aa
+3444: e2
+3445: 62
+3446: 55
+3447: a9
+3448: 3d
+3449: 2e
+344a: 01
+344b: 00
+344c: fc
+344d: 01
+344e: 0c
+344f: 00
+3450: 00
+3451: 00
+3452: 00
+3453: 68
+3454: 68
+3455: 68
+3456: 00
+3457: 01
+345a: 07
+345b: 00
+345c: 01
+345d: 01
+345e: 01
+345f: 2b
+3460: 00
+3461: 00
+3462: 00
+3463: 00
+3464: 00
+3465: 00
+3466: 00
+3467: 00
+346a: 00
+346b: 4c
+346c: ff
+346d: 0f
+346e: 00
+346f: 00
+3470: 00
+3471: 00
+3472: 00
+3473: 00
+3474: 00
+3475: 00
+3476: 00
+3477: 00
+3478: 00
+3479: 00
+347a: 00
+347b: 00
+347c: 00
+347f: 00
+3480: 00
+3481: 00
+3482: 00
+3483: 00
+3484: 00
+3485: 40
+3491: 40
+3492: 00
+3493: 00
+3494: 00
+3495: f1
+3496: f1
+3497: f1
+3498: f1
+3499: 00
+349a: 00
+349b: 00
+349c: 00
+349d: 00
+349e: 1f
+349f: 10
+34a0: 00
+34a1: 00
+34a2: 00
+34a3: 00
+34a4: 00
+34a5: 00
+34a6: 00
+34a7: 00
+34a8: 00
+34a9: 48
+34aa: 00
+34ab: 00
+34ac: 00
+34ad: 00
+34ae: 00
+34af: 00
+34b0: 0a
+34b1: 00
+34b2: 00
+34b3: 00
+34b4: 00
+34b5: 00
+34b6: 00
+34b7: 00
+34b8: 34
+34b9: 47
+34ba: 4c
+34bb: 35
+34bc: 4b
+34bd: 14
+34be: 15
+34bf: 52
+34c0: 04
+34c1: 0b
+34c2: 00
+34c3: 00
+34c4: 00
+34c5: 84
+34c6: 01
+34c7: 00
+34c8: 00
+34c9: 8d
+34ca: 8b
+34cb: 00
+34cc: 00
+34cd: 07
+34ce: 00
+34cf: 00
+
+STEP_DONE_145114=0
+miatoll-audio9# [6n
+### 2026-10-27T14:52:01 replug-later
+$ cat /proc/uptime; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "z_val|ramp" | tail -5
+cat /proc/uptime; tinymix -D 0 get "Headphone Jack"; tinymix -D 
+0 get "Mic Jack"; dmesg | grep -iE "z_val|ramp" | tail -5; printf "\nSTEP_DONE_1
+45201=%s\n" "$?"
+328.08 2619.40
+On
+On
+[  201.539288] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  322.705530] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  322.707805] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  322.709538] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  322.711295] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_145201=0
+miatoll-audio9# [6n
+### 2026-10-27T14:52:31 unplugged
+$ sleep 2; grep -E "mbhc sw" /proc/interrupts | awk "{print \$2}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"
+sleep 2; grep -E "mbhc sw" /proc/interrupts | awk "{print \$2}";
+ tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; printf "\nSTEP_
+DONE_145229=%s\n" "$?"
+10
+On
+On
+
+STEP_DONE_145229=0
+miatoll-audio9# [6n
+### 2026-10-27T14:52:43 unplugged-2
+$ sleep 3; grep -E "mbhc sw|Elect|Button" /proc/interrupts | awk "{print \$1,\$2,\$NF}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr); grep -E "^(3014|3015|3016|3018|3019|301a|3023|3120):" $R/registers; dmesg | tail -5
+sleep 3; grep -E "mbhc sw|Elect|Button" /proc/interrupts | awk "
+{print \$1,\$2,\$NF}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic 
+Jack"; R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr); grep -E "^(3014|3015|30
+16|3018|3019|301a|3023|3120):" $R/registers; dmesg | tail -5; printf "\nSTEP_DON
+E_145240=%s\n" "$?"
+194: 10 intr
+195: 0 detect
+196: 0 detect
+197: 0 Insert
+198: 0 Remove
+On
+On
+3014: bd
+3015: 09
+3016: 00
+3018: 00
+3019: 10
+301a: 18
+3023: 22
+3120: 82
+[  201.539288] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  322.705530] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  322.707805] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  322.709538] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  322.711295] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_145240=0
+miatoll-audio9# [6n
+### 2026-10-27T14:53:41 poll-plug
+$ R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr); i=0; while [ $i -lt 50 ]; do echo "T $(cut -d" " -f1 /proc/uptime) irq=$(grep "mbhc sw" /proc/interrupts | awk "{print \$2}") ins=$(grep "Elect Insert" /proc/interrupts | awk "{print \$2}") hp=$(tinymix -D 0 get "Headphone Jack") mic=$(tinymix -D 0 get "Mic Jack") mech=$(grep ^3014: $R/registers | cut -c7-)"; sleep 0.5; i=$((i+1)); done
+R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr); i=0; while [ $
+i -lt 50 ]; do echo "T $(cut -d" " -f1 /proc/uptime) irq=$(grep "mbhc sw" /proc/
+interrupts | awk "{print \$2}") ins=$(grep "Elect Insert" /proc/interrupts | awk
+ "{print \$2}") hp=$(tinymix -D 0 get "Headphone Jack") mic=$(tinymix -D 0 get "
+Mic Jack") mech=$(grep ^3014: $R/registers | cut -c7-)"; sleep 0.5; i=$((i+1)); 
+done; printf "\nSTEP_DONE_145313=%s\n" "$?"
+T 400.79 irq=10 ins=0 hp=On mic=On mech=bd
+T 401.34 irq=10 ins=0 hp=On mic=On mech=bd
+T 401.88 irq=10 ins=0 hp=On mic=On mech=bd
+T 402.44 irq=10 ins=0 hp=On mic=On mech=bd
+T 402.99 irq=10 ins=0 hp=On mic=On mech=bd
+T 403.54 irq=10 ins=0 hp=On mic=On mech=bd
+T 404.09 irq=10 ins=0 hp=On mic=On mech=bd
+T 404.64 irq=10 ins=0 hp=On mic=On mech=bd
+T 405.19 irq=10 ins=0 hp=On mic=On mech=bd
+T 405.75 irq=10 ins=0 hp=On mic=On mech=bd
+T 406.31 irq=10 ins=0 hp=On mic=On mech=bd
+T 406.86 irq=10 ins=0 hp=On mic=On mech=bd
+T 407.42 irq=10 ins=0 hp=On mic=On mech=bd
+T 407.97 irq=10 ins=0 hp=On mic=On mech=bd
+T 408.52 irq=10 ins=0 hp=On mic=On mech=bd
+T 409.08 irq=10 ins=0 hp=On mic=On mech=bd
+T 409.63 irq=10 ins=0 hp=On mic=On mech=bd
+T 410.17 irq=10 ins=0 hp=On mic=On mech=bd
+T 410.73 irq=10 ins=0 hp=On mic=On mech=bd
+T 411.28 irq=10 ins=0 hp=On mic=On mech=bd
+T 411.84 irq=10 ins=0 hp=On mic=On mech=bd
+T 412.39 irq=10 ins=0 hp=On mic=On mech=bd
+T 412.94 irq=10 ins=0 hp=On mic=On mech=bd
+T 413.50 irq=10 ins=0 hp=On mic=On mech=bd
+T 414.06 irq=10 ins=0 hp=On mic=On mech=bd
+T 414.60 irq=10 ins=0 hp=On mic=On mech=bd
+T 415.15 irq=10 ins=0 hp=On mic=On mech=bd
+T 415.70 irq=10 ins=0 hp=On mic=On mech=bd
+T 416.26 irq=10 ins=0 hp=On mic=On mech=bd
+T 416.81 irq=10 ins=0 hp=On mic=On mech=bd
+T 417.36 irq=10 ins=0 hp=On mic=On mech=bd
+T 417.91 irq=10 ins=0 hp=On mic=On mech=bd
+T 418.46 irq=10 ins=0 hp=On mic=On mech=bd
+T 419.01 irq=10 ins=0 hp=On mic=On mech=bd
+T 419.56 irq=10 ins=0 hp=On mic=On mech=bd
+T 420.12 irq=10 ins=0 hp=On mic=On mech=bd
+T 420.67 irq=10 ins=0 hp=On mic=On mech=bd
+T 421.22 irq=10 ins=0 hp=On mic=On mech=bd
+T 421.77 irq=10 ins=0 hp=On mic=On mech=bd
+T 422.32 irq=10 ins=0 hp=On mic=On mech=bd
+T 422.87 irq=10 ins=0 hp=On mic=On mech=bd
+T 423.42 irq=10 ins=0 hp=On mic=On mech=bd
+T 423.96 irq=10 ins=0 hp=On mic=On mech=bd
+T 424.51 irq=10 ins=0 hp=On mic=On mech=bd
+T 425.06 irq=10 ins=0 hp=On mic=On mech=bd
+T 425.62 irq=10 ins=0 hp=On mic=On mech=bd
+T 426.18 irq=10 ins=0 hp=On mic=On mech=bd
+T 426.73 irq=10 ins=0 hp=On mic=On mech=bd
+T 427.28 irq=10 ins=0 hp=On mic=On mech=bd
+T 427.83 irq=10 ins=0 hp=On mic=On mech=bd
+
+STEP_DONE_145313=0
+miatoll-audio9# [6n
+### 2026-10-27T14:57:09 irq-state
+$ for n in $(grep -E "mbhc sw|WCD937x|Elect" /proc/interrupts | cut -d: -f1); do echo "== $n"; grep -E "^(handler|status|istate|ddstate|dstate)|DISABLED|MASKED" /sys/kernel/debug/irq/irqs/$n; done; for d in /sys/bus/soundwire/devices/*; do echo "${d##*/} $(cat $d/power/runtime_status) $(cat $d/power/control)"; done
+for n in $(grep -E "mbhc sw|WCD937x|Elect" /proc/interrupts | cu
+t -d: -f1); do echo "== $n"; grep -E "^(handler|status|istate|ddstate|dstate)|DI
+SABLED|MASKED" /sys/kernel/debug/irq/irqs/$n; done; for d in /sys/bus/soundwire/
+devices/*; do echo "${d##*/} $(cat $d/power/runtime_status) $(cat $d/power/contr
+ol)"; done; printf "\nSTEP_DONE_145709=%s\n" "$?"
+== 190
+grep: /sys/kernel/debug/irq/irqs/190: No such file or directory
+== 194
+grep: /sys/kernel/debug/irq/irqs/194: No such file or directory
+== 197
+grep: /sys/kernel/debug/irq/irqs/197: No such file or directory
+== 198
+grep: /sys/kernel/debug/irq/irqs/198: No such file or directory
+sdw-master-2-0 active auto
+sdw-master-3-0 active auto
+sdw:2:0:0217:010a:00:4 active on
+sdw:3:0:0217:010a:00:3 active auto
+
+STEP_DONE_145709=0
+miatoll-audio9# [6n
+### 2026-10-27T14:57:26 intr-regs
+$ R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr); grep -E "^34(6a|6b|6c|6d|6e|6f|70|71|72|73|74|75|76):" $R/registers; grep -c . $R/registers; cat $R/cache_only $R/cache_bypass 2>/dev/null
+R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr); grep -E "^34(6
+a|6b|6c|6d|6e|6f|70|71|72|73|74|75|76):" $R/registers; grep -c . $R/registers; c
+at $R/cache_only $R/cache_bypass 2>/dev/null; printf "\nSTEP_DONE_145726=%s\n" "
+$?"
+346a: 00
+346b: 4c
+346c: ff
+346d: 0f
+346e: 00
+346f: 00
+3470: 00
+3471: 00
+3472: 00
+3473: 00
+3474: 00
+3475: 00
+3476: 00
+413
+N
+N
+
+STEP_DONE_145726=0
+miatoll-audio9# [6n
+### 2026-10-27T14:57:46 dmesg-late
+$ dmesg | awk -F"[][]" "\$2+0>40" | grep -viE "usb|g_serial|acm|wlan|ath10k|bluetooth|hci" | tail -25
+dmesg | awk -F"[][]" "\$2+0>40" | grep -viE "usb|g_serial|acm|wl
+an|ath10k|bluetooth|hci" | tail -25; printf "\nSTEP_DONE_145746=%s\n" "$?"
+[  109.087813] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  109.089546] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  109.091302] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  132.134239] wcd937x_codec codec: clk already disabled
+[  170.072872] wcd937x_codec codec: clk already disabled
+[  198.217196] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x22f2, z_val=49708 (milliohm)
+[  198.262967] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x23c6, z_val=47916 (milliohm)
+[  198.309067] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2316, z_val=49394 (milliohm)
+[  201.533525] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  201.535798] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  201.537534] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  201.539288] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  322.705530] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  322.707805] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  322.709538] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  322.711295] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  606.513165] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  606.515445] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  606.517185] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  606.518936] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  617.640614] wcd937x_codec codec: cross connection found, Plug type 4
+[  620.833165] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  620.835443] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  620.837184] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  620.839018] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_145746=0
+miatoll-audio9# [6n
+### 2026-10-27T14:57:56 now
+$ cut -d" " -f1 /proc/uptime; grep "mbhc sw" /proc/interrupts | awk "{print \$2}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"
+cut -d" " -f1 /proc/uptime; grep "mbhc sw" /proc/interrupts | aw
+k "{print \$2}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack";
+ printf "\nSTEP_DONE_145755=%s\n" "$?"
+682.71
+13
+On
+On
+
+STEP_DONE_145755=0
+miatoll-audio9# [6n
