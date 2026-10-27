@@ -1,0 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0
+// Headset detection check: audio5 DT (2.7 V micbias, no TX SoundWire wake
+// interrupt) with a kernel whose WCD937x driver keeps the TX Slave runtime
+// active while a jack is registered. audio6-audio8 showed that the wake
+// path does not deliver MBHC alerts from clock stop on this board.
+#include "sm7125-xiaomi-curtana-audio5.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing audio9 test)";
+	chosen {
+		miatoll,boot-profile = "audio9-ram-only";
+	};
+};

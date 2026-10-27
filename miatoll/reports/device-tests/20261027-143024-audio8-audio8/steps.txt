@@ -1,0 +1,97 @@
+### 2026-10-27T14:31:19 boot-state
+$ sleep 5; cat /proc/uptime; grep -E "swr_wake|WCD937x|mbhc sw|Elect|GICv3 (328|329)" /proc/interrupts | awk "{print \$1,\$2,\$(NF-1),\$NF}"; for d in /sys/bus/soundwire/devices/*; do echo "${d##*/} $(cat $d/power/runtime_status)"; done; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "wake enable|clock stop|z_val|ramp|soundwire" | tail -8
+sleep 5; cat /proc/uptime; grep -E "swr_wake|WCD937x|mbhc sw|Ele
+ct|GICv3 (328|329)" /proc/interrupts | awk "{print \$1,\$2,\$(NF-1),\$NF}"; for 
+d in /sys/bus/soundwire/devices/*; do echo "${d##*/} $(cat $d/power/runtime_stat
+us)"; done; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmes
+g | grep -iE "wake enable|clock stop|z_val|ramp|soundwire" | tail -8; printf "\n
+STEP_DONE_143114=%s\n" "$?"
+20.09 158.41
+188: 3 Edge soundwire
+189: 4 Edge soundwire
+190: 0 Level swr_wake_irq
+191: 1 Edge wcd937x
+195: 1 sw intr
+198: 0 Elect Insert
+199: 0 Elect Remove
+sdw-master-2-0 suspended
+sdw-master-3-0 suspended
+sdw:2:0:0217:010a:00:4 suspended
+sdw:3:0:0217:010a:00:3 suspended
+Off
+Off
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+[    4.634939] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.637210] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.639439] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.641608] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_143114=0
+miatoll-audio8# [6n
+### 2026-10-27T14:31:43 replug-suspended
+$ grep -E "swr_wake|WCD937x|mbhc sw|Elect|GICv3 (328|329)" /proc/interrupts | awk "{print \$1,\$2,\$(NF-1),\$NF}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "z_val|ramp|wake" | tail -6
+grep -E "swr_wake|WCD937x|mbhc sw|Elect|GICv3 (328|329)" /proc/i
+nterrupts | awk "{print \$1,\$2,\$(NF-1),\$NF}"; tinymix -D 0 get "Headphone Jac
+k"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "z_val|ramp|wake" | tail -6; p
+rintf "\nSTEP_DONE_143142=%s\n" "$?"
+188: 3 Edge soundwire
+189: 4 Edge soundwire
+190: 0 Level swr_wake_irq
+191: 1 Edge wcd937x
+195: 1 sw intr
+198: 0 Elect Insert
+199: 0 Elect Remove
+Off
+Off
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+[    3.707111] dwc3 a600000.usb: remote wakeup not configured
+[    4.634939] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.637210] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.639439] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.641608] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_143142=0
+miatoll-audio8# [6n
+### 2026-10-27T14:32:09 macro-on-swr-auto
+$ for d in 62620000.txmacro 62770000.codec 62600000.rxmacro; do f=/sys/bus/platform/devices/$d/power; echo on > $f/control; echo "$d $(cat $f/runtime_status)"; done; sleep 5; for d in /sys/bus/platform/devices/626[13]0000.soundwire-controller /sys/bus/soundwire/devices/*; do echo "${d##*/} $(cat $d/power/control) $(cat $d/power/runtime_status)"; done; grep -E "swr_wake|mbhc sw" /proc/interrupts | awk "{print \$1,\$2,\$NF}"
+for d in 62620000.txmacro 62770000.codec 62600000.rxmacro; do f=
+/sys/bus/platform/devices/$d/power; echo on > $f/control; echo "$d $(cat $f/runt
+ime_status)"; done; sleep 5; for d in /sys/bus/platform/devices/626[13]0000.soun
+dwire-controller /sys/bus/soundwire/devices/*; do echo "${d##*/} $(cat $d/power/
+control) $(cat $d/power/runtime_status)"; done; grep -E "swr_wake|mbhc sw" /proc
+/interrupts | awk "{print \$1,\$2,\$NF}"; printf "\nSTEP_DONE_143203=%s\n" "$?"
+62620000.txmacro active
+62770000.codec active
+62600000.rxmacro active
+62610000.soundwire-controller auto suspended
+62630000.soundwire-controller auto suspended
+sdw-master-2-0 auto suspended
+sdw-master-3-0 auto suspended
+sdw:2:0:0217:010a:00:4 auto suspended
+sdw:3:0:0217:010a:00:3 auto suspended
+190: 0 swr_wake_irq
+195: 1 intr
+
+STEP_DONE_143203=0
+miatoll-audio8# [6n
+### 2026-10-27T14:37:45 replug-macro-on
+$ grep -E "swr_wake|WCD937x|mbhc sw|Elect|GICv3 (328|329)" /proc/interrupts | awk "{print \$1,\$2,\$NF}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "z_val|ramp" | tail -3
+grep -E "swr_wake|WCD937x|mbhc sw|Elect|GICv3 (328|329)" /proc/i
+nterrupts | awk "{print \$1,\$2,\$NF}"; tinymix -D 0 get "Headphone Jack"; tinym
+ix -D 0 get "Mic Jack"; dmesg | grep -iE "z_val|ramp" | tail -3; printf "\nSTEP_
+DONE_143745=%s\n" "$?"
+188: 3 soundwire
+189: 4 soundwire
+190: 0 swr_wake_irq
+191: 1 wcd937x
+195: 1 intr
+198: 0 Insert
+199: 0 Remove
+Off
+Off
+[    4.637210] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.639439] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.641608] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_143745=0
+miatoll-audio8# [6n

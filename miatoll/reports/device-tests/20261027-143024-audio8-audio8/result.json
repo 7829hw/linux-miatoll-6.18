@@ -1,0 +1,75 @@
+{
+  "capture_id": "20261027-143024",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-audio8+",
+  "boot_profile": "audio8-ram-only",
+  "image": "boot-curtana-6.18.58-audio8.img",
+  "image_sha256": "60247710fe6940b7a1d1ee787439bc12d0e6fa1941fc87f70f631075bf3cbb04",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-audio8/boot-curtana-6.18.58-audio8.img"
+  ],
+  "physical_display_confirmed": null,
+  "user_observation": "pending",
+  "restarted_from_shell": true,
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "AUDIO8_BANNER_WRITTEN",
+      "AUDIO8_PROBE_BEGIN",
+      "AUDIO8_PROBE_END",
+      "AUDIO8_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "27:          0          0          0          0          0          0          0          0    GICv3 134 Level     arm-smmu-context-fault",
+      "28:          0          0          0          0          0          0          0          0    GICv3 135 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "audio8-fastboot-20261027-143024.txt": {
+      "bytes": 859,
+      "sha256": "32e176ddb61a1558975e1ddf364a498f8c49b14866d0236357e6cf0bcf91138e"
+    },
+    "audio8-serial-20261027-143024.txt": {
+      "bytes": 165371,
+      "sha256": "a94abb2a90f589dc933a2014ba52d860124d15f8aeb83528b8833c2e614e2670"
+    }
+  },
+  "followup_20261027": {
+    "replug_while_bus_suspended": {
+      "swr_wake_irq": 0,
+      "mbhc_sw_intr_after_boot": 1,
+      "headphone_jack": "Off",
+      "mic_jack": "Off"
+    },
+    "result": "no MBHC event delivered from clock stop",
+    "macros_forced_active_swr_suspended": "same: no wake, jack Off"
+  }
+}

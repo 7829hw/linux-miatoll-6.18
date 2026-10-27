@@ -84,6 +84,7 @@ struct wcd937x_priv {
 	/* mbhc module */
 	struct wcd_mbhc *wcd_mbhc;
 	struct wcd_mbhc_config mbhc_cfg;
+	bool jack_pm_held;
 	struct wcd_mbhc_intr intr_ids;
 	struct wcd_clsh_ctrl *clsh_info;
 	struct wcd_common common;
@@ -2590,10 +2591,30 @@ static int wcd937x_codec_set_jack(struct snd_soc_component *comp,
 	struct wcd937x_priv *wcd = dev_get_drvdata(comp->dev);
 	int ret = 0;
 
-	if (jack)
+	if (jack) {
+		/*
+		 * MBHC interrupts reach the CPU as TX SoundWire Slave alerts.
+		 * On SM7125 they are lost while the TX bus is in clock stop,
+		 * so keep the TX Slave active while a jack is registered.
+		 */
+		if (!wcd->jack_pm_held) {
+			ret = pm_runtime_resume_and_get(wcd->txdev);
+			if (ret < 0)
+				return ret;
+			wcd->jack_pm_held = true;
+		}
 		ret = wcd_mbhc_start(wcd->wcd_mbhc, &wcd->mbhc_cfg, jack);
-	else
+		if (ret) {
+			pm_runtime_put(wcd->txdev);
+			wcd->jack_pm_held = false;
+		}
+	} else {
 		wcd_mbhc_stop(wcd->wcd_mbhc);
+		if (wcd->jack_pm_held) {
+			pm_runtime_put(wcd->txdev);
+			wcd->jack_pm_held = false;
+		}
+	}
 
 	return ret;
 }

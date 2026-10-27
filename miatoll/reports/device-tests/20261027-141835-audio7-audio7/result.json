@@ -61,5 +61,14 @@
       "bytes": 165379,
       "sha256": "934e83bdd6d81f2a5f7a04513fcddaf918699d1186a96c45b5afa284ba626b38"
     }
+  },
+  "followup_20261027": {
+    "replug_while_bus_suspended": {
+      "swr_wake_irq": 0,
+      "mbhc_sw_intr_after_boot": 1,
+      "headphone_jack": "Off",
+      "mic_jack": "Off"
+    },
+    "result": "no MBHC event delivered from clock stop"
   }
 }
