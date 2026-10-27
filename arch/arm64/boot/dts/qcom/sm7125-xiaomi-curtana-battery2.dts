@@ -1,0 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0
+// QG current scale and sign check; hardware description identical to battery1.
+#include "sm7125-xiaomi-curtana-battery1.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing battery2 test)";
+	chosen {
+		miatoll,boot-profile = "battery2-ram-only";
+	};
+};
