@@ -1,0 +1,154 @@
+### 2026-10-27T21:37:15 vulkaninfo
+$ /usr/bin/vulkaninfo --summary > /tmp/vi.txt 2>&1; echo VULKANINFO_EXIT=$?; grep -vE "^\s*$" /tmp/vi.txt | head -50
+/usr/bin/vulkaninfo --summary > /tmp/vi.txt 2>&1; echo VULKANIN
+FO_EXIT=$?; grep -vE "^\s*$" /tmp/vi.txt | head -50; printf "\nSTEP_DONE_213715=
+%s\n" "$?"
+VULKANINFO_EXIT=0
+'DISPLAY' environment variable not set... skipping surface info
+error: XDG_RUNTIME_DIR is invalid or not set in the environment.
+==========
+VULKANINFO
+==========
+Vulkan Instance Version: 1.4.313
+Instance Extensions: count = 20
+-------------------------------
+VK_EXT_acquire_drm_display             : extension revision 1
+VK_EXT_debug_report                    : extension revision 10
+VK_EXT_debug_utils                     : extension revision 2
+VK_EXT_direct_mode_display             : extension revision 1
+VK_EXT_display_surface_counter         : extension revision 1
+VK_EXT_headless_surface                : extension revision 1
+VK_EXT_surface_maintenance1            : extension revision 1
+VK_EXT_swapchain_colorspace            : extension revision 5
+VK_KHR_device_group_creation           : extension revision 1
+VK_KHR_display                         : extension revision 23
+VK_KHR_external_fence_capabilities     : extension revision 1
+VK_KHR_external_memory_capabilities    : extension revision 1
+VK_KHR_external_semaphore_capabilities : extension revision 1
+VK_KHR_get_display_properties2         : extension revision 1
+VK_KHR_get_physical_device_properties2 : extension revision 2
+VK_KHR_get_surface_capabilities2       : extension revision 1
+VK_KHR_portability_enumeration         : extension revision 1
+VK_KHR_surface                         : extension revision 25
+VK_KHR_surface_protected_capabilities  : extension revision 1
+VK_LUNARG_direct_driver_loading        : extension revision 1
+Instance Layers:
+----------------
+Devices:
+========
+GPU0:
+	apiVersion         = 1.3.311
+	driverVersion      = 25.1.9
+	vendorID           = 0x5143
+	deviceID           = 0x6010800
+	deviceType         = PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU
+	deviceName         = Turnip Adreno (TM) 618
+	driverID           = DRIVER_ID_MESA_TURNIP
+	driverName         = turnip Mesa driver
+	driverInfo         = Mesa 25.1.9
+	conformanceVersion = 1.2.7.1
+	deviceUUID         = 8234aaed-e2da-bebd-5c4e-cf74fcf6e525
+	driverUUID         = cb0337c4-1c01-5402-1308-50a3c3f9497f
+
+STEP_DONE_213715=0
+miatoll-vulkan1# [6n
+### 2026-10-27T21:37:35 vkcube-start
+$ rm -f /tmp/vk.txt; setsid sh -c "echo START \$(cut -d\" \" -f1 /proc/uptime) > /tmp/vk.txt; sleep 120 | /usr/bin/vkcube --wsi display --c 1500 >> /tmp/vk.txt 2>&1; echo VKCUBE_EXIT=\$? END \$(cut -d\" \" -f1 /proc/uptime) >> /tmp/vk.txt" </dev/null >/dev/null 2>&1 & sleep 4; cat /tmp/vk.txt
+rm -f /tmp/vk.txt; setsid sh -c "echo START \$(cut -d\" \" -f1 
+/proc/uptime) > /tmp/vk.txt; sleep 120 | /usr/bin/vkcube --wsi display --c 1500 
+>> /tmp/vk.txt 2>&1; echo VKCUBE_EXIT=\$? END \$(cut -d\" \" -f1 /proc/uptime) >
+> /tmp/vk.txt" </dev/null >/dev/null 2>&1 & sleep 4; cat /tmp/vk.txt; printf "\n
+STEP_DONE_213731=%s\n" "$?"
+START 26.69
+Selected GPU 0: Turnip Adreno (TM) 618, type: IntegratedGpu
+
+STEP_DONE_213731=0
+[1]+  Done                       setsid sh -c "echo START $(cut -d" " -f1 /proc/uptime) > /tmp/vk.txt; sleep 120 | /usr/bin/vkcube --wsi display --c 1500 >> /tmp/vk.txt 2>&1; echo VKCUBE_EXIT=$? END $(cut -d" " -f1 /proc/uptime) >> /tmp/vk.txt" 0</dev/null 1>/dev/null 2>&1
+miatoll-vulkan1# [6n
+### 2026-10-27T21:37:57 vkcube-log
+$ cut -d" " -f1 /proc/uptime; cat /tmp/vk.txt; dmesg | tail -15 | grep -vE "ft8756|Bluetooth"
+cut -d" " -f1 /proc/uptime; cat /tmp/vk.txt; dmesg | tail -15 |
+ grep -vE "ft8756|Bluetooth"; printf "\nSTEP_DONE_213757=%s\n" "$?"
+51.97
+START 26.69
+Selected GPU 0: Turnip Adreno (TM) 618, type: IntegratedGpu
+[   26.715464] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1080x2400": 60 164823 1080 1100 1104 1124 2400 2408 2412 2444 0x48 0x0
+[   26.715680] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:34:DSI-1]
+[   26.715729] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:34:DSI-1] probed modes:
+[   26.715755] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1080x2400": 60 164823 1080 1100 1104 1124 2400 2408 2412 2444 0x48 0x0
+[   26.715797] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:34:DSI-1]
+[   26.715829] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:34:DSI-1] probed modes:
+[   26.715853] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1080x2400": 60 164823 1080 1100 1104 1124 2400 2408 2412 2444 0x48 0x0
+[   26.715891] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:34:DSI-1]
+[   26.715922] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:34:DSI-1] probed modes:
+[   26.715945] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1080x2400": 60 164823 1080 1100 1104 1124 2400 2408 2412 2444 0x48 0x0
+[   26.716520] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[   26.728625] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[   26.728788] msm_dpu ae01000.display-controller: [drm:drm_client_dev_restore] fbdev: ret=0
+[   33.762062] gcc-sc7180 100000.clock-controller: sync_state() pending due to 506a000.gmu
+[   33.762243] sc7180-gpucc 5090000.clock-controller: sync_state() pending due to 506a000.gmu
+
+STEP_DONE_213757=0
+miatoll-vulkan1# [6n
+### 2026-10-27T21:38:09 vkcube-state
+$ for p in /proc/[0-9]*; do c=$(cat $p/comm 2>/dev/null); case $c in vkcube*) echo "PID ${p#/proc/} $c state=$(grep State $p/status) wchan=$(cat $p/wchan)"; for t in $p/task/*; do echo " tid ${t##*/} $(cat $t/comm) $(cat $t/wchan) $(grep State $t/status | cut -f2)"; done; ls -l $p/fd 2>/dev/null | grep -E "dri|card|render"; cat $p/stack 2>/dev/null | head -12;; esac; done; cat /sys/kernel/debug/dri/0/state 2>/dev/null | grep -E "crtc\[|active|plane\[|fb=|enable" | head -20
+for p in /proc/[0-9]*; do c=$(cat $p/comm 2>/dev/null); case $c
+ in vkcube*) echo "PID ${p#/proc/} $c state=$(grep State $p/status) wchan=$(cat 
+$p/wchan)"; for t in $p/task/*; do echo " tid ${t##*/} $(cat $t/comm) $(cat $t/w
+chan) $(grep State $t/status | cut -f2)"; done; ls -l $p/fd 2>/dev/null | grep -
+E "dri|card|render"; cat $p/stack 2>/dev/null | head -12;; esac; done; cat /sys/
+kernel/debug/dri/0/state 2>/dev/null | grep -E "crtc\[|active|plane\[|fb=|enable
+" | head -20; printf "\nSTEP_DONE_213808=%s\n" "$?"
+plane[41]: plane-0
+	fb=67
+plane[47]: plane-1
+	fb=0
+plane[53]: plane-2
+	fb=0
+plane[59]: plane-3
+	fb=0
+crtc[65]: crtc-0
+	enable=1
+	active=1
+	self_refresh_active=0
+	active_changed=0
+crtc[66]: crtc-1
+	enable=0
+	active=0
+	self_refresh_active=0
+	active_changed=0
+
+STEP_DONE_213808=0
+miatoll-vulkan1# [6n
+### 2026-10-27T21:38:23 vkcube-foreground
+$ timeout 20 /usr/bin/vkcube --wsi display --c 120 --validate 2>&1 </dev/null | head -30; echo "VKCUBE_RC=$?"; dmesg | tail -4 | grep -viE "ft8756|probed|CONNECTOR"
+timeout 20 /usr/bin/vkcube --wsi display --c 120 --validate 2>&
+1 </dev/null | head -30; echo "VKCUBE_RC=$?"; dmesg | tail -4 | grep -viE "ft875
+6|probed|CONNECTOR"; printf "\nSTEP_DONE_213823=%s\n" "$?"
+vkEnumerateInstanceLayerProperties failed to find required validation layer.
+
+Please look at the Getting Started guide for additional information.
+
+VKCUBE_RC=0
+[   26.728625] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[   26.728788] msm_dpu ae01000.display-controller: [drm:drm_client_dev_restore] fbdev: ret=0
+[   33.762062] gcc-sc7180 100000.clock-controller: sync_state() pending due to 506a000.gmu
+[   33.762243] sc7180-gpucc 5090000.clock-controller: sync_state() pending due to 506a000.gmu
+
+STEP_DONE_213823=0
+miatoll-vulkan1# [6n
+### 2026-10-27T21:38:32 vkcube-foreground2
+$ timeout 20 /usr/bin/vkcube --wsi display --c 120 </dev/null > /tmp/vk2.txt 2>&1; echo "VKCUBE_RC=$?"; head -30 /tmp/vk2.txt; dmesg | tail -6 | grep -viE "ft8756|probed|CONNECTOR|sync_state"
+timeout 20 /usr/bin/vkcube --wsi display --c 120 </dev/null > /
+tmp/vk2.txt 2>&1; echo "VKCUBE_RC=$?"; head -30 /tmp/vk2.txt; dmesg | tail -6 | 
+grep -viE "ft8756|probed|CONNECTOR|sync_state"; printf "\nSTEP_DONE_213832=%s\n"
+ "$?"
+VKCUBE_RC=139
+Selected GPU 0: Turnip Adreno (TM) 618, type: IntegratedGpu
+Segmentation fault
+[   87.421676] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[   87.429691] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[   87.431886] msm_dpu ae01000.display-controller: [drm:drm_client_dev_restore] fbdev: ret=0
+
+STEP_DONE_213832=0
+miatoll-vulkan1# [6n

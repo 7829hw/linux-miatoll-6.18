@@ -29,6 +29,9 @@ def load(workspace, variant='gles'):
     assert record.get('variant', 'gles') == variant, 'Unexpected Mesa build variant'
     assert record['build_script_sha256'] == sha256(BOOT.parent / 'gpu/build_mesa.sh'), 'Rebuild Mesa: script changed'
     assert record['sysroot_packages_sha256'] == sha256(sysroot / 'sysroot-packages.json'), 'Mesa sysroot changed'
+    if record.get('vk_display_probe_source_sha256'):
+        assert record['vk_display_probe_source_sha256'] == sha256(BOOT.parent / 'gpu/vk-display-probe.c'), \
+            'Rebuild Mesa: vk-display-probe.c changed'
     files = {}
     for rel, info in record['files'].items():
         base = out / 'stage' if info['from'] == 'stage' else sysroot

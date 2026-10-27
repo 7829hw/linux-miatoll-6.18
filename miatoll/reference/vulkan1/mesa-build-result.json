@@ -9,11 +9,12 @@
     "tarball_sha256": "27f61c74f724fdc584d7575772d09a19817628b30faca072855f4c3ebeaf3f36"
   },
   "sysroot_packages_sha256": "35b9b78f76192c658ca8fbcb7e1784635ad24872cbb59c615fcc129b91ff22a6",
-  "build_script_sha256": "9749aa94efc2d4a80e97dcc5ba0f707ab887a2a4ac166d711d3a4d5ae239440c",
+  "build_script_sha256": "66a210e0abfeb772ff4598c7d1615ca166624b8ad505bef2fc2cf7b8d816e600",
+  "vk_display_probe_source_sha256": "43667e3d00fc651f9f8a95e17389c6a91c96ec37c3c3f3a6cf005b8332e6c800",
   "files": {
     "usr/lib/libgallium-25.1.9.so": {
       "from": "stage",
-      "sha256": "15806c07facb92f403a592e09ce7b2bbb4754f59059954b8cc921d385f2f2285"
+      "sha256": "796189c2b6682c8a931714b8c8b9523d723a6a460a6b5cd17ad32be043c89170"
     },
     "usr/lib/libEGL.so.1.0.0": {
       "from": "stage",
@@ -61,11 +62,15 @@
     },
     "usr/lib/libvulkan_freedreno.so": {
       "from": "stage",
-      "sha256": "1e180eb704ebf6b0f6f253ae3694303221d53a53c720c23e5116821c9d32cc8a"
+      "sha256": "0cac64b3c838ea1a17ae4e31f43e6498966dc96a8cfb0a2e3c4980f0e51438fa"
     },
     "usr/share/vulkan/icd.d/freedreno_icd.cortex-a76.json": {
       "from": "stage",
       "sha256": "a6dbfcef57d267948eb0da43bbce425205493718729e9d54321ebae5b83eb847"
+    },
+    "usr/bin/vk-display-probe": {
+      "from": "stage",
+      "sha256": "2af4f7e1fa53f5bcc5a2238eada30902584370b9d3df41b9f2b0d6f6fdd4ba79"
     },
     "usr/lib/libvulkan.so.1.4.313": {
       "from": "sysroot",
