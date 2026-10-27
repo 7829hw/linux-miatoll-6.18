@@ -266,7 +266,7 @@ def main(profile='boot1'):
                                                   'wifi-probe', 'wifi-scan', 'wifi-join', 'wifi-udhcpc',
                                                   'wifi-link-probe', 'wifi-disconnect', 'bt-start', 'bt-probe',
                                                   'battery-probe', 'fastboot-reboot', 'reboot-mode.c',
-                                                  'audio-init', 'audio-probe', 'speaker-tone.c', 'audio-path')),
+                                                  'audio-init', 'audio-probe', 'speaker-tone.c', 'audio-path', 'pcm-test.c')),
                        ROOT / ('arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-' + profile + '.dts'),
                        ROOT / 'arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-audio2.dts',
                        ROOT / 'arch/arm64/boot/dts/qcom/sm7125-xiaomi-curtana-audio1.dts',

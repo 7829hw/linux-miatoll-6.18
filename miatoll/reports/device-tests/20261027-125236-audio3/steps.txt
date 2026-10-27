@@ -1,0 +1,662 @@
+### 2026-10-27T12:53:29 card-check
+$ sleep 10; cat /proc/asound/cards; cat /proc/asound/pcm; cat /sys/kernel/debug/devices_deferred; ls /sys/bus/soundwire/devices; dmesg | grep -iE "vote|0x100f4|va_macro|wcd937x|wcd9370|snd-sm8250|DSP returned" | head -20; grep "q6v5 fatal" /proc/interrupts
+sleep 10; cat /proc/asound/cards; cat /proc/asound/pcm; cat /sys
+/kernel/debug/devices_deferred; ls /sys/bus/soundwire/devices; dmesg | grep -iE 
+"vote|0x100f4|va_macro|wcd937x|wcd9370|snd-sm8250|DSP returned" | head -20; grep
+ "q6v5 fatal" /proc/interrupts; printf "\nSTEP_DONE_125319=%s\n" "$?"
+ 0 [Xiaomimiatoll  ]: sm8250 - Xiaomi-miatoll
+                      Xiaomi-miatoll
+00-00: MultiMedia1 (*) :  : playback 1 : capture 1
+00-01: MultiMedia2 (*) :  : playback 1 : capture 1
+00-02: MultiMedia3 (*) :  : playback 1 : capture 1
+[1;36msdw-master-2-0[m          [1;36msdw:2:0:0217:010a:00:4[m
+[1;36msdw-master-3-0[m          [1;36msdw:3:0:0217:010a:00:3[m
+[    1.136579] qcom-q6afe aprsvc:service:4:4: cmd = 0x100f4 returned error = 0x16
+[    1.136846] qcom-q6afe aprsvc:service:4:4: DSP returned error[16]
+[    1.239853] qcom-q6afe aprsvc:service:4:4: AFE vote (3) accepted after 1 retries
+[    1.257541] wcd9370-codec sdw:2:0:0217:010a:00:4: Static channel mapping not specified using device channel maps
+[    1.262004] wcd9370-codec sdw:3:0:0217:010a:00:3: Static channel mapping not specified using device channel maps
+[    1.267519] wcd937x_codec codec: bound sdw:2:0:0217:010a:00:4 (ops wcd_sdw_component_ops)
+[    1.267653] wcd937x_codec codec: bound sdw:3:0:0217:010a:00:3 (ops wcd_sdw_component_ops)
+166:          0          0          0          0          0          0          0          0 smp2p-mpss   0 Edge      q6v5 fatal
+172:          0          0          0          0          0          0          0          0 smp2p-lpass   0 Edge      q6v5 fatal
+
+STEP_DONE_125319=0
+miatoll-audio3# [6n
+### 2026-10-27T12:54:16 headphone-tone
+$ tinymix -D 0 controls | grep -iE "jack|HPHL Volume|RX_RX0 Digital"; for c in "Headphone Jack" "Mic Jack"; do tinymix -D 0 get "$c" 2>&1 | head -1; done; dmesg | grep -iE "mbhc|jack|plug" | tail -5; audio-path headphones on; tinyplay /usr/share/sounds/quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4; echo "play_rc=$?"; audio-path headphones off; dmesg | tail -n 6 | grep -iE "asoc|q6|wcd|error|fail"
+tinymix -D 0 controls | grep -iE "jack|HPHL Volume|RX_RX0 Digita
+l"; for c in "Headphone Jack" "Mic Jack"; do tinymix -D 0 get "$c" 2>&1 | head -
+1; done; dmesg | grep -iE "mbhc|jack|plug" | tail -5; audio-path headphones on; 
+tinyplay /usr/share/sounds/quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4; echo "play_r
+c=$?"; audio-path headphones off; dmesg | tail -n 6 | grep -iE "asoc|q6|wcd|erro
+r|fail"; printf "\nSTEP_DONE_125415=%s\n" "$?"
+9	INT	1	HPHL Volume                             
+31	INT	1	RX_RX0 Digital Volume                   
+85	BOOL	1	Mic Jack                                
+86	BOOL	1	Headphone Jack                          
+Off
+Off
+[    0.484584] msm_dpu ae01000.display-controller: [drm:drm_sysfs_connector_hotplug_event] [CONNECTOR:36:Writeback-1] generating connector hotplug event
+[    0.485997] msm_dpu ae01000.display-controller: [drm:drm_sysfs_hotplug_event] generating hotplug event
+[    0.681851] msm_dpu ae01000.display-controller: [drm:drm_fb_helper_hotplug_event] 
+[    0.685670] msm_dpu ae01000.display-controller: [drm:drm_client_dev_hotplug] fbdev: ret=0
+[    1.372831] input: Xiaomi-miatoll Headset Jack as /devices/platform/sound/sound/card0/input4
+AUDIO_PATH headphones on failures=0
+playing '/usr/share/sounds/quiet-1khz-3s.wav': 2 ch, 48000 hz, 16 bit
+play_rc=0
+AUDIO_PATH headphones off failures=0
+[    1.302617] ft8756-spi spi11.0: Failed to read data status: 0xC3
+[   66.747458] wcd937x_codec codec: clk already disabled
+
+STEP_DONE_125415=0
+miatoll-audio3# [6n
+### 2026-10-27T12:54:47 headphone-tone-2
+$ audio-path headphones on; sleep 1; tinyplay /usr/share/sounds/quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4; echo "play_rc=$?"; audio-path headphones off
+audio-path headphones on; sleep 1; tinyplay /usr/share/sounds/qu
+iet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4; echo "play_rc=$?"; audio-path headphones 
+off; printf "\nSTEP_DONE_125446=%s\n" "$?"
+AUDIO_PATH headphones on failures=0
+playing '/usr/share/sounds/quiet-1khz-3s.wav': 2 ch, 48000 hz, 16 bit
+play_rc=0
+AUDIO_PATH headphones off failures=0
+
+STEP_DONE_125446=0
+miatoll-audio3# [6n
+### 2026-10-27T12:55:33 headphone-tone-x4
+$ audio-path headphones on; sleep 5; for i in 1 2 3 4; do tinyplay /usr/share/sounds/quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4 >/dev/null; echo "play$i rc=$?"; sleep 2; done; audio-path headphones off
+audio-path headphones on; sleep 5; for i in 1 2 3 4; do tinyplay
+ /usr/share/sounds/quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4 >/dev/null; echo "pla
+y$i rc=$?"; sleep 2; done; audio-path headphones off; printf "\nSTEP_DONE_125519
+=%s\n" "$?"
+AUDIO_PATH headphones on failures=0
+play1 rc=0
+play2 rc=0
+play3 rc=0
+play4 rc=0
+AUDIO_PATH headphones off failures=0
+
+STEP_DONE_125519=0
+miatoll-audio3# [6n
+### 2026-10-27T12:56:26 hph-dapm-during-play
+$ ls /sys/kernel/debug/asoc/ | head; audio-path headphones on >/dev/null; (tinyplay /usr/share/sounds/quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4 >/dev/null &); sleep 1.5; for f in $(ls -d /sys/kernel/debug/asoc/Xiaomi-miatoll/*/dapm/* 2>/dev/null | grep -iE "HPH|RDAC|CLS|RX INT0|RX INT1|AIF1_PB|RX_RX0|RX0 MUX|bias_level|EAR"); do printf "%s: " "${f#/sys/kernel/debug/asoc/Xiaomi-miatoll/}"; head -n 1 "$f"; done; sleep 3; audio-path headphones off >/dev/null; echo done
+ls /sys/kernel/debug/asoc/ | head; audio-path headphones on >/de
+v/null; (tinyplay /usr/share/sounds/quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4 >/de
+v/null &); sleep 1.5; for f in $(ls -d /sys/kernel/debug/asoc/Xiaomi-miatoll/*/d
+apm/* 2>/dev/null | grep -iE "HPH|RDAC|CLS|RX INT0|RX INT1|AIF1_PB|RX_RX0|RX0 MU
+X|bias_level|EAR"); do printf "%s: " "${f#/sys/kernel/debug/asoc/Xiaomi-miatoll/
+}"; head -n 1 "$f"; done; sleep 3; audio-path headphones off >/dev/null; echo do
+ne; printf "\nSTEP_DONE_125620=%s\n" "$?"
+Xiaomi-miatoll
+components
+dais
+62400000.remoteproc:glink-edge:apr:service@4:dais/dapm/bias_level: Off
+62400000.remoteproc:glink-edge:apr:service@7:dais/dapm/bias_level: Off
+62400000.remoteproc:glink-edge:apr:service@8:routing/dapm/bias_level: Off
+62600000.rxmacro/dapm/HPHL_OUT: HPHL_OUT: Off  in 0 out 1
+62600000.rxmacro/dapm/HPHR_OUT: HPHR_OUT: Off  in 0 out 1
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT0: head: INT0: No such file or directory
+DEM: head: DEM: No such file or directory
+MUX: head: MUX: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT0: head: INT0: No such file or directory
+MIX2: head: MIX2: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT0: head: INT0: No such file or directory
+MIX2: head: MIX2: No such file or directory
+INP: head: INP: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT0: head: INT0: No such file or directory
+SEC: head: SEC: No such file or directory
+MIX: head: MIX: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT0_1: head: INT0_1: No such file or directory
+INTERP: head: INTERP: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT0_1: head: INT0_1: No such file or directory
+MIX1: head: MIX1: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT0_1: head: INT0_1: No such file or directory
+MIX1: head: MIX1: No such file or directory
+INP0: head: INP0: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT0_1: head: INT0_1: No such file or directory
+MIX1: head: MIX1: No such file or directory
+INP1: head: INP1: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT0_1: head: INT0_1: No such file or directory
+MIX1: head: MIX1: No such file or directory
+INP2: head: INP2: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT0_2: head: INT0_2: No such file or directory
+INTERP: head: INTERP: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT0_2: head: INT0_2: No such file or directory
+MUX: head: MUX: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT1: head: INT1: No such file or directory
+DEM: head: DEM: No such file or directory
+MUX: head: MUX: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT1: head: INT1: No such file or directory
+MIX2: head: MIX2: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT1: head: INT1: No such file or directory
+MIX2: head: MIX2: No such file or directory
+INP: head: INP: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT1: head: INT1: No such file or directory
+SEC: head: SEC: No such file or directory
+MIX: head: MIX: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT1_1: head: INT1_1: No such file or directory
+INTERP: head: INTERP: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT1_1: head: INT1_1: No such file or directory
+MIX1: head: MIX1: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT1_1: head: INT1_1: No such file or directory
+MIX1: head: MIX1: No such file or directory
+INP0: head: INP0: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT1_1: head: INT1_1: No such file or directory
+MIX1: head: MIX1: No such file or directory
+INP1: head: INP1: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT1_1: head: INT1_1: No such file or directory
+MIX1: head: MIX1: No such file or directory
+INP2: head: INP2: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT1_2: head: INT1_2: No such file or directory
+INTERP: head: INTERP: No such file or directory
+62600000.rxmacro/dapm/RX: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX: No such file or directory
+INT1_2: head: INT1_2: No such file or directory
+MUX: head: MUX: No such file or directory
+62600000.rxmacro/dapm/RX_MACRO: head: /sys/kernel/debug/asoc/Xiaomi-miatoll/62600000.rxmacro/dapm/RX_MACRO: No such file or directory
+RX0: head: RX0: No such file or directory
+MUX: head: MUX: No such file or directory
+62600000.rxmacro/dapm/RX_RX0: RX_RX0: Off  in 0 out 1
+62600000.rxmacro/dapm/bias_level: Off
+62610000.soundwire-controller/dapm/bias_level: Off
+62620000.txmacro/dapm/bias_level: Off
+62630000.soundwire-controller/dapm/bias_level: Off
+codec/dapm/AUX_RDAC: AUX_RDAC: Off  in 0 out 1
+codec/dapm/CLS_H_PORT: CLS_H_PORT: Off  in 0 out 0
+codec/dapm/EAR: EAR: Off  in 0 out 1
+codec/dapm/EAR: EAR: Off  in 0 out 1
+PGA: head: PGA: No such file or directory
+codec/dapm/EAR_RDAC: EAR_RDAC: Off  in 0 out 1
+codec/dapm/HPHL: HPHL: Off  in 0 out 1
+codec/dapm/HPHL: HPHL: Off  in 0 out 1
+PGA: head: PGA: No such file or directory
+codec/dapm/HPHL_RDAC: HPHL_RDAC: Off  in 0 out 1
+codec/dapm/HPHR: HPHR: Off  in 0 out 1
+codec/dapm/HPHR: HPHR: Off  in 0 out 1
+PGA: head: PGA: No such file or directory
+codec/dapm/HPHR_RDAC: HPHR_RDAC: Off  in 0 out 1
+codec/dapm/IN1_HPHL: IN1_HPHL: Off  in 0 out 1
+codec/dapm/IN2_HPHR: IN2_HPHR: Off  in 0 out 1
+codec/dapm/RDAC1: RDAC1: Off  in 0 out 1
+codec/dapm/RDAC2: RDAC2: Off  in 0 out 1
+codec/dapm/RDAC3: RDAC3: Off  in 0 out 0
+codec/dapm/RDAC3_MUX: RDAC3_MUX: Off  in 0 out 0
+codec/dapm/RDAC4: RDAC4: Off  in 1 out 0
+codec/dapm/bias_level: Off
+tas2562.9-004c/dapm/bias_level: Standby
+done
+
+STEP_DONE_125620=0
+miatoll-audio3# [6n
+### 2026-10-27T12:56:44 hph-dapm-on-widgets
+$ audio-path headphones on >/dev/null; (tinyplay /usr/share/sounds/quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4 >/dev/null &); sleep 1.2; for f in /sys/kernel/debug/asoc/Xiaomi-miatoll/*/dapm/*; do l=$(head -n 1 "$f"); case "$l" in *": On"*) echo "ON  ${f#/sys/kernel/debug/asoc/Xiaomi-miatoll/} | $l";; esac; done; for w in "AIF1_PB" "RX_MACRO RX0 MUX" "RX INT0_1 MIX1 INP0" "RX INT0 INTERP" "HPHL_OUT" "IN1_HPHL" "HPHL PGA" "HPHL_RDAC" "HPHL"; do for f in /sys/kernel/debug/asoc/Xiaomi-miatoll/*/dapm/"$w"; do [ -f "$f" ] && echo "W   ${f#/sys/kernel/debug/asoc/Xiaomi-miatoll/} | $(head -n 1 "$f")"; done; done; sleep 2; audio-path headphones off >/dev/null; echo done
+audio-path headphones on >/dev/null; (tinyplay /usr/share/sounds
+/quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4 >/dev/null &); sleep 1.2; for f in /sys
+/kernel/debug/asoc/Xiaomi-miatoll/*/dapm/*; do l=$(head -n 1 "$f"); case "$l" in
+ *": On"*) echo "ON  ${f#/sys/kernel/debug/asoc/Xiaomi-miatoll/} | $l";; esac; d
+one; for w in "AIF1_PB" "RX_MACRO RX0 MUX" "RX INT0_1 MIX1 INP0" "RX INT0 INTERP
+" "HPHL_OUT" "IN1_HPHL" "HPHL PGA" "HPHL_RDAC" "HPHL"; do for f in /sys/kernel/d
+ebug/asoc/Xiaomi-miatoll/*/dapm/"$w"; do [ -f "$f" ] && echo "W   ${f#/sys/kerne
+l/debug/asoc/Xiaomi-miatoll/} | $(head -n 1 "$f")"; done; done; sleep 2; audio-p
+ath headphones off >/dev/null; echo done; printf "\nSTEP_DONE_125640=%s\n" "$?"
+ON  tas2562.9-004c/dapm/IMON | IMON: On  in 1 out 0
+ON  tas2562.9-004c/dapm/VMON | VMON: On  in 1 out 0
+W   62600000.rxmacro/dapm/RX_MACRO RX0 MUX | RX_MACRO RX0 MUX: Off  in 0 out 1
+W   62600000.rxmacro/dapm/RX INT0_1 MIX1 INP0 | RX INT0_1 MIX1 INP0: Off  in 0 out 1
+W   62600000.rxmacro/dapm/HPHL_OUT | HPHL_OUT: Off  in 0 out 1
+W   codec/dapm/IN1_HPHL | IN1_HPHL: Off  in 0 out 1
+W   codec/dapm/HPHL PGA | HPHL PGA: Off  in 0 out 1 - R12297(0x3009) mask 0x80
+W   codec/dapm/HPHL_RDAC | HPHL_RDAC: Off  in 0 out 1
+W   codec/dapm/HPHL | HPHL: Off  in 0 out 1
+done
+
+STEP_DONE_125640=0
+miatoll-audio3# [6n
+### 2026-10-27T12:57:08 hph-pcm-state
+$ audio-path headphones on >/dev/null; t0=$(cut -d" " -f1 /proc/uptime); (tinyplay /usr/share/sounds/quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4; echo "tinyplay_rc=$? end=$(cut -d" " -f1 /proc/uptime)") & sleep 1; echo "t0=$t0 now=$(cut -d" " -f1 /proc/uptime)"; cat /proc/asound/card0/pcm1p/sub0/status; cat /proc/asound/card0/pcm1p/sub0/hw_params; ls /sys/kernel/debug/asoc/Xiaomi-miatoll/ | grep -iE "multimedia|codec_dma|wcd"; cat "/sys/kernel/debug/asoc/Xiaomi-miatoll/MultiMedia2/dpcm/state" 2>&1 | head -20; sleep 4; audio-path headphones off >/dev/null; dmesg | tail -n 8
+audio-path headphones on >/dev/null; t0=$(cut -d" " -f1 /proc/up
+time); (tinyplay /usr/share/sounds/quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4; echo
+ "tinyplay_rc=$? end=$(cut -d" " -f1 /proc/uptime)") & sleep 1; echo "t0=$t0 now
+=$(cut -d" " -f1 /proc/uptime)"; cat /proc/asound/card0/pcm1p/sub0/status; cat /
+proc/asound/card0/pcm1p/sub0/hw_params; ls /sys/kernel/debug/asoc/Xiaomi-miatoll
+/ | grep -iE "multimedia|codec_dma|wcd"; cat "/sys/kernel/debug/asoc/Xiaomi-miat
+oll/MultiMedia2/dpcm/state" 2>&1 | head -20; sleep 4; audio-path headphones off 
+>/dev/null; dmesg | tail -n 8; printf "\nSTEP_DONE_125703=%s\n" "$?"
+playing '/usr/share/sounds/quiet-1khz-3s.wav': 2 ch, 48000 hz, 16 bit
+tinyplay_rc=0 end=234.16
+t0=234.06 now=235.07
+closed
+closed
+MultiMedia1
+MultiMedia2
+MultiMedia3
+cat: can't open '/sys/kernel/debug/asoc/Xiaomi-miatoll/MultiMedia2/dpcm/state': No such file or directory
+[  135.391648] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2427, z_val=47138 (milliohm)
+[  135.437386] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2356, z_val=48846 (milliohm)
+[  137.374704] wcd937x_codec codec: clk already disabled
+[  139.837169] wcd937x_codec codec: clk already disabled
+[  141.940136] wcd937x_codec codec: clk already disabled
+[  191.821424] wcd937x_codec codec: clk already disabled
+[  210.887772] wcd937x_codec codec: clk already disabled
+[  234.166466] wcd937x_codec codec: clk already disabled
+
+STEP_DONE_125703=0
+[1]+  Done                       (tinyplay /usr/share/sounds/quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4; echo "tinyplay_rc=${?} end=$(...)")
+miatoll-audio3# [6n
+### 2026-10-27T12:57:43 hph-pcm-sample
+$ audio-path headphones on >/dev/null; tinyplay /usr/share/sounds/quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4 & i=0; while [ $i -lt 12 ]; do s=$(tr "\n" " " < /proc/asound/card0/pcm1p/sub0/status); echo "S$i $s"; i=$((i+1)); usleep 50000 2>/dev/null || sleep 0.05; done; wait; cat /proc/asound/card0/pcm1p/sub0/hw_params; audio-path headphones off >/dev/null; dmesg | tail -n 4
+audio-path headphones on >/dev/null; tinyplay /usr/share/sounds/
+quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4 & i=0; while [ $i -lt 12 ]; do s=$(tr "\
+n" " " < /proc/asound/card0/pcm1p/sub0/status); echo "S$i $s"; i=$((i+1)); uslee
+p 50000 2>/dev/null || sleep 0.05; done; wait; cat /proc/asound/card0/pcm1p/sub0
+/hw_params; audio-path headphones off >/dev/null; dmesg | tail -n 4; printf "\nS
+TEP_DONE_125742=%s\n" "$?"
+playing '/usr/share/sounds/quiet-1khz-3s.wav': 2 ch, 48000 hz, 16 bit
+S0 state: SETUP owner_pid   : 1331 trigger_time: 0.000000000 tstamp      : 272.808972760 delay       : 0 avail       : 3840 avail_max   : 0 ----- hw_ptr      : 0 appl_ptr    : 0 
+S1 closed 
+S2 closed 
+S3 closed 
+S4 closed 
+S5 closed 
+S6 closed 
+S7 closed 
+S8 closed 
+S9 closed 
+S10 closed 
+S11 closed 
+closed
+[  191.821424] wcd937x_codec codec: clk already disabled
+[  210.887772] wcd937x_codec codec: clk already disabled
+[  234.166466] wcd937x_codec codec: clk already disabled
+[  272.895314] wcd937x_codec codec: clk already disabled
+
+STEP_DONE_125742=0
+[1]+  Done                       tinyplay /usr/share/sounds/quiet-1khz-3s.wav -D 0 -d 1 -p 960 -n 4
+miatoll-audio3# [6n
+### 2026-10-27T12:58:04 tinyplay-speaker-timing
+$ tinymix -D 0 set "Amp Gain Volume" 0 >/dev/null; audio-path speaker on >/dev/null; a=$(cut -d" " -f1 /proc/uptime); tinyplay /usr/share/sounds/quiet-1khz-3s.wav -D 0 -d 0 -p 960 -n 4; echo "rc=$? start=$a end=$(cut -d" " -f1 /proc/uptime)"; audio-path speaker off >/dev/null; tinymix -D 0 set "Amp Gain Volume" 16 >/dev/null; echo restored
+tinymix -D 0 set "Amp Gain Volume" 0 >/dev/null; audio-path spea
+ker on >/dev/null; a=$(cut -d" " -f1 /proc/uptime); tinyplay /usr/share/sounds/q
+uiet-1khz-3s.wav -D 0 -d 0 -p 960 -n 4; echo "rc=$? start=$a end=$(cut -d" " -f1
+ /proc/uptime)"; audio-path speaker off >/dev/null; tinymix -D 0 set "Amp Gain V
+olume" 16 >/dev/null; echo restored; printf "\nSTEP_DONE_125804=%s\n" "$?"
+playing '/usr/share/sounds/quiet-1khz-3s.wav': 2 ch, 48000 hz, 16 bit
+rc=0 start=295.09 end=295.14
+restored
+
+STEP_DONE_125804=0
+miatoll-audio3# [6n
+### 2026-10-27T13:02:05 pcm-test-headphones-timing
+$ audio-path headphones on; /run/pcm-test play 1; audio-path headphones off; dmesg | tail -n 3
+audio-path headphones on; /run/pcm-test play 1; audio-path headp
+hones off; dmesg | tail -n 3; printf "\nSTEP_DONE_130202=%s\n" "$?"
+AUDIO_PATH headphones on failures=0
+pcm_configured=1 rate=48000 channels=2 format=S16_LE period_frames=960 buffer_frames=3840
+tone_start=1 duration_ms=3000 frequency_hz=1000 peak_s16=256
+pcm_frames_submitted=144000
+pcm_drain_complete=1 elapsed_ms=3032
+pcm_test_exit=0
+AUDIO_PATH headphones off failures=0
+[  234.166466] wcd937x_codec codec: clk already disabled
+[  272.895314] wcd937x_codec codec: clk already disabled
+[  536.365709] wcd937x_codec codec: clk already disabled
+
+STEP_DONE_130202=0
+miatoll-audio3# [6n
+### 2026-10-27T13:02:42 headphone-listen-x4
+$ audio-path headphones on; sleep 5; for i in 1 2 3 4; do /run/pcm-test play 1 | grep -E "drain|exit"; sleep 2; done; audio-path headphones off
+audio-path headphones on; sleep 5; for i in 1 2 3 4; do /run/pcm
+-test play 1 | grep -E "drain|exit"; sleep 2; done; audio-path headphones off; p
+rintf "\nSTEP_DONE_130216=%s\n" "$?"
+AUDIO_PATH headphones on failures=0
+pcm_drain_complete=1 elapsed_ms=3034
+pcm_test_exit=0
+pcm_drain_complete=1 elapsed_ms=3030
+pcm_test_exit=0
+pcm_drain_complete=1 elapsed_ms=3029
+pcm_test_exit=0
+pcm_drain_complete=1 elapsed_ms=3033
+pcm_test_exit=0
+AUDIO_PATH headphones off failures=0
+
+STEP_DONE_130216=0
+miatoll-audio3# [6n
+### 2026-10-27T13:12:10 hph-dapm-pcm-test
+$ audio-path headphones on >/dev/null; (/run/pcm-test play 1 >/dev/null &); sleep 1.5; for f in /sys/kernel/debug/asoc/Xiaomi-miatoll/*/dapm/*; do l=$(head -n 1 "$f"); case "$l" in *": On"*) echo "ON  ${f#/sys/kernel/debug/asoc/Xiaomi-miatoll/} | $l";; esac; done; for w in "RX AIF1 PB" "RX_MACRO RX0 MUX" "RX INT0 INTERP" "HPHL_OUT" "IN1_HPHL" "HPHL_RDAC" "HPHL PGA" "HPHL" "VDD_BUCK" "CLS_H_PORT" "RXCLK"; do for f in /sys/kernel/debug/asoc/Xiaomi-miatoll/*/dapm/"$w"; do [ -f "$f" ] && echo "W   ${f#/sys/kernel/debug/asoc/Xiaomi-miatoll/} | $(head -n 1 "$f")"; done; done; sleep 2; audio-path headphones off >/dev/null; echo done
+audio-path headphones on >/dev/null; (/run/pcm-test play 1 >/dev/null &); sleep 1.5; for f in /sys/kernel/debug/asoc/Xiaomi-miatoll/*/dapm/*; do l=$(head -n 1 "$f"); case "$l" in *": On"*) echo "ON  ${f#/sys/kernel/debug/asoc/Xiaomi-miatoll/} | $l";; esac; done; for w in "RX AIF1 PB" "RX_MACRO RX0 MUX" "RX INT0 INTERP" "HPHL_OUT" "IN1_HPHL" "HPHL_RDAC" "HPHL PGA" "HPHL" "VDD_BUCK" "CLS_H_PORT" "RXCLK"; do for f in /sys/kernel/debug/asoc/Xiaomi-miatoll/*/dapm/"$w"; do [ -f "$f" ] && echo "W   ${f#/sys/kernel/debug/asoc/Xiaomi-miatoll/} | $(head -n 1 "$f")"; done; done; sleep 2; audio-path headphones off >/dev/null; echo done; printf "\nSTEP_DONE_131143=%s\n" "$?"^Jpcm_drain_complete=1 elapsed_ms=3036
+pcm_test_exit=0
+pcm_drain_complete=1 elapsed_ms=3030
+pcm_test_exit=0
+pcm_drain_complete=1 elapsed_ms=3034
+pcm_test_exit=0
+pcm_drain_complete=1 elapsed_ms=3032
+pcm_test_exit=0
+AUDIO_PATH headphones off failures=0
+
+STEP_DONE_131127=0
+miatoll-audio3# audio-path headphones on >/dev/null; (/run/pcm-test play 1 >/dev
+/null &); sleep 1.5; for f in /sys/kernel/debug/asoc/Xiaomi-miatoll/*/dapm/*; do
+ l=$(head -n 1 "$f"); case "$l" in *": On"*) echo "ON  ${f#/sys/kernel/debug/aso
+c/Xiaomi-miatoll/} | $l";; esac; done; for w in "RX AIF1 PB" "RX_MACRO RX0 MUX" 
+"RX INT0 INTERP" "HPHL_OUT" "IN1_HPHL" "HPHL_RDAC" "HPHL PGA" "HPHL" "VDD_BUCK" 
+"CLS_H_PORT" "RXCLK"; do for f in /sys/kernel/debug/asoc/Xiaomi-miatoll/*/dapm/"
+$w"; do [ -f "$f" ] && echo "W   ${f#/sys/kernel/debug/asoc/Xiaomi-miatoll/} | $
+(head -n 1 "$f")"; done; done; sleep 2; audio-path headphones off >/dev/null; ec
+ho done; printf "\nSTEP_DONE_131143=%s\n" "$?"
+ON  62400000.remoteproc:glink-edge:apr:service@4:dais/dapm/RX_CODEC_DMA_RX_0 | RX_CODEC_DMA_RX_0: On  in 1 out 2
+ON  62400000.remoteproc:glink-edge:apr:service@4:dais/dapm/RX_CODEC_DMA_RX_0 Playback | RX_CODEC_DMA_RX_0 Playback: On  in 1 out 2
+ON  62400000.remoteproc:glink-edge:apr:service@7:dais/dapm/MM_DL2 | MM_DL2: On  in 1 out 2
+ON  62400000.remoteproc:glink-edge:apr:service@7:dais/dapm/MultiMedia2 Playback | MultiMedia2 Playback: On  in 1 out 2
+ON  62400000.remoteproc:glink-edge:apr:service@8:routing/dapm/RX_CODEC_DMA_RX_0 Audio Mixer | RX_CODEC_DMA_RX_0 Audio Mixer: On  in 1 out 2
+ON  62600000.rxmacro/dapm/HPHL_OUT | HPHL_OUT: On  in 1 out 1
+ON  62600000.rxmacro/dapm/HPHR_OUT | HPHR_OUT: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX AIF1 PB | RX AIF1 PB: On  in 1 out 2
+ON  62600000.rxmacro/dapm/RX INT0 DEM MUX | RX INT0 DEM MUX: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX INT0 MIX2 | RX INT0 MIX2: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX INT0 SEC MIX | RX INT0 SEC MIX: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX INT0_1 INTERP | RX INT0_1 INTERP: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX INT0_1 MIX1 | RX INT0_1 MIX1: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX INT0_1 MIX1 INP0 | RX INT0_1 MIX1 INP0: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX INT1 DEM MUX | RX INT1 DEM MUX: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX INT1 MIX2 | RX INT1 MIX2: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX INT1 SEC MIX | RX INT1 SEC MIX: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX INT1_1 INTERP | RX INT1_1 INTERP: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX INT1_1 MIX1 | RX INT1_1 MIX1: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX INT1_1 MIX1 INP0 | RX INT1_1 MIX1 INP0: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX_MACRO RX0 MUX | RX_MACRO RX0 MUX: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX_MACRO RX1 MUX | RX_MACRO RX1 MUX: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX_MACRO_AIF1 Playback | RX_MACRO_AIF1 Playback: On  in 1 out 2
+ON  62600000.rxmacro/dapm/RX_MCLK | RX_MCLK: On  in 0 out 0
+ON  62600000.rxmacro/dapm/RX_RX0 | RX_RX0: On  in 1 out 1
+ON  62600000.rxmacro/dapm/RX_RX1 | RX_RX1: On  in 1 out 1
+ON  codec/dapm/CLS_H_PORT | CLS_H_PORT: On  in 0 out 0
+ON  codec/dapm/HPHL | HPHL: On  in 1 out 1
+ON  codec/dapm/HPHL PGA | HPHL PGA: On  in 1 out 1 - R12297(0x3009) mask 0x80
+ON  codec/dapm/HPHL_RDAC | HPHL_RDAC: On  in 1 out 1
+ON  codec/dapm/HPHR | HPHR: On  in 1 out 1
+ON  codec/dapm/HPHR PGA | HPHR PGA: On  in 1 out 1 - R12297(0x3009) mask 0x40
+ON  codec/dapm/HPHR_RDAC | HPHR_RDAC: On  in 1 out 1
+ON  codec/dapm/IN1_HPHL | IN1_HPHL: On  in 1 out 1
+ON  codec/dapm/IN2_HPHR | IN2_HPHR: On  in 1 out 1
+ON  codec/dapm/RDAC1 | RDAC1: On  in 1 out 1
+ON  codec/dapm/RDAC2 | RDAC2: On  in 1 out 1
+ON  codec/dapm/RX1 | RX1: On  in 1 out 1
+ON  codec/dapm/RX2 | RX2: On  in 1 out 1
+ON  codec/dapm/VDD_BUCK | VDD_BUCK: On  in 0 out 0
+ON  tas2562.9-004c/dapm/IMON | IMON: On  in 1 out 0
+ON  tas2562.9-004c/dapm/VMON | VMON: On  in 1 out 0
+W   62600000.rxmacro/dapm/RX AIF1 PB | RX AIF1 PB: On  in 1 out 2
+W   62600000.rxmacro/dapm/RX_MACRO RX0 MUX | RX_MACRO RX0 MUX: On  in 1 out 1
+W   62600000.rxmacro/dapm/HPHL_OUT | HPHL_OUT: On  in 1 out 1
+W   codec/dapm/IN1_HPHL | IN1_HPHL: On  in 1 out 1
+W   codec/dapm/HPHL_RDAC | HPHL_RDAC: On  in 1 out 1
+W   codec/dapm/HPHL PGA | HPHL PGA: On  in 1 out 1 - R12297(0x3009) mask 0x80
+W   codec/dapm/HPHL | HPHL: On  in 1 out 1
+W   codec/dapm/VDD_BUCK | VDD_BUCK: On  in 0 out 0
+W   codec/dapm/CLS_H_PORT | CLS_H_PORT: On  in 0 out 0
+done
+
+STEP_DONE_131143=0
+miatoll-audio3# [6n
+### 2026-10-27T13:13:16 headphone-listen-x6-retry
+$ audio-path headphones on; sleep 8; for i in 1 2 3 4 5 6; do /run/pcm-test play 1 | grep -E "drain|exit"; sleep 2; done; audio-path headphones off
+audio-path headphones on; sleep 8; for i in 1 2 3 4 5 6; do /run
+/pcm-test play 1 | grep -E "drain|exit"; sleep 2; done; audio-path headphones of
+f; printf "\nSTEP_DONE_131238=%s\n" "$?"
+AUDIO_PATH headphones on failures=0
+pcm_drain_complete=1 elapsed_ms=3031
+pcm_test_exit=0
+pcm_drain_complete=1 elapsed_ms=3029
+pcm_test_exit=0
+pcm_drain_complete=1 elapsed_ms=3029
+pcm_test_exit=0
+pcm_drain_complete=1 elapsed_ms=3039
+pcm_test_exit=0
+pcm_drain_complete=1 elapsed_ms=3030
+pcm_test_exit=0
+pcm_drain_complete=1 elapsed_ms=3027
+pcm_test_exit=0
+AUDIO_PATH headphones off failures=0
+
+STEP_DONE_131238=0
+miatoll-audio3# [6n
+### 2026-10-27T13:13:56 headset-mic-record
+$ rm -f /run/hs-q.wav /run/hs-s.wav; audio-path headset-mic on; printf "\033[2J\033[H\n\n\033[1;37;41m   MIC TEST: QUIET   \033[0m\n" >/dev/tty1; sleep 2; /run/pcm-test record 2 3 /run/hs-q.wav | grep -E "capture_frames|exit|refine"; printf "\n\n\033[1;37;42m   SPEAK NOW   \033[0m\n" >/dev/tty1; /run/pcm-test record 2 4 /run/hs-s.wav | grep -E "capture_frames|exit"; printf "\n\n\033[1;37;44m   DONE   \033[0m\n" >/dev/tty1; audio-path headset-mic off
+rm -f /run/hs-q.wav /run/hs-s.wav; audio-path headset-mic on; pr
+intf "\033[2J\033[H\n\n\033[1;37;41m   MIC TEST: QUIET   \033[0m\n" >/dev/tty1; 
+sleep 2; /run/pcm-test record 2 3 /run/hs-q.wav | grep -E "capture_frames|exit|r
+efine"; printf "\n\n\033[1;37;42m   SPEAK NOW   \033[0m\n" >/dev/tty1; /run/pcm-
+test record 2 4 /run/hs-s.wav | grep -E "capture_frames|exit"; printf "\n\n\033[
+1;37;44m   DONE   \033[0m\n" >/dev/tty1; audio-path headset-mic off; printf "\nS
+TEP_DONE_131346=%s\n" "$?"
+AUDIO_PATH headset-mic on failures=0
+capture_frames=144000 peak_s16=16384 peak_dbfs=-6.0 rms_dbfs=-23.7
+pcm_test_exit=0
+capture_frames=192000 peak_s16=16384 peak_dbfs=-6.0 rms_dbfs=-24.9
+pcm_test_exit=0
+AUDIO_PATH headset-mic off failures=0
+
+STEP_DONE_131346=0
+miatoll-audio3# [6n
+### 2026-10-27T13:14:06 headset-mic-samples
+$ for f in /run/hs-q.wav /run/hs-s.wav; do echo "== $f"; hexdump -s 44 -n 64 -v -e "16/2 \"%6d \" \"\n\"" $f; hexdump -s 200044 -n 32 -v -e "16/2 \"%6d \" \"\n\"" $f; done
+for f in /run/hs-q.wav /run/hs-s.wav; do echo "== $f"; hexdump -
+s 44 -n 64 -v -e "16/2 \"%6d \" \"\n\"" $f; hexdump -s 200044 -n 32 -v -e "16/2 
+\"%6d \" \"\n\"" $f; done; printf "\nSTEP_DONE_131406=%s\n" "$?"
+== /run/hs-q.wav
+     0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
+     0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
+     0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
+== /run/hs-s.wav
+     0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
+     0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
+     0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
+
+STEP_DONE_131406=0
+miatoll-audio3# [6n
+### 2026-10-27T13:14:45 headset-mic-analysis
+$ for f in /run/hs-q.wav /run/hs-s.wav; do echo "== $f"; hexdump -s 44 -v -e "1/2 \"%d\n\"" $f | awk "{n++; if (\$1!=0) {nz++; if (!first) first=n}; c[\$1]++; b=int((n-1)/4800); s[b]+=\$1*\$1} END {printf \"frames=%d nonzero=%d first_nonzero=%d\n\", n, nz, first; for (v in c) if (c[v]>n/100) printf \"value %d count %d\n\", v, c[v]; for (i=0;i<=int((n-1)/4800);i++) printf \"%s%.0f\", (i?\" \":\"rms_db:\"), (s[i]>0?10*log(s[i]/4800/1073741824)/log(10):-99); printf \"\n\"}"; done
+for f in /run/hs-q.wav /run/hs-s.wav; do echo "== $f"; hexdump -
+s 44 -v -e "1/2 \"%d\n\"" $f | awk "{n++; if (\$1!=0) {nz++; if (!first) first=n
+}; c[\$1]++; b=int((n-1)/4800); s[b]+=\$1*\$1} END {printf \"frames=%d nonzero=%
+d first_nonzero=%d\n\", n, nz, first; for (v in c) if (c[v]>n/100) printf \"valu
+e %d count %d\n\", v, c[v]; for (i=0;i<=int((n-1)/4800);i++) printf \"%s%.0f\", 
+(i?\" \":\"rms_db:\"), (s[i]>0?10*log(s[i]/4800/1073741824)/log(10):-99); printf
+ \"\n\"}"; done; printf "\nSTEP_DONE_131444=%s\n" "$?"
+== /run/hs-q.wav
+frames=144000 nonzero=21571 first_nonzero=13765
+value 0 count 122429
+value -1 count 2117
+value -16384 count 1514
+rms_db:-99 -99 -15 -10 -31 -52 -74 -95 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99
+== /run/hs-s.wav
+frames=192000 nonzero=21571 first_nonzero=14071
+value 0 count 170429
+value -1 count 2117
+rms_db:-99 -99 -18 -10 -29 -51 -73 -94 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99
+
+STEP_DONE_131444=0
+miatoll-audio3# [6n
+### 2026-10-27T13:16:04 builtin-mic-record
+$ for m in mic1 mic2; do rm -f /run/$m-q.wav /run/$m-s.wav; audio-path $m on; printf "\033[2J\033[H\n\n\033[1;37;41m   $m: QUIET   \033[0m\n" >/dev/tty1; sleep 2; /run/pcm-test record 2 3 /run/$m-q.wav | grep -E "capture_frames|stopped"; printf "\n\n\033[1;37;42m   $m: SPEAK NOW   \033[0m\n" >/dev/tty1; /run/pcm-test record 2 4 /run/$m-s.wav | grep -E "capture_frames|stopped"; audio-path $m off; done; printf "\n\n\033[1;37;44m   DONE   \033[0m\n" >/dev/tty1; for f in /run/mic1-q.wav /run/mic1-s.wav /run/mic2-q.wav /run/mic2-s.wav; do echo "== $f"; hexdump -s 44 -v -e "1/2 \"%d\n\"" $f | awk "{n++; if (\$1!=0) nz++; b=int((n-1)/9600); s[b]+=\$1*\$1} END {printf \"nonzero=%d rms_db_0.2s:\", nz; for (i=0;i<=int((n-1)/9600);i++) printf \" %.0f\", (s[i]>0?10*log(s[i]/9600/1073741824)/log(10):-99); printf \"\n\"}"; done
+for m in mic1 mic2; do rm -f /run/$m-q.wav /run/$m-s.wav; audio-
+path $m on; printf "\033[2J\033[H\n\n\033[1;37;41m   $m: QUIET   \033[0m\n" >/de
+v/tty1; sleep 2; /run/pcm-test record 2 3 /run/$m-q.wav | grep -E "capture_frame
+s|stopped"; printf "\n\n\033[1;37;42m   $m: SPEAK NOW   \033[0m\n" >/dev/tty1; /
+run/pcm-test record 2 4 /run/$m-s.wav | grep -E "capture_frames|stopped"; audio-
+path $m off; done; printf "\n\n\033[1;37;44m   DONE   \033[0m\n" >/dev/tty1; for
+ f in /run/mic1-q.wav /run/mic1-s.wav /run/mic2-q.wav /run/mic2-s.wav; do echo "
+== $f"; hexdump -s 44 -v -e "1/2 \"%d\n\"" $f | awk "{n++; if (\$1!=0) nz++; b=i
+nt((n-1)/9600); s[b]+=\$1*\$1} END {printf \"nonzero=%d rms_db_0.2s:\", nz; for 
+(i=0;i<=int((n-1)/9600);i++) printf \" %.0f\", (s[i]>0?10*log(s[i]/9600/10737418
+24)/log(10):-99); printf \"\n\"}"; done; printf "\nSTEP_DONE_131542=%s\n" "$?"
+AUDIO_PATH mic1 on failures=0
+capture_frames=144000 peak_s16=107 peak_dbfs=-49.7 rms_dbfs=-68.9
+capture_frames=192000 peak_s16=3543 peak_dbfs=-19.3 rms_dbfs=-44.5
+AUDIO_PATH mic1 off failures=0
+AUDIO_PATH mic2 on failures=0
+capture_frames=144000 peak_s16=821 peak_dbfs=-32.0 rms_dbfs=-65.6
+capture_frames=192000 peak_s16=740 peak_dbfs=-32.9 rms_dbfs=-67.5
+AUDIO_PATH mic2 off failures=0
+== /run/mic1-q.wav
+nonzero=138132 rms_db_0.2s: -73 -65 -66 -66 -68 -72 -69 -73 -71 -71 -69 -72 -68 -70 -71
+== /run/mic1-s.wav
+nonzero=188675 rms_db_0.2s: -77 -73 -65 -52 -45 -49 -49 -54 -67 -45 -52 -43 -43 -59 -35 -45 -41 -48 -63 -45
+== /run/mic2-q.wav
+nonzero=138316 rms_db_0.2s: -58 -72 -67 -66 -65 -68 -68 -72 -71 -72 -70 -61 -71 -73 -71
+== /run/mic2-s.wav
+nonzero=183799 rms_db_0.2s: -77 -73 -72 -70 -72 -69 -72 -70 -70 -57 -72 -70 -70 -71 -69 -70 -71 -72 -72 -69
+
+STEP_DONE_131542=0
+miatoll-audio3# [6n
+### 2026-10-27T13:17:30 probe-alive
+$ uname -r; cat /proc/uptime
+^[[6nuname -r; cat /proc/uptime; printf "\nSTEP_
+DONE_131729=%s\n" "$?"
+/bin/sh: miatoll-audio3#: not found
+1460.41 11654.84
+
+STEP_DONE_131729=0
+miatoll-audio3# [6n
+### 2026-10-27T13:18:48 top-mic-retest
+$ rm -f /run/mic2b-q.wav /run/mic2b-s.wav; audio-path mic2 on; printf "\033[2J\033[H\n\n\033[1;37;41m   TOP MIC: QUIET   \033[0m\n" >/dev/tty1; sleep 2; /run/pcm-test record 2 3 /run/mic2b-q.wav | grep -E "capture_frames|stopped"; printf "\n\n\033[1;37;42m   SPEAK INTO THE TOP EDGE   \033[0m\n" >/dev/tty1; /run/pcm-test record 2 4 /run/mic2b-s.wav | grep -E "capture_frames|stopped"; audio-path mic2 off; printf "\n\n\033[1;37;44m   DONE   \033[0m\n" >/dev/tty1; for f in /run/mic2b-q.wav /run/mic2b-s.wav; do echo "== $f"; hexdump -s 44 -v -e "1/2 \"%d\n\"" $f | awk "{n++; b=int((n-1)/9600); s[b]+=\$1*\$1} END {printf \"rms_db_0.2s:\"; for (i=0;i<=int((n-1)/9600);i++) printf \" %.0f\", (s[i]>0?10*log(s[i]/9600/1073741824)/log(10):-99); printf \"\n\"}"; done
+^[[6nrm -f /run/mic2b-q.wav /run/mic2b-s.wav; au
+dio-path mic2 on; printf "\033[2J\033[H\n\n\033[1;37;41m   TOP MIC: QUIET   \033
+[0m\n" >/dev/tty1; sleep 2; /run/pcm-test record 2 3 /run/mic2b-q.wav | grep -E 
+"capture_frames|stopped"; printf "\n\n\033[1;37;42m   SPEAK INTO THE TOP EDGE   
+\033[0m\n" >/dev/tty1; /run/pcm-test record 2 4 /run/mic2b-s.wav | grep -E "capt
+ure_frames|stopped"; audio-path mic2 off; printf "\n\n\033[1;37;44m   DONE   \03
+3[0m\n" >/dev/tty1; for f in /run/mic2b-q.wav /run/mic2b-s.wav; do echo "== $f";
+ hexdump -s 44 -v -e "1/2 \"%d\n\"" $f | awk "{n++; b=int((n-1)/9600); s[b]+=\$1
+*\$1} END {printf \"rms_db_0.2s:\"; for (i=0;i<=int((n-1)/9600);i++) printf \" %
+.0f\", (s[i]>0?10*log(s[i]/9600/1073741824)/log(10):-99); printf \"\n\"}"; done;
+ printf "\nSTEP_DONE_131838=%s\n" "$?"
+/bin/sh: miatoll-audio3#: not found
+AUDIO_PATH mic2 on failures=0
+capture_frames=144000 peak_s16=103 peak_dbfs=-50.1 rms_dbfs=-69.4
+capture_frames=192000 peak_s16=2594 peak_dbfs=-22.0 rms_dbfs=-43.7
+AUDIO_PATH mic2 off failures=0
+== /run/mic2b-q.wav
+rms_db_0.2s: -73 -70 -66 -71 -71 -73 -73 -69 -70 -71 -71 -66 -67 -69 -68
+== /run/mic2b-s.wav
+rms_db_0.2s: -76 -70 -66 -68 -66 -68 -69 -68 -71 -69 -71 -58 -36 -40 -36 -41 -42 -45 -45 -41
+
+STEP_DONE_131838=0
+miatoll-audio3# [6n
+### 2026-10-27T13:19:38 headset-mic-adc2
+$ rm -f /run/hs2-q.wav /run/hs2-s.wav; for c in "TX_DEC0 Volume:84" "ADC2 Volume:12" "MultiMedia3 Mixer TX_CODEC_DMA_TX_3:1" "TX DEC0 MUX:SWR_MIC" "TX SMIC MUX0:ADC2" "TX_AIF1_CAP Mixer DEC0:1" "ADC2_MIXER Switch:1" "ADC2 Switch:1" "ADC2 MUX:INP2"; do tinymix -D 0 set "${c%%:*}" "${c#*:}" >/dev/null || echo "SET_FAILED $c"; done; printf "\033[2J\033[H\n\n\033[1;37;41m   EARPHONE MIC: QUIET   \033[0m\n" >/dev/tty1; sleep 2; /run/pcm-test record 2 3 /run/hs2-q.wav | grep -E "capture_frames|stopped"; printf "\n\n\033[1;37;42m   SPEAK INTO THE EARPHONE MIC   \033[0m\n" >/dev/tty1; /run/pcm-test record 2 4 /run/hs2-s.wav | grep -E "capture_frames|stopped"; audio-path mic2 off >/dev/null; printf "\n\n\033[1;37;44m   DONE   \033[0m\n" >/dev/tty1; for f in /run/hs2-q.wav /run/hs2-s.wav; do echo "== $f"; hexdump -s 44 -v -e "1/2 \"%d\n\"" $f | awk "{n++; b=int((n-1)/9600); s[b]+=\$1*\$1} END {printf \"rms_db_0.2s:\"; for (i=0;i<=int((n-1)/9600);i++) printf \" %.0f\", (s[i]>0?10*log(s[i]/9600/1073741824)/log(10):-99); printf \"\n\"}"; done; dmesg | grep -iE "mbhc|micb|bias" | tail -3
+rm -f /run/hs2-q.wav /run/hs2-s.wav; for c in "TX_DEC0 Volume:84
+" "ADC2 Volume:12" "MultiMedia3 Mixer TX_CODEC_DMA_TX_3:1" "TX DEC0 MUX:SWR_MIC"
+ "TX SMIC MUX0:ADC2" "TX_AIF1_CAP Mixer DEC0:1" "ADC2_MIXER Switch:1" "ADC2 Swit
+ch:1" "ADC2 MUX:INP2"; do tinymix -D 0 set "${c%%:*}" "${c#*:}" >/dev/null || ec
+ho "SET_FAILED $c"; done; printf "\033[2J\033[H\n\n\033[1;37;41m   EARPHONE MIC:
+ QUIET   \033[0m\n" >/dev/tty1; sleep 2; /run/pcm-test record 2 3 /run/hs2-q.wav
+ | grep -E "capture_frames|stopped"; printf "\n\n\033[1;37;42m   SPEAK INTO THE 
+EARPHONE MIC   \033[0m\n" >/dev/tty1; /run/pcm-test record 2 4 /run/hs2-s.wav | 
+grep -E "capture_frames|stopped"; audio-path mic2 off >/dev/null; printf "\n\n\0
+33[1;37;44m   DONE   \033[0m\n" >/dev/tty1; for f in /run/hs2-q.wav /run/hs2-s.w
+av; do echo "== $f"; hexdump -s 44 -v -e "1/2 \"%d\n\"" $f | awk "{n++; b=int((n
+-1)/9600); s[b]+=\$1*\$1} END {printf \"rms_db_0.2s:\"; for (i=0;i<=int((n-1)/96
+00);i++) printf \" %.0f\", (s[i]>0?10*log(s[i]/9600/1073741824)/log(10):-99); pr
+intf \"\n\"}"; done; dmesg | grep -iE "mbhc|micb|bias" | tail -3; printf "\nSTEP
+_DONE_131928=%s\n" "$?"
+capture_frames=144000 peak_s16=34 peak_dbfs=-59.7 rms_dbfs=-82.5
+capture_frames=192000 peak_s16=37 peak_dbfs=-58.9 rms_dbfs=-82.2
+== /run/hs2-q.wav
+rms_db_0.2s: -78 -81 -80 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84
+== /run/hs2-s.wav
+rms_db_0.2s: -77 -78 -80 -83 -83 -83 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84
+[  135.345404] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2299, z_val=50500 (milliohm)
+[  135.391648] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2427, z_val=47138 (milliohm)
+[  135.437386] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2356, z_val=48846 (milliohm)
+
+STEP_DONE_131928=0
+miatoll-audio3# [6n
+### 2026-10-27T13:20:01 headset-mic-bias-check
+$ for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tinymix -D 0 get "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "mbhc|plug|headset|impedance|z_val" | tail -6; for c in "TX_DEC0 Volume:84" "ADC2 Volume:12" "MultiMedia3 Mixer TX_CODEC_DMA_TX_3:1" "TX DEC0 MUX:SWR_MIC" "TX SMIC MUX0:ADC2" "TX_AIF1_CAP Mixer DEC0:1" "ADC2_MIXER Switch:1" "ADC2 Switch:1" "ADC2 MUX:INP2"; do tinymix -D 0 set "${c%%:*}" "${c#*:}" >/dev/null; done; (/run/pcm-test record 2 3 /run/hs3.wav >/dev/null &); sleep 1.5; for w in "MIC BIAS1" "MIC BIAS2" "MIC BIAS3" "AMIC1" "AMIC2" "AMIC3" "ADC2" "ADC2 MUX" "ADC2_MIXER"; do for f in /sys/kernel/debug/asoc/Xiaomi-miatoll/codec/dapm/"$w"; do [ -f "$f" ] && echo "W $(head -n 1 "$f")"; done; done; sleep 2; audio-path mic2 off >/dev/null; rm -f /run/hs3.wav
+for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tinymix -D 0
+ get "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "mbhc|plug|headset|impedanc
+e|z_val" | tail -6; for c in "TX_DEC0 Volume:84" "ADC2 Volume:12" "MultiMedia3 M
+ixer TX_CODEC_DMA_TX_3:1" "TX DEC0 MUX:SWR_MIC" "TX SMIC MUX0:ADC2" "TX_AIF1_CAP
+ Mixer DEC0:1" "ADC2_MIXER Switch:1" "ADC2 Switch:1" "ADC2 MUX:INP2"; do tinymix
+ -D 0 set "${c%%:*}" "${c#*:}" >/dev/null; done; (/run/pcm-test record 2 3 /run/
+hs3.wav >/dev/null &); sleep 1.5; for w in "MIC BIAS1" "MIC BIAS2" "MIC BIAS3" "
+AMIC1" "AMIC2" "AMIC3" "ADC2" "ADC2 MUX" "ADC2_MIXER"; do for f in /sys/kernel/d
+ebug/asoc/Xiaomi-miatoll/codec/dapm/"$w"; do [ -f "$f" ] && echo "W $(head -n 1 
+"$f")"; done; done; sleep 2; audio-path mic2 off >/dev/null; rm -f /run/hs3.wav;
+ printf "\nSTEP_DONE_131957=%s\n" "$?"
+Headphone Jack=On
+Mic Jack=On
+[    0.681851] msm_dpu ae01000.display-controller: [drm:drm_fb_helper_hotplug_event] 
+[    0.685670] msm_dpu ae01000.display-controller: [drm:drm_client_dev_hotplug] fbdev: ret=0
+[    1.372831] input: Xiaomi-miatoll Headset Jack as /devices/platform/sound/sound/card0/input4
+[  135.345404] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2299, z_val=50500 (milliohm)
+[  135.391648] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2427, z_val=47138 (milliohm)
+[  135.437386] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2356, z_val=48846 (milliohm)
+W MIC BIAS1: Off  in 0 out 0
+W MIC BIAS2: On  in 0 out 0
+W MIC BIAS3: Off  in 0 out 0
+W AMIC1: Off  in 1 out 0
+W AMIC2: On  in 1 out 1
+W AMIC3: Off  in 1 out 0
+W ADC2: On  in 1 out 1
+W ADC2 MUX: On  in 1 out 1
+W ADC2_MIXER: On  in 1 out 1
+
+STEP_DONE_131957=0
+miatoll-audio3# [6n
+### 2026-10-27T13:20:39 bcs-control
+$ tinymix -D 0 controls | grep -iE "BCS|MBHC"
+tinymix -D 0 controls | grep -iE "BCS|MBHC"; printf "\nSTEP_DONE
+_132038=%s\n" "$?"
+22	BOOL	1	MBHC Switch                             
+84	BOOL	1	DEC0_BCS Switch                         
+
+STEP_DONE_132038=0
+miatoll-audio3# [6n
+### 2026-10-27T13:21:46 headset-mic-bcs
+$ rm -f /run/hs4-q.wav /run/hs4-s.wav; for c in "TX_DEC0 Volume:84" "ADC2 Volume:12" "MultiMedia3 Mixer TX_CODEC_DMA_TX_3:1" "TX DEC0 MUX:SWR_MIC" "TX SMIC MUX0:ADC2" "TX_AIF1_CAP Mixer DEC0:1" "DEC0_BCS Switch:1" "ADC2_MIXER Switch:1" "ADC2 Switch:1" "ADC2 MUX:INP2"; do tinymix -D 0 set "${c%%:*}" "${c#*:}" >/dev/null || echo "SET_FAILED $c"; done; printf "\033[2J\033[H\n\n\033[1;37;41m   EARPHONE MIC: QUIET   \033[0m\n" >/dev/tty1; sleep 2; /run/pcm-test record 2 3 /run/hs4-q.wav | grep -E "capture_frames|stopped"; printf "\n\n\033[1;37;42m   SPEAK INTO THE EARPHONE MIC   \033[0m\n" >/dev/tty1; /run/pcm-test record 2 4 /run/hs4-s.wav | grep -E "capture_frames|stopped"; tinymix -D 0 set "DEC0_BCS Switch" 0 >/dev/null; audio-path mic2 off >/dev/null; printf "\n\n\033[1;37;44m   DONE   \033[0m\n" >/dev/tty1; for f in /run/hs4-q.wav /run/hs4-s.wav; do echo "== $f"; hexdump -s 44 -v -e "1/2 \"%d\n\"" $f | awk "{n++; b=int((n-1)/9600); s[b]+=\$1*\$1} END {printf \"rms_db_0.2s:\"; for (i=0;i<=int((n-1)/9600);i++) printf \" %.0f\", (s[i]>0?10*log(s[i]/9600/1073741824)/log(10):-99); printf \"\n\"}"; done
+rm -f /run/hs4-q.wav /run/hs4-s.wav; for c in "TX_DEC0 Volume:84
+" "ADC2 Volume:12" "MultiMedia3 Mixer TX_CODEC_DMA_TX_3:1" "TX DEC0 MUX:SWR_MIC"
+ "TX SMIC MUX0:ADC2" "TX_AIF1_CAP Mixer DEC0:1" "DEC0_BCS Switch:1" "ADC2_MIXER 
+Switch:1" "ADC2 Switch:1" "ADC2 MUX:INP2"; do tinymix -D 0 set "${c%%:*}" "${c#*
+:}" >/dev/null || echo "SET_FAILED $c"; done; printf "\033[2J\033[H\n\n\033[1;37
+;41m   EARPHONE MIC: QUIET   \033[0m\n" >/dev/tty1; sleep 2; /run/pcm-test recor
+d 2 3 /run/hs4-q.wav | grep -E "capture_frames|stopped"; printf "\n\n\033[1;37;4
+2m   SPEAK INTO THE EARPHONE MIC   \033[0m\n" >/dev/tty1; /run/pcm-test record 2
+ 4 /run/hs4-s.wav | grep -E "capture_frames|stopped"; tinymix -D 0 set "DEC0_BCS
+ Switch" 0 >/dev/null; audio-path mic2 off >/dev/null; printf "\n\n\033[1;37;44m
+   DONE   \033[0m\n" >/dev/tty1; for f in /run/hs4-q.wav /run/hs4-s.wav; do echo
+ "== $f"; hexdump -s 44 -v -e "1/2 \"%d\n\"" $f | awk "{n++; b=int((n-1)/9600); 
+s[b]+=\$1*\$1} END {printf \"rms_db_0.2s:\"; for (i=0;i<=int((n-1)/9600);i++) pr
+intf \" %.0f\", (s[i]>0?10*log(s[i]/9600/1073741824)/log(10):-99); printf \"\n\"
+}"; done; printf "\nSTEP_DONE_132136=%s\n" "$?"
+capture_frames=144000 peak_s16=33 peak_dbfs=-59.9 rms_dbfs=-82.1
+capture_frames=192000 peak_s16=37 peak_dbfs=-58.9 rms_dbfs=-82.4
+== /run/hs4-q.wav
+rms_db_0.2s: -78 -78 -80 -83 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -83
+== /run/hs4-s.wav
+rms_db_0.2s: -77 -79 -80 -83 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84
+
+STEP_DONE_132136=0
+miatoll-audio3# [6n

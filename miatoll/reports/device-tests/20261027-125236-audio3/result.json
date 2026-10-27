@@ -1,0 +1,135 @@
+{
+  "capture_id": "20261027-125236",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-audio3+",
+  "boot_profile": "audio3-ram-only",
+  "image": "boot-curtana-6.18.58-audio3.img",
+  "image_sha256": "5a4976a67dc1f3a407acb73f4aad3c6c24dfd9e4fa593c6c282fb631d0caf205",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-audio3/boot-curtana-6.18.58-audio3.img"
+  ],
+  "physical_display_confirmed": true,
+  "user_observation": {
+    "screen": "AUDIO TEST 3 banner and the QUIET/SPEAK prompts were visible",
+    "backlight": "on",
+    "notes": ""
+  },
+  "restarted_from_shell": true,
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "AUDIO3_BANNER_WRITTEN",
+      "AUDIO3_PROBE_BEGIN",
+      "AUDIO3_PROBE_END",
+      "AUDIO3_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "27:          0          0          0          0          0          0          0          0    GICv3 134 Level     arm-smmu-context-fault",
+      "28:          0          0          0          0          0          0          0          0    GICv3 135 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "audio3-fastboot-20261027-125236.txt": {
+      "bytes": 859,
+      "sha256": "612109c5263e69d5d203560e1764591a4eda544ee9b1163c8dccd032719b441d"
+    },
+    "audio3-serial-20261027-125236.txt": {
+      "bytes": 164777,
+      "sha256": "f7693ec31aaf103cacab992b66b22e8b055fd2463eca85efbbfe7662e0c6da89"
+    },
+    "steps.txt": {
+      "bytes": 46399,
+      "sha256": "461988d182bb723ab918b47d02468cb77e9d82a5fa331dfc7dd7e89e1f363cd2"
+    }
+  },
+  "step_observations": {
+    "headphone-listen-x6-retry": {
+      "screen": "user heard the quiet 1 kHz beeps in both earphones",
+      "backlight": "on",
+      "notes": ""
+    },
+    "builtin-mic-record": {
+      "screen": "user followed the QUIET/SPEAK NOW prompts on screen for both built-in mics",
+      "backlight": "on",
+      "notes": ""
+    },
+    "headset-mic-bcs": {
+      "screen": "user spoke into the earphone inline mic on the prompt; no speech captured",
+      "backlight": "on",
+      "notes": ""
+    }
+  },
+  "kernel_change": "q6afe LPASS HW vote: route rejected vote result to the waiter; retry every 100 ms up to 5 s",
+  "audio_confirmed": {
+    "full_card_at_boot": true,
+    "speaker": "confirmed in audio2 (not repeated)",
+    "headphones": true,
+    "mic1_bottom": true,
+    "mic2_top": true,
+    "headset_mic": false
+  },
+  "audio": {
+    "vote": "1.136 s cmd 0x100f4 rejected (0x16); 1.240 s \"AFE vote (3) accepted after 1 retries\"; both WCD937x SoundWire devices bound; card registered with no deferred probes",
+    "tinyplay": "tinyalsa 2.0.0 tinyplay returned after 0.05-0.1 s without playing on both PCM 0 and 1 (PCM went SETUP then closed); earlier \"nothing heard\" rounds were this tool bug, and one round never started because of a runner error",
+    "pcm_test": {
+      "sha256": "eeb6e1a749243573b653540dd83a3efc53f22b8516d2038dc381eec39957a25d",
+      "delivery": "pushed over the shell into /run and hash-checked; now built into the audio3 RAMdisk recipe"
+    },
+    "headphones": {
+      "routing": "sm7125-mainline UCM rx-macro + wcd937x sequences with miatoll BootSequence volumes (HPHL/R Volume 2, RX_RX0/1 84)",
+      "dapm_during_play": "MultiMedia2 -> RX_CODEC_DMA_RX_0 -> RX macro AIF1/INT0/INT1/DEM -> WCD RDAC1/2 -> HPHL/HPHR PGA all On",
+      "playback": "6 x 3 s tone, drain 3027-3039 ms each",
+      "user": "heard in both ears"
+    },
+    "mic1_bottom": {
+      "routing": "UCM Mic1 (SMIC ADC0, ADC1)",
+      "quiet_rms_dbfs": -68.9,
+      "speech_rms_dbfs": -44.5,
+      "speech_0.2s_blocks_dbfs": "-35..-52"
+    },
+    "mic2_top": {
+      "routing": "UCM Mic2 (SMIC ADC2, ADC2 MUX INP3)",
+      "first_try": "user position unclear: speech barely above floor",
+      "retest_quiet_rms_dbfs": -69.4,
+      "retest_speech_rms_dbfs": -43.7,
+      "note": "two retest attempts first failed because the USB/IP link dropped when the phone moved; runner --wait-port re-attached"
+    },
+    "headset_mic": {
+      "jack": "Headphone Jack=On, Mic Jack=On (MBHC impedance ~47-50 ohm)",
+      "attempt1": "generic tx-macro UCM (SMIC ADC1, ADC2 INP2): only a saturating start-up transient 0.28-0.7 s, then digital zero",
+      "attempt2": "downstream amic2 (SMIC ADC2, ADC2 INP2): live floor about -84 dBFS, no speech response",
+      "attempt3": "attempt2 + DEC0_BCS Switch 1 (downstream): same",
+      "dapm": "MIC BIAS2, AMIC2, ADC2 MUX, ADC2 On during capture",
+      "open": "MBHC mic bias mode or mic polarity; needs register-level investigation"
+    },
+    "warnings": "wcd937x_codec \"clk already disabled\" once per RX stream stop"
+  }
+}

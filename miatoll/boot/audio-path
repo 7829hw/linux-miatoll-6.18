@@ -57,15 +57,18 @@ case "$device:$state" in
         set_ctl 'RX HPH Mode' CLS_H_INVALID
         set_ctl 'RX_CODEC_DMA_RX_0 Audio Mixer MultiMedia2' 0 ;;
     headset-mic:on)
+        # The generic tx-macro UCM file picks SMIC ADC1, which only captured a
+        # start-up pop. Use curtana's Android amic2 path (ADC2, INP2, DEC0_BCS)
+        # instead; speech capture through it is still unconfirmed on device.
         boot_volumes
         set_ctl 'MultiMedia3 Mixer TX_CODEC_DMA_TX_3' 1
-        set_ctl 'ADC2_MIXER Switch' 1
-        set_ctl 'ADC2 MUX' INP2
-        set_ctl 'ADC2 Switch' 1
         set_ctl 'TX DEC0 MUX' SWR_MIC
-        set_ctl 'TX SMIC MUX0' ADC1
+        set_ctl 'TX SMIC MUX0' ADC2
         set_ctl 'TX_AIF1_CAP Mixer DEC0' 1
-        set_ctl 'TX_DEC0 Volume' 110 ;;
+        set_ctl 'DEC0_BCS Switch' 1
+        set_ctl 'ADC2_MIXER Switch' 1
+        set_ctl 'ADC2 Switch' 1
+        set_ctl 'ADC2 MUX' INP2 ;;
     mic1:on)
         boot_volumes
         set_ctl 'MultiMedia3 Mixer TX_CODEC_DMA_TX_3' 1
@@ -83,7 +86,14 @@ case "$device:$state" in
         set_ctl 'ADC2_MIXER Switch' 1
         set_ctl 'ADC2 Switch' 1
         set_ctl 'ADC2 MUX' INP3 ;;
-    headset-mic:off|mic2:off)
+    headset-mic:off)
+        set_ctl 'DEC0_BCS Switch' 0
+        set_ctl 'ADC2_MIXER Switch' 0
+        set_ctl 'ADC2 Switch' 0
+        set_ctl 'TX SMIC MUX0' ZERO
+        set_ctl 'TX_AIF1_CAP Mixer DEC0' 0
+        set_ctl 'MultiMedia3 Mixer TX_CODEC_DMA_TX_3' 0 ;;
+    mic2:off)
         set_ctl 'ADC2_MIXER Switch' 0
         set_ctl 'ADC2 Switch' 0
         set_ctl 'TX SMIC MUX0' ZERO

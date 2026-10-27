@@ -214,6 +214,8 @@ def build(output, profile='boot1'):
         add('usr/share/sounds/quiet-1khz-3s.wav', stat.S_IFREG | 0o644, quiet_tone_wav())
         add('usr/share/licenses/tinyalsa', stat.S_IFDIR | 0o755)
         add('usr/share/licenses/tinyalsa/NOTICE', stat.S_IFREG | 0o644, tinyalsa['NOTICE'])
+        # tinyplay 2.0.0 returned at once without playing here; pcm-test plays and records.
+        add('bin/pcm-test', stat.S_IFREG | 0o755, build_static_tool('pcm-test.c', ('-lc', '-lm')))
     speaker_tone = None
     if profile in ('audio2', 'audio3'):
         speaker_tone = build_static_tool('speaker-tone.c', ('-lc', '-lm'))
