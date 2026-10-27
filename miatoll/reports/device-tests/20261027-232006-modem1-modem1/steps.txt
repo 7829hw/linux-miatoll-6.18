@@ -1,0 +1,225 @@
+### 2026-10-27T23:22:48 mpss-start
+$ wifi-start 2>&1 | tail -8; sleep 15; cat /sys/class/remoteproc/remoteproc0/state; dmesg | grep -iE "remoteproc0|mpss|modem|qmi|sysmon|rmtfs" | tail -10; modem-query services
+wifi-start 2>&1 | tail -8; sleep 15; cat /sys/class/remoteproc/r
+emoteproc0/state; dmesg | grep -iE "remoteproc0|mpss|modem|qmi|sysmon|rmtfs" | t
+ail -10; modem-query services; printf "\nSTEP_DONE_232231=%s\n" "$?"
+RMTFS source modemst1: /dev/sdf2 (read-only)
+RMTFS source modemst2: /dev/sdf3 (read-only)
+RMTFS source fsg: /dev/sdf4 (read-only)
+RMTFS source fsc: /dev/sdf5 (read-only)
+tqftpserv is already active
+MPSS automatic recovery disabled for this diagnostic start.
+Starting MPSS; collect wifi-probe afterward.
+state: running
+running
+[    0.000000] Kernel command line: rcupdate.rcu_expedited=1 rcu_nocbs=0-7 noirqdebug rdinit=/init console=tty0 loglevel=8 ignore_loglevel clk_ignore_unused pd_ignore_unused no_console_suspend deferred_probe_timeout=30 panic=0 enforcing=0 miatoll_boot=modem1 consoleblank=0 drm.debug=0x06 androidboot.verifiedbootstate=orange androidboot.keymaster=1  androidboot.bootdevice=1d84000.ufshc androidboot.fstab_suffix=default androidboot.boot_devices=soc/1d84000.ufshc androidboot.serialno=REDACTED androidboot.cpuid=0xd7896932 androidboot.multisim_config=dsds androidboot.dp=0x0 androidboot.baseband=msm msm_drm.dsi_display0=dsi_ft8756_huaxing_vid_display: androidboot.fpsensor=fpc androidboot.lcmtype=dsi_nt36672c_huaxing_fhd_video_display androidboot.dtbo_idx=0 androidboot.dtb_idx=0 androidboot.secureboot=1 androidboot.hwc=Global_TWO androidboot.hwversion=1.91.0 androidboot.hwlevel=MP androidboot.hwname=curtana androidboot.AdcVol1=183 androidboot.AdcVol2=1400
+[    0.000000] Unknown kernel command line parameters "rcu_nocbs=0-7 miatoll_boot=modem1", will be passed to user space.
+[    0.429201] remoteproc remoteproc0: modem is available
+[    1.605808]     miatoll_boot=modem1
+[  113.669295] remoteproc remoteproc0: powering up modem
+[  113.764377] remoteproc remoteproc0: Booting fw image qcom/sm7125/miatoll/modem.mbn, size 62183024
+[  114.104612] remoteproc remoteproc0: remote processor modem is now up
+[  115.143713] ath10k_snoc 18800000.wifi: qmi chip_id 0x320 chip_family 0x4001 board_id 0xff soc_id 0x400c0000
+[  115.143923] ath10k_snoc 18800000.wifi: qmi fw_version 0x322183b3 fw_build_timestamp 2023-03-03 11:36 fw_build_id QC_IMAGE_VERSION_STRING=WLAN.HL.3.2.2-00947-QCAHLSWMTPLZ-1.24884.5.26445.2
+[  115.146030] ath10k_snoc 18800000.wifi: failed to fetch board data for bus=snoc,qmi-board-id=ff,qmi-chip-id=320 from ath10k/WCN3990/hw1.0/board-2.bin
+== qrtr-lookup
+  Service Version Instance Node  Port
+       43       2       18    0     1 Subsystem control service
+       66       1      180    0     3 Service registry notification service
+       15       1        0    0    17 Test service
+       51       1        2    0    18 CoreSight remote tracing service
+       21       1        0    0    20 Modem embedded file system service
+       24       1        0    0    21 Thermal mitigation device service
+       23       1        0    0    22 Thermal sensors service
+       22       1        0    0    24 Time service
+       36       1        0    0    26 Persistent device configuration service
+       49       1        2    0    27 IPA control service
+       17       1        0    0    32 Specific absorption rate service
+       74       1        0    0    33 <unknown>
+     4098       0        0    0    34 <unknown>
+       34       1        0    0    36 Coexistence service
+       41       1        1    0    37 RF radiated performance enhancement service
+       55       1        2    0    40 QMI-SLIM service
+       50       1        0    0    41 UIMRMT service
+       12       1        0    0    43 Phonebook Management service
+        9       2        0    0    44 Voice service
+        3       1        0    0    45 Network Access Service
+       10       2        0    0    46 Card Application Toolkit service (v2)
+       47       1        0    0    47 Data Port Mapper service
+        1       1        0    0    48 Wireless Data Service
+        4       1        0    0    49 Quality Of Service service
+       26       1        0    0    50 Wireless data administrative service
+        7       1        0    0    51 Authentication service
+        8       1        0    0    52 AT service
+       29       1        0    0    53 Circuit switched videotelephony service
+       71       1        0    0    54 UIMHTTP service
+       11       1        0    0    58 User Identity Module service
+       77       1        0    0    60 IMS QMI Priv service
+       42       1        0    0    61 Data system determination service
+        2       1        0    0    62 Device Management Service
+        5       1        0    0    63 Wireless Messaging Service
+       48       1        0    0    69 QMI DFS service
+       68       1        0    0    70 <unknown>
+       16       2        0    0    71 Location service (~ PDS v2)
+       75       1        0    0    73 QDMA service
+       33       1        0    0    74 IMS application service
+       18       1        0    0    75 IMS settings service
+       51       1        3    0    80 CoreSight remote tracing service
+       69       1        0    0    81 ATH10k WLAN firmware service
+       14       1        0    1    14 Remote file system service
+       64       1        1    1 16387 Service registry locator service
+     4096       1        0    1 16390 TFTP
+       15       1       32    5     1 Test service
+       43       2       20    5     2 Subsystem control service
+       66       1       74    5     3 Service registry notification service
+       51       1        5    5     6 CoreSight remote tracing service
+       15       1       33    5     8 Test service
+       15       1       34    5     9 Test service
+       24       1        1    5    10 Thermal mitigation device service
+       51       1       12    5    13 CoreSight remote tracing service
+      400       1        0    5    14 Snapdragon Sensor Core service
+     4100      10        0    5    15 <unknown>
+      769       1        0    5    16 SLIMbus control service
+
+STEP_DONE_232231=0
+miatoll-modem1# [6n
+### 2026-10-27T23:22:57 modem-query-1
+$ for p in info ids mode sim; do modem-query $p; done
+for p in info ids mode sim; do modem-query $p; done; printf "\nS
+TEP_DONE_232256=%s\n" "$?"
+== qmicli --dms-get-manufacturer
+[qrtr://0] Device manufacturer retrieved:
+	Manufacturer: 'QUALCOMM INCORPORATED'
+QMI_RC=0
+== qmicli --dms-get-model
+[qrtr://0] Device model retrieved:
+	Model: '0'
+QMI_RC=0
+== qmicli --dms-get-revision
+[qrtr://0] Device revision retrieved:
+	Revision: 'MPSS.AT.4.4.c6-00071-RENNELL_GEN_PACK-3  1  [Dec 05 2022 09:00:00]'
+QMI_RC=0
+== qmicli --dms-get-capabilities
+[qrtr://0] Device capabilities retrieved:
+	Max TX channel rate: '<redacted-digits>'
+	Max RX channel rate: '<redacted-digits>'
+	       Data Service: 'non-simultaneous-cs-ps'
+	                SIM: 'supported'
+	           Networks: 'gsm, umts, lte'
+QMI_RC=0
+== qmicli --dms-get-ids
+[qrtr://0] Device IDs retrieved:
+	    ESN: <redacted>
+	   IMEI: <redacted>
+	   MEID: <redacted>
+	IMEI SV: <redacted>
+QMI_RC=0
+== qmicli --dms-get-operating-mode
+[qrtr://0] Operating mode retrieved:
+	Mode: 'shutting-down'
+	HW restricted: 'no'
+QMI_RC=0
+== qmicli --uim-get-card-status
+[qrtr://0] Successfully got card status
+Provisioning applications:
+	Primary GW:   session doesn't exist
+	Primary 1X:   session doesn't exist
+	Secondary GW: session doesn't exist
+	Secondary 1X: session doesn't exist
+Slot [1]:
+	Card state: 'error: no-atr-received (3)'
+	UPIN state: 'not-initialized'
+		UPIN retries: '0'
+		UPUK retries: '0'
+Slot [2]:
+	Card state: 'error: no-atr-received (3)'
+	UPIN state: 'not-initialized'
+		UPIN retries: '0'
+		UPUK retries: '0'
+QMI_RC=0
+
+STEP_DONE_232256=0
+miatoll-modem1# [6n
+### 2026-10-27T23:23:15 modem-query-2
+$ modem-query mode; modem-query network; modem-query signal; cat /sys/class/remoteproc/remoteproc0/state; dmesg | grep -iE "sysmon|shutdown|ssctl|remoteproc0|qcom_q6v5|mpss" | grep -v "Kernel command" | tail -12; tail -5 /run/rmtfs.log
+modem-query mode; modem-query network; modem-query signal; cat /
+sys/class/remoteproc/remoteproc0/state; dmesg | grep -iE "sysmon|shutdown|ssctl|
+remoteproc0|qcom_q6v5|mpss" | grep -v "Kernel command" | tail -12; tail -5 /run/
+rmtfs.log; printf "\nSTEP_DONE_232314=%s\n" "$?"
+== qmicli --dms-get-operating-mode
+[qrtr://0] Operating mode retrieved:
+	Mode: 'shutting-down'
+	HW restricted: 'no'
+QMI_RC=0
+== qmicli --nas-get-serving-system
+[qrtr://0] Successfully got serving system:
+	Registration state: 'not-registered-searching'
+	CS: 'detached'
+	PS: 'detached'
+	Selected network: 'unknown'
+	Radio interfaces: '1'
+		[0]: 'none'
+	Data service capabilities: '0'
+	Detailed status:
+		Status: 'none'
+		Capability: 'none'
+		HDR Status: 'none'
+		HDR Hybrid: 'no'
+		Forbidden: 'no'
+QMI_RC=0
+== qmicli --nas-get-system-info
+[qrtr://0] Successfully got system info:
+	GSM service:
+		Status: 'none'
+		True Status: 'none'
+		Preferred data path: 'no'
+	WCDMA service:
+		Status: 'none'
+		True Status: 'none'
+		Preferred data path: 'no'
+	LTE service:
+		Status: 'none'
+		True Status: 'none'
+		Preferred data path: 'no'
+		Registration restriction: 'unrestricted'
+	SIM reject info: 'unavailable'
+QMI_RC=0
+== qmicli --nas-get-signal-info
+error: couldn't get signal info: QMI protocol error (74): 'InformationUnavailable'
+QMI_RC=0
+== qmicli --nas-get-signal-strength
+[qrtr://0] Successfully got signal strength
+Current:
+	Network 'none': '-128 dBm'
+RSSI:
+	Network 'none': '-128 dBm'
+ECIO:
+	Network 'none': '-2.5 dBm'
+IO: '-106 dBm'
+SINR (8): '9.0 dB'
+QMI_RC=0
+running
+[    0.429201] remoteproc remoteproc0: modem is available
+[  113.669295] remoteproc remoteproc0: powering up modem
+[  113.764377] remoteproc remoteproc0: Booting fw image qcom/sm7125/miatoll/modem.mbn, size 62183024
+[  114.104612] remoteproc remoteproc0: remote processor modem is now up
+[RMTFS] del_client 1:16393
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16394
+[RMTFS] packet; from: 1:-2
+[RMTFS] del_client 1:16393
+STEP_DONE_232314=0
+miatoll-modem1# [6n
+### 2026-10-27T23:23:24 modem-mode-again
+$ cut -d" " -f1 /proc/uptime; modem-query mode
+cut -d" " -f1 /proc/uptime; modem-query mode; printf "\nSTEP_DON
+E_232324=%s\n" "$?"
+164.77
+== qmicli --dms-get-operating-mode
+[qrtr://0] Operating mode retrieved:
+	Mode: 'shutting-down'
+	HW restricted: 'no'
+QMI_RC=0
+
+STEP_DONE_232324=0
+miatoll-modem1# [6n

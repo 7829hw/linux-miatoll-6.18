@@ -1,0 +1,67 @@
+{
+  "capture_id": "20261027-232006",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-modem1+",
+  "boot_profile": "modem1-ram-only",
+  "image": "boot-curtana-6.18.58-modem1.img",
+  "image_sha256": "1d60aa9bc853589ebce3075ec60d177d3c9e03d28ec39b4f94a3f70f1fb5428c",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-modem1/boot-curtana-6.18.58-modem1.img"
+  ],
+  "physical_display_confirmed": null,
+  "user_observation": "pending",
+  "restarted_from_shell": true,
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "MODEM1_BANNER_WRITTEN",
+      "MODEM1_PROBE_BEGIN",
+      "MODEM1_PROBE_END",
+      "MODEM1_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "27:          0          0          0          0          0          0          0          0    GICv3 134 Level     arm-smmu-context-fault",
+      "28:          0          0          0          0          0          0          0          0    GICv3 135 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault",
+      "148:          0          0          0          0          0          0          0          0    GICv3 396 Edge      arm-smmu-context-fault",
+      "149:          0          0          0          0          0          0          0          0    GICv3 397 Edge      arm-smmu-context-fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "modem1-fastboot-20261027-232006.txt": {
+      "bytes": 859,
+      "sha256": "95ed5912628c181ac34b56a35558dc32643180f16cb38af382dfaecc122fc0e2"
+    },
+    "modem1-serial-20261027-232006.txt": {
+      "bytes": 166310,
+      "sha256": "eda042310027b35d152d3ecdc9ec2cb9f7a26e07d248af4c44c4e359c66b3093"
+    }
+  }
+}

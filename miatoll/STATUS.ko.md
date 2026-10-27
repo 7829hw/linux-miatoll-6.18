@@ -18,6 +18,7 @@ Bluetooth 초기화·검색을 실기기로 확인한 브랜치: **`miatoll/6.18
 Adreno A618 초기화·명령 실행을 실기기로 확인한 브랜치: **`miatoll/6.18-gpu1`**(audio12 + GPU/GMU, SQE/GMU/zap firmware).
 Mesa freedreno GLES 렌더링(kmscube 화면 표시)을 실기기로 확인한 브랜치: **`miatoll/6.18-gpu2`**(gpu1 + Mesa 25.1.9/kmscube RAM 디스크).
 Turnip Vulkan 렌더링(셰이더, VK_KHR_display 표시)을 실기기로 확인한 브랜치: **`miatoll/6.18-vulkan1`**(gpu2 + Turnip, Vulkan loader, 점검 도구).
+모뎀 MPSS 기동과 읽기 전용 QMI 조회를 실기기로 확인한 브랜치: **`miatoll/6.18-modem1`**(vulkan1 + qmicli, `modem-query`).
 공식 Linux **v6.18.58**을 기반으로, 6.14.7 포크의 Xiaomi 하드웨어 구현을 직접 선별 이식했다.
 기존 로컬 커널 수정은 보존 브랜치와 백업에 남겼다.
 
@@ -307,6 +308,16 @@ vulkan1: 같은 Mesa 25.1.9를 Turnip 포함으로 다시 빌드했고, Alpine V
   - GLSL→SPIR-V 삼각형 오프스크린 픽셀 검증 통과, 화면 회전 삼각형 60 fps.
 - 사용자가 화면으로 확인했고, fault는 없었다.
 [vulkan1 셰이더 기록](reports/device-tests/20261027-230340-vulkan1-vulkan1-shader/README.ko.md)
+
+## modem1: MPSS와 읽기 전용 QMI
+
+qmicli(libqmi 1.36.0, QRTR)와 읽기 전용 래퍼 `modem-query`(식별자·위치 가림)를 넣었다. Alpine main/community 인덱스 서명을 확인했다.
+- MPSS는 RAM-shadow rmtfs로 기동해 QRTR에 DMS/NAS/WDS/UIM/Voice/WMS/IPA 등 서비스를 노출했다.
+- 펌웨어 `MPSS.AT.4.4.c6-00071-RENNELL_GEN_PACK-3`, GSM/UMTS/LTE.
+- SIM 없음: UIM `no-atr-received`, NAS `not-registered-searching`, 수신 IO -106 dBm.
+- 운영 모드가 `shutting-down`으로 보고된다(원인 미확인, 모드 변경은 보내지 않았다).
+- 망 등록·데이터·통화·SMS는 미시험이다.
+[modem1 기록](reports/device-tests/20261027-232006-modem1-modem1/README.ko.md)
 
 ## 하드웨어별 상태
 
