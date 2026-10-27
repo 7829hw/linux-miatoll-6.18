@@ -1,0 +1,13 @@
+{
+  "capture_id": "20261027-181529",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-audio10+",
+  "boot_profile": "audio10-ram-only",
+  "image": "boot-curtana-6.18.58-audio10.img",
+  "image_sha256": "3b10a72ded513cd6f25161c9272df916a3ed000bde1e8e064b25e5df22b62df9",
+  "capture_only": false,
+  "fastboot_commands": [],
+  "physical_display_confirmed": null,
+  "user_observation": "pending",
+  "stopped": "Expected exactly one Linux ACM port for the shell reboot."
+}

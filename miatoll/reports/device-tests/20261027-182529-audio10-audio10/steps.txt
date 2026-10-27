@@ -1,0 +1,469 @@
+### 2026-10-27T18:26:14 fresh-state
+$ sleep 3; dmesg | grep -E "mbhc-dbg|ramp|z_val|cross"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; cat /sys/kernel/debug/regmap/*wcd937x_csr/registers
+sleep 3; dmesg | grep -E "mbhc-dbg|ramp|z_val|cross"; tinymix -
+D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; cat /sys/kernel/debug/reg
+map/*wcd937x_csr/registers; printf "\nSTEP_DONE_182611=%s\n" "$?"
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+[    0.003853] Timer migration: 1 hierarchy levels; 8 children per group; 1 crossnode level
+[    1.424434] wcd937x_codec codec: mbhc-dbg: switch irq insertion plug=0 status=0x0
+[    1.441395] wcd937x_codec codec: mbhc-dbg: cross_conn=0
+[    1.452094] wcd937x_codec codec: mbhc-dbg: correct start mv=1762 plug=3 hs_thr=1700 micb=2700
+[    4.630401] wcd937x_codec codec: mbhc-dbg: correct end mv=2062 plug=3 spl=0 swap_cnt=0
+[    4.630604] wcd937x_codec codec: mbhc-dbg: find plug 3 current 0
+[    4.630704] wcd937x_codec codec: mbhc-dbg: zdet bias=80 rxsup=00 anaclk=10 digclk=f0 ctl1=82 mech=9d elect=89 micb2=62 hph=0c
+[    4.633549] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.635711] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.637931] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.640098] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[    4.640518] wcd937x_codec codec: mbhc-dbg: report insertion type=0x4 plug=3 status=0x4 pa=0 zl=0 zr=0
+Off
+Off
+3001: 80
+3008: 00
+3009: 0c
+300a: 00
+300b: 02
+300e: 20
+300f: 00
+3010: 20
+3011: 00
+3012: 00
+3013: 00
+3014: 9d
+3015: b9
+3016: 02
+3017: 00
+3018: 00
+3019: 00
+301a: 18
+301b: 30
+301c: 48
+301d: a0
+301e: a0
+301f: a0
+3020: a0
+3021: a0
+3022: 22
+3023: 22
+3024: 90
+3025: 22
+3028: 2a
+3029: 85
+3040: 01
+3041: 00
+3056: 00
+3057: 00
+3058: 00
+3059: 00
+305a: 00
+305b: 30
+305c: 00
+3067: 2b
+3068: 68
+3069: 00
+306a: 50
+306b: fa
+306c: 01
+306d: a4
+306e: fa
+306f: 01
+3070: a4
+3071: fa
+3072: 01
+3073: a4
+3077: 39
+3078: c0
+3079: 6f
+307a: 4f
+307b: 2e
+307c: 00
+307d: c7
+307e: ff
+307f: cc
+3080: 09
+3081: 0a
+3082: 38
+3083: ff
+3084: 00
+3085: 00
+3086: 00
+3087: cc
+3088: 09
+3089: 0a
+308a: 38
+308b: ff
+308c: 00
+308d: 00
+308e: 00
+3097: 40
+3098: 3a
+3099: 00
+309a: 70
+309b: 82
+309c: 31
+309d: 80
+309e: 80
+309f: 51
+30a0: 00
+30a1: 00
+30a2: 77
+30a3: 00
+30a4: 4e
+30a5: 0b
+30a6: 45
+30a7: 74
+30a8: 7f
+30a9: 83
+30aa: 98
+30ab: a9
+30ac: 68
+30ad: 64
+30ae: ed
+30af: f0
+30b0: a6
+30b1: 65
+30b2: 00
+30b3: 00
+30b4: 00
+30b5: 32
+30b6: 1f
+30b7: 77
+30b8: a0
+30b9: aa
+30ba: a9
+30bb: aa
+30bc: 8a
+30bd: 88
+30be: 82
+30bf: 82
+30c0: a0
+30c1: aa
+30c2: 50
+30c3: 00
+30c4: 08
+30c5: 44
+30c6: 40
+30c7: aa
+30c8: 14
+30c9: 04
+30ca: 04
+30cb: 80
+30cc: 9a
+30cd: 14
+30ce: 28
+30cf: 16
+30d0: 83
+30d1: 46
+30d2: 50
+30d3: 80
+30d4: e0
+30d5: 50
+30d6: 80
+30d7: e0
+30d8: 54
+30d9: 99
+30da: 9b
+30db: 33
+30dc: 00
+30dd: a8
+30de: 0e
+30df: 20
+30e0: 20
+30e1: 55
+30e2: d9
+30e3: a0
+30e4: 00
+30e9: 22
+30ea: 44
+30eb: db
+30ec: 80
+30ed: b2
+30ee: 00
+30ef: 00
+30f0: 00
+3100: 00
+3101: 00
+3102: 00
+3103: d6
+3104: 00
+311f: 00
+3120: 82
+3121: 06
+3122: e6
+3123: 0f
+3124: 04
+3125: 20
+3126: 00
+3127: 00
+3128: 00
+3129: 0c
+312a: 00
+312c: 00
+312d: 00
+3132: 40
+3133: 81
+3134: 10
+3135: 00
+3136: 81
+3137: 22
+3138: 00
+3139: 00
+313a: fe
+313b: 02
+313c: 4e
+313d: 54
+313e: 00
+313f: 00
+3145: 62
+3146: 01
+3147: 11
+31af: 57
+31b0: 01
+31b1: 08
+31b2: 00
+31b7: a8
+31b8: 42
+31b9: 22
+31ba: 00
+31bd: 00
+31be: 06
+31bf: d2
+31c0: 80
+31c1: 50
+31c2: 00
+31c3: 00
+31c4: 00
+31c5: 6e
+31c6: 50
+31c7: 1c
+31c8: ff
+31c9: 1f
+31ca: 00
+31d0: 0a
+31d1: 0a
+31d3: 02
+31d4: 60
+3400: 00
+3401: 01
+3402: 00
+3403: 0a
+3404: 01
+3406: 03
+3407: 00
+3408: 00
+3409: f0
+340a: 00
+340b: 55
+340c: 00
+340d: fc
+340e: fc
+340f: fc
+3410: 55
+3411: 55
+3412: 55
+3413: 01
+3414: 00
+3417: 66
+3418: 00
+3419: 01
+341a: 63
+341b: 04
+341c: ac
+341d: 04
+341e: 1a
+341f: 03
+3420: bc
+3421: 02
+3422: c7
+3423: f8
+3424: 47
+3425: 43
+3426: b1
+3427: 17
+3428: 4b
+3429: 26
+342a: 32
+342b: 57
+342c: 63
+342d: 7c
+342e: 57
+342f: 00
+3430: 01
+3431: 96
+3432: 09
+3433: ab
+3434: 05
+3435: 1c
+3436: 02
+3437: 17
+3438: 02
+3439: aa
+343a: e3
+343b: 69
+343c: 54
+343d: 02
+343e: 15
+343f: a4
+3440: b5
+3441: 86
+3442: 85
+3443: aa
+3444: e2
+3445: 62
+3446: 55
+3447: a9
+3448: 3d
+3449: 2e
+344a: 01
+344b: 00
+344c: fc
+344d: 01
+344e: 00
+344f: 00
+3450: 00
+3451: 00
+3452: 00
+3453: 68
+3454: 68
+3455: 68
+3456: 00
+3457: 01
+345a: 07
+345b: 00
+345c: 01
+345d: 01
+345e: 01
+345f: 2b
+3460: 00
+3461: 00
+3462: 00
+3463: 00
+3464: 00
+3465: 00
+3466: 00
+3467: 00
+346a: 00
+346b: 4c
+346c: ff
+346d: 0f
+346e: 00
+346f: 00
+3470: 00
+3471: 00
+3472: 00
+3473: 00
+3474: 00
+3475: 00
+3476: 00
+3477: 00
+3478: 00
+3479: 00
+347a: 00
+347b: 00
+347c: 00
+347f: 00
+3480: 00
+3481: 00
+3482: 00
+3483: 00
+3484: 00
+3485: 40
+3491: 40
+3492: 00
+3493: 00
+3494: 00
+3495: f1
+3496: f1
+3497: f1
+3498: f1
+3499: 00
+349a: 00
+349b: 00
+349c: 00
+349d: 00
+349e: 1f
+349f: 10
+34a0: 00
+34a1: 00
+34a2: 00
+34a3: 00
+34a4: 00
+34a5: 00
+34a6: 00
+34a7: 00
+34a8: 00
+34a9: 48
+34aa: 00
+34ab: 00
+34ac: 00
+34ad: 00
+34ae: 00
+34af: 00
+34b0: 0a
+34b1: 00
+34b2: 00
+34b3: 00
+34b4: 00
+34b5: 00
+34b6: 00
+34b7: 00
+34b8: 34
+34b9: 47
+34ba: 4c
+34bb: 35
+34bc: 4b
+34bd: 14
+34be: 15
+34bf: 52
+34c0: 04
+34c1: 0b
+34c2: 00
+34c3: 00
+34c4: 00
+34c5: 84
+34c6: 01
+34c7: 00
+34c8: 00
+34c9: 8d
+34ca: 8b
+34cb: 00
+34cc: 00
+34cd: 07
+34ce: 00
+34cf: 00
+
+STEP_DONE_182611=0
+miatoll-audio10# [6n
+### 2026-10-27T18:27:52 after-unplug
+$ sleep 2; dmesg | grep -E "mbhc-dbg|ramp|z_val|cross|Swapped|Invalid" | awk -F"[][]" "\$2+0>5"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"
+sleep 2; dmesg | grep -E "mbhc-dbg|ramp|z_val|cross|Swapped|Inv
+alid" | awk -F"[][]" "\$2+0>5"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 
+get "Mic Jack"; printf "\nSTEP_DONE_182750=%s\n" "$?"
+[  105.262196] wcd937x_codec codec: mbhc-dbg: switch irq removal plug=3 status=0x4
+[  105.264162] wcd937x_codec codec: mbhc-dbg: report removal type=0x4 plug=3 status=0x0
+Off
+Off
+
+STEP_DONE_182750=0
+miatoll-audio10# [6n
+### 2026-10-27T18:28:24 after-plug
+$ sleep 4; dmesg | grep -E "mbhc-dbg|ramp|z_val|cross|Swapped|Invalid" | awk -F"[][]" "\$2+0>106"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"
+sleep 4; dmesg | grep -E "mbhc-dbg|ramp|z_val|cross|Swapped|Inv
+alid" | awk -F"[][]" "\$2+0>106"; tinymix -D 0 get "Headphone Jack"; tinymix -D 
+0 get "Mic Jack"; printf "\nSTEP_DONE_182820=%s\n" "$?"
+[  134.211620] wcd937x_codec codec: mbhc-dbg: switch irq insertion plug=0 status=0x0
+[  134.230508] wcd937x_codec codec: mbhc-dbg: cross_conn=1
+[  134.230580] wcd937x_codec codec: cross connection found, Plug type 4
+[  137.422186] wcd937x_codec codec: mbhc-dbg: correct end mv=2043 plug=3 spl=0 swap_cnt=0
+[  137.422388] wcd937x_codec codec: mbhc-dbg: find plug 3 current 0
+[  137.422491] wcd937x_codec codec: mbhc-dbg: zdet bias=80 rxsup=00 anaclk=10 digclk=f0 ctl1=82 mech=9d elect=89 micb2=62 hph=0c
+[  137.425336] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  137.427499] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  137.429235] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  137.430983] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  137.431454] wcd937x_codec codec: mbhc-dbg: report insertion type=0x4 plug=3 status=0x4 pa=0 zl=0 zr=0
+Off
+Off
+
+STEP_DONE_182820=0
+miatoll-audio10# [6n

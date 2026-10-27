@@ -1,0 +1,20 @@
+// SPDX-License-Identifier: GPL-2.0
+// Headset detection check: scale the MBHC plug thresholds to the 2.7 V
+// mic bias. The common thresholds (1.7 V headset, 50 mV headphone) are
+// for a 1.8 V bias and the driver does not rescale them when they are
+// given for the configured bias, so a headset read at 1.76-2.06 V was
+// classified as an extension cable. Downstream leaves them unset and
+// scales its 1700 mV / 75 mV defaults from 1.8 V to the bias.
+#include "sm7125-xiaomi-curtana-audio10.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing audio11 test)";
+	chosen {
+		miatoll,boot-profile = "audio11-ram-only";
+	};
+};
+
+&wcd937x {
+	qcom,mbhc-headset-vthreshold-microvolt = <2550000>;
+	qcom,mbhc-headphone-vthreshold-microvolt = <75000>;
+};
