@@ -1,4 +1,4 @@
-"""Mesa freedreno userspace and kmscube for the gpu2 RAMdisk.
+"""Mesa freedreno userspace and kmscube for the gpu2 and vulkan1 RAMdisks.
 
 Built by miatoll/gpu/build_mesa.sh (Mesa 25.1.9 and kmscube 2c1f2646, both
 pinned by SHA-256) against the Alpine v3.22 sysroot from
@@ -16,12 +16,17 @@ def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def load(workspace):
-    """Return ({initramfs path: (bytes, mode)}, {link: target}, summary)."""
+def load(workspace, variant='gles'):
+    """Return ({initramfs path: (bytes, mode)}, {link: target}, summary).
+
+    variant 'gles' is ../out-mesa (gpu2); 'vulkan' is ../out-mesa-vulkan, which
+    adds Turnip, the Alpine Vulkan loader and vulkan-tools (vulkan1).
+    """
     workspace = Path(workspace)
-    out = workspace / 'out-mesa'
+    out = workspace / {'gles': 'out-mesa', 'vulkan': 'out-mesa-vulkan'}[variant]
     sysroot = workspace / 'tools/sysroot-mesa-aarch64'
     record = json.loads((out / 'build-result.json').read_text())
+    assert record.get('variant', 'gles') == variant, 'Unexpected Mesa build variant'
     assert record['build_script_sha256'] == sha256(BOOT.parent / 'gpu/build_mesa.sh'), 'Rebuild Mesa: script changed'
     assert record['sysroot_packages_sha256'] == sha256(sysroot / 'sysroot-packages.json'), 'Mesa sysroot changed'
     files = {}

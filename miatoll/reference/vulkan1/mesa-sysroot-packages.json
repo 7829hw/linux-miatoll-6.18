@@ -1,0 +1,167 @@
+{
+  "musl": {
+    "version": "1.2.5-r13",
+    "bytes": 418149,
+    "sha256": "d616c430bcbe0bf452b7f6ea2669f2cad14e85644a7599f4f495115d021742ef",
+    "apkindex_checksum": "Q1JAqR2UwijevqCQ0bzOuH0exRjjs="
+  },
+  "musl-dev": {
+    "version": "1.2.5-r13",
+    "bytes": 2557519,
+    "sha256": "9d100736f645f15c01da723c9bafd8a843ae847ef4334aa4c0f53405dcfa4dff",
+    "apkindex_checksum": "Q1DYGd/oNCZRa+hULFdI/n4fdKEb4="
+  },
+  "linux-headers": {
+    "version": "6.14.2-r0",
+    "bytes": 1647708,
+    "sha256": "08bc7264055d4ceca249e21f47875ccd7ae2dc7eaf49e235a83b1059e06d9089",
+    "apkindex_checksum": "Q1EPztwpwuaGshrW8YBsPTwTFpe/k="
+  },
+  "libgcc": {
+    "version": "14.2.0-r6",
+    "bytes": 67013,
+    "sha256": "ba1835eec3ad8a120efd3d5020e561d53553a0513763a08f509e3ce6d4baa9ca",
+    "apkindex_checksum": "Q1gWAlqlkuoc3AxelSD9Lh3Fi3gX0="
+  },
+  "libstdc++": {
+    "version": "14.2.0-r6",
+    "bytes": 906209,
+    "sha256": "0d2f054057a4f932e985a129eccb79908b40964185139a0a609aed3032aba064",
+    "apkindex_checksum": "Q1m+yT9cA6w+D55pj502hftj3qOVY="
+  },
+  "libstdc++-dev": {
+    "version": "14.2.0-r6",
+    "bytes": 4006405,
+    "sha256": "a606b1b4a2cebce71443c3c27876cec4b6d51a5216e362d8674760d6b1586b69",
+    "apkindex_checksum": "Q1YuWl0dyTXax3TAQRpKogRtrwRfs="
+  },
+  "libdrm": {
+    "version": "2.4.124-r0",
+    "bytes": 206670,
+    "sha256": "e966fb3fc167255ed3de436134425e6207a38438e4df2e54ee807431ab4230f3",
+    "apkindex_checksum": "Q1qWW2PDf2JJ/5Wt/JChDZlZ4LmxM="
+  },
+  "libdrm-dev": {
+    "version": "2.4.124-r0",
+    "bytes": 201908,
+    "sha256": "5794a2582947f899036006a77a2aff14dfaee230a4427a0e8e9208b276157ec5",
+    "apkindex_checksum": "Q1UCchJ7xZOzx7MokCpEW7vWyTcjE="
+  },
+  "libpciaccess": {
+    "version": "0.18.1-r0",
+    "bytes": 15317,
+    "sha256": "22d0bb3ebc355338468b587325b5b624b9cf9ba10151918b48c6f7a575bb248a",
+    "apkindex_checksum": "Q1O0du2dbqhLIChOeHXbnfNbgB3m0="
+  },
+  "libpciaccess-dev": {
+    "version": "0.18.1-r0",
+    "bytes": 6347,
+    "sha256": "53c0bb46ba51b24b40629c609182555c06e3512cc3a4dc1fe50f90391f1acf86",
+    "apkindex_checksum": "Q1HS66Y8yACkwwP943VOf3zUYyzwc="
+  },
+  "expat": {
+    "version": "2.9.0-r0",
+    "bytes": 13549,
+    "sha256": "46ec614042f6ce9f214a9188b20a5c53afcc4eade7444f4245fb531ec98f9a10",
+    "apkindex_checksum": "Q182WisYU3pMw1d/jm8CQOwhFIc64="
+  },
+  "expat-dev": {
+    "version": "2.9.0-r0",
+    "bytes": 22125,
+    "sha256": "59a3599cbb29c7a964dd678a45ac8cd246cb0b21b5b5b4ab9ca34bdc96b9e235",
+    "apkindex_checksum": "Q1+vp/r4J3qsObubkRaCmDBdZDAIg="
+  },
+  "zlib": {
+    "version": "1.3.2-r1",
+    "bytes": 54452,
+    "sha256": "2d274cb1b2a36d0e8347d802e6dea8648cab952ea5fae1989ab72e725842a2c3",
+    "apkindex_checksum": "Q1B2OtvCCCPVaxhorsLOsoS1EFABA="
+  },
+  "zlib-dev": {
+    "version": "1.3.2-r1",
+    "bytes": 34425,
+    "sha256": "636acd013ad6e929e86b395bdc66d3c50ad4430a11a471e259f0bae651f7ae98",
+    "apkindex_checksum": "Q17kPhuXnxcGySGEfryfyM9gMWhuo="
+  },
+  "compiler-rt": {
+    "version": "20.1.8-r0",
+    "bytes": 12425257,
+    "sha256": "9dd65d86b36b824202b4d5e6eec3da7b922f74adee585a6824c659669c8a6875",
+    "apkindex_checksum": "Q1L8l5fTnqq/bWN2mlxHSqdRrPFuQ="
+  },
+  "vulkan-headers": {
+    "version": "1.4.313.0-r0",
+    "bytes": 2574652,
+    "sha256": "1f11cc1d421aafaa364c5d0b71da524da2cd24c2968e1b7ad13f12ca70a6fe68",
+    "apkindex_checksum": "Q1+vbNiQE+AhQdAkgr6EjGcgTk9wo="
+  },
+  "vulkan-loader": {
+    "version": "1.4.313.0-r0",
+    "bytes": 172831,
+    "sha256": "8b0a25c122015a5732ad548ef27a1e4dbd040b167c5852559f77b7fe99c08084",
+    "apkindex_checksum": "Q17N8epap4UTS3XuGBllgLvvRzkB4="
+  },
+  "vulkan-loader-dev": {
+    "version": "1.4.313.0-r0",
+    "bytes": 4516,
+    "sha256": "d61841132e681c16e095dd483f299c596196f1f3bcaa41ed5cb20fff1ac57f9e",
+    "apkindex_checksum": "Q1bc4/X1+VHpvWXvt/wY9rvC3q82s="
+  },
+  "vulkan-tools": {
+    "version": "1.4.313.0-r0",
+    "bytes": 309729,
+    "sha256": "2e492febae99450875809a37944f95a65a92224ebd1b403830db3971b24112fc",
+    "apkindex_checksum": "Q1PRK1hegxw58RA1r46A8X/Qs5ht4="
+  },
+  "libx11": {
+    "version": "1.8.11-r0",
+    "bytes": 868857,
+    "sha256": "727ebb88fd3162b667dfd8a0cf3c33034329b6549cf80d52cfccf6acf349ca2a",
+    "apkindex_checksum": "Q1VC8dP5w38EwBkN23iOFMk5thGzk="
+  },
+  "libxcb": {
+    "version": "1.17.0-r0",
+    "bytes": 261172,
+    "sha256": "c7d7f55f5ea61eefc749201a041e774ad60a5e0ca4d59acc89eb56f6c201b08f",
+    "apkindex_checksum": "Q1z6M1qA3kWjdo+1GvpHk9MR2Q/so="
+  },
+  "libxau": {
+    "version": "1.0.12-r0",
+    "bytes": 6210,
+    "sha256": "1dcbaf3a2995c60ba9f442e580eea9e03a1d68898b54bdc9eeba25a68124888b",
+    "apkindex_checksum": "Q1XL1Ha8WojkIv7aZh8XaqcGVnpDc="
+  },
+  "libxdmcp": {
+    "version": "1.1.5-r1",
+    "bytes": 9919,
+    "sha256": "6988bfc23df3e551de62de498bbe661963f13bac2c48b501d82ddd0a3d3eafe5",
+    "apkindex_checksum": "Q1sHrqdje4pOU+1g5WFRKL/x8HyRc="
+  },
+  "libbsd": {
+    "version": "0.12.2-r0",
+    "bytes": 31485,
+    "sha256": "8a51acec613887f12a294685465c17b0d03f2c9b1adfae805d8e6b8d8421cd77",
+    "apkindex_checksum": "Q1x0rzB5TULDPPNEA9iN2cfAt/k0U="
+  },
+  "libmd": {
+    "version": "1.1.0-r0",
+    "bytes": 21605,
+    "sha256": "b1624431ed1932069c17b02f21e1fb2c8d4db42c3be1e2f8c5a22ccac27b78aa",
+    "apkindex_checksum": "Q1oTonKCyzooVVAyCjc9kNNkEAvAQ="
+  },
+  "wayland-libs-client": {
+    "version": "1.23.1-r3",
+    "bytes": 21939,
+    "sha256": "9481b11de37951462cf26a8309e410346455f67b17f7f2d48f0d2326c522ebee",
+    "apkindex_checksum": "Q1ZcaWuNosnYV2slf/Pzoim4ADC0o="
+  },
+  "libffi": {
+    "version": "3.4.8-r0",
+    "bytes": 17599,
+    "sha256": "9391f60a14c146655deaf65115563bc8dcd749cf0f93ec567e6443f2ed7d3bfc",
+    "apkindex_checksum": "Q1q+9OCyehyHODbm71gRN5RkK7eY8="
+  },
+  "local_links": {
+    "usr/lib/libgcc_s.so": "libgcc_s.so.1"
+  }
+}

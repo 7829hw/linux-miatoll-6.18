@@ -1,0 +1,8 @@
+{
+  "mesa": "same Mesa 25.1.9 and kmscube inputs as gpu2 (see ../gpu2/sources.json), built with -Dvulkan-drivers=freedreno",
+  "host_glslang": {"package": "glslang-tools 16.2.0-2 amd64 (Ubuntu 26.04 resolute/universe)",
+                   "sha256": "2ad3ea819da071f1eff681415d35bc0af03e076ed5ff3993bffb558095adbb4d",
+                   "checked_against": "apt-cache show SHA256 field from the signed APT metadata"},
+  "alpine_runtime": "vulkan-loader 1.4.313.0-r0, vulkan-tools 1.4.313.0-r0 (vkcube, vulkaninfo) and their X11/Wayland client libraries, checked against downloads/alpine-APKINDEX.tar.gz (see mesa-sysroot-packages.json)",
+  "test_path": "vkcube --wsi display (VK_KHR_display); X11/Wayland libraries are only load-time dependencies of vulkaninfo"
+}

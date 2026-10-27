@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0
+// Turnip Vulkan check: gpu2 DT, with the Mesa Vulkan driver, the Vulkan
+// loader and vulkan-tools added to the RAM disk only.
+#include "sm7125-xiaomi-curtana-gpu2.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing vulkan1 test)";
+	chosen {
+		miatoll,boot-profile = "vulkan1-ram-only";
+	};
+};

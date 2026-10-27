@@ -24,7 +24,12 @@ SYSROOT = WORKSPACE / 'tools/sysroot-mesa-aarch64'
 URL = 'https://dl-cdn.alpinelinux.org/alpine/v3.22/main/aarch64/'
 PACKAGES = ('musl', 'musl-dev', 'linux-headers', 'libgcc', 'libstdc++', 'libstdc++-dev',
             'libdrm', 'libdrm-dev', 'libpciaccess', 'libpciaccess-dev', 'expat', 'expat-dev',
-            'zlib', 'zlib-dev', 'compiler-rt')
+            'zlib', 'zlib-dev', 'compiler-rt',
+            # Vulkan loader and headers, and vulkan-tools (vkcube, vulkaninfo) with the
+            # X11/Wayland client libraries it links against; the RAM test uses its
+            # VK_KHR_display path only.
+            'vulkan-headers', 'vulkan-loader', 'vulkan-loader-dev', 'vulkan-tools',
+            'libx11', 'libxcb', 'libxau', 'libxdmcp', 'libbsd', 'libmd', 'wayland-libs-client', 'libffi')
 
 
 def index_entries():
