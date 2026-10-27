@@ -102,3 +102,38 @@ CAPTURE_DONE
 STEP_DONE_192631=0
 [1]+  Done                       (timeout 90 cat /dev/input/event4 | hexdump -v -e "4/4 "%08x " 1/2 " type=%u" 1/2 " code=%u" 1/4 " value=%d\n"" 1>/tmp/btn.txt)
 miatoll-audio13# [6n
+### 2026-10-27T19:30:38 tool-check
+$ for t in sha256sum md5sum base64 hexdump od xxd dd split; do command -v $t >/dev/null && echo "HAVE $t" || echo "MISS $t"; done
+for t in sha256sum md5sum base64 hexdump od xxd dd split; do co
+mmand -v $t >/dev/null && echo "HAVE $t" || echo "MISS $t"; done; printf "\nSTEP
+_DONE_193038=%s\n" "$?"
+HAVE sha256sum
+MISS md5sum
+MISS base64
+HAVE hexdump
+MISS od
+MISS xxd
+HAVE dd
+MISS split
+
+STEP_DONE_193038=0
+miatoll-audio13# [6n
+### 2026-10-27T19:32:26 pull
+pulled /usr/share/sounds/quiet-1khz-3s.wav bytes=576044 sha256=f147c92972409c77af1a7ed9b935aa09e35a842029e7ba15d941a960a04293cd chunk_retries=0
+### 2026-10-27T19:32:57 headset-mic-listen-record
+$ audio-path headset-mic on; /bin/pcm-test record 2 10 /tmp/headset-mic-10s.wav; audio-path headset-mic off
+audio-path headset-mic on; /bin/pcm-test record 2 10 /tmp/heads
+et-mic-10s.wav; audio-path headset-mic off; printf "\nSTEP_DONE_193247=%s\n" "$?
+"
+AUDIO_PATH headset-mic on failures=0
+pcm_configured=1 rate=48000 channels=1 format=S16_LE period_frames=960 buffer_frames=3840
+capture_start=1 seconds=10
+capture_frames=480000 peak_s16=3045 peak_dbfs=-20.6 rms_dbfs=-44.4
+capture_file=/tmp/headset-mic-10s.wav bytes=960044
+pcm_test_exit=0
+AUDIO_PATH headset-mic off failures=0
+
+STEP_DONE_193247=0
+miatoll-audio13# [6n
+### 2026-10-27T19:33:57 pull
+pulled /tmp/headset-mic-10s.wav bytes=960044 sha256=a50b49be017e5e605b5e9e5527cb335d21bc1840677a6dfbc8e79109074e841b chunk_retries=0

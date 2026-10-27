@@ -298,6 +298,66 @@ def observe(args):
     path.write_text(json.dumps(result, indent=2, ensure_ascii=False) + '\n')
 
 
+def pull(args):
+    """Copy one file from the RAM shell in sha256-checked chunks.
+
+    The bytes go only to the local output path; steps.txt records the
+    transfer summary, so recordings and other private data stay out of Git.
+    """
+    import serial
+    ports = [Path(args.port)] if args.port else list(find_acm())
+    if len(ports) != 1:
+        raise Stop('Expected exactly one Linux ACM port; nothing was sent.')
+    remote = args.remote
+    if not re.fullmatch(r'/[A-Za-z0-9_./-]+', remote):
+        raise Stop('Remote path must be a plain absolute path.')
+
+    def call(console, cmdline, end, timeout=30):
+        console.reset_input_buffer()
+        # The shell echoes the command line; the quotes keep the markers out of the echo.
+        console.write(f'echo {end}""_BEGIN; {cmdline}; echo {end}""_DONE\n'.encode())
+        text = ''
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline and f'{end}_DONE' not in text:
+            text += console.read(65536).decode('ascii', 'replace')
+        if f'{end}_DONE' not in text:
+            raise Stop(f'No reply for {end}; transfer abandoned.')
+        return text.split(f'{end}_DONE')[0].split(f'{end}_BEGIN')[-1]
+
+    chunk = 4096
+    data = bytearray()
+    retries = 0
+    with serial.Serial(str(ports[0]), 115200, timeout=0.2, write_timeout=3) as console:
+        console.dtr = console.rts = True
+        info = call(console, f'ls -ln {remote}; sha256sum {remote}', 'INFO')
+        size = int(re.search(r'^\S+\s+\d+\s+\d+\s+\d+\s+(\d+) ', info, re.M).group(1))
+        whole = re.search(r'^([0-9a-f]{64}) ', info, re.M).group(1)
+        for index in range((size + chunk - 1) // chunk):
+            for attempt in range(4):
+                text = call(console, f'dd if={remote} bs={chunk} skip={index} count=1 2>/dev/null'
+                            f" | hexdump -v -e '32/1 \"%02x\" \"\\n\"'; echo SUM; "
+                            f'dd if={remote} bs={chunk} skip={index} count=1 2>/dev/null | sha256sum',
+                            f'CHUNK{index}')
+                body, _, tail = text.partition('SUM')
+                piece = bytes.fromhex(re.sub(r'[^0-9a-f]', '', body))
+                want = re.search(r'([0-9a-f]{64})', tail)
+                if want and hashlib.sha256(piece).hexdigest() == want.group(1):
+                    data += piece
+                    break
+                retries += 1
+            else:
+                raise Stop(f'Chunk {index} failed its checksum four times.')
+    if hashlib.sha256(data).hexdigest() != whole:
+        raise Stop('Whole-file sha256 mismatch; output not written.')
+    out = Path(args.output)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_bytes(data)
+    summary = f'pulled {remote} bytes={len(data)} sha256={whole} chunk_retries={retries}'
+    with (Path(args.directory) / 'steps.txt').open('a', encoding='utf-8', newline='') as stream:
+        stream.write(f'### {datetime.datetime.now().isoformat(timespec="seconds")} pull\n{summary}\n')
+    print(summary)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
@@ -321,6 +381,11 @@ def main():
     step.add_argument('--timeout', type=int, default=60)
     step.add_argument('--wait-port', type=int, default=0,
                       help='seconds to wait for (and attach) a re-enumerated ACM port')
+    get = commands.add_parser('pull', help='copy a file from the RAM shell with sha256 checks')
+    get.add_argument('directory', help='report directory; only the transfer summary is logged')
+    get.add_argument('remote')
+    get.add_argument('output', help='local path, keep private data outside Git')
+    get.add_argument('--port')
     note = commands.add_parser('observe', help="record the user's physical observation")
     note.add_argument('directory')
     note.add_argument('--screen', required=True)
@@ -331,7 +396,7 @@ def main():
     args = parser.parse_args()
     try:
         {'boot': run, 'shell': shell, 'observe': observe,
-         'reboot-bootloader': reboot_bootloader}[args.command](args)
+         'reboot-bootloader': reboot_bootloader, 'pull': pull}[args.command](args)
     except Stop as error:
         sys.exit('STOPPED: ' + str(error))
 
