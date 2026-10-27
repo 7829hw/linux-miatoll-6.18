@@ -1,0 +1,9 @@
+{
+  "alpine_signing_key": {"name": "alpine-devel@lists.alpinelinux.org-616ae350.rsa.pub",
+                         "sha256": "d11f6b21c61b4274e182eb888883a8ba8acdbf820dcc7a6d82a7d9fc2fd2836d",
+                         "sources": ["https://alpinelinux.org/keys/", "github.com/alpinelinux/aports 3.22-stable main/alpine-keys"],
+                         "note": "both copies were byte-identical"},
+  "indexes": "v3.22 aarch64 main (v3.22.7-1-g0b8db0af6fb) and community (v3.22.7-4-g875a08dd453) APKINDEX, RSA-SHA1 signatures verified with openssl",
+  "qmicli": "qmi-utils 1.36.0-r0 and libqmi 1.36.0-r0 (community) with glib and the other DT_NEEDED libraries; see qmi-runtime-packages.json",
+  "privacy": "modem-query redacts IMEI/IMSI/ICCID/MSISDN/serials and cell/LAC/TAC fields before printing"
+}

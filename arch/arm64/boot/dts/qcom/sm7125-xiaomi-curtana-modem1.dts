@@ -1,0 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0
+// Modem check: vulkan1 DT, with qmicli and the read-only modem-query
+// wrapper added to the RAM disk only. MPSS still starts through wifi-start
+// with the read-only RAM-shadow rmtfs.
+#include "sm7125-xiaomi-curtana-vulkan1.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing modem1 test)";
+	chosen {
+		miatoll,boot-profile = "modem1-ram-only";
+	};
+};

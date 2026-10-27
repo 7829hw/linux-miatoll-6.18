@@ -35,3 +35,23 @@ DMESG_DONE
 
 STEP_DONE_230459=0
 miatoll-vulkan1# [6n
+### 2026-10-27T23:09:47 modem-state
+$ for r in /sys/class/remoteproc/*; do echo "$r $(cat $r/name) $(cat $r/state) $(cat $r/firmware 2>/dev/null)"; done; ls /bin | grep -iE "qrtr|rmtfs|pd-mapper|tqftp|qmi"; ls /usr/bin 2>/dev/null | grep -iE "qrtr|qmi"; cat /proc/net/protocols 2>/dev/null | grep -i qip; ls /sys/bus/platform/drivers | grep -iE "ipa|bam_dmux|qcom-q6v5"; ip link | grep -E "rmnet|ipa" ; dmesg | grep -iE "modem|mpss|ipa |ipa:|rmnet|qmi" | grep -v "Kernel command" | tail -15
+for r in /sys/class/remoteproc/*; do echo "$r $(cat $r/name) $(
+cat $r/state) $(cat $r/firmware 2>/dev/null)"; done; ls /bin | grep -iE "qrtr|rm
+tfs|pd-mapper|tqftp|qmi"; ls /usr/bin 2>/dev/null | grep -iE "qrtr|qmi"; cat /pr
+oc/net/protocols 2>/dev/null | grep -i qip; ls /sys/bus/platform/drivers | grep 
+-iE "ipa|bam_dmux|qcom-q6v5"; ip link | grep -E "rmnet|ipa" ; dmesg | grep -iE "
+modem|mpss|ipa |ipa:|rmnet|qmi" | grep -v "Kernel command" | tail -15; printf "\
+nSTEP_DONE_230947=%s\n" "$?"
+/sys/class/remoteproc/remoteproc0 modem offline qcom/sm7125/miatoll/modem.mbn
+/sys/class/remoteproc/remoteproc1 adsp running qcom/sm7125/miatoll/adsp.mbn
+qrtr-lookup
+rmtfs
+tqftpserv
+QIPCRTR    784      0      -1   NI       0   yes  kernel      n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n  n
+qcom-q6v5-mss
+[    0.432238] remoteproc remoteproc0: modem is available
+
+STEP_DONE_230947=0
+miatoll-vulkan1# [6n

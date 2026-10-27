@@ -1,0 +1,46 @@
+#!/bin/sh
+# Read-only QMI queries to the MPSS over QRTR for the curtana RAM test.
+# Only the "get" requests below can be sent; nothing that changes the modem
+# configuration, the SIM, the operating mode or NV/EFS data is reachable
+# from here. Output goes through redact so identifiers (IMEI, IMSI, ICCID,
+# MSISDN, serials) and location fields (cell, LAC/TAC) never reach the log.
+# usage: modem-query services|info|ids|mode|sim|network|signal|all
+qmicli=/usr/bin/qmicli
+device=qrtr://0
+
+redact() {
+    sed -E \
+        -e 's/((IMEI|IMSI|ICCID|MSISDN|ESN|MEID|[Ss]erial|[Ii]dentifier|[Cc]ell [Ii][Dd]|[Cc]ell ID|[Ll]ocation [Aa]rea [Cc]ode|[Tt]racking [Aa]rea [Cc]ode|LAC|TAC|[Pp]hysical [Cc]ell)[^:]*):.*/\1: <redacted>/' \
+        -e 's/[0-9A-Fa-f]{12,}/<redacted-long>/g' \
+        -e 's/[0-9]{8,}/<redacted-digits>/g'
+}
+
+query() {
+    echo "== qmicli $1"
+    timeout 15 "$qmicli" -d "$device" "$1" 2>&1 | redact
+    echo "QMI_RC=$?"
+}
+
+case "$1" in
+    services)
+        echo '== qrtr-lookup'
+        qrtr-lookup 2>&1 | redact ;;
+    info)
+        for q in --dms-get-manufacturer --dms-get-model --dms-get-revision --dms-get-capabilities; do query "$q"; done ;;
+    ids)
+        # Only says which identifiers are present; values are redacted.
+        query --dms-get-ids ;;
+    mode)
+        query --dms-get-operating-mode ;;
+    sim)
+        query --uim-get-card-status ;;
+    network)
+        for q in --nas-get-serving-system --nas-get-system-info; do query "$q"; done ;;
+    signal)
+        for q in --nas-get-signal-info --nas-get-signal-strength; do query "$q"; done ;;
+    all)
+        for part in services info ids mode sim network signal; do "$0" "$part"; done ;;
+    *)
+        echo 'usage: modem-query services|info|ids|mode|sim|network|signal|all'
+        exit 2 ;;
+esac
