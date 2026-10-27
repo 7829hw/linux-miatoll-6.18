@@ -1,0 +1,23 @@
+### 2026-10-28T00:12:04 sd-export-on
+$ setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1 & sleep 1; cat /run/sd-export.log
+setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1 & slee
+p 1; cat /run/sd-export.log; printf "\nSTEP_DONE_001203=%s\n" "$?"
+SD-EXPORT: exporting /dev/mmcblk2 (62333952 sectors)
+
+STEP_DONE_001203=0
+[1]+  Done                       setsid sh -c "sd-export on" 0</dev/null 1>/dev/null 2>&1
+miatoll-sdexport1# [6n
+### 2026-10-28T00:12:33 sd-export-status
+$ sd-export status; cat /run/sd-export.log; cat /sys/kernel/config/usb_gadget/miatoll-boot1/UDC; ls /sys/kernel/config/usb_gadget/miatoll-boot1/configs/c.1/
+sd-export status; cat /run/sd-export.log; cat
+ /sys/kernel/config/usb_gadget/miatoll-boot1/UDC; ls /sys/kernel/config/usb_gadg
+et/miatoll-boot1/configs/c.1/; printf "\nSTEP_DONE_001232=%s\n" "$?"
+/bin/sh: miatoll-sdexportsd-export: not found
+SD-EXPORT: exporting /dev/mmcblk2 (62333952 sectors)
+SD-EXPORT: on
+a600000.usb
+[0;0mMaxPower[m         [0;0mbmAttributes[m     [1;34mstrings[m
+[1;36macm.usb0[m         [1;36mmass_storage.sd[m
+
+STEP_DONE_001232=0
+miatoll-sdexport1# [6n

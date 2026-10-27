@@ -1,5 +1,0 @@
-# WSL write access to the curtana SD export only (miatoll/boot/sd-export).
-# The RAM test gadget (1d6b:0104, serial miatoll-boot1) exposes the SM32G
-# microSD as a SCSI disk with vendor "CURTANA" and model "SM32G SD EXPORT";
-# no other block device gets group access from this rule.
-SUBSYSTEM=="block", ATTRS{idVendor}=="1d6b", ATTRS{idProduct}=="0104", ATTRS{serial}=="miatoll-boot1", ATTRS{vendor}=="CURTANA*", ATTRS{model}=="SM32G SD EXPORT*", MODE="0660", GROUP="plugdev"

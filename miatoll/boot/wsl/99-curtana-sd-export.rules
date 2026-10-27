@@ -1,0 +1,7 @@
+# WSL write access to the curtana SD export only (miatoll/boot/sd-export).
+# The RAM test gadget (1d6b:0104, serial miatoll-boot1) exposes the SM32G
+# microSD as a SCSI disk with vendor "CURTANA" and model "SM32G SD EXPORT".
+# ID_VENDOR/ID_MODEL/ID_SERIAL come from 60-persistent-storage.rules, so this
+# file sorts after it. ATTRS keys must all match one parent, hence only the
+# USB IDs are matched with ATTRS. No other block device gets group access.
+SUBSYSTEM=="block", ENV{ID_VENDOR}=="CURTANA", ENV{ID_MODEL}=="SM32G_SD_EXPORT", ENV{ID_SERIAL}=="CURTANA_SM32G_SD_EXPORT_miatoll-boot1-*", ATTRS{idVendor}=="1d6b", ATTRS{idProduct}=="0104", MODE="0660", GROUP="plugdev"
