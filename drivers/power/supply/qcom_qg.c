@@ -14,6 +14,10 @@
 #include <linux/power_supply.h>
 #include <linux/regmap.h>
 
+/* Peripheral subtype selects the current ADC range */
+#define QG_PERPH_SUBTYPE_REG		0x05
+#define QG_ADC_IBAT_5A			0x3
+
 /* BATT offsets */
 #define QG_S2_NORMAL_AVG_V_DATA0_REG	0x80 /* 2-byte 0x80-0x81 */
 #define QG_S2_NORMAL_AVG_I_DATA0_REG	0x82 /* 2-byte 0x82-0x83 */
@@ -35,6 +39,7 @@ struct qcom_qg_chip {
 
 	struct power_supply *batt_psy;
 	struct power_supply_battery_info *batt_info;
+	u32 iraw_to_na;
 };
 
 static int qcom_qg_get_current(struct qcom_qg_chip *chip, u8 offset, int *val)
@@ -50,7 +55,8 @@ static int qcom_qg_get_current(struct qcom_qg_chip *chip, u8 offset, int *val)
 	}
 
 	temp = (s16)(readval[1] << 8 | readval[0]);
-	*val = div_s64((s64)temp * 152588, 1000);
+	/* QG counts discharge as positive; power_supply reports charging so. */
+	*val = -div_s64((s64)temp * chip->iraw_to_na, 1000);
 
 	return 0;
 }
@@ -206,6 +212,7 @@ static int qcom_qg_probe(struct platform_device *pdev)
 {
 	struct qcom_qg_chip *chip;
 	struct power_supply_config psy_cfg = {};
+	unsigned int subtype;
 	int ret;
 
 	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
@@ -225,6 +232,12 @@ static int qcom_qg_probe(struct platform_device *pdev)
 	if (ret < 0)
 		return dev_err_probe(chip->dev, ret,
 				     "Couldn't read base address\n");
+
+	/* The 10 A current range has twice the LSB of the 5 A range */
+	ret = regmap_read(chip->regmap, chip->base + QG_PERPH_SUBTYPE_REG, &subtype);
+	if (ret)
+		return dev_err_probe(chip->dev, ret, "Couldn't read QG subtype\n");
+	chip->iraw_to_na = subtype == QG_ADC_IBAT_5A ? 152588 : 305176;
 
 	/* ADC for thermal channel */
 	chip->batt_therm_chan = devm_iio_channel_get(chip->dev, "batt-therm");
