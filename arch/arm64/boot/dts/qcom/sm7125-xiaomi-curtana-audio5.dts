@@ -1,0 +1,19 @@
+// SPDX-License-Identifier: GPL-2.0
+// Headset microphone check: only the WCD937x mic bias of curtana's Android
+// device tree (cust-atoll-audio-overlay.dtsi: qcom,cdc-micbias1..3-mv =
+// <2700>). audio4 showed the Android MBHC switch values must not be mapped
+// to the upstream normally-closed properties.
+#include "sm7125-xiaomi-curtana-audio3.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing audio5 test)";
+	chosen {
+		miatoll,boot-profile = "audio5-ram-only";
+	};
+};
+
+&wcd937x {
+	qcom,micbias1-microvolt = <2700000>;
+	qcom,micbias2-microvolt = <2700000>;
+	qcom,micbias3-microvolt = <2700000>;
+};

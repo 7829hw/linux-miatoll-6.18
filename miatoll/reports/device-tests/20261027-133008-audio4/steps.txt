@@ -1,0 +1,38 @@
+### 2026-10-27T13:31:01 card-jack-check
+$ sleep 8; cat /proc/asound/cards | head -1; cat /sys/kernel/debug/devices_deferred; for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tinymix -D 0 get "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "vote|mbhc|micb|plug|wcd937x" | tail -8
+sleep 8; cat /proc/asound/cards | head -1; cat /sys/kernel/debug
+/devices_deferred; for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tinymix -
+D 0 get "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "vote|mbhc|micb|plug|wcd
+937x" | tail -8; printf "\nSTEP_DONE_133053=%s\n" "$?"
+ 0 [Xiaomimiatoll  ]: sm8250 - Xiaomi-miatoll
+Headphone Jack=Off
+Mic Jack=Off
+[    0.466691] msm_dpu ae01000.display-controller: [drm:drm_sysfs_connector_hotplug_event] [CONNECTOR:34:DSI-1] generating connector hotplug event
+[    0.466722] msm_dpu ae01000.display-controller: [drm:drm_sysfs_connector_hotplug_event] [CONNECTOR:36:Writeback-1] generating connector hotplug event
+[    0.470510] msm_dpu ae01000.display-controller: [drm:drm_sysfs_hotplug_event] generating hotplug event
+[    0.653300] msm_dpu ae01000.display-controller: [drm:drm_fb_helper_hotplug_event] 
+[    0.665941] msm_dpu ae01000.display-controller: [drm:drm_client_dev_hotplug] fbdev: ret=0
+[    1.248146] qcom-q6afe aprsvc:service:4:4: AFE vote (3) accepted after 1 retries
+[    1.273119] wcd937x_codec codec: bound sdw:2:0:0217:010a:00:4 (ops wcd_sdw_component_ops)
+[    1.273248] wcd937x_codec codec: bound sdw:3:0:0217:010a:00:3 (ops wcd_sdw_component_ops)
+
+STEP_DONE_133053=0
+miatoll-audio4# [6n
+### 2026-10-27T13:34:21 jack-after-replug
+$ sleep 2; for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tinymix -D 0 get "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "mbhc|micb|plug|z_val|impedance|jack" | tail -8; cat /proc/uptime
+sleep 2; for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tin
+ymix -D 0 get "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "mbhc|micb|plug|z_
+val|impedance|jack" | tail -8; cat /proc/uptime; printf "\nSTEP_DONE_133419=%s\n
+" "$?"
+Headphone Jack=Off
+Mic Jack=Off
+[    0.466691] msm_dpu ae01000.display-controller: [drm:drm_sysfs_connector_hotplug_event] [CONNECTOR:34:DSI-1] generating connector hotplug event
+[    0.466722] msm_dpu ae01000.display-controller: [drm:drm_sysfs_connector_hotplug_event] [CONNECTOR:36:Writeback-1] generating connector hotplug event
+[    0.470510] msm_dpu ae01000.display-controller: [drm:drm_sysfs_hotplug_event] generating hotplug event
+[    0.653300] msm_dpu ae01000.display-controller: [drm:drm_fb_helper_hotplug_event] 
+[    0.665941] msm_dpu ae01000.display-controller: [drm:drm_client_dev_hotplug] fbdev: ret=0
+[    1.371657] input: Xiaomi-miatoll Headset Jack as /devices/platform/sound/sound/card0/input4
+217.95 1740.25
+
+STEP_DONE_133419=0
+miatoll-audio4# [6n

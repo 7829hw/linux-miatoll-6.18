@@ -1,0 +1,82 @@
+{
+  "capture_id": "20261027-133008",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-audio4+",
+  "boot_profile": "audio4-ram-only",
+  "image": "boot-curtana-6.18.58-audio4.img",
+  "image_sha256": "1a8401487b386aae25cd20a2d2fa6dd4095e7244dc272aeca3f2b8f3da130284",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-audio4/boot-curtana-6.18.58-audio4.img"
+  ],
+  "physical_display_confirmed": null,
+  "user_observation": "pending",
+  "restarted_from_shell": true,
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "AUDIO4_BANNER_WRITTEN",
+      "AUDIO4_PROBE_BEGIN",
+      "AUDIO4_PROBE_END",
+      "AUDIO4_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "27:          0          0          0          0          0          0          0          0    GICv3 134 Level     arm-smmu-context-fault",
+      "28:          0          0          0          0          0          0          0          0    GICv3 135 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "audio4-fastboot-20261027-133008.txt": {
+      "bytes": 859,
+      "sha256": "4e71009f2c7cfda98a06326fd64ba68ad66ddcfd433840b5e0191a6a93c592ee"
+    },
+    "audio4-serial-20261027-133008.txt": {
+      "bytes": 164783,
+      "sha256": "618b82c253e626f64c143d8a6411bc6d0b797e905209eb9660a18476e9c0d012"
+    },
+    "steps.txt": {
+      "bytes": 2815,
+      "sha256": "019d88fdbcde861af808024b69689328438a95e6a2e198ac8dc3fc21572580fc"
+    }
+  },
+  "step_observations": {
+    "jack-after-replug": {
+      "screen": "user unplugged and replugged the earphones",
+      "backlight": "on",
+      "notes": "no MBHC event; Headphone/Mic Jack stayed Off"
+    }
+  },
+  "audio": {
+    "card": "registered at boot (vote accepted after 1 retry)",
+    "dt": "micbias1-3 2700 mV + qcom,hphl-jack-type-normally-closed + qcom,ground-jack-type-normally-closed",
+    "result": "plug detection lost: no MBHC events after replug, Headphone/Mic Jack Off (audio3 without the switch properties detected the plug)",
+    "conclusion": "downstream qcom,msm-mbhc-hphl-swh/gnd-swh = 1 does not map to the upstream normally-closed properties on curtana; keep the upstream default. Mic bias tested alone in audio5."
+  }
+}
