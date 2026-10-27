@@ -1,0 +1,149 @@
+### 2026-10-27T20:41:50 gpu-dmesg
+$ dmesg | grep -iE "adreno|a6xx|gmu|zap|msm_dpu|\[drm\]|gpu|firmware" | head -40; ls -l /dev/dri
+dmesg | grep -iE "adreno|a6xx|gmu|zap|msm_dpu|\[drm\]|gpu|firmware
+" | head -40; ls -l /dev/dri; printf "\nSTEP_DONE_204150=%s\n" "$?"
+[    0.000000] Linux version 6.18.58-miatoll-gpu1+ (miatoll@lts) (Ubuntu clang version 18.1.3 (1ubuntu1), Ubuntu LLD 18.1.3) #1 SMP PREEMPT 2026-10-26 00:00:00 +0000
+[    0.000000] Machine model: Xiaomi Redmi Note 9S (Huaxing gpu1 test)
+[    0.000000] OF: reserved mem: 0x000000009d700000..0x000000009d7fffff (1024 KiB) map non-reusable firmware-reserved@9d700000
+[    0.000000] OF: reserved mem: 0x000000009c9e3400..0x000000009d6fffff (13427 KiB) map non-reusable firmware-reserved@9c9e3400
+[    0.000000] OF: reserved mem: 0x000000009f400000..0x00000000a11fffff (30720 KiB) nomap non-reusable firmware-reserved@9f400000
+[    0.000000] OF: reserved mem: 0x000000009e000000..0x000000009f3fffff (20480 KiB) nomap non-reusable firmware-reserved@9e000000
+[    0.000000] OF: reserved mem: 0x0000000093b10000..0x0000000093b14fff (20 KiB) nomap non-reusable firmware-reserved@93b10000
+[    0.000000] OF: reserved mem: 0x000000008e900000..0x000000008edfffff (5120 KiB) nomap non-reusable firmware-reserved@8e900000
+[    0.000000] OF: reserved mem: 0x000000008e400000..0x000000008e8fffff (5120 KiB) nomap non-reusable firmware-reserved@8e400000
+[    0.000000] psci: PSCIv1.1 detected in firmware.
+[    0.000000] psci: [Firmware Bug]: failed to set PC mode: -3
+[    0.000000] Kernel command line: rcupdate.rcu_expedited=1 rcu_nocbs=0-7 noirqdebug rdinit=/init console=tty0 loglevel=8 ignore_loglevel clk_ignore_unused pd_ignore_unused no_console_suspend deferred_probe_timeout=30 panic=0 enforcing=0 miatoll_boot=gpu1 consoleblank=0 drm.debug=0x06 androidboot.verifiedbootstate=orange androidboot.keymaster=1  androidboot.bootdevice=1d84000.ufshc androidboot.fstab_suffix=default androidboot.boot_devices=soc/1d84000.ufshc androidboot.serialno=REDACTED androidboot.cpuid=0xd7896932 androidboot.multisim_config=dsds androidboot.dp=0x0 androidboot.baseband=msm msm_drm.dsi_display0=dsi_ft8756_huaxing_vid_display: androidboot.fpsensor=fpc androidboot.lcmtype=dsi_nt36672c_huaxing_fhd_video_display androidboot.dtbo_idx=0 androidboot.dtb_idx=0 androidboot.secureboot=1 androidboot.hwc=Global_TWO androidboot.hwversion=1.91.0 androidboot.hwlevel=MP androidboot.hwname=curtana androidboot.AdcVol1=183 androidboot.AdcVol2=1401
+[    0.000000] Unknown kernel command line parameters "rcu_nocbs=0-7 miatoll_boot=gpu1", will be passed to user space.
+[    0.080751] qcom_scm firmware:scm: qseecom: found qseecom with version 0x1400000
+[    0.080781] qcom_scm firmware:scm: qseecom: untested machine, skipping
+[    0.299774] platform 5000000.gpu: Adding to iommu group 8
+[    0.299934] platform 506a000.gmu: Adding to iommu group 9
+[    0.487928] msm_dpu ae01000.display-controller: bound ae94000.dsi (ops dsi_ops)
+[    0.487964] [drm:adreno_bind] Found GPU: 6.1.8.0
+[    0.488435] [drm:adreno_gpu_init] fast_rate=750000000, slow_rate=27000000
+[    0.489150] [drm:msm_gpu_init] ebi1_clk: fffffffffffffffe
+[    0.489208] adreno 5000000.gpu: supply vdd not found, using dummy regulator
+[    0.489299] [drm:msm_gpu_init] gpu_reg: 000000007871c448
+[    0.489334] adreno 5000000.gpu: supply vddcx not found, using dummy regulator
+[    0.489368] [drm:msm_gpu_init] gpu_cx: 00000000cabab1cb
+[    0.498108] msm_dpu ae01000.display-controller: bound 5000000.gpu (ops a3xx_ops)
+[    0.501313] msm_dpu ae01000.display-controller: [drm:drm_sysfs_connector_add] [CONNECTOR:34:DSI-1] adding connector to sysfs
+[    0.501405] msm_dpu ae01000.display-controller: [drm:drm_sysfs_connector_hotplug_event] [CONNECTOR:34:DSI-1] generating connector hotplug event
+[    0.501440] msm_dpu ae01000.display-controller: [drm:drm_sysfs_connector_add] [CONNECTOR:36:Writeback-1] adding connector to sysfs
+[    0.501521] msm_dpu ae01000.display-controller: [drm:drm_sysfs_connector_hotplug_event] [CONNECTOR:36:Writeback-1] generating connector hotplug event
+[    0.501551] [drm] Initialized msm 1.13.0 for ae01000.display-controller on minor 0
+[    0.804262] msm_dpu ae01000.display-controller: [drm:adreno_request_fw] loaded qcom/a630_sqe.fw from new location
+[    0.804423] msm_dpu ae01000.display-controller: [drm:adreno_request_fw] loaded qcom/a630_gmu.bin from new location
+[    0.874858] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] 
+[    0.874954] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:34:DSI-1]
+[    0.874994] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:34:DSI-1] status updated from unknown to connected
+[    0.875065] msm_dpu ae01000.display-controller: [drm:drm_sysfs_hotplug_event] generating hotplug event
+[    0.875178] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:34:DSI-1] probed modes:
+[    0.875208] msm_dpu ae01000.display-controller: [drm:drm_helper_probe_single_connector_modes] Probed mode: "1080x2400": 60 164823 1080 1100 1104 1124 2400 2408 2412 2444 0x48 0x0
+[    0.875242] msm_dpu ae01000.display-controller: [drm:drm_client_modeset_probe] [CONNECTOR:34:DSI-1] enabled? yes
+total 0
+crw-------    1 0        0         226,   0 Jan  1 00:00 [1;35mcard0[m
+crw-------    1 0        0         226, 128 Jan  1 00:00 [1;35mrenderD128[m
+
+STEP_DONE_204150=0
+miatoll-gpu1# [6n
+### 2026-10-27T20:42:00 gpu-probe-1
+$ dmesg | grep -iE "gmu|zap|speed|opp|hang|fault|timeout|a6xx|adreno|scm" | grep -v "iommu group" | tail -15; echo ===; /bin/gpu-probe; echo GPU_PROBE_EXIT=$?; dmesg | tail -15
+dmesg | grep -iE "gmu|zap|speed|opp|hang|fault|timeout|a6xx|adreno
+|scm" | grep -v "iommu group" | tail -15; echo ===; /bin/gpu-probe; echo GPU_PRO
+BE_EXIT=$?; dmesg | tail -15; printf "\nSTEP_DONE_204159=%s\n" "$?"
+[    0.000000] Kernel command line: rcupdate.rcu_expedited=1 rcu_nocbs=0-7 noirqdebug rdinit=/init console=tty0 loglevel=8 ignore_loglevel clk_ignore_unused pd_ignore_unused no_console_suspend deferred_probe_timeout=30 panic=0 enforcing=0 miatoll_boot=gpu1 consoleblank=0 drm.debug=0x06 androidboot.verifiedbootstate=orange androidboot.keymaster=1  androidboot.bootdevice=1d84000.ufshc androidboot.fstab_suffix=default androidboot.boot_devices=soc/1d84000.ufshc androidboot.serialno=REDACTED androidboot.cpuid=0xd7896932 androidboot.multisim_config=dsds androidboot.dp=0x0 androidboot.baseband=msm msm_drm.dsi_display0=dsi_ft8756_huaxing_vid_display: androidboot.fpsensor=fpc androidboot.lcmtype=dsi_nt36672c_huaxing_fhd_video_display androidboot.dtbo_idx=0 androidboot.dtb_idx=0 androidboot.secureboot=1 androidboot.hwc=Global_TWO androidboot.hwversion=1.91.0 androidboot.hwlevel=MP androidboot.hwname=curtana androidboot.AdcVol1=183 androidboot.AdcVol2=1401
+[    0.000940] pid_max: default: 32768 minimum: 301
+[    0.079053] iommu: Default domain type: Translated
+[    0.080373] scmi_core: SCMI protocol bus registered
+[    0.080460] qcom_scm: convention: smc arm 64
+[    0.080751] qcom_scm firmware:scm: qseecom: found qseecom with version 0x1400000
+[    0.080781] qcom_scm firmware:scm: qseecom: untested machine, skipping
+[    0.487964] [drm:adreno_bind] Found GPU: 6.1.8.0
+[    0.488435] [drm:adreno_gpu_init] fast_rate=750000000, slow_rate=27000000
+[    0.489208] adreno 5000000.gpu: supply vdd not found, using dummy regulator
+[    0.489334] adreno 5000000.gpu: supply vddcx not found, using dummy regulator
+[    0.804262] msm_dpu ae01000.display-controller: [drm:adreno_request_fw] loaded qcom/a630_sqe.fw from new location
+[    0.804423] msm_dpu ae01000.display-controller: [drm:adreno_request_fw] loaded qcom/a630_gmu.bin from new location
+===
+gpu_param gpu_id=0x26a (618)
+gpu_param chip_id=0x6010800 (100730880)
+gpu_param gmem_size=0x80000 (524288)
+gpu_param max_freq=0x2cb41780 (750000000)
+gpu_param va_start=0x100000000 (4294967296)
+gpu_param va_size=0x100000000 (4294967296)
+gpu_param faults=0x0 (0)
+cmd_iova=0x100000000 dst_iova=0x100001000
+fence=1 done_us=4782 dst=0xc0ffee18
+GPU_PROBE_OK CP_MEM_WRITE executed
+GPU_PROBE_EXIT=0
+[    1.464332]     TERM=linux
+[    1.467474]     rcu_nocbs=0-7
+[    1.470520]     miatoll_boot=gpu1
+[    1.530004] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    1.531885] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[    1.710332] ft8756-spi spi11.0: Touch IC FW loaded successfully
+[    1.711197] ft8756-spi spi11.0: Failed to read data status: 0xC3
+[    1.712003] ft8756-spi spi11.0: Failed to read data status: 0xC3
+[    1.713010] ft8756-spi spi11.0: Failed to read data status: 0xC3
+[    1.713637] ft8756-spi spi11.0: Cannot read touch point data: -5
+[    1.721479] Bluetooth: hci0: QCA setup on UART is completed
+[    3.725328] dwc3 a600000.usb: remote wakeup not configured
+[   23.925906] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[   23.931666] [drm:dpu_kms_wait_flush] [crtc:66] not enable
+[   23.931950] msm_dpu ae01000.display-controller: [drm:drm_client_dev_restore] fbdev: ret=0
+
+STEP_DONE_204159=0
+miatoll-gpu1# [6n
+### 2026-10-27T20:42:13 gpu-state
+$ dmesg | grep -iE "zap|secure|trust" ; ls /sys/class/devfreq/; for d in /sys/class/devfreq/*gpu*; do cat $d/available_frequencies; echo cur=$(cat $d/cur_freq) gov=$(cat $d/governor); done; cat /sys/devices/platform/soc@0/5000000.gpu/power/runtime_status /sys/devices/platform/soc@0/506a000.gmu/power/runtime_status 2>&1; ls /sys/kernel/debug/dri/0/ 2>&1 | tr "\n" " "
+dmesg | grep -iE "zap|secure|trust" ; ls /sys/class/devfreq/; for 
+d in /sys/class/devfreq/*gpu*; do cat $d/available_frequencies; echo cur=$(cat $
+d/cur_freq) gov=$(cat $d/governor); done; cat /sys/devices/platform/soc@0/500000
+0.gpu/power/runtime_status /sys/devices/platform/soc@0/506a000.gmu/power/runtime
+_status 2>&1; ls /sys/kernel/debug/dri/0/ 2>&1 | tr "\n" " "; printf "\nSTEP_DON
+E_204213=%s\n" "$?"
+[    0.000000] Kernel command line: rcupdate.rcu_expedited=1 rcu_nocbs=0-7 noirqdebug rdinit=/init console=tty0 loglevel=8 ignore_loglevel clk_ignore_unused pd_ignore_unused no_console_suspend deferred_probe_timeout=30 panic=0 enforcing=0 miatoll_boot=gpu1 consoleblank=0 drm.debug=0x06 androidboot.verifiedbootstate=orange androidboot.keymaster=1  androidboot.bootdevice=1d84000.ufshc androidboot.fstab_suffix=default androidboot.boot_devices=soc/1d84000.ufshc androidboot.serialno=REDACTED androidboot.cpuid=0xd7896932 androidboot.multisim_config=dsds androidboot.dp=0x0 androidboot.baseband=msm msm_drm.dsi_display0=dsi_ft8756_huaxing_vid_display: androidboot.fpsensor=fpc androidboot.lcmtype=dsi_nt36672c_huaxing_fhd_video_display androidboot.dtbo_idx=0 androidboot.dtb_idx=0 androidboot.secureboot=1 androidboot.hwc=Global_TWO androidboot.hwversion=1.91.0 androidboot.hwlevel=MP androidboot.hwname=curtana androidboot.AdcVol1=183 androidboot.AdcVol2=1401
+[    0.103453] Initialise system trusted keyrings
+[    0.225144] sdhci: Secure Digital Host Controller Interface driver
+[1;36m1d84000.ufshc[m  [1;36m5000000.gpu[m
+180000000 267000000 355000000 430000000 565000000 650000000 750000000
+cur=180000000 gov=simple_ondemand
+suspended
+suspended
+DSI-1 Writeback-1 clients crtc-0 crtc-1 debug devfreq disable_err_irq encoder-0 encoder-1 fb framebuffer gem gem_names gpu hangcheck_period_ms hangrd internal_clients kms mm name perf rd shrink stall_reenable_time_us state 
+STEP_DONE_204213=0
+miatoll-gpu1# [6n
+### 2026-10-27T20:42:48 gpu-repeat
+$ ok=0; i=0; while [ $i -lt 30 ]; do /bin/gpu-probe >/tmp/g.txt 2>&1 && ok=$((ok+1)); i=$((i+1)); done; echo BACK_TO_BACK_OK=$ok/30; grep done_us /tmp/g.txt; ok=0; i=0; while [ $i -lt 10 ]; do sleep 2; s=$(cat /sys/devices/platform/soc@0/5000000.gpu/power/runtime_status); /bin/gpu-probe >/tmp/g.txt 2>&1 && ok=$((ok+1)); echo "cycle $i pre=$s $(grep done_us /tmp/g.txt)"; i=$((i+1)); done; echo RESUME_CYCLES_OK=$ok/10; /bin/gpu-probe | grep faults; dmesg | grep -iE "hang|fault|timeout|recover|gmu.*err|error" | grep -v "Failed to read data status\|touch point" | tail -5
+ok=0; i=0; while [ $i -lt 30 ]; do /bin/gpu-probe >/tmp/g.txt 2>&1
+ && ok=$((ok+1)); i=$((i+1)); done; echo BACK_TO_BACK_OK=$ok/30; grep done_us /t
+mp/g.txt; ok=0; i=0; while [ $i -lt 10 ]; do sleep 2; s=$(cat /sys/devices/platf
+orm/soc@0/5000000.gpu/power/runtime_status); /bin/gpu-probe >/tmp/g.txt 2>&1 && 
+ok=$((ok+1)); echo "cycle $i pre=$s $(grep done_us /tmp/g.txt)"; i=$((i+1)); don
+e; echo RESUME_CYCLES_OK=$ok/10; /bin/gpu-probe | grep faults; dmesg | grep -iE 
+"hang|fault|timeout|recover|gmu.*err|error" | grep -v "Failed to read data statu
+s\|touch point" | tail -5; printf "\nSTEP_DONE_204227=%s\n" "$?"
+BACK_TO_BACK_OK=30/30
+fence=1 done_us=1402 dst=0xc0ffee18
+cycle 0 pre=suspended fence=1 done_us=5474 dst=0xc0ffee18
+cycle 1 pre=suspended fence=1 done_us=5224 dst=0xc0ffee18
+cycle 2 pre=suspended fence=1 done_us=5258 dst=0xc0ffee18
+cycle 3 pre=suspended fence=1 done_us=4489 dst=0xc0ffee18
+cycle 4 pre=suspended fence=1 done_us=4879 dst=0xc0ffee18
+cycle 5 pre=suspended fence=1 done_us=5457 dst=0xc0ffee18
+cycle 6 pre=suspended fence=1 done_us=5299 dst=0xc0ffee18
+cycle 7 pre=suspended fence=1 done_us=5339 dst=0xc0ffee18
+cycle 8 pre=suspended fence=1 done_us=4516 dst=0xc0ffee18
+cycle 9 pre=suspended fence=1 done_us=5163 dst=0xc0ffee18
+RESUME_CYCLES_OK=10/10
+gpu_param faults=0x0 (0)
+[    0.000000] Kernel command line: rcupdate.rcu_expedited=1 rcu_nocbs=0-7 noirqdebug rdinit=/init console=tty0 loglevel=8 ignore_loglevel clk_ignore_unused pd_ignore_unused no_console_suspend deferred_probe_timeout=30 panic=0 enforcing=0 miatoll_boot=gpu1 consoleblank=0 drm.debug=0x06 androidboot.verifiedbootstate=orange androidboot.keymaster=1  androidboot.bootdevice=1d84000.ufshc androidboot.fstab_suffix=default androidboot.boot_devices=soc/1d84000.ufshc androidboot.serialno=REDACTED androidboot.cpuid=0xd7896932 androidboot.multisim_config=dsds androidboot.dp=0x0 androidboot.baseband=msm msm_drm.dsi_display0=dsi_ft8756_huaxing_vid_display: androidboot.fpsensor=fpc androidboot.lcmtype=dsi_nt36672c_huaxing_fhd_video_display androidboot.dtbo_idx=0 androidboot.dtb_idx=0 androidboot.secureboot=1 androidboot.hwc=Global_TWO androidboot.hwversion=1.91.0 androidboot.hwlevel=MP androidboot.hwname=curtana androidboot.AdcVol1=183 androidboot.AdcVol2=1401
+[    0.000940] pid_max: default: 32768 minimum: 301
+[    0.079053] iommu: Default domain type: Translated
+[    1.272370] mmc2: error -110 reading general info of SD ext reg
+[    1.272417] mmc2: error -110 whilst initialising SD card
+
+STEP_DONE_204227=0
+miatoll-gpu1# [6n
