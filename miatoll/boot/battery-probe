@@ -1,0 +1,35 @@
+#!/bin/sh
+# Read-only battery telemetry: power_supply properties, the QG peripheral
+# SUBTYPE register (one line through regmap debugfs) and $1 samples every $2 s.
+samples=${1:-1}
+interval=${2:-5}
+echo 'BATTERY_PROBE_BEGIN'
+for psy in /sys/class/power_supply/*; do
+    [ -e "$psy/type" ] || continue
+    echo "--- ${psy##*/} type=$(cat "$psy/type")"
+    for attr in "$psy"/*; do
+        [ -f "$attr" ] || continue
+        case "${attr##*/}" in uevent|*_control|*_limit*) continue ;; esac
+        printf '%s=%s\n' "${attr##*/}" "$(cat "$attr" 2>&1)"
+    done
+done
+echo '--- QG peripheral SUBTYPE (PMIC 0x4805, read-only regmap debugfs) ---'
+for map in /sys/kernel/debug/regmap/*; do
+    [ -r "$map/registers" ] || continue
+    line=$(dd if="$map/registers" bs=9 skip=$((0x4805)) count=1 2>/dev/null)
+    case "$line" in 4805:*) echo "${map##*/} $line" ;; esac
+done
+echo '--- samples: uptime voltage_now current_now current_avg temp capacity ---'
+i=0
+while [ "$i" -lt "$samples" ]; do
+    for psy in /sys/class/power_supply/*; do
+        [ "$(cat "$psy/type" 2>/dev/null)" = Battery ] || continue
+        echo "SAMPLE $(cut -d' ' -f1 /proc/uptime) $(cat "$psy/voltage_now") $(cat "$psy/current_now")" \
+             "$(cat "$psy/current_avg") $(cat "$psy/temp") $(cat "$psy/capacity")"
+    done
+    i=$((i + 1))
+    [ "$i" -lt "$samples" ] && sleep "$interval"
+done
+echo '--- QG / ADC / SDAM kernel messages ---'
+dmesg | grep -iE 'qg|qgauge|sdam|adc5|vadc|battery|power_supply' | tail -n 20
+echo 'BATTERY_PROBE_END'

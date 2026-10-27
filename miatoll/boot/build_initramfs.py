@@ -21,23 +21,25 @@ TOUCH_FIRMWARE = 'focaltech_ts_fw_huaxing.bin'
 TOUCH_FIRMWARE_SHA256 = '83e7fb01d3a0595984c2b701633db83db4eb71eb4fd613aa635437a768ad6c9b'
 
 def build(output, profile='boot1'):
-    assert profile in ('boot1', 'display1', 'display2', 'touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1')
+    assert profile in ('boot1', 'display1', 'display2', 'touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1')
     script_names = ['init', 'usb-gadget', 'boot-probe']
     if profile != 'boot1':
         script_names += ['display-banner', 'display-probe']
-    touch = profile in ('touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1')
+    touch = profile in ('touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1')
     if touch:
         script_names += ['touch-probe', 'touch-events']
-    if profile in ('storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1'):
+    if profile in ('storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1'):
         script_names += ['storage-probe']
-    if profile in ('usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1'):
+    if profile in ('usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1'):
         script_names += ['usb-host-watch']
-    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1'):
+    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1'):
         script_names += ['wifi-start', 'wifi-services', 'wifi-board', 'wifi-probe', 'wifi-scan']
-    if profile in ('wifi2', 'wifi3', 'bt1'):
+    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1'):
         script_names += ['wifi-join', 'wifi-udhcpc', 'wifi-link-probe', 'wifi-disconnect']
-    if profile == 'bt1':
+    if profile in ('bt1', 'battery1'):
         script_names += ['bt-start', 'bt-probe']
+    if profile == 'battery1':
+        script_names += ['battery-probe']
     package = ROOT.parent / 'downloads/busybox-static-1.37.0-r20.apk'
     assert hashlib.sha256(package.read_bytes()).hexdigest() == APK_SHA256
     with tarfile.open(package, 'r:gz', ignore_zeros=True) as archive:
@@ -53,11 +55,11 @@ def build(output, profile='boot1'):
                 'blockdev', 'watchdog', 'tr', 'setsid', 'sleep', 'ln', 'ls', 'dmesg'}
     if touch:
         required |= {'hexdump', 'timeout', 'seq', 'cut', 'basename', 'readlink'}
-    if profile in ('storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1'):
+    if profile in ('storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1'):
         required |= {'dd', 'sha256sum', 'sync', 'chmod', 'uniq'}
-    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1'):
+    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1'):
         required |= {'sed', 'awk', 'mktemp', 'stat', 'mount', 'umount', 'cp', 'mv', 'rm', 'kill', 'ip'}
-    if profile in ('wifi2', 'wifi3', 'bt1'):
+    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1'):
         required |= {'stty', 'tee', 'ifconfig', 'udhcpc', 'ping'}
     with tempfile.TemporaryDirectory(prefix='boot1-busybox-') as temporary:
         executable = Path(temporary) / 'busybox'
@@ -87,7 +89,7 @@ def build(output, profile='boot1'):
         members.append(name)
     for name in ('.', 'bin', 'sbin', 'dev', 'proc', 'sys', 'run', 'etc', 'root'):
         add(name, stat.S_IFDIR | 0o755)
-    if profile in ('wifi2', 'wifi3', 'bt1'):
+    if profile in ('wifi2', 'wifi3', 'bt1', 'battery1'):
         # wpa_cli binds its client socket in /tmp.
         add('tmp', stat.S_IFDIR | 0o1777)
     add('dev/console', stat.S_IFCHR | 0o600, major=5, minor=1)
@@ -105,10 +107,10 @@ def build(output, profile='boot1'):
             add(name, stat.S_IFDIR | 0o755)
         add('lib/firmware/' + TOUCH_FIRMWARE, stat.S_IFREG | 0o644, firmware)
     wifi = {}
-    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1'):
+    if profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1'):
         import wifi_payload
-        wifi, wifi_summary = wifi_payload.load(ROOT.parent, connect=profile in ('wifi2', 'wifi3', 'bt1'))
-        if profile == 'bt1':
+        wifi, wifi_summary = wifi_payload.load(ROOT.parent, connect=profile in ('wifi2', 'wifi3', 'bt1', 'battery1'))
+        if profile in ('bt1', 'battery1'):
             import bluetooth_payload
             bluetooth, bluetooth_summary = bluetooth_payload.load(ROOT.parent)
             wifi.update(bluetooth)
@@ -125,7 +127,7 @@ def build(output, profile='boot1'):
             add(name, stat.S_IFREG | mode, data)
     add('TRAILER!!!', 0)
     allowed = {'lib', 'lib/firmware', 'lib/firmware/' + TOUCH_FIRMWARE} if firmware else set()
-    allowed |= {name for name in members if name.startswith('lib/firmware/') and profile in ('wifi1', 'wifi2', 'wifi3', 'bt1')}
+    allowed |= {name for name in members if name.startswith('lib/firmware/') and profile in ('wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1')}
     assert not any(name.startswith(('lib', 'vendor/', 'system/')) and name not in allowed
                    for name in members)
     compressed = gzip.compress(stream.getvalue(), mtime=0)

@@ -1,0 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0
+// Read-only PM6150 QG battery telemetry on top of the verified bt1 RAM test.
+#include "sm7125-xiaomi-curtana-bt1.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing battery1 test)";
+	chosen {
+		miatoll,boot-profile = "battery1-ram-only";
+	};
+};
+
+// Restore the common-board QG node; its driver only reads registers and SDAM.
+&pm6150_qgauge { status = "okay"; };
