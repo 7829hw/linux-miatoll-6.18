@@ -63,5 +63,12 @@
       "bytes": 166334,
       "sha256": "2deba3f7bc8aa811d4998cdb9044ed03e310bb006b6cf66040ed226f4846311a"
     }
+  },
+  "step_observations": {
+    "vkcube-start": {
+      "screen": "no change, text console stayed",
+      "backlight": "on",
+      "notes": "vkcube --wsi display segfaulted (exit 139) after selecting the GPU"
+    }
   }
 }

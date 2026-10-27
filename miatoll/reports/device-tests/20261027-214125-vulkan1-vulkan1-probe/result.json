@@ -63,5 +63,12 @@
       "bytes": 166334,
       "sha256": "ec3ccccdb3024ea9ec6884092bd0dca60f14f7a4b9856dd43fead1ae6e57dc0d"
     }
+  },
+  "step_observations": {
+    "vk-probe-start": {
+      "screen": "full screen alternating red, green, blue each second for 15 s",
+      "backlight": "on",
+      "notes": "vulkan1: Turnip VK_KHR_display clear/present seen by the user"
+    }
   }
 }

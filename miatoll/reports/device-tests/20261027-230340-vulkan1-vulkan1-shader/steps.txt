@@ -1,0 +1,37 @@
+### 2026-10-27T23:04:31 vk-shader-start
+$ rm -f /tmp/vs.txt; setsid sh -c "/usr/bin/vk-shader-probe 20 > /tmp/vs.txt 2>&1; echo VK_SHADER_RC=\$? >> /tmp/vs.txt" </dev/null >/dev/null 2>&1 & sleep 3; cat /tmp/vs.txt
+rm -f /tmp/vs.txt; setsid sh -c "/usr/bin/vk-shader-probe 20 > 
+/tmp/vs.txt 2>&1; echo VK_SHADER_RC=\$? >> /tmp/vs.txt" </dev/null >/dev/null 2>
+&1 & sleep 3; cat /tmp/vs.txt; printf "\nSTEP_DONE_230428=%s\n" "$?"
+step instance
+gpu Turnip Adreno (TM) 618
+step offscreen triangle
+pixel centre            (128,128) rgba= 84, 87, 85,255 ok
+pixel corner            (  2,  2) rgba=  0,  0,  0,255 ok
+pixel corner            (253,253) rgba=  0,  0,  0,255 ok
+pixel near-red-vertex   (128, 60) rgba=234, 11,  9,255 ok
+pixel near-green-vertex (184,161) rgba= 11,230, 14,255 ok
+pixel near-blue-vertex  ( 72,161) rgba= 11, 16,228,255 ok
+VK_SHADER_OFFSCREEN_OK
+step display
+display 1080x2400 format=50 images=2
+step present 20s
+
+STEP_DONE_230428=0
+[1]+  Done                       setsid sh -c "/usr/bin/vk-shader-probe 20 > /tmp/vs.txt 2>&1; echo VK_SHADER_RC=$? >> /tmp/vs.txt" 0</dev/null 1>/dev/null 2>&1
+miatoll-vulkan1# [6n
+### 2026-10-27T23:05:04 vk-shader-result
+$ sleep 5; tail -3 /tmp/vs.txt; /bin/gpu-probe | grep -E "faults|GPU_PROBE"; dmesg | grep -iE "fault|hang|recover|underrun" | grep -v "Kernel command\|pid_max\|iommu" | tail -3; echo DMESG_DONE
+sleep 5; tail -3 /tmp/vs.txt; /bin/gpu-probe | grep -E "faults|
+GPU_PROBE"; dmesg | grep -iE "fault|hang|recover|underrun" | grep -v "Kernel com
+mand\|pid_max\|iommu" | tail -3; echo DMESG_DONE; printf "\nSTEP_DONE_230459=%s\
+n" "$?"
+presented frames=1199 in 20s (60.0 fps)
+VK_SHADER_OK
+VK_SHADER_RC=0
+gpu_param faults=0x0 (0)
+GPU_PROBE_OK CP_MEM_WRITE executed
+DMESG_DONE
+
+STEP_DONE_230459=0
+miatoll-vulkan1# [6n
