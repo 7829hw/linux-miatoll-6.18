@@ -49,6 +49,7 @@ display1의 실제 화면 실패 로그를 보존하고 수정 후보는 `miatol
 | `miatoll/6.18-audio9` | WCD937x가 jack 등록 중 TX Slave runtime PM 참조 유지. MBHC 인터럽트 전달 확인 |
 | `miatoll/6.18-audio10`–`audio11` | MBHC 진단 로그(시험 전용)와 2.7 V 기준 MBHC 임계값 DT |
 | `miatoll/6.18-audio12` | audio11에서 진단 로그를 뺀 헤드셋 후보. 감지·제거·이어폰 마이크 실기기 확인 |
+| `miatoll/6.18-audio13` | audio12에 측정 전용 버튼 구간 DT. 3버튼 짧게 누름 15/15 확인 |
 
 최초 Git 보존 bundle은 백업 디렉터리의 `legacy-kernel.bundle`이다.
 공식 태그는 shallow fetch로 고정했으므로 모든 과거 upstream 이력을 보유한 전체 clone은 아니다.

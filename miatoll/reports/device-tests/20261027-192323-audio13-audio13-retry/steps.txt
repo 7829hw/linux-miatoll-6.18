@@ -1,0 +1,104 @@
+### 2026-10-27T19:24:06 boot-check
+$ tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; grep -E "^301[a-e]:" /sys/kernel/debug/regmap/*wcd937x_csr/registers | tr "\n" " "
+tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack";
+ grep -E "^301[a-e]:" /sys/kernel/debug/regmap/*wcd937x_csr/registers | tr "\n" 
+" "; printf "\nSTEP_DONE_192406=%s\n" "$?"
+On
+On
+301a: 18 301b: 30 301c: 48 301d: 80 301e: 90 
+STEP_DONE_192406=0
+miatoll-audio13# [6n
+### 2026-10-27T19:26:08 button-bins-voldown
+$ R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr); (timeout 90 cat /dev/input/event4 | hexdump -v -e "4/4 \"%08x \" 1/2 \" type=%u\" 1/2 \" code=%u\" 1/4 \" value=%d\n\"" > /tmp/btn.txt) & echo CAPTURE_READY; last=; i=0; while [ $i -lt 450 ]; do p=$(grep "Press detect" /proc/interrupts | awk "{print \$2}"); r=$(grep "Release detect" /proc/interrupts | awk "{print \$2}"); v=$(grep ^3019: $R/registers | cut -c7-); s="p=$p r=$r res=$v"; if [ "$s" != "$last" ]; then echo "S $(cut -d" " -f1 /proc/uptime) $s"; last="$s"; fi; sleep 0.2; i=$((i+1)); done; wait; grep "type=1 " /tmp/btn.txt; echo CAPTURE_DONE
+R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr); (timeout 90 c
+at /dev/input/event4 | hexdump -v -e "4/4 \"%08x \" 1/2 \" type=%u\" 1/2 \" code
+=%u\" 1/4 \" value=%d\n\"" > /tmp/btn.txt) & echo CAPTURE_READY; last=; i=0; whi
+le [ $i -lt 450 ]; do p=$(grep "Press detect" /proc/interrupts | awk "{print \$2
+}"); r=$(grep "Release detect" /proc/interrupts | awk "{print \$2}"); v=$(grep ^
+3019: $R/registers | cut -c7-); s="p=$p r=$r res=$v"; if [ "$s" != "$last" ]; th
+en echo "S $(cut -d" " -f1 /proc/uptime) $s"; last="$s"; fi; sleep 0.2; i=$((i+1
+)); done; wait; grep "type=1 " /tmp/btn.txt; echo CAPTURE_DONE; printf "\nSTEP_D
+ONE_192423=%s\n" "$?"
+CAPTURE_READY
+S 34.75 p=0 r=0 res=00
+S 40.85 p=1 r=0 res=03
+S 41.08 p=1 r=1 res=03
+S 43.42 p=2 r=1 res=03
+S 43.66 p=2 r=2 res=03
+S 45.76 p=3 r=2 res=03
+S 45.99 p=3 r=3 res=03
+S 48.77 p=4 r=4 res=03
+S 52.00 p=5 r=5 res=03
+Terminated
+00000028 00000000 000f143e 00000000 type=1 code=114 value=1
+00000028 00000000 000f148d 00000000 type=1 code=114 value=0
+0000002b 00000000 00074d4d 00000000 type=1 code=114 value=1
+0000002b 00000000 00074da7 00000000 type=1 code=114 value=0
+0000002d 00000000 000bedd7 00000000 type=1 code=114 value=1
+0000002d 00000000 000bee13 00000000 type=1 code=114 value=0
+00000030 00000000 000a9bcc 00000000 type=1 code=114 value=1
+00000030 00000000 000a9c42 00000000 type=1 code=114 value=0
+00000033 00000000 000ee62a 00000000 type=1 code=114 value=1
+00000033 00000000 000ee65d 00000000 type=1 code=114 value=0
+CAPTURE_DONE
+
+STEP_DONE_192423=0
+[1]+  Done                       (timeout 90 cat /dev/input/event4 | hexdump -v -e "4/4 "%08x " 1/2 " type=%u" 1/2 " code=%u" 1/4 " value=%d\n"" 1>/tmp/btn.txt)
+miatoll-audio13# [6n
+### 2026-10-27T19:28:15 button-bins-volup-media
+$ R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr); (timeout 90 cat /dev/input/event4 | hexdump -v -e "4/4 \"%08x \" 1/2 \" type=%u\" 1/2 \" code=%u\" 1/4 \" value=%d\n\"" > /tmp/btn.txt) & last=; i=0; while [ $i -lt 450 ]; do p=$(grep "Press detect" /proc/interrupts | awk "{print \$2}"); r=$(grep "Release detect" /proc/interrupts | awk "{print \$2}"); v=$(grep ^3019: $R/registers | cut -c7-); s="p=$p r=$r res=$v"; if [ "$s" != "$last" ]; then echo "S $(cut -d" " -f1 /proc/uptime) $s"; last="$s"; fi; sleep 0.2; i=$((i+1)); done; wait; grep "type=1 " /tmp/btn.txt; echo CAPTURE_DONE
+R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr); (timeout 90 c
+at /dev/input/event4 | hexdump -v -e "4/4 \"%08x \" 1/2 \" type=%u\" 1/2 \" code
+=%u\" 1/4 \" value=%d\n\"" > /tmp/btn.txt) & last=; i=0; while [ $i -lt 450 ]; d
+o p=$(grep "Press detect" /proc/interrupts | awk "{print \$2}"); r=$(grep "Relea
+se detect" /proc/interrupts | awk "{print \$2}"); v=$(grep ^3019: $R/registers |
+ cut -c7-); s="p=$p r=$r res=$v"; if [ "$s" != "$last" ]; then echo "S $(cut -d"
+ " -f1 /proc/uptime) $s"; last="$s"; fi; sleep 0.2; i=$((i+1)); done; wait; grep
+ "type=1 " /tmp/btn.txt; echo CAPTURE_DONE; printf "\nSTEP_DONE_192631=%s\n" "$?
+"
+S 162.56 p=5 r=5 res=03
+S 169.51 p=6 r=5 res=02
+S 169.74 p=6 r=6 res=02
+S 171.82 p=7 r=6 res=02
+S 172.05 p=7 r=7 res=02
+S 174.12 p=8 r=7 res=02
+S 174.35 p=8 r=8 res=02
+S 176.45 p=9 r=8 res=02
+S 176.68 p=9 r=9 res=02
+S 178.78 p=10 r=9 res=02
+S 179.01 p=10 r=10 res=02
+S 181.57 p=11 r=10 res=00
+S 181.80 p=11 r=11 res=00
+S 183.90 p=12 r=11 res=00
+S 184.14 p=12 r=12 res=00
+S 186.46 p=13 r=13 res=00
+S 188.77 p=14 r=13 res=00
+S 189.01 p=14 r=14 res=00
+S 191.32 p=15 r=14 res=00
+S 191.55 p=15 r=15 res=00
+Terminated
+000000a9 00000000 0009a403 00000000 type=1 code=115 value=1
+000000a9 00000000 0009a4bf 00000000 type=1 code=115 value=0
+000000ab 00000000 000cf66b 00000000 type=1 code=115 value=1
+000000ab 00000000 000cf6af 00000000 type=1 code=115 value=0
+000000ae 00000000 0002f7ea 00000000 type=1 code=115 value=1
+000000ae 00000000 0002f88d 00000000 type=1 code=115 value=0
+000000b0 00000000 000797bb 00000000 type=1 code=115 value=1
+000000b0 00000000 0007981e 00000000 type=1 code=115 value=0
+000000b2 00000000 000d9243 00000000 type=1 code=115 value=1
+000000b2 00000000 000d9288 00000000 type=1 code=115 value=0
+000000b5 00000000 000a4ec7 00000000 type=1 code=226 value=1
+000000b5 00000000 000a4efe 00000000 type=1 code=226 value=0
+000000b7 00000000 000f0d5a 00000000 type=1 code=226 value=1
+000000b7 00000000 000f0dce 00000000 type=1 code=226 value=0
+000000ba 00000000 0006b165 00000000 type=1 code=226 value=1
+000000ba 00000000 0006b1ac 00000000 type=1 code=226 value=0
+000000bc 00000000 000cb3da 00000000 type=1 code=226 value=1
+000000bc 00000000 000cb484 00000000 type=1 code=226 value=0
+000000bf 00000000 00058af7 00000000 type=1 code=226 value=1
+000000bf 00000000 00058ba1 00000000 type=1 code=226 value=0
+CAPTURE_DONE
+
+STEP_DONE_192631=0
+[1]+  Done                       (timeout 90 cat /dev/input/event4 | hexdump -v -e "4/4 "%08x " 1/2 " type=%u" 1/2 " code=%u" 1/4 " value=%d\n"" 1>/tmp/btn.txt)
+miatoll-audio13# [6n

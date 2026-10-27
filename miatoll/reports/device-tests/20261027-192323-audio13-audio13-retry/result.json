@@ -1,0 +1,62 @@
+{
+  "capture_id": "20261027-192323",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-audio13+",
+  "boot_profile": "audio13-ram-only",
+  "image": "boot-curtana-6.18.58-audio13.img",
+  "image_sha256": "a242e0aa4a82dfd2fb7b9b92d7dc09606f84e0c89b28a6c5f95409223da4d0e9",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-audio13/boot-curtana-6.18.58-audio13.img"
+  ],
+  "physical_display_confirmed": null,
+  "user_observation": "pending",
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "AUDIO13_BANNER_WRITTEN",
+      "AUDIO13_PROBE_BEGIN",
+      "AUDIO13_PROBE_END",
+      "AUDIO13_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "27:          0          0          0          0          0          0          0          0    GICv3 134 Level     arm-smmu-context-fault",
+      "28:          0          0          0          0          0          0          0          0    GICv3 135 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "audio13-fastboot-20261027-192323.txt": {
+      "bytes": 587,
+      "sha256": "5ad91b962b1330c2aa0cfc8c98808c9622d65b56a2605f8047a4f490ea255eac"
+    },
+    "audio13-serial-20261027-192323.txt": {
+      "bytes": 165483,
+      "sha256": "79fabad66afa0f468ed7c5f83918686016cb62ec2cacc6851bc16eab44527bd8"
+    }
+  }
+}

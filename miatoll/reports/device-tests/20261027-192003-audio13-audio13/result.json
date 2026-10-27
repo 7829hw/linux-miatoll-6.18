@@ -1,0 +1,31 @@
+{
+  "capture_id": "20261027-192003",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-audio13+",
+  "boot_profile": "audio13-ram-only",
+  "image": "boot-curtana-6.18.58-audio13.img",
+  "image_sha256": "a242e0aa4a82dfd2fb7b9b92d7dc09606f84e0c89b28a6c5f95409223da4d0e9",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-audio13/boot-curtana-6.18.58-audio13.img"
+  ],
+  "physical_display_confirmed": null,
+  "user_observation": "pending",
+  "restarted_from_shell": true,
+  "ram_boot_requests": 1,
+  "stopped": "No Linux ACM port after 120 s. Do not resend the image.",
+  "log_files": {
+    "audio13-fastboot-20261027-192003.txt": {
+      "bytes": 861,
+      "sha256": "c35ff33ed42ddc18d51c105b5ad30d5a84cd04010509dbe8b25a2bdc89ed6ba4"
+    }
+  }
+}
