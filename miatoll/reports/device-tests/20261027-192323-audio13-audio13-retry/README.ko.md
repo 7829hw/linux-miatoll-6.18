@@ -15,3 +15,9 @@
   - audio12에서 이벤트가 없던 2회는 사용자가 캡처 시간 밖에 누른 것으로 판단한다. 사용자도 제때 못 눌렀다고 했다.
 - 길게 누름(audio12)은 3버튼 모두 키 down/up이 정상이었다.
 - 결론: 최종 후보는 audio12 임계값을 그대로 쓴다. audio13 구간은 측정용이다.
+
+## 이어폰 마이크 녹음 청취 확인
+- `audio-path headset-mic` 경로로 10초를 녹음했다(48 kHz mono S16, peak −20.6 dBFS, RMS −44.4 dBFS).
+- `ram_boot_test.py pull`로 PC에 가져왔다. 4 KiB 청크마다 sha256을 확인했고 재시도는 0회였다. 전체 sha256은 `a50b49be017e5e605b5e9e5527cb335d21bc1840677a6dfbc8e79109074e841b`.
+- 파일은 Git 밖의 `dist/miatoll-audio13/private-logs/`에 있다. 원본과 −3 dBFS 정규화본(+17.6 dB)을 둘 다 두었다.
+- 사용자 청취 결과: "잘 들려, 숫자 세는 소리 또렷해". 음성 녹음을 사람이 직접 확인했다.

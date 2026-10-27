@@ -269,7 +269,8 @@ audio3(`20261027-125236`)는 q6afe가 거부 응답을 바로 전달하고 100 m
   - 짧게 누름: 가운데 KEY_MEDIA, 볼륨 + KEY_VOLUMEUP, 볼륨 − KEY_VOLUMEDOWN이 각 5/5였다.
   - 길게 누름도 down/up이 정상이었다.
   - 볼륨 −는 225–400 mV 구간으로 측정돼 audio12 임계값 안에 있다.
-- 미검증: 녹음 청취, 유휴 전력, system suspend 중 감지.
+- 이어폰 마이크 녹음 청취: 10초 녹음을 PC로 옮겨 사용자가 들었고, 숫자 세는 소리가 또렷하다고 확인했다(audio13).
+- 미검증: 유휴 전력, system suspend 중 감지.
 - audio13 첫 RAM 부팅은 Linux 시리얼 없이 Android로 넘어갔고, 재부팅 후 같은 이미지가 정상 부팅됐다. 원인은 미확인이다.
 - 기록: [audio6](reports/device-tests/20261027-135906-audio6/README.ko.md), [audio7](reports/device-tests/20261027-141835-audio7-audio7/README.ko.md),
   [audio8](reports/device-tests/20261027-143024-audio8-audio8/README.ko.md), [audio9](reports/device-tests/20261027-144600-audio9-audio9/README.ko.md),
