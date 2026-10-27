@@ -1,0 +1,112 @@
+{
+  "capture_id": "20261027-135906",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-audio6+",
+  "boot_profile": "audio6-ram-only",
+  "image": "boot-curtana-6.18.58-audio6.img",
+  "image_sha256": "9dbca1690908ebbaaa2f75e0a4ade50dc27846f5fd4bc8d8d55babed8c1162be",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-audio6/boot-curtana-6.18.58-audio6.img"
+  ],
+  "physical_display_confirmed": null,
+  "user_observation": "pending",
+  "restarted_from_shell": true,
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "AUDIO6_BANNER_WRITTEN",
+      "AUDIO6_PROBE_BEGIN",
+      "AUDIO6_PROBE_END",
+      "AUDIO6_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "27:          0          0          0          0          0          0          0          0    GICv3 134 Level     arm-smmu-context-fault",
+      "28:          0          0          0          0          0          0          0          0    GICv3 135 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "audio6-fastboot-20261027-135906.txt": {
+      "bytes": 859,
+      "sha256": "8bf9ace9f15ab7f28ea9f069877254b3a0f6831eb5dabf37e4a855b7483e5b9f"
+    },
+    "audio6-serial-20261027-135906.txt": {
+      "bytes": 164573,
+      "sha256": "f59965ff7df062a197c7c4911e817323866038c1184a6dc59bffc583746dd19b"
+    }
+  },
+  "followup_20261027": {
+    "runtime_pm_idle": "all SoundWire controllers, masters and WCD937x slaves suspended",
+    "wake_irq_gic587_count": 0,
+    "forced_power_control_on": {
+      "pending_mbhc_irq_serviced": true,
+      "replug_detected": true,
+      "z_milliohm": [
+        49282,
+        48728,
+        49699
+      ],
+      "headphone_jack": "On",
+      "mic_jack": "On"
+    },
+    "headset_mic_capture_rms_dbfs_0p5s": {
+      "speech": [
+        -36.6,
+        -37.4,
+        -38.2,
+        -41.2,
+        -48.4,
+        -44.9,
+        -44.6,
+        -43.6,
+        -41.5,
+        -46.0,
+        -48.5,
+        -62.2
+      ],
+      "silence": [
+        -39.8,
+        -46.9,
+        -52.5,
+        -51.4,
+        -56.9,
+        -65.3,
+        -58.8,
+        -55.6,
+        -59.5,
+        -56.1,
+        -57.2,
+        -54.1
+      ]
+    },
+    "human_listened_to_capture": false,
+    "conclusion": "SPI 555 is PDC pin 75; requested from the GIC directly the wake never arrives. audio7 routes it through the PDC."
+  }
+}

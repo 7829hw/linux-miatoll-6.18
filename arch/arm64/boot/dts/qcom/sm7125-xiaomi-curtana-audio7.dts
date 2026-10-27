@@ -1,0 +1,21 @@
+// SPDX-License-Identifier: GPL-2.0
+// Headset detection check: route the TX SoundWire wakeup interrupt
+// (downstream atoll-audio-overlay.dtsi: swr_wake_irq <0 555 0>) through the
+// PDC. SPI 555 is PDC pin 75 (sc7180 qcom,pdc-ranges <0 480 94>); audio6
+// requested it from the GIC directly, which left the PDC pin disabled and
+// the wake never arrived while the bus was in clock stop.
+#include "sm7125-xiaomi-curtana-audio5.dts"
+
+/ {
+	model = "Xiaomi Redmi Note 9S (Huaxing audio7 test)";
+	chosen {
+		miatoll,boot-profile = "audio7-ram-only";
+	};
+};
+
+&swr2 {
+	/delete-property/ interrupts;
+	interrupts-extended = <&intc GIC_SPI 296 IRQ_TYPE_LEVEL_HIGH>,
+			      <&pdc 75 IRQ_TYPE_LEVEL_HIGH>;
+	interrupt-names = "core", "wakeup";
+};

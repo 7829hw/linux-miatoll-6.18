@@ -1,0 +1,253 @@
+### 2026-10-27T13:59:53 wake-irq-check
+$ sleep 5; grep -iE "swr_wake|soundwire| WCD937x |mbhc sw|Elect" /proc/interrupts; cat /proc/asound/cards | head -1; dmesg | grep -iE "wake|swr|soundwire.*err|mbhc|ramp" | tail -6
+sleep 5; grep -iE "swr_wake|soundwire| WCD937x |mbhc sw|Elect" /
+proc/interrupts; cat /proc/asound/cards | head -1; dmesg | grep -iE "wake|swr|so
+undwire.*err|mbhc|ramp" | tail -6; printf "\nSTEP_DONE_135948=%s\n" "$?"
+188:          3          0          0          0          0          0          0          0    GICv3 329 Edge      soundwire
+189:          3          0          0          0          0          0          0          0    GICv3 328 Edge      soundwire
+190:          0          0          0          0          0          0          0          0    GICv3 587 Level     swr_wake_irq
+191:          0          0          0          0          0          0          0          0  WCD937x   0 Edge      wcd937x
+192:          0          0          0          0          0          0          0          0  wcd937x  14 Edge      HPHR PDM WDOG INT
+193:          0          0          0          0          0          0          0          0  wcd937x  13 Edge      HPHL PDM WDOG INT
+194:          0          0          0          0          0          0          0          0  wcd937x  15 Edge      AUX PDM WDOG INT
+195:          0          0          0          0          0          0          0          0  wcd937x   4 Edge      mbhc sw intr
+196:          0          0          0          0          0          0          0          0  wcd937x   0 Edge      Button Press detect
+197:          0          0          0          0          0          0          0          0  wcd937x   1 Edge      Button Release detect
+198:          0          0          0          0          0          0          0          0  wcd937x   3 Edge      Elect Insert
+199:          0          0          0          0          0          0          0          0  wcd937x   2 Edge      Elect Remove
+200:          0          0          0          0          0          0          0          0  wcd937x   7 Edge      HPH_L OCP detect
+201:          0          0          0          0          0          0          0          0  wcd937x   5 Edge      HPH_R OCP detect
+ 0 [Xiaomimiatoll  ]: sm8250 - Xiaomi-miatoll
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+[    3.670831] dwc3 a600000.usb: remote wakeup not configured
+
+STEP_DONE_135948=0
+miatoll-audio6# [6n
+### 2026-10-27T14:01:47 after-unplug
+$ sleep 1; grep -iE "swr_wake| WCD937x |mbhc sw|Elect" /proc/interrupts; for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tinymix -D 0 get "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "mbhc|ramp|z_val" | tail -4
+sleep 1; grep -iE "swr_wake| WCD937x |mbhc sw|Elect" /proc/inter
+rupts; for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tinymix -D 0 get "$c"
+ 2>&1 | head -n 1)"; done; dmesg | grep -iE "mbhc|ramp|z_val" | tail -4; printf 
+"\nSTEP_DONE_140146=%s\n" "$?"
+190:          0          0          0          0          0          0          0          0    GICv3 587 Level     swr_wake_irq
+191:          0          0          0          0          0          0          0          0  WCD937x   0 Edge      wcd937x
+192:          0          0          0          0          0          0          0          0  wcd937x  14 Edge      HPHR PDM WDOG INT
+193:          0          0          0          0          0          0          0          0  wcd937x  13 Edge      HPHL PDM WDOG INT
+194:          0          0          0          0          0          0          0          0  wcd937x  15 Edge      AUX PDM WDOG INT
+195:          0          0          0          0          0          0          0          0  wcd937x   4 Edge      mbhc sw intr
+196:          0          0          0          0          0          0          0          0  wcd937x   0 Edge      Button Press detect
+197:          0          0          0          0          0          0          0          0  wcd937x   1 Edge      Button Release detect
+198:          0          0          0          0          0          0          0          0  wcd937x   3 Edge      Elect Insert
+199:          0          0          0          0          0          0          0          0  wcd937x   2 Edge      Elect Remove
+200:          0          0          0          0          0          0          0          0  wcd937x   7 Edge      HPH_L OCP detect
+201:          0          0          0          0          0          0          0          0  wcd937x   5 Edge      HPH_R OCP detect
+Headphone Jack=Off
+Mic Jack=Off
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+
+STEP_DONE_140146=0
+miatoll-audio6# [6n
+### 2026-10-27T14:02:56 after-plug
+$ sleep 2; grep -iE "swr_wake| WCD937x |mbhc sw|Elect" /proc/interrupts; for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tinymix -D 0 get "$c" 2>&1 | head -n 1)"; done; dmesg | grep -iE "mbhc|ramp|z_val" | tail -4
+sleep 2; grep -iE "swr_wake| WCD937x |mbhc sw|Elect" /proc/inter
+rupts; for c in "Headphone Jack" "Mic Jack"; do echo "$c=$(tinymix -D 0 get "$c"
+ 2>&1 | head -n 1)"; done; dmesg | grep -iE "mbhc|ramp|z_val" | tail -4; printf 
+"\nSTEP_DONE_140254=%s\n" "$?"
+190:          0          0          0          0          0          0          0          0    GICv3 587 Level     swr_wake_irq
+191:          0          0          0          0          0          0          0          0  WCD937x   0 Edge      wcd937x
+192:          0          0          0          0          0          0          0          0  wcd937x  14 Edge      HPHR PDM WDOG INT
+193:          0          0          0          0          0          0          0          0  wcd937x  13 Edge      HPHL PDM WDOG INT
+194:          0          0          0          0          0          0          0          0  wcd937x  15 Edge      AUX PDM WDOG INT
+195:          0          0          0          0          0          0          0          0  wcd937x   4 Edge      mbhc sw intr
+196:          0          0          0          0          0          0          0          0  wcd937x   0 Edge      Button Press detect
+197:          0          0          0          0          0          0          0          0  wcd937x   1 Edge      Button Release detect
+198:          0          0          0          0          0          0          0          0  wcd937x   3 Edge      Elect Insert
+199:          0          0          0          0          0          0          0          0  wcd937x   2 Edge      Elect Remove
+200:          0          0          0          0          0          0          0          0  wcd937x   7 Edge      HPH_L OCP detect
+201:          0          0          0          0          0          0          0          0  wcd937x   5 Edge      HPH_R OCP detect
+Headphone Jack=Off
+Mic Jack=Off
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+
+STEP_DONE_140254=0
+miatoll-audio6# [6n
+### 2026-10-27T14:03:12 mbhc-regs-idle
+$ R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr | head -1); grep -E "^(3014|3015|3016|3023|3120|3121|3191|3192|3193|3194|3195|3196|3197):" $R/registers; cat /sys/bus/soundwire/devices/*/power/runtime_status 2>/dev/null; for d in /sys/bus/soundwire/devices/*; do echo "${d##*/} $(cat $d/power/runtime_status 2>/dev/null)"; done; cat /sys/bus/platform/devices/62630000.soundwire-controller/power/runtime_status
+R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr | head -1); grep
+ -E "^(3014|3015|3016|3023|3120|3121|3191|3192|3193|3194|3195|3196|3197):" $R/re
+gisters; cat /sys/bus/soundwire/devices/*/power/runtime_status 2>/dev/null; for 
+d in /sys/bus/soundwire/devices/*; do echo "${d##*/} $(cat $d/power/runtime_stat
+us 2>/dev/null)"; done; cat /sys/bus/platform/devices/62630000.soundwire-control
+ler/power/runtime_status; printf "\nSTEP_DONE_140312=%s\n" "$?"
+3014: bd
+3015: 09
+3016: 00
+3023: 22
+3120: 82
+3121: 06
+suspended
+suspended
+suspended
+suspended
+sdw-master-2-0 suspended
+sdw-master-3-0 suspended
+sdw:2:0:0217:010a:00:4 suspended
+sdw:3:0:0217:010a:00:3 suspended
+suspended
+
+STEP_DONE_140312=0
+miatoll-audio6# [6n
+### 2026-10-27T14:05:05 pm-force-on
+$ for c in /sys/bus/platform/devices/*soundwire*/power/control /sys/bus/soundwire/devices/*/power/control; do echo on > $c; echo "$c $(cat ${c%control}runtime_status)"; done; grep -E "swr|wcd937x|mbhc|Elect" /proc/interrupts
+for c in /sys/bus/platform/devices/*soundwire*/power/control /sy
+s/bus/soundwire/devices/*/power/control; do echo on > $c; echo "$c $(cat ${c%con
+trol}runtime_status)"; done; grep -E "swr|wcd937x|mbhc|Elect" /proc/interrupts; 
+printf "\nSTEP_DONE_140505=%s\n" "$?"
+/sys/bus/platform/devices/62610000.soundwire-controller/power/control active
+/sys/bus/platform/devices/62630000.soundwire-controller/power/control active
+/sys/bus/soundwire/devices/sdw-master-2-0/power/control active
+/sys/bus/soundwire/devices/sdw-master-3-0/power/control active
+/sys/bus/soundwire/devices/sdw:2:0:0217:010a:00:4/power/control active
+/sys/bus/soundwire/devices/sdw:3:0:0217:010a:00:3/power/control active
+190:          0          0          0          0          0          0          0          0    GICv3 587 Level     swr_wake_irq
+191:          1          0          0          0          0          0          0          0  WCD937x   0 Edge      wcd937x
+192:          0          0          0          0          0          0          0          0  wcd937x  14 Edge      HPHR PDM WDOG INT
+193:          0          0          0          0          0          0          0          0  wcd937x  13 Edge      HPHL PDM WDOG INT
+194:          0          0          0          0          0          0          0          0  wcd937x  15 Edge      AUX PDM WDOG INT
+195:          1          0          0          0          0          0          0          0  wcd937x   4 Edge      mbhc sw intr
+196:          0          0          0          0          0          0          0          0  wcd937x   0 Edge      Button Press detect
+197:          0          0          0          0          0          0          0          0  wcd937x   1 Edge      Button Release detect
+198:          0          0          0          0          0          0          0          0  wcd937x   3 Edge      Elect Insert
+199:          0          0          0          0          0          0          0          0  wcd937x   2 Edge      Elect Remove
+200:          0          0          0          0          0          0          0          0  wcd937x   7 Edge      HPH_L OCP detect
+201:          0          0          0          0          0          0          0          0  wcd937x   5 Edge      HPH_R OCP detect
+
+STEP_DONE_140505=0
+miatoll-audio6# [6n
+### 2026-10-27T14:05:15 jack-after-pm-on
+$ tinymix -D 0 get "Headphone Jack" ; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "mbhc|wcd937x|zdet|imped" | tail -15
+tinymix -D 0 get "Headphone Jack" ; tinymix -D 0 get "Mic Jack";
+ dmesg | grep -iE "mbhc|wcd937x|zdet|imped" | tail -15; printf "\nSTEP_DONE_1405
+15=%s\n" "$?"
+Off
+Off
+[    1.278080] wcd937x_codec codec: bound sdw:2:0:0217:010a:00:4 (ops wcd_sdw_component_ops)
+[    1.278203] wcd937x_codec codec: bound sdw:3:0:0217:010a:00:3 (ops wcd_sdw_component_ops)
+[  330.168585] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  330.170819] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  330.173044] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  330.175214] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_140515=0
+miatoll-audio6# [6n
+### 2026-10-27T14:07:15 replug-pm-on
+$ grep -E "wcd937x|mbhc|Elect|swr_wake" /proc/interrupts | awk "{print \$1,\$2,\$NF,\$(NF-1)}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 get "Mic Jack"; dmesg | grep -iE "mbhc|wcd937x|zdet|imped|z_val" | tail -12
+grep -E "wcd937x|mbhc|Elect|swr_wake" /proc/interrupts | awk "{p
+rint \$1,\$2,\$NF,\$(NF-1)}"; tinymix -D 0 get "Headphone Jack"; tinymix -D 0 ge
+t "Mic Jack"; dmesg | grep -iE "mbhc|wcd937x|zdet|imped|z_val" | tail -12; print
+f "\nSTEP_DONE_140715=%s\n" "$?"
+190: 0 swr_wake_irq Level
+191: 3 wcd937x Edge
+192: 0 INT WDOG
+193: 0 INT WDOG
+194: 0 INT WDOG
+195: 3 intr sw
+196: 0 detect Press
+197: 0 detect Release
+198: 0 Insert Elect
+199: 0 Remove Elect
+200: 0 detect OCP
+201: 0 detect OCP
+On
+On
+[    1.278203] wcd937x_codec codec: bound sdw:3:0:0217:010a:00:3 (ops wcd_sdw_component_ops)
+[  330.168585] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  330.170819] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  330.173044] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  330.175214] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  445.946866] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2323, z_val=49282 (milliohm)
+[  445.992680] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x2364, z_val=48728 (milliohm)
+[  446.038306] wcd937x_codec codec: wcd937x_mbhc_get_result_params: d1=5, c1=3, x1=0x22f3, z_val=49699 (milliohm)
+[  449.244585] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  449.246862] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  449.248599] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+[  449.250352] wcd937x_codec codec: Impedance detect ramp error, c1=2, x1=0x0
+
+STEP_DONE_140715=0
+miatoll-audio6# [6n
+### 2026-10-27T14:07:49 headset-mic-pm-on
+$ audio-path headset-mic on; (sleep 2; R=$(ls -d /sys/kernel/debug/regmap/*wcd937x_csr|head -1); grep -E "^(3014|3015|3023|3021|3022):" $R/registers) & /bin/pcm-test record 2 6 /tmp/hs.wav; wait; audio-path headset-mic off
+audio-path headset-mic on; (sleep 2; R=$(ls -d /sys/kernel/debug
+/regmap/*wcd937x_csr|head -1); grep -E "^(3014|3015|3023|3021|3022):" $R/registe
+rs) & /bin/pcm-test record 2 6 /tmp/hs.wav; wait; audio-path headset-mic off; pr
+intf "\nSTEP_DONE_140742=%s\n" "$?"
+AUDIO_PATH headset-mic on failures=0
+pcm_configured=1 rate=48000 channels=1 format=S16_LE period_frames=960 buffer_frames=3840
+capture_start=1 seconds=6
+3014: 9d
+3015: 89
+3021: a0
+3022: 22
+3023: 62
+capture_frames=288000 peak_s16=1457 peak_dbfs=-27.0 rms_dbfs=-41.5
+capture_file=/tmp/hs.wav bytes=576044
+pcm_test_exit=0
+AUDIO_PATH headset-mic off failures=0
+
+STEP_DONE_140742=0
+[1]+  Done                       (sleep 2; ; grep -E "^(3014|3015|3023|3021|3022):" ${R}/registers)
+miatoll-audio6# [6n
+### 2026-10-27T14:08:18 headset-mic-silence-pm-on
+$ audio-path headset-mic on; /bin/pcm-test record 2 6 /tmp/hs-quiet.wav; audio-path headset-mic off
+audio-path headset-mic on; /bin/pcm-test record 2 6 /tmp/hs-quie
+t.wav; audio-path headset-mic off; printf "\nSTEP_DONE_140811=%s\n" "$?"
+AUDIO_PATH headset-mic on failures=0
+pcm_configured=1 rate=48000 channels=1 format=S16_LE period_frames=960 buffer_frames=3840
+capture_start=1 seconds=6
+capture_frames=288000 peak_s16=695 peak_dbfs=-33.5 rms_dbfs=-48.9
+capture_file=/tmp/hs-quiet.wav bytes=576044
+pcm_test_exit=0
+AUDIO_PATH headset-mic off failures=0
+
+STEP_DONE_140811=0
+miatoll-audio6# [6n
+### 2026-10-27T14:08:29 segment-rms
+$ for f in /tmp/hs.wav /tmp/hs-quiet.wav; do echo "== $f"; dd if=$f bs=44 skip=1 2>/dev/null | od -An -td2 -v -w2 | awk "{s+=\$1*\$1; if(\$1>p)p=\$1; if(-\$1>p)p=-\$1; n++; if(n==24000){printf \"%d:%.1f/%.1f \", ++k, 10*log(s/n/1073741824)/log(10), 20*log(p/32768+1e-9)/log(10); s=0;n=0;p=0}} END{print \"\"}"; done
+for f in /tmp/hs.wav /tmp/hs-quiet.wav; do echo "== $f"; dd if=$
+f bs=44 skip=1 2>/dev/null | od -An -td2 -v -w2 | awk "{s+=\$1*\$1; if(\$1>p)p=\
+$1; if(-\$1>p)p=-\$1; n++; if(n==24000){printf \"%d:%.1f/%.1f \", ++k, 10*log(s/
+n/1073741824)/log(10), 20*log(p/32768+1e-9)/log(10); s=0;n=0;p=0}} END{print \"\
+"}"; done; printf "\nSTEP_DONE_140829=%s\n" "$?"
+== /tmp/hs.wav
+/bin/sh: od: not found
+
+== /tmp/hs-quiet.wav
+/bin/sh: od: not found
+
+
+STEP_DONE_140829=0
+miatoll-audio6# [6n
+### 2026-10-27T14:08:43 segment-rms-hexdump
+$ for f in /tmp/hs.wav /tmp/hs-quiet.wav; do echo "== $f"; dd if=$f bs=44 skip=1 2>/dev/null | hexdump -v -e "1/2 \"%u\n\"" | awk "{v=\$1; if(v>32767)v-=65536; s+=v*v; if(v>p)p=v; if(-v>p)p=-v; n++; if(n==24000){printf \"%d:%.1f/%.1f \", ++k, 10*log(s/n/1073741824)/log(10), 20*log(p/32768+1e-9)/log(10); s=0;n=0;p=0}} END{print \"\"}"; done
+for f in /tmp/hs.wav /tmp/hs-quiet.wav; do echo "== $f"; dd if=$
+f bs=44 skip=1 2>/dev/null | hexdump -v -e "1/2 \"%u\n\"" | awk "{v=\$1; if(v>32
+767)v-=65536; s+=v*v; if(v>p)p=v; if(-v>p)p=-v; n++; if(n==24000){printf \"%d:%.
+1f/%.1f \", ++k, 10*log(s/n/1073741824)/log(10), 20*log(p/32768+1e-9)/log(10); s
+=0;n=0;p=0}} END{print \"\"}"; done; printf "\nSTEP_DONE_140841=%s\n" "$?"
+== /tmp/hs.wav
+1:-36.6/-27.6 2:-37.4/-27.4 3:-38.2/-27.0 4:-41.2/-28.7 5:-48.4/-34.1 6:-44.9/-33.1 7:-44.6/-35.0 8:-43.6/-32.3 9:-41.5/-30.8 10:-46.0/-34.4 11:-48.5/-35.0 12:-62.2/-48.9 
+== /tmp/hs-quiet.wav
+1:-39.8/-33.5 2:-46.9/-37.6 3:-52.5/-43.5 4:-51.4/-44.9 5:-56.9/-48.7 6:-65.3/-52.0 7:-58.8/-49.5 8:-55.6/-48.7 9:-59.5/-50.8 10:-56.1/-47.8 11:-57.2/-48.9 12:-54.1/-46.4 
+
+STEP_DONE_140841=0
+miatoll-audio6# [6n
+### 2026-10-27T14:09:55 core-irq-count
+$ grep -E "soundwire|swr|62630000|62610000" /proc/interrupts
+grep -E "soundwire|swr|62630000|62610000" /proc/interrupts; prin
+tf "\nSTEP_DONE_140955=%s\n" "$?"
+188:          4          0          0          0          0          0          0          0    GICv3 329 Edge      soundwire
+189:         15          0          0          0          0          0          0          0    GICv3 328 Edge      soundwire
+190:          0          0          0          0          0          0          0          0    GICv3 587 Level     swr_wake_irq
+
+STEP_DONE_140955=0
+miatoll-audio6# [6n
