@@ -1,0 +1,160 @@
+### 2026-10-27T11:35:07 battery-probe
+$ battery-probe 5 3
+battery-probe 5 3; printf "\nSTEP_DONE_113455=%s\n" "$?"
+BATTERY_PROBE_BEGIN
+--- qcom_qg type=Battery
+capacity=100
+charge_full=5052000
+charge_full_design=5020000
+current_avg=-47302
+current_now=-87585
+status=Unknown
+technology=Li-ion
+temp=256
+type=Battery
+voltage_avg=4455046
+voltage_max_design=4400000
+voltage_min_design=3400000
+voltage_now=4480933
+voltage_ocv=4417900
+waiting_for_supplier=0
+--- tcpm-source-psy-c440000.spmi:pmic@0:typec@1500 type=USB
+current_max=0
+current_now=0
+online=0
+type=USB
+usb_type=[C] PD PD_PPS
+voltage_max=0
+voltage_min=0
+voltage_now=0
+waiting_for_supplier=0
+--- QG peripheral SUBTYPE (PMIC 0x4805, read-only regmap debugfs) ---
+0-00 4805: 04
+0-01 4805: 6b
+0-04 4805: XX
+0-05 4805: 7d
+--- samples: uptime voltage_now current_now current_avg temp capacity ---
+SAMPLE 8.64 4480933 -87585 -47302 257 100
+SAMPLE 11.66 4481127 -85296 -47302 257 100
+SAMPLE 14.68 4480738 -86669 -47302 257 100
+SAMPLE 17.71 4481322 -85601 -47302 257 100
+SAMPLE 20.73 4480543 -85754 -47302 257 100
+--- QG / ADC / SDAM kernel messages ---
+[    0.000000] Linux version 6.18.58-miatoll-battery1+ (miatoll@lts) (Ubuntu clang version 18.1.3 (1ubuntu1), Ubuntu LLD 18.1.3) #1 SMP PREEMPT 2026-10-26 00:00:00 +0000
+[    0.000000] Machine model: Xiaomi Redmi Note 9S (Huaxing battery1 test)
+[    0.000000] Kernel command line: rcupdate.rcu_expedited=1 rcu_nocbs=0-7 noirqdebug rdinit=/init console=tty0 loglevel=8 ignore_loglevel clk_ignore_unused pd_ignore_unused no_console_suspend deferred_probe_timeout=30 panic=0 enforcing=0 miatoll_boot=battery1 consoleblank=0 drm.debug=0x06 androidboot.verifiedbootstate=orange androidboot.keymaster=1  androidboot.bootdevice=1d84000.ufshc androidboot.fstab_suffix=default androidboot.boot_devices=soc/1d84000.ufshc androidboot.serialno=REDACTED androidboot.cpuid=0xd7896932 androidboot.multisim_config=dsds androidboot.dp=0x0 androidboot.baseband=msm msm_drm.dsi_display0=dsi_ft8756_huaxing_vid_display: androidboot.fpsensor=fpc androidboot.lcmtype=dsi_nt36672c_huaxing_fhd_video_display androidboot.dtbo_idx=0 androidboot.dtb_idx=0 androidboot.secureboot=1 androidboot.hwc=Global_TWO androidboot.hwversion=1.91.0 androidboot.hwlevel=MP androidboot.hwname=curtana androidboot.AdcVol1=182 androidboot.AdcVol2=1400
+[    0.000000] Unknown kernel command line parameters "rcu_nocbs=0-7 miatoll_boot=battery1", will be passed to user space.
+[    0.922915]     miatoll_boot=battery1
+BATTERY_PROBE_END
+
+STEP_DONE_113455=0
+miatoll-battery1# [6n
+### 2026-10-27T11:35:59 battery-unplug-logger-start
+$ setsid sh -c "i=0; while [ \$i -lt 90 ]; do echo \"\$(cut -d\" \" -f1 /proc/uptime) \$(cat /sys/class/power_supply/qcom_qg/voltage_now) \$(cat /sys/class/power_supply/qcom_qg/current_now) \$(cat /sys/class/power_supply/qcom_qg/current_avg) usb_online=\$(cat /sys/class/power_supply/tcpm-source-psy-*/online) vbus=\$(cat /sys/kernel/debug/usb/a600000.usb/mode)\" >> /run/battery-unplug.log; printf \"\\r BAT t=%ss \" \$i >/dev/tty1; sleep 1; i=\$((i+1)); done; echo DONE >> /run/battery-unplug.log" </dev/null >/dev/null 2>&1 & sleep 2; tail -n 2 /run/battery-unplug.log
+setsid sh -c "i=0; while [ \$i -lt 90 ]; do echo \"\$(cut -d\"
+ \" -f1 /proc/uptime) \$(cat /sys/class/power_supply/qcom_qg/voltage_now) \$(cat
+ /sys/class/power_supply/qcom_qg/current_now) \$(cat /sys/class/power_supply/qco
+m_qg/current_avg) usb_online=\$(cat /sys/class/power_supply/tcpm-source-psy-*/on
+line) vbus=\$(cat /sys/kernel/debug/usb/a600000.usb/mode)\" >> /run/battery-unpl
+ug.log; printf \"\\r BAT t=%ss \" \$i >/dev/tty1; sleep 1; i=\$((i+1)); done; ec
+ho DONE >> /run/battery-unplug.log" </dev/null >/dev/null 2>&1 & sleep 2; tail -
+n 2 /run/battery-unplug.log; printf "\nSTEP_DONE_113557=%s\n" "$?"
+70.62 4480933 -81787 -74310 usb_online=0 vbus=device
+71.63 4481516 -83923 -74310 usb_online=0 vbus=device
+
+STEP_DONE_113557=0
+[1]+  Done                       setsid sh -c "i=0; while [ $i -lt 90 ]; do echo "$(cut -d" " -f1 /proc/uptime) $(cat /sys/class/power_supply/qcom_qg/voltage_now) $(cat /sys/class/power_supply/qcom_qg/current_now) $(cat /sys/class/power_supply/qcom_qg/current_avg) usb_online=$(cat /sys/class/power_supply/tcpm-source-psy-*/online) vbus=$(cat /sys/kernel/debug/usb/a600000.usb/mode)" >> /run/battery-unplug.log; printf "\r BAT t=%ss " $i >/dev/tty1; sleep 1; i=$((i+1)); done; echo DONE >> /run/battery-unplug.log" 0</dev/null 1>/dev/null 2>&1
+miatoll-battery1# [6n
+### 2026-10-27T11:37:23 battery-unplug-log
+$ sleep 3; cat /run/battery-unplug.log
+^[[6nsleep 3; cat /run/battery-unplug.log; pri
+ntf "\nSTEP_DONE_113723=%s\n" "$?"
+/bin/sh: miatoll-battery1^[[6nsleep: not found
+70.62 4480933 -81787 -74310 usb_online=0 vbus=device
+71.63 4481516 -83923 -74310 usb_online=0 vbus=device
+72.64 4481906 -82702 -74310 usb_online=0 vbus=device
+73.66 4480933 -84228 -74310 usb_online=0 vbus=device
+74.68 4481516 -84228 -74310 usb_online=0 vbus=device
+75.69 4480933 -82855 -74310 usb_online=0 vbus=device
+76.71 4480933 -83465 -74310 usb_online=0 vbus=device
+77.73 4481127 -82244 -74310 usb_online=0 vbus=device
+78.75 4481711 -81787 -74310 usb_online=0 vbus=device
+79.77 4480738 -83770 -74310 usb_online=0 vbus=device
+80.78 4481127 -82550 -74310 usb_online=0 vbus=device
+81.80 4480933 -84838 -74310 usb_online=0 vbus=device
+82.82 4480738 -83160 -74310 usb_online=0 vbus=device
+83.84 4480738 -81329 -74310 usb_online=0 vbus=device
+84.85 4482100 -81634 -74310 usb_online=0 vbus=device
+85.87 4480543 -81634 -74310 usb_online=0 vbus=device
+86.89 4480933 -82550 -74310 usb_online=0 vbus=device
+87.91 4480738 -82244 -74310 usb_online=0 vbus=device
+88.93 4481322 -82244 -74310 usb_online=0 vbus=device
+89.94 4480933 -81176 -74310 usb_online=0 vbus=device
+90.96 4481127 -83770 -74310 usb_online=0 vbus=device
+91.98 4481127 -82855 -74310 usb_online=0 vbus=device
+92.99 4481127 -81176 -74310 usb_online=0 vbus=device
+94.01 4481322 -81176 -74310 usb_online=0 vbus=device
+95.03 4481127 -82397 -74310 usb_online=0 vbus=device
+96.05 4394124 89721 -74310 usb_online=0 vbus=device
+97.06 4396460 58288 -74310 usb_online=0 vbus=device
+98.08 4394903 57830 -74310 usb_online=0 vbus=device
+99.10 4391010 59204 -74310 usb_online=0 vbus=device
+100.12 4393541 55389 -74310 usb_online=0 vbus=device
+101.13 4392567 56610 -74310 usb_online=0 vbus=device
+102.15 4392373 56610 -74310 usb_online=0 vbus=device
+103.17 4391789 56610 -74310 usb_online=0 vbus=device
+104.19 4391789 57067 -74310 usb_online=0 vbus=device
+105.21 4391010 56610 -74310 usb_online=0 vbus=device
+106.23 4391399 54779 -74310 usb_online=0 vbus=device
+107.24 4391594 51116 -74310 usb_online=0 vbus=device
+108.26 4390037 55847 -74310 usb_online=0 vbus=device
+109.28 4389453 56457 -74310 usb_online=0 vbus=device
+110.29 4390621 54016 -74310 usb_online=0 vbus=device
+111.31 4389258 57983 -74310 usb_online=0 vbus=device
+112.33 4390816 48370 -74310 usb_online=0 vbus=device
+113.34 4385755 65612 -74310 usb_online=0 vbus=device
+114.36 4388869 62408 -74310 usb_online=0 vbus=device
+115.38 4389453 56610 -74310 usb_online=0 vbus=device
+116.39 4387312 64697 -74310 usb_online=0 vbus=device
+117.41 4389064 47607 -74310 usb_online=0 vbus=device
+118.43 4388675 56304 -74310 usb_online=0 vbus=device
+119.45 4388869 57983 -74310 usb_online=0 vbus=device
+120.46 4387896 55542 -74310 usb_online=0 vbus=device
+121.48 4388285 56610 -74310 usb_online=0 vbus=device
+122.50 4386923 56610 -74310 usb_online=0 vbus=device
+123.51 4387701 57678 -74310 usb_online=0 vbus=device
+124.53 4387312 56915 -74310 usb_online=0 vbus=device
+125.55 4387312 57373 -74310 usb_online=0 vbus=device
+126.57 4387701 55694 -74310 usb_online=0 vbus=device
+127.59 4387507 54931 -74310 usb_online=0 vbus=device
+128.61 4388285 51574 -20294 usb_online=0 vbus=device
+129.63 4387312 55999 -20294 usb_online=0 vbus=device
+130.64 4381668 76141 -20294 usb_online=0 vbus=device
+131.66 4387701 53863 -20294 usb_online=0 vbus=device
+132.67 4387312 57220 -20294 usb_online=0 vbus=device
+133.69 4388091 48828 -20294 usb_online=0 vbus=device
+134.71 4387896 55389 -20294 usb_online=0 vbus=device
+135.73 4387312 58288 -20294 usb_online=0 vbus=device
+136.75 4386534 54931 -20294 usb_online=0 vbus=device
+137.76 4387117 55999 -20294 usb_online=0 vbus=device
+138.78 4387117 47912 -20294 usb_online=0 vbus=device
+139.80 4412810 0 -20294 usb_online=0 vbus=device
+140.81 4481127 -102844 -20294 usb_online=0 vbus=device
+141.83 4480738 -94451 -20294 usb_online=0 vbus=device
+142.85 4481322 -91857 -20294 usb_online=0 vbus=device
+143.87 4481322 -92010 -20294 usb_online=0 vbus=device
+144.88 4481322 -90789 -20294 usb_online=0 vbus=device
+145.90 4480933 -90179 -20294 usb_online=0 vbus=device
+146.92 4481322 -91247 -20294 usb_online=0 vbus=device
+147.94 4480933 -89721 -20294 usb_online=0 vbus=device
+148.96 4481127 -88653 -20294 usb_online=0 vbus=device
+149.98 4480738 -89111 -20294 usb_online=0 vbus=device
+150.99 4480154 -88958 -20294 usb_online=0 vbus=device
+152.01 4480543 -88195 -20294 usb_online=0 vbus=device
+153.03 4481322 -88043 -20294 usb_online=0 vbus=device
+154.04 4480738 -88501 -20294 usb_online=0 vbus=device
+155.06 4481127 -86975 -20294 usb_online=0 vbus=device
+156.08 4480738 -86517 -20294 usb_online=0 vbus=device
+
+STEP_DONE_113723=0
+miatoll-battery1# [6n

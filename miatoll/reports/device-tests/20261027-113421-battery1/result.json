@@ -1,0 +1,115 @@
+{
+  "capture_id": "20261027-113421",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-battery1+",
+  "boot_profile": "battery1-ram-only",
+  "image": "boot-curtana-6.18.58-battery1.img",
+  "image_sha256": "4cc74859c623c8bfb135dfda39d88e9f019e9abf1a74758a97981e0e60560711",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-battery1/boot-curtana-6.18.58-battery1.img"
+  ],
+  "physical_display_confirmed": true,
+  "user_observation": {
+    "screen": "BATTERY TEST 1 banner and BAT counter normal, no reboot, including while USB was unplugged",
+    "backlight": "on",
+    "notes": ""
+  },
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "BATTERY1_BANNER_WRITTEN",
+      "BATTERY1_PROBE_BEGIN",
+      "BATTERY1_PROBE_END",
+      "BATTERY1_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "27:          0          0          0          0          0          0          0          0    GICv3 134 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "battery1-fastboot-20261027-113421.txt": {
+      "bytes": 589,
+      "sha256": "5bbd4a894e1d7bf16457b2f30979ef92ace98d7828965d51d17da37f274e3903"
+    },
+    "battery1-serial-20261027-113421.txt": {
+      "bytes": 157858,
+      "sha256": "2e4763f65cd96b36a2a3ccfc5bbae0895266f658c2eb83f4f8c2df812a8bec84"
+    },
+    "android-reference/android-dumpsys.txt": {
+      "bytes": 2837,
+      "sha256": "f759460308fb2aae661784c004d1967f1220b782aca9c5b571766863971a1c2f"
+    },
+    "battery-unplug-log.txt": {
+      "bytes": 4777,
+      "sha256": "57179324bebbd8e3ab7f00a965cf8aaae554b7e8fe406f1883addf1637c567d1"
+    },
+    "steps.txt": {
+      "bytes": 9392,
+      "sha256": "b0bc7a8d70d1b4456fe679af9b83f715c017d9508bb8fe5c8db2eb434e0e564b"
+    }
+  },
+  "battery_telemetry_confirmed": true,
+  "battery": {
+    "driver": "6.14.7 fork qcom_qg (read-only registers, ADC, SDAM)",
+    "qg_subtype": "0x04 (PM6150 0x4805; downstream QG_ADC_IBAT_10A)",
+    "scale_finding": "fork uses 152.588 uA/LSB (5 A subtype); downstream uses 305.176 uA/LSB for subtype 0x04, so reported current is half",
+    "sign_finding": "raw value is negative while charging and positive while discharging; the power_supply ABI expects the opposite",
+    "voltage": "194.637 uV/LSB matches downstream V_RAW_TO_UV; 4.481 V while charging, 4.381-4.396 V on battery; SDAM OCV 4.418 V",
+    "unplug_test": {
+      "plugged_raw_ua": [
+        -92000,
+        -81000
+      ],
+      "unplugged_raw_ua": [
+        48000,
+        76000
+      ],
+      "unplug_window_s": [
+        97,
+        137
+      ],
+      "corrected_estimate_ma": {
+        "charging": "about 165-185 into the battery",
+        "discharging": "about 110 out of the battery"
+      }
+    },
+    "temp_decidegc": 256,
+    "capacity": "100 (voltage-linear in the fork driver)",
+    "status": "Unknown (fork driver constant)",
+    "typec_psy": "tcpm source psy online=0 with the USB-A cable (no Type-C partner), expected",
+    "android_reference": {
+      "source": "adb dumpsys battery before this boot (read-only)",
+      "level": 100,
+      "status": "FULL (5)",
+      "voltage_mv": 4420,
+      "temp_decidegc": 249,
+      "note": "shell SELinux denied direct power_supply sysfs reads; dumpsys has no instantaneous current"
+    }
+  }
+}

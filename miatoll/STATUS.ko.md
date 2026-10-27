@@ -10,6 +10,7 @@ Wi-Fi firmware·검색을 실기기로 확인한 브랜치: **`miatoll/6.18-wifi
 WPA3 연결·IPv4 통신을 실기기로 확인한 브랜치: **`miatoll/6.18-wifi2`**(wifi1과 같은 커널).
 Wi-Fi 지연을 개선한 브랜치: **`miatoll/6.18-wifi3`**(wifi2 + ath10k WCN3990 PMF peer 비트 backport).
 Bluetooth 초기화·검색을 실기기로 확인한 브랜치: **`miatoll/6.18-bt1`**(wifi3 기반).
+배터리 계측을 실기기로 확인한 브랜치: **`miatoll/6.18-battery1`**(bt1 기반, 전류 배율·부호 수정 필요).
 공식 Linux **v6.18.58**을 기반으로, 6.14.7 포크의 Xiaomi 하드웨어 구현을 직접 선별 이식했다.
 기존 로컬 커널 수정은 보존 브랜치와 백업에 남겼다.
 
@@ -198,6 +199,14 @@ firmware 초기화가 완료됐지만 공개 주소가 없어 unconfigured였다
 같은 이미지로 두 번 Galaxy Buds Pro와 BR/EDR Just Works 페어링(`pairing_complete=1`)과 직후 기본 연결을 확인했다.
 프로필이 없어 수 초 뒤 기본 연결은 해제됐다. 같은 부팅에서 A2DP SBC 3초 시험음을 보냈고, 사용자가 이어폰에서 들었다고 확인했다.
 [페어링 재확인 기록](reports/device-tests/20261027-035503-bt1-pair-recheck/README.ko.md)
+
+## battery1 실기기 결과: QG 계측과 전류 배율·부호 문제
+
+`20261027-113421` 회차는 bt1에 포크의 읽기 전용 QG 드라이버와 SDAM을 내장했다.
+전압·OCV·온도 읽기는 정상이었다. QG SUBTYPE이 0x04(10 A)여서 포크의 고정 5 A 배율로는 전류가 절반으로 보고된다.
+USB 분리 시험에서 원시 부호가 충전 음수·방전 양수로 power_supply ABI와 반대임을 확인했다.
+충전 제어 드라이버는 없다. 다음 후보 battery2에서 SUBTYPE 기반 배율과 부호를 고친다.
+[battery1 실기기 기록](reports/device-tests/20261027-113421-battery1/README.ko.md)
 
 ## 하드웨어별 상태
 

@@ -1,0 +1,10 @@
+{
+  "downstream": "LineageOS/android_kernel_xiaomi_sm6250 803b55865869df8558ef07f51bfb8182d95d08ed",
+  "qg-defs.h": {"url": "https://raw.githubusercontent.com/LineageOS/android_kernel_xiaomi_sm6250/803b55865869df8558ef07f51bfb8182d95d08ed/drivers/power/supply/qcom/qg-defs.h",
+                "sha256": "0ac4631945d58f5380fd4d32fab89272c84e3e22114beb2fedf30bd0493a59b6",
+                "used": "V_RAW_TO_UV = 194637 * raw / 1000 uV"},
+  "qg-util.c": {"workspace_copy": "reference/lineage-qg/drivers/power/supply/qcom/qg-util.c",
+                "used": "qg_iraw_to_ua: subtype QG_ADC_IBAT_5A (0x3) -> 152588 * raw / 1000 uA, otherwise 305176 * raw / 1000 uA"},
+  "qg-reg.h": {"workspace_copy": "reference/lineage-qg/drivers/power/supply/qcom/qg-reg.h",
+               "used": "PERPH_SUBTYPE_REG 0x05, QG_ADC_IBAT_5A 0x3, QG_ADC_IBAT_10A 0x4"}
+}
