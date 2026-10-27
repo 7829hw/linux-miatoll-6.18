@@ -1,0 +1,63 @@
+### 2026-10-27T12:44:25 va-macro-rebind
+$ sleep 20; cat /proc/uptime; cat /sys/kernel/debug/devices_deferred; ls /sys/bus/platform/drivers/ | grep -iE "macro|wcd|soundwire|qcom-soundwire"; echo 62770000.codec > /sys/bus/platform/drivers/va_macro/bind; echo "bind_rc=$?"; sleep 5; cat /sys/kernel/debug/devices_deferred; cat /proc/asound/cards; dmesg | grep -iE "va_macro|rx_macro|tx_macro|vote|0x100f4|wcd|soundwire|swr|snd-sm8250|q6afe" | tail -25
+sleep 20; cat /proc/uptime; cat /sys/kernel/debug/devices_deferr
+ed; ls /sys/bus/platform/drivers/ | grep -iE "macro|wcd|soundwire|qcom-soundwire
+"; echo 62770000.codec > /sys/bus/platform/drivers/va_macro/bind; echo "bind_rc=
+$?"; sleep 5; cat /sys/kernel/debug/devices_deferred; cat /proc/asound/cards; dm
+esg | grep -iE "va_macro|rx_macro|tx_macro|vote|0x100f4|wcd|soundwire|swr|snd-sm
+8250|q6afe" | tail -25; printf "\nSTEP_DONE_124400=%s\n" "$?"
+29.62 234.69
+62610000.soundwire-controller	platform: supplier 62600000.rxmacro not ready
+62630000.soundwire-controller	platform: supplier 62620000.txmacro not ready
+62600000.rxmacro	platform: supplier 62770000.codec not ready
+62620000.txmacro	platform: supplier 62770000.codec not ready
+sound	snd-sm8250: WCD Playback: codec dai not found
+qcom-soundwire
+rx_macro
+tx_macro
+va_macro
+wcd937x_codec
+/bin/sh: can't create /sys/bus/platform/drivers/va_macro/bind: Permission denied
+bind_rc=1
+62610000.soundwire-controller	platform: supplier 62600000.rxmacro not ready
+62630000.soundwire-controller	platform: supplier 62620000.txmacro not ready
+62600000.rxmacro	platform: supplier 62770000.codec not ready
+62620000.txmacro	platform: supplier 62770000.codec not ready
+sound	snd-sm8250: WCD Playback: codec dai not found
+--- no soundcards ---
+[    1.082687] qcom-q6afe aprsvc:service:4:4: cmd = 0x100f4 returned error = 0x16
+[    1.082778] qcom-q6afe aprsvc:service:4:4: Unknown cmd 0x100f4
+[    4.320511] qcom-q6afe aprsvc:service:4:4: AFE failed to vote (3)
+[    4.320771] va_macro 62770000.codec: probe with driver va_macro failed with error -110
+[   33.767339] platform 62610000.soundwire-controller: deferred probe pending: platform: supplier 62600000.rxmacro not ready
+[   33.767526] platform 62630000.soundwire-controller: deferred probe pending: platform: supplier 62620000.txmacro not ready
+[   33.767758] platform sound: deferred probe pending: snd-sm8250: WCD Playback: codec dai not found
+
+STEP_DONE_124400=0
+miatoll-audio1# [6n
+### 2026-10-27T12:44:42 va-macro-drivers-probe
+$ cat /proc/uptime; echo 62770000.codec > /sys/bus/platform/drivers_probe; echo "probe_rc=$?"; sleep 6; ls -l /sys/bus/platform/devices/62770000.codec/driver 2>&1; cat /sys/kernel/debug/devices_deferred; cat /proc/asound/cards; dmesg | grep -iE "va_macro|rx_macro|tx_macro|vote|0x100f4|wcd|soundwire|swr|snd-sm8250|q6afe" | tail -12
+cat /proc/uptime; echo 62770000.codec > /sys/bus/platform/driver
+s_probe; echo "probe_rc=$?"; sleep 6; ls -l /sys/bus/platform/devices/62770000.c
+odec/driver 2>&1; cat /sys/kernel/debug/devices_deferred; cat /proc/asound/cards
+; dmesg | grep -iE "va_macro|rx_macro|tx_macro|vote|0x100f4|wcd|soundwire|swr|sn
+d-sm8250|q6afe" | tail -12; printf "\nSTEP_DONE_124436=%s\n" "$?"
+45.36 360.48
+probe_rc=0
+lrwxrwxrwx    1 0        0                0 Jan  1 00:00 [1;36m/sys/bus/platform/devices/62770000.codec/driver[m -> [1;34m../../../../bus/platform/drivers/va_macro[m
+ 0 [Xiaomimiatoll  ]: sm8250 - Xiaomi-miatoll
+                      Xiaomi-miatoll
+[    1.082687] qcom-q6afe aprsvc:service:4:4: cmd = 0x100f4 returned error = 0x16
+[    1.082778] qcom-q6afe aprsvc:service:4:4: Unknown cmd 0x100f4
+[    4.320511] qcom-q6afe aprsvc:service:4:4: AFE failed to vote (3)
+[    4.320771] va_macro 62770000.codec: probe with driver va_macro failed with error -110
+[   33.767339] platform 62610000.soundwire-controller: deferred probe pending: platform: supplier 62600000.rxmacro not ready
+[   33.767526] platform 62630000.soundwire-controller: deferred probe pending: platform: supplier 62620000.txmacro not ready
+[   33.767758] platform sound: deferred probe pending: snd-sm8250: WCD Playback: codec dai not found
+[   45.386600] wcd9370-codec sdw:2:0:0217:010a:00:4: Static channel mapping not specified using device channel maps
+[   45.391932] wcd9370-codec sdw:3:0:0217:010a:00:3: Static channel mapping not specified using device channel maps
+[   45.397535] wcd937x_codec codec: bound sdw:2:0:0217:010a:00:4 (ops wcd_sdw_component_ops)
+[   45.397743] wcd937x_codec codec: bound sdw:3:0:0217:010a:00:3 (ops wcd_sdw_component_ops)
+
+STEP_DONE_124436=0
+miatoll-audio1# [6n

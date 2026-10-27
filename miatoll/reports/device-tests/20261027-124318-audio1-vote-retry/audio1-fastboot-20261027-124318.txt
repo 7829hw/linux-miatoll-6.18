@@ -1,0 +1,29 @@
+shell: reboot-mode bootloader
+for t in /bin/reboot-mode /run/reboot-mode; do [ -x "$t" ] && ex
+ec "$t" bootloader; done; echo REBOOT_MODE_UNAVAIL""ABLE
+REBOOT_MODE_REQUESTED: bootloader
+
+[ACM closed by the restart]
+
+fastboot devices
+
+fastboot devices
+REDACTED	 fastboot
+fastboot devices
+REDACTED	 fastboot
+fastboot -s REDACTED getvar product
+product: curtana
+Finished. Total time: 0.002s
+fastboot -s REDACTED reboot bootloader
+Rebooting into bootloader                          OKAY [  0.001s]
+Finished. Total time: 0.051s
+fastboot devices
+
+fastboot devices
+
+fastboot devices
+REDACTED	 fastboot
+fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-audio1/boot-curtana-6.18.58-audio1.img
+Sending 'boot.img' (131072 KB)                     OKAY [  2.982s]
+Booting                                            OKAY [  5.105s]
+Finished. Total time: 8.172s
