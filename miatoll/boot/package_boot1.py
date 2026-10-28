@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Package one curtana RAM boot candidate without modifying existing artifacts."""
 import importlib.util
+import io
+import stat
 import argparse
 import json
 from pathlib import Path, PurePosixPath
@@ -51,6 +53,23 @@ def analyze_avb(module, path):
             'properties': properties}
 
 PROFILES = ('boot1', 'display1', 'display2', 'touch1', 'storage1', 'usb2', 'wifi1', 'wifi2', 'wifi3', 'bt1', 'battery1', 'battery2', 'reboot1', 'audio1', 'audio2', 'audio3', 'audio4', 'audio5', 'audio6', 'audio7', 'audio8', 'audio9', 'audio10', 'audio11', 'audio12', 'audio13', 'audio14', 'gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1', 'lineage1')
+
+def newc_archive(entries):
+    """Uncompressed newc cpio; entries are (path, bytes) or (path, None) for a directory."""
+    stream = io.BytesIO()
+    for inode, (name, data) in enumerate(entries + [('TRAILER!!!', b'')], start=1):
+        mode = (stat.S_IFDIR | 0o755) if data is None else (0 if name == 'TRAILER!!!' else stat.S_IFREG | 0o644)
+        data = data or b''
+        encoded = name.encode() + b'\0'
+        fields = (inode, mode, 0, 0, 2 if data == b'' and mode & stat.S_IFDIR else 1, 0,
+                  len(data), 0, 0, 0, 0, len(encoded), 0)
+        stream.write(b'070701' + b''.join(f'{n:08x}'.encode() for n in fields))
+        stream.write(encoded)
+        stream.write(b'\0' * (-stream.tell() % 4))
+        stream.write(data)
+        stream.write(b'\0' * (-stream.tell() % 4))
+    return stream.getvalue()
+
 
 def main(profile='boot1', android_ramdisk=None):
     require(profile in PROFILES, 'Unknown RAM test profile')
@@ -174,9 +193,23 @@ def main(profile='boot1', android_ramdisk=None):
     if profile == 'lineage1':
         # First-stage Android ramdisk from the LineageOS build (curtana_ml).
         require(android_ramdisk is not None, 'lineage1 needs --android-ramdisk')
-        ramdisk = Path(android_ramdisk)
-        ramdisk_report = {'android_ramdisk': str(ramdisk), 'bytes': ramdisk.stat().st_size,
-                          'sha256': digest(ramdisk.read_bytes()), 'profile': profile}
+        android = Path(android_ramdisk).read_bytes()
+        # cfg80211 loads regulatory.db at late_initcall, long before Android
+        # mounts /vendor; without it the regulatory domain stays world (00)
+        # and no country hint applies. Append the pinned database under
+        # /lib/firmware as a second, uncompressed newc archive.
+        import wifi_payload
+        wifi, _ = wifi_payload.load(WORKSPACE)
+        regdb = {name: data for name, (data, _) in wifi.items() if name.startswith('lib/firmware/regulatory.db')}
+        require(sorted(regdb) == ['lib/firmware/regulatory.db', 'lib/firmware/regulatory.db.p7s'],
+                'Missing pinned regulatory database')
+        extra = newc_archive([('lib', None), ('lib/firmware', None)] + sorted(regdb.items()))
+        ramdisk = DIST / 'ramdisk-lineage1.img'
+        ramdisk.write_bytes(android + b'\0' * (-len(android) % 4) + extra)
+        ramdisk_report = {'android_ramdisk': str(android_ramdisk), 'android_bytes': len(android),
+                          'android_sha256': digest(android), 'profile': profile,
+                          'appended': {name: digest(data) for name, data in regdb.items()},
+                          'bytes': ramdisk.stat().st_size, 'sha256': digest(ramdisk.read_bytes())}
     else:
         ramdisk = DIST / ('initramfs-' + profile + '.cpio.gz')
         ramdisk_report = build_initramfs(ramdisk, profile=profile)
@@ -196,6 +229,7 @@ def main(profile='boot1', android_ramdisk=None):
         command_line = ('console=tty0 loglevel=7 clk_ignore_unused pd_ignore_unused deferred_probe_timeout=30 '
                         'printk.devkmsg=on firmware_class.path=/vendor/firmware/ '
                         'androidboot.boot_devices=soc@0/8804000.mmc androidboot.super_partition=los_super androidboot.hardware=curtana_ml '
+                        'androidboot.wificountrycode=KR '
                         'androidboot.selinux=permissive androidboot.verifiedbootstate=orange '
                         'androidboot.console=tty0 panic=0 androidboot.init_fatal_panic=true '
                         'miatoll_boot=lineage1')
