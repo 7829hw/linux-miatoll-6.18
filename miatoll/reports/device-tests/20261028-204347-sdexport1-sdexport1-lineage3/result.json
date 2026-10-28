@@ -1,0 +1,60 @@
+{
+  "capture_id": "20261028-204347",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-sdexport1+",
+  "boot_profile": "sdexport1-ram-only",
+  "image": "boot-curtana-6.18.58-sdexport1.img",
+  "image_sha256": "5e4a4b97145d154673f571d5ef7249f6e7ac9cec94908532c0f58bc14a50a201",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-sdexport1/boot-curtana-6.18.58-sdexport1.img"
+  ],
+  "physical_display_confirmed": null,
+  "user_observation": "pending",
+  "ram_boot_requests": 1,
+  "serial_port": "/dev/ttyACM0",
+  "summary": {
+    "kernel_release_seen": true,
+    "boot_profile_seen": true,
+    "probe_end_seen": true,
+    "kernel_log_exit": 0,
+    "markers": [
+      "SDEXPORT1_BANNER_WRITTEN",
+      "SDEXPORT1_PROBE_BEGIN",
+      "SDEXPORT1_PROBE_END",
+      "SDEXPORT1_UNBLANK_REQUESTED"
+    ],
+    "smmu_context_fault_lines": 0,
+    "smmu_first_fault": null,
+    "smmu_irq_lines": [
+      "18:          0          0          0          0          0          0          0          0    GICv3  97 Level     arm-smmu global fault",
+      "19:          0          0          0          0          0          0          0          0    GICv3 126 Level     arm-smmu-context-fault",
+      "20:          0          0          0          0          0          0          0          0    GICv3 127 Level     arm-smmu-context-fault",
+      "21:          0          0          0          0          0          0          0          0    GICv3 128 Level     arm-smmu-context-fault",
+      "22:          0          0          0          0          0          0          0          0    GICv3 129 Level     arm-smmu-context-fault",
+      "23:          0          0          0          0          0          0          0          0    GICv3 130 Level     arm-smmu-context-fault",
+      "24:          0          0          0          0          0          0          0          0    GICv3 131 Level     arm-smmu-context-fault",
+      "25:          0          0          0          0          0          0          0          0    GICv3 132 Level     arm-smmu-context-fault",
+      "26:          0          0          0          0          0          0          0          0    GICv3 133 Level     arm-smmu-context-fault",
+      "27:          0          0          0          0          0          0          0          0    GICv3 134 Level     arm-smmu-context-fault",
+      "28:          0          0          0          0          0          0          0          0    GICv3 135 Level     arm-smmu-context-fault",
+      "146:          0          0          0          0          0          0          0          0    GICv3 261 Level     arm-smmu global fault",
+      "147:          0          0          0          0          0          0          0          0    GICv3 263 Level     arm-smmu global fault",
+      "148:          0          0          0          0          0          0          0          0    GICv3 396 Edge      arm-smmu-context-fault",
+      "149:          0          0          0          0          0          0          0          0    GICv3 397 Edge      arm-smmu-context-fault"
+    ],
+    "kernel_warning_lines": 0
+  },
+  "log_files": {
+    "sdexport1-fastboot-20261028-204347.txt": {
+      "bytes": 384,
+      "sha256": "f3a5f2cb1a32a8b8b45ec18b15cb6335502a5897443743f67e961519c8081528"
+    },
+    "sdexport1-serial-20261028-204347.txt": {
+      "bytes": 167063,
+      "sha256": "efc6485d54a9d3a1a62e5cb40726eb04ddd281896de1040ad6a6354782b3fab6"
+    }
+  }
+}

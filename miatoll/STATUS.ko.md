@@ -319,6 +319,16 @@ qmicli(libqmi 1.36.0, QRTR)와 읽기 전용 래퍼 `modem-query`(식별자·위
 - SIM 망 등록·데이터·통화·SMS는 미시험이다.
 [modem1 기록](reports/device-tests/20261027-232006-modem1-modem1/README.ko.md)
 
+## lineage1: SD 카드 LineageOS 22.2
+
+lineage1 커널을 `fastboot boot`로 RAM에서 실행하고 LineageOS 22.2를 SM32G microSD에서 부팅했다. 내부 UFS·MPSS·IPA·Wi-Fi는 DT에서 꺼져 있다.
+- 커널 수정: `UNICODE`(userdata f2fs casefold), `CPUSETS_V1`·`UCLAMP_TASK(_GROUP)`(Android task profile).
+- `sys.boot_completed=1`, 세로 1080x2400·밀도 440, 터치 정확(사용자 관찰).
+- ADSP 기동, ALSA 카드 등록. 오디오 HAL은 아직 없다.
+- Mesa 26.2.5 freedreno(GLES 3.2)·Turnip(Vulkan 1.3) userspace로 GPU 렌더링. 사용자가 SwiftShader보다 빨라졌다고 확인했다.
+- 남은 일: 내비게이션 바, 오디오 HAL, 무선·모뎀, FBE, 절전.
+[lineage1 기록](reports/device-tests/20261028-205935-lineage1-lineage3-mesa/README.ko.md)
+
 ## 하드웨어별 상태
 
 아래의 '반영'은 새 브랜치의 소스·설정·컴파일 결과다. boot1에서 확인한 기본 기능 외의
@@ -329,7 +339,7 @@ qmicli(libqmi 1.36.0, QRTR)와 읽기 전용 래퍼 `modem-query`(식별자·위
 | CPU/RAM/UFS/SD/USB/버튼 | 기존 SM7125/SC7180, PMIC, UFS/MMC/GENI/QUSB2 드라이버 | 보드 DT와 추가 주변장치 연결 | boot1에서 CPU/RAM/USB ACM/UFS 열거 확인. storage1에서 UFS·SD(SDR104 포함) read-only 블록 읽기 확인, SH64G 카드는 CMD48 단계 실패(카드 고유). usb2에서 Type-C 역할 전환·USB host(저장장치·HID) 확인. 쓰기/마운트, 충전/PD, 버튼 입력은 미검증 |
 | 디스플레이 | DRM/MSM DPU/DSI, PHY, WLED, 표준 MDSS reset | Huaxing FT8756 및 Tianma NT36675 패널, DT, WLED 수정. DSI API 변환 | display2(Huaxing)에서 VT 표시·색상, WLED 밝기 0–4095, blank/unblank 3회, 2분 유지를 실기기 확인. 절전, 장시간, Tianma 패널은 미검증 |
 | 터치 | SPI/GENI/input | FT8756 및 NT36xxx SPI 드라이버, 패널 연동과 firmware 이름 | touch1(Huaxing FT8756)에서 RAM firmware·IRQ·좌표·5점 멀티터치 실기기 확인. suspend/blank 중 처리, Tianma NT36xxx 미검증 |
-| GPU | Adreno A618/GMU/DRM | ZAP 이름, HWCG, fuse 0x9f/bin 3. OPP는 SM7125에 한정. gpu1에서 GPU/GMU 활성화와 firmware 공급 | gpu1에서 GMU 전원·SQE/GMU firmware·zap 로드, `CP_MEM_WRITE` 제출 실행(연속 30/30, 재개 10/10), devfreq 180–750 MHz, runtime suspend 실기기 확인. gpu2에서 Mesa 25.1.9 freedreno(FD618, GLES 3.2)로 kmscube 오프스크린 약 890 fps, 화면 60 fps 렌더링 실기기 확인(사용자 관찰). vulkan1에서 Turnip(Vulkan 1.3.311) 전송 명령·셰이더 렌더링(오프스크린 픽셀 검증, 화면 60 fps) 실기기 확인(사용자 관찰). 장시간 부하 DVFS·발열, GLES/Vulkan 적합성 테스트, Android GPU userspace(KGSL ABI) 미검증 |
+| GPU | Adreno A618/GMU/DRM | ZAP 이름, HWCG, fuse 0x9f/bin 3. OPP는 SM7125에 한정. gpu1에서 GPU/GMU 활성화와 firmware 공급 | gpu1에서 GMU 전원·SQE/GMU firmware·zap 로드, `CP_MEM_WRITE` 제출 실행(연속 30/30, 재개 10/10), devfreq 180–750 MHz, runtime suspend 실기기 확인. gpu2에서 Mesa 25.1.9 freedreno(FD618, GLES 3.2)로 kmscube 오프스크린 약 890 fps, 화면 60 fps 렌더링 실기기 확인(사용자 관찰). vulkan1에서 Turnip(Vulkan 1.3.311) 전송 명령·셰이더 렌더링(오프스크린 픽셀 검증, 화면 60 fps) 실기기 확인(사용자 관찰). lineage1에서 Android용 Mesa 26.2.5(msm DRM, KGSL 아님)로 SurfaceFlinger GPU 합성 확인. 장시간 부하 DVFS·발열, GLES/Vulkan 적합성 테스트 미검증 |
 | 카메라 | CAMSS 공통 코드, OV8856/DW9714 | SC7180 CAMSS/CCI/PHY/DT, S5KGM2/S5K5E9/OV16A1Q/DW9800, 기존 센서/VCM 확장 | ID/전원/스트림/초점/영상 품질. DW9800은 원본도 WIP. joyeuse DT에는 S5K5E9/OV16A1Q만 있고 주카메라 경로가 완성되지 않음 |
 | 오디오 | QDSP6/APR, sm8250 machine, TAS2562, WCD937x, SoundWire/LPASS | ADSP 및 스피커/헤드폰/마이크 DT 경로, 드라이버 설정. q6afe LPASS HW vote 재시도(audio3), WCD937x jack 등록 중 TX Slave 유지(audio9), 2.7 V MBHC 임계값 DT(audio11) | 스피커·유선 이어폰 출력 청취, 내장 마이크 2개 녹음, 헤드셋 삽입·제거 감지, 이어폰 마이크 녹음, 이어폰 3버튼(audio12/13), TX 유지 유휴 전력 영향(audio14 비교, 측정 오차 안) 실기기 확인. 통화, 음량 곡선, ACDB/HAL 대응 미검증 |
 | LTE 모뎀 | MPSS remoteproc, QRTR/QMI, IPA/RMNET | 보드 firmware/메모리/IPA DT, SM7125 PD mapper | MPSS/QMI/SIM/망 등록, 데이터, RIL/IMS/음성 호환성 |

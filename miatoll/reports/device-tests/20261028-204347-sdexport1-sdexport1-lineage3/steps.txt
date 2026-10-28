@@ -1,0 +1,30 @@
+### 2026-10-28T20:44:23 sd-export-on
+$  true; setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1 & sleep 1; cat /run/sd-export.log
+ true; setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1
+ & sleep 1; cat /run/sd-export.log; printf "\nSTEP_DONE_204422=%s\n" "$?"
+SD-EXPORT: exporting /dev/mmcblk2 (62333952 sectors)
+
+STEP_DONE_204422=0
+[1]+  Done                       setsid sh -c "sd-export on" 0</dev/null 1>/dev/null 2>&1
+miatoll-sdexport1# [6n
+### 2026-10-28T20:59:10 sd-export-off
+$  true; sync; setsid sh -c "sd-export off" </dev/null >/dev/null 2>&1 & sleep 2; tail -1 /run/sd-export.log
+^[[6n true; sync; setsid sh -c "sd-export off
+" </dev/null >/dev/null 2>&1 & sleep 2; tail -1 /run/sd-export.log; printf "\nST
+EP_DONE_205906=%s\n" "$?"
+/bin/sh: miatoll-sdexport^[[6n: not found
+SD-EXPORT: on
+
+STEP_DONE_205906=0
+[1]+  Done                       setsid sh -c "sd-export off" 0</dev/null 1>/dev/null 2>&1
+miatoll-sdexport1# [6n
+### 2026-10-28T20:59:25 sd-export-status
+$  true; sd-export status; grep -c mmcblk2 /proc/mounts
+^[[6n true; sd-export status; grep -c mmcblk2
+ /proc/mounts; printf "\nSTEP_DONE_205925=%s\n" "$?"
+/bin/sh: miatoll-sdexport^[[6n: not found
+SD-EXPORT: off
+0
+
+STEP_DONE_205925=1
+miatoll-sdexport1# [6n
