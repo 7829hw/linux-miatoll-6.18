@@ -54,10 +54,28 @@ static int huaxing_ft8756_on(struct huaxing_ft8756 *ctx)
 
 	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
 
+	/*
+	 * Command2 unlock, CABC tables and the B5 setting from the vendor on
+	 * command (dsi-panel-ft8756-huaxing-fhd-video.dtsi), which the
+	 * generated sequence left out.
+	 */
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0x00, 0x00);
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0xff, 0x87, 0x56, 0x01);
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0x00, 0x80);
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0xff, 0x87, 0x56);
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0x00, 0x80);
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0xca, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80,
+				     0x80, 0x80, 0x80, 0x80, 0x80, 0x80);
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0x00, 0x90);
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0xca, 0xfe, 0xff, 0x66, 0xf6, 0xff, 0x66,
+				     0xfb, 0xff, 0x32);
+
 	mipi_dsi_dcs_set_display_brightness_multi(&dsi_ctx, 0x00ff);
 
 	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, MIPI_DCS_WRITE_CONTROL_DISPLAY, 0x24);
 	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, MIPI_DCS_WRITE_POWER_SAVE, 0x00);
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0x00, 0xb5);
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0xca, 0x04);
 
 	mipi_dsi_dcs_exit_sleep_mode_multi(&dsi_ctx);
 	mipi_dsi_msleep(&dsi_ctx, 90);
