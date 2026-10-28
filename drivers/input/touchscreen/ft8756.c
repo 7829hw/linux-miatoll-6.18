@@ -19,6 +19,9 @@
 #include <linux/spi/spi.h>
 #include <linux/input.h>
 #include <drm/drm_panel.h>
+#include <drm/panel/huaxing-ft8756.h>
+#include <linux/completion.h>
+#include <linux/pm_wakeup.h>
 #include <linux/pm_runtime.h>
 #include <linux/devm-helpers.h>
 #include <linux/regulator/consumer.h>
@@ -65,6 +68,17 @@
 /* Point data length */
 #define POINT_DATA_LEN 62
 
+/*
+ * Wake gestures, from the Xiaomi curtana-q-oss focaltech_gesture.c: the
+ * gesture enable register, the gesture masks, and the gesture data that the
+ * firmware appends to the point data (enable, reserved, id, point count,
+ * then 6 points of 4 bytes).
+ */
+#define FT8756_REG_GESTURE_EN       0xD0
+#define FT8756_GESTURE_DATA_LEN     (6 * 4 + 4)
+#define FT8756_GESTURE_DOUBLECLICK  0x24
+static const u8 ft8756_gesture_mask_regs[] = { 0xD1, 0xD2, 0xD5, 0xD6, 0xD7, 0xD8 };
+
 static struct drm_panel_follower_funcs ft8756_panel_follower_funcs;
 
 struct ft8756_abs_object {
@@ -93,6 +107,14 @@ struct ft8756_ts {
 	struct ft8756_abs_object abs_obj;
 
 	struct drm_panel_follower panel_follower;
+
+	/* Double tap to wake: requested from user space, active while the
+	 * panel is off and the controller is in gesture mode. */
+	bool dt2w_enabled;
+	bool gesture_active;
+	/* The SPI bus is usable again only after our own resume callback. */
+	bool pm_suspended;
+	struct completion pm_resumed;
 
 	struct delayed_work work;
 
@@ -316,6 +338,8 @@ static int ft8756_input_dev_config(struct ft8756_ts *ts)
 	/* Check if the maximum x-coordinate is valid */
 	WARN_ON(ts->prop.max_x < 1);
 
+	input_set_capability(ts->input, EV_KEY, KEY_WAKEUP);
+
     /* Initialize multitouch slots for the input device */
 	ret = input_mt_init_slots(ts->input, TOUCH_MAX_FINGER_NUM,
 				  INPUT_MT_DIRECT | INPUT_MT_DROP_UNUSED);
@@ -405,9 +429,43 @@ exit:
     return;
 }
 
+static void ft8756_report_gesture(struct ft8756_ts *ts)
+{
+	u8 data[POINT_DATA_LEN + FT8756_GESTURE_DATA_LEN];
+	u8 *gesture = data + POINT_DATA_LEN;
+	int ret;
+
+	/* The IRQ can fire while the system resumes; wait for the SPI bus. */
+	if (READ_ONCE(ts->pm_suspended) &&
+	    !wait_for_completion_timeout(&ts->pm_resumed, msecs_to_jiffies(700))) {
+		dev_warn(ts->dev, "bus not resumed, dropping gesture\n");
+		return;
+	}
+
+	ret = regmap_raw_read(ts->regmap, 0x01, data, sizeof(data));
+	if (ret < 0) {
+		dev_err(ts->dev, "Cannot read gesture data: %d\n", ret);
+		return;
+	}
+
+	if (gesture[0] != 1 || gesture[2] != FT8756_GESTURE_DOUBLECLICK)
+		return;
+
+	pm_wakeup_event(ts->dev, 0);
+	input_report_key(ts->input, KEY_WAKEUP, 1);
+	input_sync(ts->input);
+	input_report_key(ts->input, KEY_WAKEUP, 0);
+	input_sync(ts->input);
+}
+
 static irqreturn_t ft8756_irq_handler(int irq, void *dev_id)
 {
 	struct ft8756_ts *ts = dev_id;
+
+	if (READ_ONCE(ts->gesture_active)) {
+		ft8756_report_gesture(ts);
+		return IRQ_HANDLED;
+	}
 
     disable_irq_nosync(ts->irq);
 
@@ -786,6 +844,10 @@ skip_regulators:
 		return ret;
 	}
 
+	init_completion(&ts->pm_resumed);
+	complete_all(&ts->pm_resumed);
+	device_init_wakeup(dev, true);
+
     ret = ft8756_input_dev_config(ts);
 	if (ret) {
         dev_err(dev, "failed set input device: %d\n", ret);
@@ -825,7 +887,7 @@ static int __maybe_unused ft8756_internal_pm_suspend(struct device *dev)
 
 	cancel_delayed_work_sync(&ts->work);
 
-	regmap_write(ts->regmap, FT8756_REG_POWER_MODE_SLEEP, FT8756_REG_POWER_MODE_SLEEP);
+	ret = regmap_write(ts->regmap, FT8756_REG_POWER_MODE, FT8756_REG_POWER_MODE_SLEEP);
 	if (ret)
 		dev_err(ts->dev, "Cannot enter sleep!\n");
 	return 0;
@@ -835,6 +897,9 @@ static int __maybe_unused ft8756_pm_suspend(struct device *dev)
 {
 	struct ft8756_ts *ts = dev_get_drvdata(dev);
 	int ret=0;
+
+	reinit_completion(&ts->pm_resumed);
+	WRITE_ONCE(ts->pm_suspended, true);
 
 	if (drm_is_panel_follower(dev))
 		return 0;
@@ -863,6 +928,9 @@ static int __maybe_unused ft8756_pm_resume(struct device *dev)
 	struct ft8756_ts *ts = dev_get_drvdata(dev);
 	int ret=0;
 
+	WRITE_ONCE(ts->pm_suspended, false);
+	complete_all(&ts->pm_resumed);
+
 	if (drm_is_panel_follower(dev))
 		return 0;
 
@@ -876,12 +944,35 @@ EXPORT_GPL_SIMPLE_DEV_PM_OPS(ft8756_pm_ops,
 			     ft8756_pm_suspend,
 			     ft8756_pm_resume);
 
+static int ft8756_enter_gesture(struct ft8756_ts *ts)
+{
+	unsigned int state = 0;
+	int i, j;
+
+	for (i = 0; i < 5; i++) {
+		for (j = 0; j < ARRAY_SIZE(ft8756_gesture_mask_regs); j++)
+			regmap_write(ts->regmap, ft8756_gesture_mask_regs[j], 0xFF);
+		regmap_write(ts->regmap, FT8756_REG_GESTURE_EN, 1);
+		usleep_range(1000, 2000);
+		if (!regmap_read(ts->regmap, FT8756_REG_GESTURE_EN, &state) && state == 1)
+			return 0;
+	}
+
+	dev_err(ts->dev, "Cannot enter gesture mode (state %#x)\n", state);
+	return -EIO;
+}
+
 static int panel_prepared(struct drm_panel_follower *follower)
 {
 	struct ft8756_ts *ts = container_of(follower, struct ft8756_ts, panel_follower);
 
-	if (ts->status & FT8756_STATUS_SUSPEND)
+	if (ts->gesture_active) {
+		/* The panel reset also left gesture mode; the IRQ stayed on. */
+		WRITE_ONCE(ts->gesture_active, false);
+		disable_irq_wake(ts->irq);
+	} else if (ts->status & FT8756_STATUS_SUSPEND) {
 		enable_irq(ts->irq);
+	}
 
 	return ft8756_internal_pm_resume(ts->dev);
 }
@@ -892,10 +983,61 @@ static int panel_unpreparing(struct drm_panel_follower *follower)
 
 	ts->status |= FT8756_STATUS_SUSPEND;
 
+	if (READ_ONCE(ts->dt2w_enabled)) {
+		cancel_delayed_work_sync(&ts->work);
+		disable_irq(ts->irq);
+		if (!ft8756_enter_gesture(ts)) {
+			WRITE_ONCE(ts->gesture_active, true);
+			enable_irq_wake(ts->irq);
+			enable_irq(ts->irq);
+			return 0;
+		}
+		return ft8756_internal_pm_suspend(ts->dev);
+	}
+
 	disable_irq(ts->irq);
 
 	return ft8756_internal_pm_suspend(ts->dev);
 }
+
+static ssize_t double_tap_enable_show(struct device *dev,
+				      struct device_attribute *attr, char *buf)
+{
+	struct ft8756_ts *ts = dev_get_drvdata(dev);
+
+	return sysfs_emit(buf, "%d\n", READ_ONCE(ts->dt2w_enabled));
+}
+
+static ssize_t double_tap_enable_store(struct device *dev,
+				       struct device_attribute *attr,
+				       const char *buf, size_t count)
+{
+	struct ft8756_ts *ts = dev_get_drvdata(dev);
+	bool enable;
+	int ret;
+
+	ret = kstrtobool(buf, &enable);
+	if (ret)
+		return ret;
+
+	if (!ts->panel_follower.panel)
+		return -ENODEV;
+
+	/* Takes effect at the next panel power-off. */
+	ret = huaxing_ft8756_keep_powered(ts->panel_follower.panel, enable);
+	if (ret)
+		return ret;
+
+	WRITE_ONCE(ts->dt2w_enabled, enable);
+	return count;
+}
+static DEVICE_ATTR_RW(double_tap_enable);
+
+static struct attribute *ft8756_attrs[] = {
+	&dev_attr_double_tap_enable.attr,
+	NULL
+};
+ATTRIBUTE_GROUPS(ft8756);
 
 static struct drm_panel_follower_funcs ft8756_panel_follower_funcs = {
 	.panel_prepared = panel_prepared,
@@ -912,6 +1054,7 @@ static struct spi_driver ft8756_spi_driver = {
 	.driver = {
 		.name   = "ft8756-spi",
 		.pm = pm_sleep_ptr(&ft8756_pm_ops),
+		.dev_groups = ft8756_groups,
 	},
 	.probe = ft8756_spi_probe,
 	.id_table = ft8756_spi_ids,

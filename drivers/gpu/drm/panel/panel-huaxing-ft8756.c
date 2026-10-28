@@ -16,6 +16,7 @@
 #include <drm/drm_mipi_dsi.h>
 #include <drm/drm_modes.h>
 #include <drm/drm_panel.h>
+#include <drm/panel/huaxing-ft8756.h>
 
 struct huaxing_ft8756 {
 	struct drm_panel panel;
@@ -24,6 +25,11 @@ struct huaxing_ft8756 {
 	struct regulator *supply;
 
 	struct gpio_desc *reset_gpio;
+
+	/* Stay in sleep-in with power and reset kept across unprepare,
+	 * so the touch side of the TDDI can detect wake gestures. */
+	bool keep_powered;
+	bool powered;
 };
 
 static inline struct huaxing_ft8756 *to_huaxing_ft8756(struct drm_panel *panel)
@@ -83,9 +89,12 @@ static int huaxing_ft8756_prepare(struct drm_panel *panel)
 	struct device *dev = &ctx->dsi->dev;
 	int ret;
 
-	ret = regulator_enable(ctx->supply);
-	if (ret < 0)
-		return ret;
+	if (!ctx->powered) {
+		ret = regulator_enable(ctx->supply);
+		if (ret < 0)
+			return ret;
+		ctx->powered = true;
+	}
 
 	huaxing_ft8756_reset(ctx);
 
@@ -94,6 +103,7 @@ static int huaxing_ft8756_prepare(struct drm_panel *panel)
 		dev_err(dev, "Failed to initialize panel: %d\n", ret);
 		gpiod_set_value_cansleep(ctx->reset_gpio, 1);
 		regulator_disable(ctx->supply);
+		ctx->powered = false;
 		return ret;
 	}
 
@@ -110,8 +120,12 @@ static int huaxing_ft8756_unprepare(struct drm_panel *panel)
 	if (ret < 0)
 		dev_err(dev, "Failed to un-initialize panel: %d\n", ret);
 
+	if (READ_ONCE(ctx->keep_powered))
+		return 0;
+
 	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
 	regulator_disable(ctx->supply);
+	ctx->powered = false;
 
 	return 0;
 }
@@ -154,6 +168,16 @@ static const struct drm_panel_funcs huaxing_ft8756_panel_funcs = {
 	.unprepare = huaxing_ft8756_unprepare,
 	.get_modes = huaxing_ft8756_get_modes,
 };
+
+int huaxing_ft8756_keep_powered(struct drm_panel *panel, bool keep)
+{
+	if (!panel || panel->funcs != &huaxing_ft8756_panel_funcs)
+		return -ENODEV;
+
+	WRITE_ONCE(to_huaxing_ft8756(panel)->keep_powered, keep);
+	return 0;
+}
+EXPORT_SYMBOL_GPL(huaxing_ft8756_keep_powered);
 
 static int huaxing_ft8756_probe(struct mipi_dsi_device *dsi)
 {
