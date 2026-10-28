@@ -1,0 +1,5 @@
+fastboot devices
+REDACTED	 fastboot
+fastboot -s REDACTED getvar product
+
+TIMEOUT after 120 s

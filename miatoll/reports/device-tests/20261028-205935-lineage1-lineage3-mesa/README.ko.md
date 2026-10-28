@@ -34,7 +34,9 @@ Android는 SM32G microSD(`soc@0/8804000.mmc`)의 super·userdata로 부팅했다
 - 이전 ANGLE/SwiftShader(CPU 렌더링)는 사용자가 "매우 느리다"고 보고했다.
 
 ## 남은 일
-- 화면 하단 소프트키(내비게이션 바)가 없다. 기기 트리 overlay로 수정해 재시험 중이다.
-- 오디오 HAL·라우팅은 아직 없다. ADSP와 ALSA 카드만 올라온 상태다.
+- 이후 Android 쪽 수정(같은 lineage1 커널):
+  - 공식 LineageOS sm6250 overlay와 handheld 기능 선언을 넣었다. 소프트키와 Trebuchet이 정상이다(사용자 확인, 213111/220438).
+  - 오디오 HAL(dragonboard tinyalsa 기반)이 PCM 0(스피커)·1(이어폰)과 RAM 시험 mixer 경로를 쓴다. 스피커와 이어폰 모두 들렸다(사용자 확인, 230420).
+  - 마이크 녹음은 Android에서 아직 미확인이다.
 - Wi-Fi/모뎀/Bluetooth는 lineage1 DT에서 꺼져 있다.
 - FBE(KeyMint), 절전·suspend, 장시간 안정성은 미시험이다.

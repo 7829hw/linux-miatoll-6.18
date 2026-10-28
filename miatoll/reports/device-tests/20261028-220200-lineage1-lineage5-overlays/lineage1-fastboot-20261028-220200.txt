@@ -1,0 +1,4 @@
+shell: reboot-mode bootloader
+
+[ACM closed by the restart]
+
