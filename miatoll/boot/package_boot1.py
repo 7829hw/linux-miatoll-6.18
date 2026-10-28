@@ -195,7 +195,7 @@ def main(profile='boot1', android_ramdisk=None):
         # console stays on screen and pstore can be read after a manual reset.
         command_line = ('console=tty0 loglevel=7 clk_ignore_unused pd_ignore_unused deferred_probe_timeout=30 '
                         'printk.devkmsg=on firmware_class.path=/vendor/firmware/ '
-                        'androidboot.boot_devices=soc@0/8804000.mmc androidboot.hardware=curtana_ml '
+                        'androidboot.boot_devices=soc@0/8804000.mmc androidboot.super_partition=los_super androidboot.hardware=curtana_ml '
                         'androidboot.selinux=permissive androidboot.verifiedbootstate=orange '
                         'androidboot.console=tty0 panic=0 androidboot.init_fatal_panic=true '
                         'miatoll_boot=lineage1')
