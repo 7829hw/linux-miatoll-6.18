@@ -1,0 +1,5 @@
+fastboot devices
+REDACTED	 fastboot
+fastboot -s REDACTED getvar product
+getvar:product                                     FAILED (remote: 'GetVar Variable Not found')
+Finished. Total time: 0.002s

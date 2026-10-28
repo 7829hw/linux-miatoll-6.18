@@ -1,0 +1,8 @@
+fastboot devices
+REDACTED	 fastboot
+fastboot -s REDACTED getvar product
+product: curtana
+Finished. Total time: 0.002s
+fastboot -s REDACTED reboot bootloader
+Rebooting into bootloader                          FAILED (remote: 'unknown command')
+fastboot: error: Command failed

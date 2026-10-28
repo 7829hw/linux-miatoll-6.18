@@ -1,0 +1,72 @@
+### 2026-10-28T19:50:18 diag
+$ dd if=/dev/mmcblk2p2 bs=4096 count=1 2>/dev/null | hexdump -C | grep -v "00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00" | head -8; echo ===; dd if=/dev/mmcblk2p1 bs=1024 skip=1 count=1 2>/dev/null | hexdump -C | head -2; dd if=/dev/mmcblk2p4 bs=1024 skip=1 count=1 2>/dev/null | hexdump -C | head -1; echo ===; ls /sys/fs/pstore 2>&1; mkdir -p /run/md && mount -t ext4 -o ro /dev/mmcblk2p1 /run/md 2>&1 && ls -la /run/md /run/md/* 2>&1 | head -30
+dd if=/dev/mmcblk2p2 bs=4096 count=1 2>/dev/null | hexdump -C
+ | grep -v "00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00" | head -8; echo ==
+=; dd if=/dev/mmcblk2p1 bs=1024 skip=1 count=1 2>/dev/null | hexdump -C | head -
+2; dd if=/dev/mmcblk2p4 bs=1024 skip=1 count=1 2>/dev/null | hexdump -C | head -
+1; echo ===; ls /sys/fs/pstore 2>&1; mkdir -p /run/md && mount -t ext4 -o ro /de
+v/mmcblk2p1 /run/md 2>&1 && ls -la /run/md /run/md/* 2>&1 | head -30; printf "\n
+STEP_DONE_195018=%s\n" "$?"
+*
+00001000
+===
+00000000  00 20 00 00 00 20 00 00  51 00 00 00 c1 17 00 00  |. ... ..Q.......|
+00000010  ba 1f 00 00 00 00 00 00  02 00 00 00 02 00 00 00  |................|
+00000000  10 20 f5 f2 01 00 10 00  09 00 00 00 03 00 00 00  |. ..............|
+===
+/run/md:
+total 116
+drwxrwxr-x   27 1023     1023          4096 Oct 28  2026 .
+drwxr-xr-x    4 0        0              200 Jan  1 00:00 ..
+drwx------    2 10208    10208         4096 Oct 28  2026 Alarms
+drwx------    4 10208    10208         4096 Oct 28  2026 Android
+drwx------    2 10208    10208         4096 Oct 28  2026 Audiobooks
+drwx------    2 10208    10208         4096 Oct 28  2026 DCIM
+drwx------    2 10208    10208         4096 Oct 28  2026 Documents
+drwx------    2 10208    10208         4096 Oct 28  2026 Download
+drwx------    3 10208    10208         4096 Oct 28  2026 Movies
+drwx------    3 10208    10208         4096 Oct 28  2026 Music
+drwx------    2 10208    10208         4096 Oct 28  2026 Notifications
+drwx------    3 10208    10208         4096 Oct 28  2026 Pictures
+drwx------    2 10208    10208         4096 Oct 28  2026 Podcasts
+drwx------    2 10208    10208         4096 Oct 28  2026 Recordings
+drwx------    2 10208    10208         4096 Oct 28  2026 Ringtones
+drwxrwxr-x    5 0        1000          4096 Jan  1 00:00 aconfig
+drwx------    3 0        1000          4096 Jan  1 00:00 apex
+drwxr-x---    2 1000     1007          4096 Jan  1 00:00 bootstat
+drwxrwx--x    5 0        1000          4096 Jan  1 00:00 gsi
+drwx------    2 0        0            16384 Jan  1 00:00 lost+found
+drwxr-x---    3 0        1000          4096 Jan  1 00:00 ota
+drwxrwx--x    2 0        1000          4096 Jan  1 00:00 password_slots
+drwxrwx---    2 0        1000          4096 Jan  1 00:00 prefetch
+drwxrwx---    2 0        1000          4096 Jan  1 00:00 staged-install
+drwxrwx---    2 0        1000          4096 Jan  1 00:00 tradeinmode
+drwx------    2 0        0             4096 Jan  1 00:00 vold
+drwxrwx---    2 0        1000          4096 Jan  1 00:00 watchdog
+
+
+STEP_DONE_195018=0
+miatoll-sdexport1# [6n
+### 2026-10-28T19:50:41 data-ro
+$ umount /run/md 2>/dev/null; mkdir -p /run/ud && mount -t f2fs -o ro /dev/mmcblk2p4 /run/ud 2>&1; ls /run/ud 2>&1 | tr "\n" " "; echo; ls -la /run/ud/system/dropbox 2>&1 | tail -15; ls -la /run/ud/tombstones 2>&1 | tail -5; ls /run/ud/misc/bootstat 2>&1 | head; ls /run/ud/system 2>&1 | tr "\n" " "
+umount /run/md 2>/dev/null; mkdir -p /run/ud && mount -t f2fs
+ -o ro /dev/mmcblk2p4 /run/ud 2>&1; ls /run/ud 2>&1 | tr "\n" " "; echo; ls -la 
+/run/ud/system/dropbox 2>&1 | tail -15; ls -la /run/ud/tombstones 2>&1 | tail -5
+; ls /run/ud/misc/bootstat 2>&1 | head; ls /run/ud/system 2>&1 | tr "\n" " "; pr
+intf "\nSTEP_DONE_195041=%s\n" "$?"
+mount: mounting /dev/mmcblk2p4 on /run/ud failed: Invalid argument
+
+ls: /run/ud/system/dropbox: No such file or directory
+ls: /run/ud/tombstones: No such file or directory
+ls: /run/ud/misc/bootstat: No such file or directory
+ls: /run/ud/system: No such file or directory 
+STEP_DONE_195041=0
+miatoll-sdexport1# [6n
+### 2026-10-28T19:50:48 data-ro2
+$ dmesg | grep -i f2fs | tail -5
+dmesg | grep -i f2fs | tail -5; printf "\nSTEP_DONE_195048=%s
+\n" "$?"
+[   41.703417] F2FS-fs (mmcblk2p4): Filesystem with casefold feature cannot be mounted without CONFIG_UNICODE
+
+STEP_DONE_195048=0
+miatoll-sdexport1# [6n
