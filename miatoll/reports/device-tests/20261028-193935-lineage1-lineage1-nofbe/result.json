@@ -1,0 +1,31 @@
+{
+  "capture_id": "20261028-193935",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-lineage1+",
+  "boot_profile": "lineage1-ram-only",
+  "image": "boot-curtana-6.18.58-lineage1.img",
+  "image_sha256": "ee9eb56e040f6d653c794d664122168f195d5b4f46e04888ee277dfe89a782e0",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED reboot bootloader",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot devices",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-lineage1/boot-curtana-6.18.58-lineage1.img"
+  ],
+  "physical_display_confirmed": null,
+  "user_observation": "pending",
+  "restarted_from_shell": true,
+  "ram_boot_requests": 1,
+  "stopped": "No Linux ACM port after 60 s. Do not resend the image.",
+  "log_files": {
+    "lineage1-fastboot-20261028-193935.txt": {
+      "bytes": 863,
+      "sha256": "05c73b846fd6f334397f5a22949d30baa0cae3d8e7e0e22b1049bc2001f9282c"
+    }
+  }
+}

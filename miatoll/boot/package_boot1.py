@@ -188,12 +188,15 @@ def main(profile='boot1', android_ramdisk=None):
         command_line += ' consoleblank=0 drm.debug=0x06'
     if profile == 'lineage1':
         # The ramdisk's /init is Android's first stage; partitions come from the
-        # SD controller only (androidboot.boot_devices).
+        # SD controller only (androidboot.boot_devices). A fatal init error
+        # panics instead of rebooting and panic=0 keeps the kernel there, so the
+        # console stays on screen and pstore can be read after a manual reset.
         command_line = ('console=tty0 loglevel=7 clk_ignore_unused pd_ignore_unused deferred_probe_timeout=30 '
                         'printk.devkmsg=on firmware_class.path=/vendor/firmware/ '
                         'androidboot.boot_devices=soc@0/8804000.mmc androidboot.hardware=curtana_ml '
                         'androidboot.selinux=permissive androidboot.verifiedbootstate=orange '
-                        'androidboot.console=tty0 miatoll_boot=lineage1')
+                        'androidboot.console=tty0 panic=0 androidboot.init_fatal_panic=true '
+                        'miatoll_boot=lineage1')
     plain = DIST / (profile + '-plain.img')
     mkbootimg = TOOLS / 'aosp-mkbootimg/mkbootimg.py'
     command = [sys.executable, str(mkbootimg), '--kernel', str(shim), '--ramdisk', str(ramdisk),

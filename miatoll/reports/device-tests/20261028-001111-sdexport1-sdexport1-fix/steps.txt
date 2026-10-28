@@ -21,3 +21,14 @@ a600000.usb
 
 STEP_DONE_001232=0
 miatoll-sdexport1# [6n
+### 2026-10-28T01:30:26 state-check
+$ cat /proc/version; cut -d" " -f1 /proc/uptime; sd-export status; ls /sys/class/block | grep mmcblk | tr "\n" " "
+^[[6ncat /proc/version; cut -d" " -f1 /proc/u
+ptime; sd-export status; ls /sys/class/block | grep mmcblk | tr "\n" " "; printf
+ "\nSTEP_DONE_013025=%s\n" "$?"
+/bin/sh: miatoll-sdexport^[[6ncat: not found
+4720.36
+SD-EXPORT: on, file=/dev/mmcblk2
+mmcblk2 mmcblk2p1 mmcblk2p2 
+STEP_DONE_013025=0
+miatoll-sdexport1# [6n

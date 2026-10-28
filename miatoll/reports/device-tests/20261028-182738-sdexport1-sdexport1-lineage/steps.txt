@@ -1,0 +1,42 @@
+### 2026-10-28T18:28:31 sd-export-on
+$ setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1 & sleep 1; cat /run/sd-export.log
+setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1 & slee
+p 1; cat /run/sd-export.log; printf "\nSTEP_DONE_182830=%s\n" "$?"
+SD-EXPORT: exporting /dev/mmcblk2 (62333952 sectors)
+
+STEP_DONE_182830=0
+[1]+  Done                       setsid sh -c "sd-export on" 0</dev/null 1>/dev/null 2>&1
+miatoll-sdexport1# [6n
+### 2026-10-28T19:18:54 sd-export-off
+$ sync; setsid sh -c "sd-export off" </dev/null >/dev/null 2>&1 & sleep 1; cat /run/sd-export.log | tail -2
+sync; setsid sh -c "sd-export off" </dev/null
+ >/dev/null 2>&1 & sleep 1; cat /run/sd-export.log | tail -2; printf "\nSTEP_DON
+E_191853=%s\n" "$?"
+/bin/sh: miatoll-sdexportsync: not found
+SD-EXPORT: exporting /dev/mmcblk2 (62333952 sectors)
+SD-EXPORT: on
+
+STEP_DONE_191853=0
+[1]+  Done                       setsid sh -c "sd-export off" 0</dev/null 1>/dev/null 2>&1
+miatoll-sdexport1# [6n
+### 2026-10-28T19:19:03 sd-export-status
+$ sync; sd-export status; sync
+^[[6nsync; sd-export status; sync; printf "\n
+STEP_DONE_191903=%s\n" "$?"
+/bin/sh: miatoll-sdexport^[[6nsync: not found
+SD-EXPORT: off
+
+STEP_DONE_191903=0
+miatoll-sdexport1# [6n
+### 2026-10-28T19:19:13 sd-partnames
+$ blockdev --rereadpt /dev/mmcblk2 2>&1; for p in /sys/class/block/mmcblk2p*; do echo "${p##*/} $(sed -n "s/^PARTNAME=//p" $p/uevent) $(cat $p/size)"; done
+blockdev --rereadpt /dev/mmcblk2 2>&1; for p in /sys/class/bl
+ock/mmcblk2p*; do echo "${p##*/} $(sed -n "s/^PARTNAME=//p" $p/uevent) $(cat $p/
+size)"; done; printf "\nSTEP_DONE_191913=%s\n" "$?"
+mmcblk2p1 metadata 65536
+mmcblk2p2 misc 8192
+mmcblk2p3 super 12582912
+mmcblk2p4 userdata 49675231
+
+STEP_DONE_191913=0
+miatoll-sdexport1# [6n
