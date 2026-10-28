@@ -26,6 +26,7 @@
 #include <linux/devm-helpers.h>
 #include <linux/regulator/consumer.h>
 #include <linux/firmware.h>
+#include <linux/slab.h>
 
 /* Misc */
 #define FT8756_NUM_SUPPLIES 3
@@ -131,11 +132,10 @@ static int ft8756_spi_write(void *dev, const void *data, size_t len)
     int ret;
     u32 datalen = len - 1;
     u32 txlen = 0;
-    u8 *txBuf = devm_kzalloc(dev, len + 9, GFP_KERNEL);
-    if (!txBuf)
-		return -ENOMEM;
-    u8 *rxBuf = devm_kzalloc(dev, len + 9, GFP_KERNEL);
-    if (!rxBuf)
+    /* Per-transfer buffers; devm allocations here grew on every access. */
+    u8 *txBuf __free(kfree) = kzalloc(len + 9, GFP_KERNEL);
+    u8 *rxBuf __free(kfree) = kzalloc(len + 9, GFP_KERNEL);
+    if (!txBuf || !rxBuf)
 		return -ENOMEM;
 
     txBuf[txlen++] = ((u8*)data)[0];
@@ -187,14 +187,14 @@ static int ft8756_spi_read(void *dev, const void *reg_buf, size_t reg_size, void
 	struct spi_device *spi = to_spi_device((struct device *)dev);
     int ret, i, j;
     u32 txlen = 0;
-    u8 *txBuf = devm_kzalloc(dev, 4, GFP_KERNEL);
-    if (!txBuf)
-		return -ENOMEM;
-    u8 *rxBuf = devm_kzalloc(dev, val_size + 9, GFP_KERNEL);
-    if (!rxBuf)
+    /* The transfer is full duplex over the whole length, so the TX buffer
+     * must cover it too (header, dummy bytes, data and CRC). */
+    u8 *txBuf __free(kfree) = kzalloc(val_size + 9, GFP_KERNEL);
+    u8 *rxBuf __free(kfree) = kzalloc(val_size + 9, GFP_KERNEL);
+    if (!txBuf || !rxBuf)
 		return -ENOMEM;
     u32 dp = 0;
-    u16 crc = 0xFFFF;
+    u16 crc;
 
     txBuf[txlen++] = ((u8*)reg_buf)[0];
     txBuf[txlen++] = READ_CMD;
@@ -223,8 +223,8 @@ static int ft8756_spi_read(void *dev, const void *reg_buf, size_t reg_size, void
             continue;
         }
         if ((rxBuf[3] & 0xA0) == 0) {
-            memcpy(val_buf, &rxBuf[dp], val_size);
             if(txBuf[1] & DATA_CRC_EN) {
+                crc = 0xFFFF;
                 for(j = 0; j < (txlen - dp - 2); j++) {
                     crc ^= rxBuf[dp + j];
                     for(u8 k = 0; k < 8; k++)
@@ -233,10 +233,12 @@ static int ft8756_spi_read(void *dev, const void *reg_buf, size_t reg_size, void
                 u16 crc_read = (u16) (rxBuf[txlen - 1] << 8) + rxBuf[txlen - 2];
                 if (crc != crc_read) {
                     dev_err(dev, "crc error: 0x%02x expected, got 0x%02x", crc, crc_read);
+                    ret = -EIO;
                     usleep_range(CS_HIGH_DELAY, CS_HIGH_DELAY + 100);
                     continue;
                 }
             }
+            memcpy(val_buf, &rxBuf[dp], val_size);
             break;
         } else {
             dev_err(dev, "Failed to read data status: 0x%X", rxBuf[3]);
