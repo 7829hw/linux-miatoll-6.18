@@ -194,21 +194,29 @@ def main(profile='boot1', android_ramdisk=None):
         # First-stage Android ramdisk from the LineageOS build (curtana_ml).
         require(android_ramdisk is not None, 'lineage1 needs --android-ramdisk')
         android = Path(android_ramdisk).read_bytes()
-        # cfg80211 loads regulatory.db at late_initcall, long before Android
-        # mounts /vendor; without it the regulatory domain stays world (00)
-        # and no country hint applies. Append the pinned database under
-        # /lib/firmware as a second, uncompressed newc archive.
+        # cfg80211 loads regulatory.db at late_initcall and hci_qca loads the
+        # WCN3991 firmware when it registers hci0, both long before Android
+        # mounts /vendor. Without them the regulatory domain stays world (00)
+        # and no country hint applies, and hci0 fails its setup. Append the
+        # pinned files under /lib/firmware as a second, uncompressed newc
+        # archive.
+        import bluetooth_payload
         import wifi_payload
         wifi, _ = wifi_payload.load(WORKSPACE)
         regdb = {name: data for name, (data, _) in wifi.items() if name.startswith('lib/firmware/regulatory.db')}
         require(sorted(regdb) == ['lib/firmware/regulatory.db', 'lib/firmware/regulatory.db.p7s'],
                 'Missing pinned regulatory database')
-        extra = newc_archive([('lib', None), ('lib/firmware', None)] + sorted(regdb.items()))
+        early = dict(regdb)
+        early.update(bluetooth_payload.load_bluetooth_firmware(WORKSPACE))
+        require(all(name.startswith('lib/firmware/qca/') for name in set(early) - set(regdb)),
+                'Unexpected Bluetooth firmware path')
+        extra = newc_archive([('lib', None), ('lib/firmware', None), ('lib/firmware/qca', None)]
+                             + sorted(early.items()))
         ramdisk = DIST / 'ramdisk-lineage1.img'
         ramdisk.write_bytes(android + b'\0' * (-len(android) % 4) + extra)
         ramdisk_report = {'android_ramdisk': str(android_ramdisk), 'android_bytes': len(android),
                           'android_sha256': digest(android), 'profile': profile,
-                          'appended': {name: digest(data) for name, data in regdb.items()},
+                          'appended': {name: digest(data) for name, data in early.items()},
                           'bytes': ramdisk.stat().st_size, 'sha256': digest(ramdisk.read_bytes())}
     else:
         ramdisk = DIST / ('initramfs-' + profile + '.cpio.gz')
