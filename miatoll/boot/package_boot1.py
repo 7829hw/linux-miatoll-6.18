@@ -154,10 +154,12 @@ def main(profile='boot1', android_ramdisk=None):
         from check_display import check as check_display
         display_validation = check_display(dtb, config)
     if profile == 'lineage1':
-        # Android runs from the SM32G microSD only: the internal UFS, the modem
-        # and Wi-Fi must not be probed at all.
-        disabled += ('/soc@0/ufshc@1d84000', '/soc@0/phy@1d87000', '/soc@0/remoteproc@4080000',
-                     '/soc@0/wifi@18800000', '/soc@0/ipa@1e40000')
+        # Android runs from the SM32G microSD. The internal UFS is probed only
+        # for the read-only modem EFS (rmtfs), with MPSS and Wi-Fi; modem data
+        # (IPA) stays off.
+        disabled += ('/soc@0/ipa@1e40000',)
+        for node in ('/soc@0/ufshc@1d84000', '/soc@0/remoteproc@4080000', '/soc@0/wifi@18800000'):
+            require(fdt(dtb, node, 'status') == 'okay', 'lineage1 needs ' + node)
         for symbol in ('EROFS_FS', 'F2FS_FS', 'BLK_DEV_DM', 'ANDROID_BINDERFS', 'USB_CONFIGFS_F_FS',
                        'IP_NF_IPTABLES', 'IP6_NF_IPTABLES', 'UHID', 'ZRAM'):
             require('CONFIG_' + symbol + '=y\n' in config, 'Missing Android built-in: ' + symbol)
