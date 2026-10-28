@@ -80,6 +80,20 @@ static int huaxing_ft8756_off(struct huaxing_ft8756 *ctx)
 	mipi_dsi_dcs_enter_sleep_mode_multi(&dsi_ctx);
 	mipi_dsi_msleep(&dsi_ctx, 150);
 
+	/*
+	 * Low power mode, from the off command of the vendor panel
+	 * (dsi-panel-ft8756-huaxing-fhd-video.dtsi). The touch side of the
+	 * TDDI needs it to detect wake gestures while the panel stays powered.
+	 * F7 is behind the command2 unlock that the vendor on command sends
+	 * first, so repeat that unlock here.
+	 */
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0x00, 0x00);
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0xff, 0x87, 0x56, 0x01);
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0x00, 0x80);
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0xff, 0x87, 0x56);
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0x00, 0x00);
+	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, 0xf7, 0x5a, 0xa5, 0x95, 0x27);
+
 	return dsi_ctx.accum_err;
 }
 
