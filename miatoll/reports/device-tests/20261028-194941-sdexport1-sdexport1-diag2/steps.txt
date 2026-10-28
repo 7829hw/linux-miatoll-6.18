@@ -70,3 +70,18 @@ dmesg | grep -i f2fs | tail -5; printf "\nSTEP_DONE_195048=%s
 
 STEP_DONE_195048=0
 miatoll-sdexport1# [6n
+### 2026-10-28T19:58:21 sd-reset-meta-data
+$ umount /run/md /run/ud 2>/dev/null; b=/sys/class/block/mmcblk2; case "$(readlink -f $b)" in */8804000.mmc/*) ;; *) echo NOT_SD; exit 1;; esac; [ "$(cat $b/device/name)" = SM32G ] || { echo NOT_SM32G; exit 1; }; grep -q mmcblk2 /proc/mounts && { echo MOUNTED; exit 1; }; [ "$(sed -n s/^PARTNAME=//p $b/mmcblk2p1/uevent)" = metadata ] && [ "$(sed -n s/^PARTNAME=//p $b/mmcblk2p4/uevent)" = userdata ] || { echo PARTNAMES; exit 1; }; dd if=/dev/zero of=/dev/mmcblk2p1 bs=1M count=32 2>/dev/null; dd if=/dev/zero of=/dev/mmcblk2p4 bs=1M count=16 2>/dev/null; dd if=/dev/zero of=/dev/mmcblk2p2 bs=1M count=4 2>/dev/null; sync; echo RESET_DONE
+umount /run/md /run/ud 2>/dev/null; b=/sys/class/block/mmcblk
+2; case "$(readlink -f $b)" in */8804000.mmc/*) ;; *) echo NOT_SD; exit 1;; esac
+; [ "$(cat $b/device/name)" = SM32G ] || { echo NOT_SM32G; exit 1; }; grep -q mm
+cblk2 /proc/mounts && { echo MOUNTED; exit 1; }; [ "$(sed -n s/^PARTNAME=//p $b/
+mmcblk2p1/uevent)" = metadata ] && [ "$(sed -n s/^PARTNAME=//p $b/mmcblk2p4/ueve
+nt)" = userdata ] || { echo PARTNAMES; exit 1; }; dd if=/dev/zero of=/dev/mmcblk
+2p1 bs=1M count=32 2>/dev/null; dd if=/dev/zero of=/dev/mmcblk2p4 bs=1M count=16
+ 2>/dev/null; dd if=/dev/zero of=/dev/mmcblk2p2 bs=1M count=4 2>/dev/null; sync;
+ echo RESET_DONE; printf "\nSTEP_DONE_195819=%s\n" "$?"
+RESET_DONE
+
+STEP_DONE_195819=0
+miatoll-sdexport1# [6n
