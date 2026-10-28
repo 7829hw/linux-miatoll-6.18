@@ -857,8 +857,14 @@ skip_regulators:
 	}
 
     /* Request threaded IRQ for touch screen interrupts */
+	/*
+	 * The controller pulls INT low when data is ready (the DT and the
+	 * vendor driver use the falling edge). With the rising edge a wake
+	 * gesture was only seen when INT went high again, after the
+	 * controller had given up and reset.
+	 */
 	ret = devm_request_threaded_irq(dev, ts->irq, NULL, ft8756_irq_handler,
-			 IRQ_TYPE_EDGE_RISING | IRQF_ONESHOT, dev_name(dev), ts);
+			 IRQF_TRIGGER_FALLING | IRQF_ONESHOT, dev_name(dev), ts);
 	if (ret) {
         dev_err(dev, "request irq failed: %d\n", ret);
         return ret;
