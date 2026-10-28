@@ -202,16 +202,21 @@ def run(args):
             device = serials[0]
             if not re.search(r'product:\s*curtana\b', fastboot.run('getvar', 'product', serial=device)):
                 raise Stop('Expected product curtana. Keep the log and stop here.')
-            print('Restarting the bootloader for a fresh Fastboot session. No partition is written.')
-            fastboot.run('reboot', 'bootloader', serial=device)
-            deadline = time.monotonic() + args.reconnect_timeout
-            while True:
-                time.sleep(2)
-                usbipd_attach(FASTBOOT_ID)
-                if device in fastboot_serials(fastboot):
-                    break
-                if time.monotonic() > deadline:
-                    raise Stop('Bootloader did not reconnect; image was not sent.')
+            if args.no_restart:
+                # After `adb reboot bootloader` this bootloader rejects
+                # reboot-bootloader as an unknown command; it is already fresh.
+                print('Skipping the bootloader restart as requested.')
+            else:
+                print('Restarting the bootloader for a fresh Fastboot session. No partition is written.')
+                fastboot.run('reboot', 'bootloader', serial=device)
+                deadline = time.monotonic() + args.reconnect_timeout
+                while True:
+                    time.sleep(2)
+                    usbipd_attach(FASTBOOT_ID)
+                    if device in fastboot_serials(fastboot):
+                        break
+                    if time.monotonic() > deadline:
+                        raise Stop('Bootloader did not reconnect; image was not sent.')
             print('Sending the image once with fastboot boot for RAM execution. This does not flash it.')
             fastboot.run('boot', str(image), serial=device)
             result['ram_boot_requests'] = 1
@@ -369,6 +374,8 @@ def main():
     boot.add_argument('--port-timeout', type=int, default=120)
     boot.add_argument('--capture-timeout', type=int, default=120)
     boot.add_argument('--label', help='suffix for the report directory name')
+    boot.add_argument('--no-restart', action='store_true',
+                      help='send the image without first restarting the bootloader')
     boot.add_argument('--from-shell', action='store_true',
                       help='first restart the running RAM test into Fastboot through its USB shell')
     rb = commands.add_parser('reboot-bootloader', help='restart the running RAM test into Fastboot')
