@@ -396,6 +396,10 @@ Clang/LLD 18.1.3과 호스트 도구는 작업 공간의 `tools/`에만 준비�
 (18.1.3-1ubuntu1)과 noble `libxml2` 2.9.14, `libicu74`를 Ubuntu 인덱스 SHA256 확인 후
 `tools/llvm18`에만 풀고, 로컬 `patchelf`로 두 보조 라이브러리에 `$ORIGIN` runpath를 지정했다.
 실기기 USB는 usbipd-win 5.3.0과 `boot/wsl/51-curtana-ramtest.rules`로 WSL에 연결한다.
+2026-10-28부터 커널 빌드는 별도 빌드 호스트(Ubuntu 24.04)에서 한다. WSL에서 커밋한 브랜치를 빌드 호스트의
+bare 저장소(공식 v6.18.58 태그로 시작)에 push하고, 위 표의 noble 패키지(같은 SHA-256)와
+`libllvm18`·`libclang-cpp18` 18.1.3-1ubuntu1을 apt-get download로 받아 작업 공간 `tools/`에만 풀었다.
+같은 커밋 cabd68c2의 lineage1 빌드에서 DTB는 동일하고, Image는 빌드 번호(`#N`)와 그에 따른 kallsyms만 다르다.
 
 ## 우선 남은 작업
 
