@@ -330,7 +330,8 @@ lineage1 커널을 `fastboot boot`로 RAM에서 실행하고 LineageOS 22.2를 S
 - Wi-Fi 2.4/5 GHz·인터넷, Bluetooth A2DP 재생(사용자 확인). UFS는 rmtfs의 읽기 전용 EFS 접근용으로만 켜고 모든 LUN을 ro로 둔다.
   SD 파티션 이름은 `los_*`. [Wi-Fi·BT 기록](reports/device-tests/20261029-172800-lineage1-lineage24-btprofiles/README.ko.md)
 - 두 번 탭 켜기는 미해결: 제스처 모드에서 탭 순간 FT8756이 리셋된다. [DT2W 기록](reports/device-tests/20261029-005930-lineage1-lineage20-oncmd/README.ko.md)
-- 남은 일: 진동, RIL, 카메라, FBE, 절전.
+- 진동: AW8624(aw8695-haptics, FF_RUMBLE)와 기기 트리 vibrator HAL로 Android 진동·터치 피드백 동작(사용자 확인). [진동 기록](reports/device-tests/20261029-181230-lineage1-lineage27-vibrator/README.ko.md)
+- 남은 일: RIL, 카메라, FBE, 절전.
 [lineage1 기록](reports/device-tests/20261028-205935-lineage1-lineage3-mesa/README.ko.md)
 
 ## 하드웨어별 상태
@@ -350,7 +351,7 @@ lineage1 커널을 `fastboot boot`로 RAM에서 실행하고 LineageOS 22.2를 S
 | Wi-Fi/Bluetooth | ath10k SNOC, QCA UART/HCI | 전원/버스/펌웨어 DT | wifi1에서 MPSS·WLAN firmware·wlan0·수동 검색, wifi2에서 WPA3-SAE 연결·DHCPv4·ICMP, wifi3에서 PMF peer 비트 backport 후 지연 개선(평균 23 ms) 실기기 확인(read-only rmtfs, 기기 BDF). bt1에서 Bluetooth firmware·임시 주소 전원·LE/BR 검색 확인. Galaxy Buds Pro 페어링과 A2DP SBC 시험음 청취 확인. 공장 MAC/BD 주소, 처리량, 공존, 장시간 오디오·통화 미검증. PMF 패치는 wifi3 브랜치에만 포함 |
 | 배터리/충전 | ADC5, SPMI SDAM, regulator, Type-C | 실험적 QGauge와 PM6150 DT. 6.18 fwnode API 변환. QG SUBTYPE 배율·ABI 부호 수정(battery2) | battery2에서 전압·OCV·온도·충전/방전 전류 부호와 크기 실기기 확인. 잔량은 선형 전압 추정이며 STATUS_UNKNOWN. 충전 제어·정확한 SOC·건강 HAL은 미완성. SM5714는 Samsung용이므로 제외 |
 | 전력 관리 | RPMh/CPUfreq/thermal/PSCI | 보드 전원 DT와 Android wakelock/autosleep 설정 | 실제 idle/suspend/resume/열 보호/소비 전류/USB 전력 역할 |
-| 추가 기능 | Venus/IR SPI | 기존 드라이버 모듈 설정, 보드 DT; AW8695/DRV2624 진동 드라이버 | 영상 가속/IR/진동은 실행 미검증. DRV2624 GPIO API 변환 |
+| 추가 기능 | Venus/IR SPI | 기존 드라이버 모듈 설정, 보드 DT; AW8695/DRV2624 진동 드라이버 | 진동은 lineage1에서 AW8624(aw8695-haptics) 동작 확인, DRV2624 변형은 미검증. 영상 가속/IR은 실행 미검증. DRV2624 GPIO API 변환 |
 
 `curtana`와 `joyeuse`의 두 패널 변형이 현재 DTB 빌드 대상이다.
 miatoll 전체 명칭만으로 `gram`/`excalibur`의 보드 ID·패널·센서 구성을 지원한다고 가정하지 않는다.

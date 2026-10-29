@@ -1,0 +1,18 @@
+### 2026-10-29T18:09:26 sd-export-on
+$  true; setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1 & sleep 1; cat /run/sd-export.log
+ true; setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1
+ & sleep 1; cat /run/sd-export.log; printf "\nSTEP_DONE_180925=%s\n" "$?"
+SD-EXPORT: exporting /dev/mmcblk2 (62333952 sectors)
+
+STEP_DONE_180925=0
+[1]+  Done                       setsid sh -c "sd-export on" 0</dev/null 1>/dev/null 2>&1
+miatoll-sdexport1# [6n
+### 2026-10-29T18:12:30 sd-export-status
+$  true; sd-export status
+ true; sd-export status; printf "\nSTEP
+_DONE_181230=%s\n" "$?"
+/bin/sh: miatoll-sdexport^[[6nm: not found
+SD-EXPORT: off
+
+STEP_DONE_181230=0
+miatoll-sdexport1# [6n
