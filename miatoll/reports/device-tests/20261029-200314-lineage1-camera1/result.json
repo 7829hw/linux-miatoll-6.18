@@ -1,0 +1,21 @@
+{
+  "capture_id": "20261029-200314",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-lineage1+",
+  "boot_profile": "lineage1-ram-only",
+  "image": "boot-curtana-6.18.58-lineage1.img",
+  "image_sha256": "221df3631f761e23bf9c4a7a142353fd3dc3ded7fbc36c45be45510564ff2e22",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices"
+  ],
+  "physical_display_confirmed": null,
+  "user_observation": "pending",
+  "stopped": "Connect exactly one curtana in bootloader fastboot mode.",
+  "log_files": {
+    "lineage1-fastboot-20261029-200314.txt": {
+      "bytes": 18,
+      "sha256": "32eb42e974c6a627e8a8dbc09bfb4a194653b9cd099643e1f570799955da8f57"
+    }
+  }
+}
