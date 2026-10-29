@@ -1,0 +1,9 @@
+fastboot devices
+REDACTED	 fastboot
+fastboot -s REDACTED getvar product
+product: curtana
+Finished. Total time: 0.002s
+fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-sdexport1/boot-curtana-6.18.58-sdexport1.img
+Sending 'boot.img' (131072 KB)                     OKAY [  2.999s]
+Booting                                            OKAY [  5.108s]
+Finished. Total time: 8.214s
