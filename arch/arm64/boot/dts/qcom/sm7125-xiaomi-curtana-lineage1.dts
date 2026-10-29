@@ -16,3 +16,5 @@
 &remoteproc_mpss { status = "okay"; };
 &wifi { status = "okay"; };
 &ipa { status = "disabled"; };
+/* Haptics (AW8624 or DRV2624) on the QUP0 I2C bus. */
+&i2c4 { status = "okay"; };
