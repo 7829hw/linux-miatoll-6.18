@@ -331,7 +331,7 @@ lineage1 커널을 `fastboot boot`로 RAM에서 실행하고 LineageOS 22.2를 S
   SD 파티션 이름은 `los_*`. [Wi-Fi·BT 기록](reports/device-tests/20261029-172800-lineage1-lineage24-btprofiles/README.ko.md)
 - 두 번 탭 켜기는 미해결: 제스처 모드에서 탭 순간 FT8756이 리셋된다. [DT2W 기록](reports/device-tests/20261029-005930-lineage1-lineage20-oncmd/README.ko.md)
 - 진동: AW8624(aw8695-haptics)가 벤더 파형 라이브러리와 브레이크 설정으로 클릭 효과를 재생하고, 터치 세기 3단계가 구분된다(사용자 확인). [진동 기록](reports/device-tests/20261029-181230-lineage1-lineage27-vibrator/README.ko.md), [타격감·세기 기록](reports/device-tests/20261029-194929-lineage1-lineage28-strength/README.ko.md)
-- 카메라(커널 경로): CSIPHY v1.2.2 표와 CSIPHY id를 고쳤고 L13A를 상시 켰다. 네 센서(S5KGM2, S5K5E9, OV8856, OV16A1Q) 모두 RAW 프레임을 받는다. 연속 캡처 20/20, 50/50. [RAW 캡처 기록](reports/device-tests/20261029-201216-lineage1-camera3/README.ko.md), [CCI 안정화 기록](reports/device-tests/20261029-203842-lineage1-camera5/README.ko.md). Android 카메라 HAL은 아직 없다.
+- 카메라(커널 경로): CSIPHY v1.2.2 표와 CSIPHY id를 고쳤고 L13A를 상시 켰다. 네 센서(S5KGM2, S5K5E9, OV8856, OV16A1Q) 모두 RAW 프레임을 받는다. 연속 캡처 20/20, 50/50. [RAW 캡처 기록](reports/device-tests/20261029-201216-lineage1-camera3/README.ko.md), [CCI 안정화 기록](reports/device-tests/20261029-203842-lineage1-camera5/README.ko.md). Android 카메라 HAL: libcamera(simple 파이프라인+CPU 소프트웨어 ISP)로 카메라 4개 등록, 메인 미리보기 확인. 전환·AF·전면 화질은 미해결. [HAL 기록](reports/device-tests/20261029-231938-lineage1-lineage31-cameras/README.ko.md)
 - 남은 일: RIL, 카메라 HAL, FBE, 절전.
 [lineage1 기록](reports/device-tests/20261028-205935-lineage1-lineage3-mesa/README.ko.md)
 
