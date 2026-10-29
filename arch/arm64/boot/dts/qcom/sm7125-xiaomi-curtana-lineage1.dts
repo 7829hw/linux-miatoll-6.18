@@ -18,3 +18,7 @@
 &ipa { status = "disabled"; };
 /* Haptics (AW8624 or DRV2624) on the QUP0 I2C bus. */
 &i2c4 { status = "okay"; };
+/* Cameras: CAMSS with the sensors on the two CCI controllers. */
+&camss { status = "okay"; };
+&cci0 { status = "okay"; };
+&cci1 { status = "okay"; };

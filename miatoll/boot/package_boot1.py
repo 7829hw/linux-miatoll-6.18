@@ -130,7 +130,13 @@ def main(profile='boot1', android_ramdisk=None):
         require(fdt(dtb, typec + '/connector', 'power-role') == 'source', 'Unexpected Type-C power role')
     else:
         require(fdt(dtb, dwc3, 'dr_mode') == 'peripheral', 'USB must be peripheral')
-    disabled = ('/soc@0/remoteproc@8300000', '/soc@0/camss@acb3000')
+    disabled = ('/soc@0/remoteproc@8300000',)
+    if profile == 'lineage1':
+        for symbol in ('VIDEO_QCOM_CAMSS', 'I2C_QCOM_CCI', 'VIDEO_S5KGM2', 'VIDEO_S5K5E9', 'VIDEO_OV16A1Q'):
+            require('CONFIG_' + symbol + '=y\n' in config, 'Missing camera built-in: ' + symbol)
+        available(dtb, '/soc@0/camss@acb3000')
+    else:
+        disabled += ('/soc@0/camss@acb3000',)
     if profile in ('gpu1', 'gpu2', 'vulkan1', 'modem1', 'sdexport1', 'lineage1'):
         require('CONFIG_DRM_MSM=y\n' in config and 'CONFIG_QCOM_MDT_LOADER=y\n' in config, 'Missing GPU built-in')
         for node in ('/soc@0/gpu@5000000', '/soc@0/gmu@506a000'):
