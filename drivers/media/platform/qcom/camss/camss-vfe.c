@@ -1188,16 +1188,29 @@ int vfe_flush_buffers(struct camss_video *vid,
 
 	vfe_buf_flush_pending(output, state);
 
-	if (output->buf[0])
+	if (output->buf[0]) {
 		vb2_buffer_done(&output->buf[0]->vb.vb2_buf, state);
+		output->buf[0] = NULL;
+	}
 
-	if (output->buf[1])
+	if (output->buf[1]) {
 		vb2_buffer_done(&output->buf[1]->vb.vb2_buf, state);
+		output->buf[1] = NULL;
+	}
 
 	if (output->last_buffer) {
 		vb2_buffer_done(&output->last_buffer->vb.vb2_buf, state);
 		output->last_buffer = NULL;
 	}
+
+	/*
+	 * A STREAMON that fails after vfe_enable_output() leaves active_num
+	 * set. gen1 VFEs share this union field with active_buf, so only
+	 * reset it for the gen2 VFE-170/480 (asidko/qcom-camss-mainline
+	 * cd6cd249 patch 0003).
+	 */
+	if (vfe->res->hw_ops == &vfe_ops_170 || vfe->res->hw_ops == &vfe_ops_480)
+		output->gen2.active_num = 0;
 
 	spin_unlock_irqrestore(&vfe->output_lock, flags);
 
