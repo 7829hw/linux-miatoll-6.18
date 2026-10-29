@@ -15,6 +15,8 @@
 #include <linux/regmap.h>
 #include <linux/regulator/consumer.h>
 #include <linux/slab.h>
+#include <linux/uaccess.h>
+#include <linux/unaligned.h>
 
 #define AW8624_CHIPID			0x24
 #define AW8695_CHIPID			0x95
@@ -488,6 +490,26 @@
 
 #define AW8695_MAX_REG				0x7f
 
+/*
+ * AW8624 has no boost converter. Its registers 0x31-0x3c and 0x46/0x47 hold
+ * brake and gain controls at addresses where AW8695 has boost settings.
+ */
+#define AW8624_WAVECTRL				0x31
+#define AW8624_WAVECTRL_NUM_OV_DRIVER_MASK	GENMASK(7, 4)
+#define AW8624_ANACTRL				0x38
+#define AW8624_SW_BRAKE				0x39
+#define AW8624_DATDBG				0x3b
+#define AW8624_GLB_STATE			0x47
+#define AW8624_THRS_BRA_END			0x4f
+#define AW8624_R_SPARE_ENABLE			BIT(7)
+
+/* Waveform library loaded into the AW8624 SRAM, from the vendor firmware */
+#define AW8624_FIRMWARE_NAME			"aw8624_haptic.bin"
+#define AW8695_MAX_WAVES			32
+#define AW8695_FF_EFFECTS			16
+/* Full-scale data gain (DATDBG) */
+#define AW8695_GAIN_FULL			0x80U
+
 enum aw8695_work_mode {
 	AW8695_STANDBY_MODE,
 	AW8695_RAM_MODE,
@@ -496,13 +518,55 @@ enum aw8695_work_mode {
 	AW8695_CONT_MODE,
 };
 
+struct aw8695_variant {
+	unsigned int glb_state;
+	unsigned int anactrl;
+	unsigned int datdbg;
+	bool has_boost;
+};
+
+static const struct aw8695_variant aw8624_variant = {
+	.glb_state = AW8624_GLB_STATE,
+	.anactrl = AW8624_ANACTRL,
+	.datdbg = AW8624_DATDBG,
+};
+
+static const struct aw8695_variant aw8695_variant = {
+	.glb_state = AW8695_GLB_STATE,
+	.anactrl = AW8695_ANACTRL,
+	.datdbg = AW8695_DATDBG,
+	.has_boost = true,
+};
+
+/*
+ * An uploaded force-feedback effect: a SRAM waveform played once, or looped
+ * at a data gain until the effect length has passed or it is stopped.
+ */
+struct aw8695_effect {
+	u8 wave;
+	u8 gain;
+	bool loop;
+	u16 length;
+};
+
 struct aw8695_data {
 	struct input_dev *input_dev;
 	struct i2c_client *client;
 	struct regmap *regmap;
 	struct gpio_desc *reset_gpio;
-	bool running;
+	const struct aw8695_variant *variant;
+	struct mutex lock;
+	struct aw8695_effect effects[AW8695_FF_EFFECTS];
+	/* Last playback request, written in atomic context */
+	int play_id;
+	int play_value;
 	struct work_struct play_work;
+	struct delayed_work stop_work;
+	unsigned long stop_deadline;
+	bool looping;
+	/* SRAM waveforms 1..num_waves; loop_wave is used for constant effects */
+	unsigned int num_waves;
+	unsigned int loop_wave;
 	/* Parameters from devicetree */
 	u32 f0_preset;
 	u32 f0_coefficient;
@@ -515,6 +579,8 @@ struct aw8695_data {
 	u8 boost_debug[3];
 	u8 tset;
 	u8 r_spare;
+	u8 sw_brake;
+	bool has_sw_brake;
 	u32 bemf_vthh;
 	u32 bemf_vthl;
 };
@@ -613,10 +679,13 @@ static int aw8695_set_work_mode(struct aw8695_data *haptics,
 			AW8695_SYSCTRL_PLAY_MODE_MASK, AW8695_SYSCTRL_PLAY_MODE_RAM);
 		if (err)
 			return err;
-		err = regmap_update_bits(haptics->regmap, AW8695_SYSCTRL,
-			AW8695_SYSCTRL_BST_MODE_MASK, AW8695_SYSCTRL_BST_MODE_BYPASS);
-		if (err)
-			return err;
+		if (haptics->variant->has_boost) {
+			err = regmap_update_bits(haptics->regmap, AW8695_SYSCTRL,
+				AW8695_SYSCTRL_BST_MODE_MASK,
+				AW8695_SYSCTRL_BST_MODE_BYPASS);
+			if (err)
+				return err;
+		}
 		err = aw8695_haptic_set_active(haptics);
 		if (err)
 			return err;
@@ -626,10 +695,13 @@ static int aw8695_set_work_mode(struct aw8695_data *haptics,
 			AW8695_SYSCTRL_PLAY_MODE_MASK, AW8695_SYSCTRL_PLAY_MODE_CONT);
 		if (err)
 			return err;
-		err = regmap_update_bits(haptics->regmap, AW8695_SYSCTRL,
-			AW8695_SYSCTRL_BST_MODE_MASK, AW8695_SYSCTRL_BST_MODE_BYPASS);
-		if (err)
-			return err;
+		if (haptics->variant->has_boost) {
+			err = regmap_update_bits(haptics->regmap, AW8695_SYSCTRL,
+				AW8695_SYSCTRL_BST_MODE_MASK,
+				AW8695_SYSCTRL_BST_MODE_BYPASS);
+			if (err)
+				return err;
+		}
 		err = aw8695_haptic_set_active(haptics);
 		if (err)
 			return err;
@@ -640,22 +712,6 @@ static int aw8695_set_work_mode(struct aw8695_data *haptics,
 	}
 
 	return err;
-}
-
-static int aw8695_haptics_play(struct input_dev *dev, void *data,
-			       struct ff_effect *effect)
-{
-	struct aw8695_data *haptics = input_get_drvdata(dev);
-	int level;
-
-	level = effect->u.rumble.strong_magnitude;
-	if (!level)
-		level = effect->u.rumble.weak_magnitude;
-
-	haptics->running = level;
-	schedule_work(&haptics->play_work);
-
-	return 0;
 }
 
 static void aw8695_hw_reset(struct aw8695_data *haptics); // FIXME
@@ -671,7 +727,7 @@ static int aw8695_haptics_stop(struct aw8695_data *haptics)
 	if (err)
 		return err;
 
-	err = regmap_read_poll_timeout(haptics->regmap, AW8695_GLB_STATE, read_buf,
+	err = regmap_read_poll_timeout(haptics->regmap, haptics->variant->glb_state, read_buf,
 			(read_buf & 0x0f) == 0, 2000, 2000 * 100);
 	if (err) {
 		dev_err(dev, "Did not enter standby: %d\n", err);
@@ -683,7 +739,8 @@ static int aw8695_haptics_stop(struct aw8695_data *haptics)
 	return aw8695_set_work_mode(haptics, AW8695_STANDBY_MODE);
 }
 
-static int aw8695_haptics_start(struct aw8695_data *haptics)
+static int aw8695_haptics_start(struct aw8695_data *haptics,
+				const struct aw8695_effect *effect)
 {
 	int err;
 
@@ -691,13 +748,13 @@ static int aw8695_haptics_start(struct aw8695_data *haptics)
 	if (err)
 		return err;
 
-	/* Configure for waveform #1 to be played infinitely */
-	err = regmap_write(haptics->regmap, AW8695_WAVSEQ1, 0x1);
+	/* Play the waveform once, or loop it until stopped */
+	err = regmap_write(haptics->regmap, AW8695_WAVSEQ1, effect->wave);
 	if (err)
 		return err;
 
 	err = regmap_update_bits(haptics->regmap, AW8695_WAVLOOP1,
-		AW8695_WAVLOOP1_SEQ1_MASK, 0xf0);
+		AW8695_WAVLOOP1_SEQ1_MASK, effect->loop ? 0xf0 : 0x0);
 	if (err)
 		return err;
 
@@ -707,6 +764,10 @@ static int aw8695_haptics_start(struct aw8695_data *haptics)
 
 	err = regmap_update_bits(haptics->regmap, AW8695_WAVLOOP1,
 		AW8695_WAVLOOP1_SEQ2_MASK, 0x0);
+	if (err)
+		return err;
+
+	err = regmap_write(haptics->regmap, haptics->variant->datdbg, effect->gain);
 	if (err)
 		return err;
 
@@ -720,6 +781,75 @@ static int aw8695_haptics_start(struct aw8695_data *haptics)
 		AW8695_GO_ENABLE, AW8695_GO_ENABLE);
 }
 
+/* Map a force-feedback magnitude (0..0x7fff) to the data gain */
+static u8 aw8695_level_to_gain(unsigned int level)
+{
+	return clamp(DIV_ROUND_UP(level * AW8695_GAIN_FULL, 0x7fff),
+		     1U, AW8695_GAIN_FULL);
+}
+
+static int aw8695_upload_effect(struct input_dev *dev, struct ff_effect *effect,
+				struct ff_effect *old)
+{
+	struct aw8695_data *haptics = input_get_drvdata(dev);
+	struct aw8695_effect new = {
+		.wave = haptics->loop_wave,
+		.loop = true,
+		.length = effect->replay.length,
+	};
+	s16 id;
+
+	switch (effect->type) {
+	case FF_CONSTANT:
+		new.gain = aw8695_level_to_gain(abs(effect->u.constant.level));
+		break;
+	case FF_RUMBLE:
+		new.gain = aw8695_level_to_gain(max(effect->u.rumble.strong_magnitude,
+						    effect->u.rumble.weak_magnitude) / 2);
+		break;
+	case FF_PERIODIC:
+		/*
+		 * custom_data[0] selects a library effect, as with the vendor
+		 * driver: effect n plays SRAM waveform n + 1 once, at a gain
+		 * from the magnitude (the effect strength). Without a library
+		 * the loop waveform is played for the effect length instead.
+		 */
+		if (effect->u.periodic.waveform != FF_CUSTOM ||
+		    effect->u.periodic.custom_len < 1)
+			return -EINVAL;
+		if (copy_from_user(&id, effect->u.periodic.custom_data, sizeof(id)))
+			return -EFAULT;
+		if (haptics->num_waves > 1) {
+			if (id < 0 || id + 1 >= haptics->loop_wave)
+				return -EINVAL;
+			new.wave = id + 1;
+			new.loop = false;
+		}
+		new.gain = aw8695_level_to_gain(abs(effect->u.periodic.magnitude));
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	mutex_lock(&haptics->lock);
+	haptics->effects[effect->id] = new;
+	mutex_unlock(&haptics->lock);
+
+	return 0;
+}
+
+/* Called with the input event lock held, the I2C work runs in play_work */
+static int aw8695_playback(struct input_dev *dev, int effect_id, int value)
+{
+	struct aw8695_data *haptics = input_get_drvdata(dev);
+
+	WRITE_ONCE(haptics->play_id, effect_id);
+	WRITE_ONCE(haptics->play_value, value);
+	schedule_work(&haptics->play_work);
+
+	return 0;
+}
+
 static void aw8695_close(struct input_dev *input)
 {
 	struct aw8695_data *haptics = input_get_drvdata(input);
@@ -727,7 +857,11 @@ static void aw8695_close(struct input_dev *input)
 	int err;
 
 	cancel_work_sync(&haptics->play_work);
+	cancel_delayed_work_sync(&haptics->stop_work);
+	mutex_lock(&haptics->lock);
+	haptics->looping = false;
 	err = aw8695_haptics_stop(haptics);
+	mutex_unlock(&haptics->lock);
 	if (err)
 		dev_err(dev, "Failed to stop haptics: %d\n", err);
 }
@@ -737,15 +871,48 @@ static void aw8695_haptics_play_work(struct work_struct *work)
 	struct aw8695_data *haptics =
 		container_of(work, struct aw8695_data, play_work);
 	struct device *dev = &haptics->client->dev;
+	int id = READ_ONCE(haptics->play_id);
+	int value = READ_ONCE(haptics->play_value);
+	const struct aw8695_effect *effect;
 	int err;
 
-	if (haptics->running)
-		err = aw8695_haptics_start(haptics);
-	else
+	mutex_lock(&haptics->lock);
+	effect = &haptics->effects[id];
+	haptics->looping = false;
+	if (value) {
+		err = aw8695_haptics_start(haptics, effect);
+		if (!err && effect->loop && effect->length) {
+			haptics->looping = true;
+			haptics->stop_deadline = jiffies + msecs_to_jiffies(effect->length);
+			mod_delayed_work(system_wq, &haptics->stop_work,
+					 msecs_to_jiffies(effect->length));
+		}
+	} else {
 		err = aw8695_haptics_stop(haptics);
+	}
+	mutex_unlock(&haptics->lock);
 
 	if (err)
 		dev_err(dev, "Failed to execute work command: %d\n", err);
+}
+
+/* Ends a looped effect when its length has passed */
+static void aw8695_haptics_stop_work(struct work_struct *work)
+{
+	struct aw8695_data *haptics =
+		container_of(work, struct aw8695_data, stop_work.work);
+	struct device *dev = &haptics->client->dev;
+	int err = 0;
+
+	mutex_lock(&haptics->lock);
+	if (haptics->looping && time_after_eq(jiffies, haptics->stop_deadline)) {
+		haptics->looping = false;
+		err = aw8695_haptics_stop(haptics);
+	}
+	mutex_unlock(&haptics->lock);
+
+	if (err)
+		dev_err(dev, "Failed to stop haptics: %d\n", err);
 }
 
 static void aw8695_hw_reset(struct aw8695_data *haptics)
@@ -856,7 +1023,7 @@ static int aw8695_haptic_get_f0(struct aw8695_data *haptics)
 		return err;
 
 	/* LRA OSC Source */
-	err = regmap_update_bits(haptics->regmap, AW8695_ANACTRL,
+	err = regmap_update_bits(haptics->regmap, haptics->variant->anactrl,
 		AW8695_ANACTRL_LRA_SRC_MASK, AW8695_ANACTRL_LRA_SRC_REG);
 	if (err)
 		return err;
@@ -906,7 +1073,7 @@ static int aw8695_haptic_get_f0(struct aw8695_data *haptics)
 		(haptics->f0_det_trace + haptics->f0_det_wait) * (haptics->f0_det_repeat - 1));
 	usleep_range(f0_trace_ms * 1000, f0_trace_ms * 1000 + 500);
 
-	err = regmap_read_poll_timeout(haptics->regmap, AW8695_GLB_STATE, read_buf,
+	err = regmap_read_poll_timeout(haptics->regmap, haptics->variant->glb_state, read_buf,
 			(read_buf & 0x0f) == 0, 10000, 10000 * 50);
 	if (err) {
 		dev_err(dev, "Did not enter standby: %d\n", err);
@@ -995,6 +1162,40 @@ static int aw8695_haptic_f0_calibration(struct aw8695_data *haptics)
 	return aw8695_haptics_stop(haptics);
 }
 
+static int aw8695_boost_init(struct aw8695_data *haptics)
+{
+	int err;
+
+	err = regmap_write(haptics->regmap, AW8695_BSTDBG1, haptics->boost_debug[0]);
+	if (err)
+		return err;
+	err = regmap_write(haptics->regmap, AW8695_BSTDBG2, haptics->boost_debug[1]);
+	if (err)
+		return err;
+	err = regmap_write(haptics->regmap, AW8695_BSTDBG3, haptics->boost_debug[2]);
+	if (err)
+		return err;
+	err = regmap_write(haptics->regmap, AW8695_R_SPARE, haptics->r_spare);
+	if (err)
+		return err;
+
+	err = regmap_update_bits(haptics->regmap, AW8695_ANADBG,
+		AW8695_ANADBG_IOC_MASK, AW8695_ANADBG_IOC_4P65A);
+	if (err)
+		return err;
+
+	/* Set boost peak current */
+	err = regmap_update_bits(haptics->regmap, AW8695_BSTCFG,
+		AW8695_BSTCFG_PEAKCUR_MASK, AW8695_BSTCFG_PEAKCUR_2A);
+	if (err)
+		return err;
+
+	/* Adjust auto boost config */
+	return regmap_update_bits(haptics->regmap, AW8695_BST_AUTO,
+		AW8695_BST_AUTO_BST_AUTOSW_MASK,
+		AW8695_BST_AUTO_BST_MANUAL_BOOST);
+}
+
 static int aw8695_init(struct aw8695_data *haptics)
 {
 	int err;
@@ -1014,6 +1215,7 @@ static int aw8695_init(struct aw8695_data *haptics)
 			AW8624_CHIPID, AW8695_CHIPID, read_buf);
 		return -ENODEV;
 	}
+	haptics->variant = read_buf == AW8624_CHIPID ? &aw8624_variant : &aw8695_variant;
 
 	err = regmap_write(haptics->regmap, AW8695_ID, AW8695_RESET);
 	if (err) {
@@ -1071,32 +1273,21 @@ static int aw8695_init(struct aw8695_data *haptics)
 	if (err)
 		return err;
 
-	err = regmap_write(haptics->regmap, AW8695_BSTDBG1, haptics->boost_debug[0]);
-	if (err)
-		return err;
-	err = regmap_write(haptics->regmap, AW8695_BSTDBG2, haptics->boost_debug[1]);
-	if (err)
-		return err;
-	err = regmap_write(haptics->regmap, AW8695_BSTDBG3, haptics->boost_debug[2]);
-	if (err)
-		return err;
 	err = regmap_write(haptics->regmap, AW8695_TSET, haptics->tset);
 	if (err)
 		return err;
-	err = regmap_write(haptics->regmap, AW8695_R_SPARE, haptics->r_spare);
-	if (err)
-		return err;
 
-	err = regmap_update_bits(haptics->regmap, AW8695_ANADBG,
-		AW8695_ANADBG_IOC_MASK, AW8695_ANADBG_IOC_4P65A);
-	if (err)
-		return err;
-
-	/* Set boost peak current */
-	err = regmap_update_bits(haptics->regmap, AW8695_BSTCFG,
-		AW8695_BSTCFG_PEAKCUR_MASK, AW8695_BSTCFG_PEAKCUR_2A);
-	if (err)
-		return err;
+	if (haptics->variant->has_boost) {
+		err = aw8695_boost_init(haptics);
+		if (err)
+			return err;
+	} else {
+		/* The AW8624 vendor driver sets this bit instead of r-spare */
+		err = regmap_update_bits(haptics->regmap, AW8695_R_SPARE,
+			AW8624_R_SPARE_ENABLE, AW8624_R_SPARE_ENABLE);
+		if (err)
+			return err;
+	}
 
 	/* Adjust motorprotect config */
 	err = regmap_update_bits(haptics->regmap, AW8695_DETCTRL,
@@ -1109,13 +1300,6 @@ static int aw8695_init(struct aw8695_data *haptics)
 		return err;
 	err = regmap_update_bits(haptics->regmap, AW8695_PRLVL,
 		AW8695_PRLVL_PR_ENABLE, 0);
-	if (err)
-		return err;
-
-	/* Adjust auto boost config */
-	err = regmap_update_bits(haptics->regmap, AW8695_BST_AUTO,
-		AW8695_BST_AUTO_BST_AUTOSW_MASK,
-		AW8695_BST_AUTO_BST_MANUAL_BOOST);
 	if (err)
 		return err;
 
@@ -1132,6 +1316,23 @@ static int aw8695_init(struct aw8695_data *haptics)
 	err = aw8695_haptic_f0_calibration(haptics);
 	if (err)
 		return err;
+
+	if (!haptics->variant->has_boost) {
+		/* Brake and overdrive setup of the AW8624 vendor driver */
+		if (haptics->has_sw_brake) {
+			err = regmap_write(haptics->regmap, AW8624_SW_BRAKE,
+					   haptics->sw_brake);
+			if (err)
+				return err;
+		}
+		err = regmap_write(haptics->regmap, AW8624_THRS_BRA_END, 0);
+		if (err)
+			return err;
+		err = regmap_update_bits(haptics->regmap, AW8624_WAVECTRL,
+			AW8624_WAVECTRL_NUM_OV_DRIVER_MASK, 0);
+		if (err)
+			return err;
+	}
 
 	/* beme config */
 	err = regmap_write(haptics->regmap, AW8695_BEMF_VTHH_H,
@@ -1150,48 +1351,158 @@ static int aw8695_init(struct aw8695_data *haptics)
 			FIELD_GET(AW8695_LOW_MASK, haptics->bemf_vthl));
 }
 
-static int aw8695_ram_init(struct aw8695_data *haptics)
+static int aw8695_ram_write(struct aw8695_data *haptics, const u8 *data, size_t len)
 {
-	unsigned char *ptr;
 	int err;
-	int i;
+	size_t i;
 
-	/* Enable SRAM init */
-	err = regmap_update_bits(haptics->regmap, AW8695_SYSCTRL,
-		AW8695_SYSCTRL_RAMINIT_EN, AW8695_SYSCTRL_RAMINIT_EN);
+	for (i = 0; i < len; i++) {
+		err = regmap_write(haptics->regmap, AW8695_RAMDATA, data[i]);
+		if (err)
+			return err;
+	}
+
+	return 0;
+}
+
+static int aw8695_ram_set_base(struct aw8695_data *haptics, u16 base)
+{
+	int err;
+
+	err = regmap_write(haptics->regmap, AW8695_BASE_ADDRH,
+		FIELD_GET(AW8695_HIGH_MASK, base));
+	if (err)
+		return err;
+	err = regmap_write(haptics->regmap, AW8695_BASE_ADDRL,
+		FIELD_GET(AW8695_LOW_MASK, base));
+	if (err)
+		return err;
+
+	/* FIFO thresholds as set by the vendor driver */
+	err = regmap_write(haptics->regmap, AW8695_FIFO_AEH,
+		FIELD_GET(AW8695_HIGH_MASK, base >> 1));
+	if (err)
+		return err;
+	err = regmap_write(haptics->regmap, AW8695_FIFO_AEL,
+		FIELD_GET(AW8695_LOW_MASK, base >> 1));
+	if (err)
+		return err;
+	err = regmap_write(haptics->regmap, AW8695_FIFO_AFH,
+		FIELD_GET(AW8695_HIGH_MASK, base - (base >> 2)));
+	if (err)
+		return err;
+	err = regmap_write(haptics->regmap, AW8695_FIFO_AFL,
+		FIELD_GET(AW8695_LOW_MASK, base - (base >> 2)));
 	if (err)
 		return err;
 
 	/* Set RAMDATA write address */
 	err = regmap_write(haptics->regmap, AW8695_RAMADDRH,
-		FIELD_GET(AW8695_HIGH_MASK, AW8695_RAM_BASE_ADDR));
+		FIELD_GET(AW8695_HIGH_MASK, base));
 	if (err)
 		return err;
-	err = regmap_write(haptics->regmap, AW8695_RAMADDRL,
-		FIELD_GET(AW8695_LOW_MASK, AW8695_RAM_BASE_ADDR));
+	return regmap_write(haptics->regmap, AW8695_RAMADDRL,
+		FIELD_GET(AW8695_LOW_MASK, base));
+}
+
+/*
+ * Vendor waveform library: a big-endian checksum (sum of all following
+ * bytes), the SRAM base address and the SRAM image. The image starts with a
+ * version byte and the start/end addresses of each waveform, as in
+ * struct aw8695_sram_waveform_header.
+ */
+static int aw8695_ram_check_library(struct aw8695_data *haptics,
+				    const struct firmware *fw, u16 *base)
+{
+	struct device *dev = &haptics->client->dev;
+	const u8 *ram = fw->data + 4;
+	size_t len = fw->size - 4;
+	unsigned int num_waves, i;
+	u16 sum = 0, first, start, end;
+
+	if (fw->size < 4 + 1 + 4) {
+		dev_err(dev, "Waveform library too short: %zu\n", fw->size);
+		return -EINVAL;
+	}
+
+	for (i = 2; i < fw->size; i++)
+		sum += fw->data[i];
+	if (sum != get_unaligned_be16(fw->data)) {
+		dev_err(dev, "Waveform library checksum mismatch: %04x\n", sum);
+		return -EINVAL;
+	}
+
+	*base = get_unaligned_be16(fw->data + 2);
+	first = get_unaligned_be16(ram + 1);
+	if (first <= *base || first - *base > len || (first - *base - 1) % 4)
+		return -EINVAL;
+
+	num_waves = (first - *base - 1) / 4;
+	if (num_waves > AW8695_MAX_WAVES)
+		return -EINVAL;
+
+	for (i = 0; i < num_waves; i++) {
+		start = get_unaligned_be16(ram + 1 + 4 * i);
+		end = get_unaligned_be16(ram + 3 + 4 * i);
+		if (start < first || end < start || end - *base >= len) {
+			dev_err(dev, "Waveform %u out of range\n", i + 1);
+			return -EINVAL;
+		}
+	}
+
+	haptics->num_waves = num_waves;
+	return 0;
+}
+
+static int aw8695_ram_init(struct aw8695_data *haptics)
+{
+	struct device *dev = &haptics->client->dev;
+	const struct firmware *fw = NULL;
+	u16 base = AW8695_RAM_BASE_ADDR;
+	int err;
+
+	if (!haptics->variant->has_boost &&
+	    !firmware_request_nowarn(&fw, AW8624_FIRMWARE_NAME, dev) &&
+	    aw8695_ram_check_library(haptics, fw, &base)) {
+		release_firmware(fw);
+		fw = NULL;
+	}
+
+	/* Enable SRAM init */
+	err = regmap_update_bits(haptics->regmap, AW8695_SYSCTRL,
+		AW8695_SYSCTRL_RAMINIT_EN, AW8695_SYSCTRL_RAMINIT_EN);
 	if (err)
-		return err;
+		goto out;
 
-	/* Write waveform header */
-	ptr = (unsigned char *) &sram_waveform_header;
-	for (i = 0; i < sizeof(sram_waveform_header); i++) {
-		err = regmap_write(haptics->regmap, AW8695_RAMDATA,
-			ptr[i]);
-		if (err)
-			return err;
-	}
+	err = aw8695_ram_set_base(haptics, base);
+	if (err)
+		goto out;
 
-	/* Write waveform data */
-	for (i = 0; i < ARRAY_SIZE(aw8695_sine_waveform); i++) {
-		err = regmap_write(haptics->regmap, AW8695_RAMDATA,
-			aw8695_sine_waveform[i]);
-		if (err)
-			return err;
+	if (fw) {
+		/* The last library waveform is the one used for looping */
+		err = aw8695_ram_write(haptics, fw->data + 4, fw->size - 4);
+		haptics->loop_wave = haptics->num_waves;
+		dev_info(dev, "Loaded %u waveforms from %s\n", haptics->num_waves,
+			 AW8624_FIRMWARE_NAME);
+	} else {
+		/* Write waveform header and data */
+		err = aw8695_ram_write(haptics, (const u8 *)&sram_waveform_header,
+				       sizeof(sram_waveform_header));
+		if (!err)
+			err = aw8695_ram_write(haptics, aw8695_sine_waveform,
+					       ARRAY_SIZE(aw8695_sine_waveform));
+		haptics->num_waves = 1;
+		haptics->loop_wave = 1;
 	}
+	if (err)
+		goto out;
 
 	/* Disable SRAM init */
-	return regmap_update_bits(haptics->regmap, AW8695_SYSCTRL,
+	err = regmap_update_bits(haptics->regmap, AW8695_SYSCTRL,
 		AW8695_SYSCTRL_RAMINIT_EN, 0);
+out:
+	release_firmware(fw);
+	return err;
 }
 
 static irqreturn_t aw8695_irq(int irq, void *data)
@@ -1313,6 +1624,9 @@ static int aw8695_probe(struct i2c_client *client)
 	if (err)
 		return dev_err_probe(dev, err, "Failed to read awinic,r-spare\n");
 
+	haptics->has_sw_brake = !of_property_read_u8(dev->of_node, "awinic,sw-brake",
+						     &haptics->sw_brake);
+
 	err = of_property_read_u32(dev->of_node, "awinic,bemf-upper-threshold",
 				   &haptics->bemf_vthh);
 	if (err)
@@ -1337,18 +1651,28 @@ static int aw8695_probe(struct i2c_client *client)
 	if (err)
 		return dev_err_probe(dev, err, "Failed to request interrupt\n");
 
+	err = devm_mutex_init(dev, &haptics->lock);
+	if (err)
+		return err;
+
 	INIT_WORK(&haptics->play_work, aw8695_haptics_play_work);
+	INIT_DELAYED_WORK(&haptics->stop_work, aw8695_haptics_stop_work);
 
 	haptics->input_dev->name = "aw8695-haptics";
 	haptics->input_dev->close = aw8695_close;
 
 	input_set_drvdata(haptics->input_dev, haptics);
 	input_set_capability(haptics->input_dev, EV_FF, FF_RUMBLE);
+	input_set_capability(haptics->input_dev, EV_FF, FF_CONSTANT);
+	input_set_capability(haptics->input_dev, EV_FF, FF_PERIODIC);
+	input_set_capability(haptics->input_dev, EV_FF, FF_CUSTOM);
 
-	err = input_ff_create_memless(haptics->input_dev, NULL,
-				      aw8695_haptics_play);
+	err = input_ff_create(haptics->input_dev, AW8695_FF_EFFECTS);
 	if (err)
 		return dev_err_probe(dev, err, "Failed to create FF dev\n");
+
+	haptics->input_dev->ff->upload = aw8695_upload_effect;
+	haptics->input_dev->ff->playback = aw8695_playback;
 
 	haptics->client = client;
 	i2c_set_clientdata(client, haptics);

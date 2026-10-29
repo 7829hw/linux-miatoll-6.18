@@ -140,7 +140,6 @@ config INPUT_AW86927
 config INPUT_AW8695_HAPTICS
 	tristate "Awinic AW8695 haptics support"
 	depends on INPUT && I2C
-	select INPUT_FF_MEMLESS
 	select REGMAP_I2C
 	help
 	  Say Y to enable support for the Awinic AW8695 haptics driver.

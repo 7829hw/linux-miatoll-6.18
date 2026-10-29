@@ -197,10 +197,12 @@ def main(profile='boot1', android_ramdisk=None):
         # cfg80211 loads regulatory.db at late_initcall and hci_qca loads the
         # WCN3991 firmware when it registers hci0, both long before Android
         # mounts /vendor. Without them the regulatory domain stays world (00)
-        # and no country hint applies, and hci0 fails its setup. Append the
+        # and no country hint applies, and hci0 fails its setup. The haptics
+        # driver loads its waveform library at probe as well. Append the
         # pinned files under /lib/firmware as a second, uncompressed newc
         # archive.
         import bluetooth_payload
+        import haptics_payload
         import wifi_payload
         wifi, _ = wifi_payload.load(WORKSPACE)
         regdb = {name: data for name, (data, _) in wifi.items() if name.startswith('lib/firmware/regulatory.db')}
@@ -210,6 +212,7 @@ def main(profile='boot1', android_ramdisk=None):
         early.update(bluetooth_payload.load_bluetooth_firmware(WORKSPACE))
         require(all(name.startswith('lib/firmware/qca/') for name in set(early) - set(regdb)),
                 'Unexpected Bluetooth firmware path')
+        early.update(haptics_payload.load_haptics_firmware(WORKSPACE))
         extra = newc_archive([('lib', None), ('lib/firmware', None), ('lib/firmware/qca', None)]
                              + sorted(early.items()))
         ramdisk = DIST / 'ramdisk-lineage1.img'
