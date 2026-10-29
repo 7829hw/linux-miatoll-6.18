@@ -108,6 +108,16 @@
 	};
 };
 
+/*
+ * L13A is the I/O rail of every camera sensor and VCM and also pulls up the
+ * CCI lines. When the last sensor powered down it turned off, and the next
+ * transfer on CCI0 master 1 (S5K5E9, OV8856, DW9714) timed out until the
+ * CCI power domain collapsed. Keep it on.
+ */
+&vreg_l13a_1p8 {
+	regulator-always-on;
+};
+
 &cci0 {
 	status = "okay";
 };
