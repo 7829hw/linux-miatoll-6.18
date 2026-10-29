@@ -331,7 +331,8 @@ lineage1 커널을 `fastboot boot`로 RAM에서 실행하고 LineageOS 22.2를 S
   SD 파티션 이름은 `los_*`. [Wi-Fi·BT 기록](reports/device-tests/20261029-172800-lineage1-lineage24-btprofiles/README.ko.md)
 - 두 번 탭 켜기는 미해결: 제스처 모드에서 탭 순간 FT8756이 리셋된다. [DT2W 기록](reports/device-tests/20261029-005930-lineage1-lineage20-oncmd/README.ko.md)
 - 진동: AW8624(aw8695-haptics)가 벤더 파형 라이브러리와 브레이크 설정으로 클릭 효과를 재생하고, 터치 세기 3단계가 구분된다(사용자 확인). [진동 기록](reports/device-tests/20261029-181230-lineage1-lineage27-vibrator/README.ko.md), [타격감·세기 기록](reports/device-tests/20261029-194929-lineage1-lineage28-strength/README.ko.md)
-- 남은 일: RIL, 카메라, FBE, 절전.
+- 카메라(커널 경로): CSIPHY v1.2.2 표와 CSIPHY id를 고쳤고 L13A를 상시 켰다. 네 센서(S5KGM2, S5K5E9, OV8856, OV16A1Q) 모두 RAW 프레임을 받는다. 연속 캡처 20/20, 50/50. [RAW 캡처 기록](reports/device-tests/20261029-201216-lineage1-camera3/README.ko.md), [CCI 안정화 기록](reports/device-tests/20261029-203842-lineage1-camera5/README.ko.md). Android 카메라 HAL은 아직 없다.
+- 남은 일: RIL, 카메라 HAL, FBE, 절전.
 [lineage1 기록](reports/device-tests/20261028-205935-lineage1-lineage3-mesa/README.ko.md)
 
 ## 하드웨어별 상태
@@ -345,7 +346,7 @@ lineage1 커널을 `fastboot boot`로 RAM에서 실행하고 LineageOS 22.2를 S
 | 디스플레이 | DRM/MSM DPU/DSI, PHY, WLED, 표준 MDSS reset | Huaxing FT8756 및 Tianma NT36675 패널, DT, WLED 수정. DSI API 변환 | display2(Huaxing)에서 VT 표시·색상, WLED 밝기 0–4095, blank/unblank 3회, 2분 유지를 실기기 확인. 절전, 장시간, Tianma 패널은 미검증 |
 | 터치 | SPI/GENI/input | FT8756 및 NT36xxx SPI 드라이버, 패널 연동과 firmware 이름 | touch1(Huaxing FT8756)에서 RAM firmware·IRQ·좌표·5점 멀티터치 실기기 확인. suspend/blank 중 처리, Tianma NT36xxx 미검증 |
 | GPU | Adreno A618/GMU/DRM | ZAP 이름, HWCG, fuse 0x9f/bin 3. OPP는 SM7125에 한정. gpu1에서 GPU/GMU 활성화와 firmware 공급 | gpu1에서 GMU 전원·SQE/GMU firmware·zap 로드, `CP_MEM_WRITE` 제출 실행(연속 30/30, 재개 10/10), devfreq 180–750 MHz, runtime suspend 실기기 확인. gpu2에서 Mesa 25.1.9 freedreno(FD618, GLES 3.2)로 kmscube 오프스크린 약 890 fps, 화면 60 fps 렌더링 실기기 확인(사용자 관찰). vulkan1에서 Turnip(Vulkan 1.3.311) 전송 명령·셰이더 렌더링(오프스크린 픽셀 검증, 화면 60 fps) 실기기 확인(사용자 관찰). lineage1에서 Android용 Mesa 26.2.5(msm DRM, KGSL 아님)로 SurfaceFlinger GPU 합성 확인. 장시간 부하 DVFS·발열, GLES/Vulkan 적합성 테스트 미검증 |
-| 카메라 | CAMSS 공통 코드, OV8856/DW9714 | SC7180 CAMSS/CCI/PHY/DT, S5KGM2/S5K5E9/OV16A1Q/DW9800, 기존 센서/VCM 확장 | ID/전원/스트림/초점/영상 품질. DW9800은 원본도 WIP. joyeuse DT에는 S5K5E9/OV16A1Q만 있고 주카메라 경로가 완성되지 않음 |
+| 카메라 | CAMSS 공통 코드, OV8856/DW9714 | SC7180 CAMSS/CCI/PHY/DT, S5KGM2/S5K5E9/OV16A1Q/DW9800, 기존 센서/VCM 확장 | lineage1에서 네 센서 ID·전원·RAW 스트림 확인(CSIPHY v1.2.2, CSIPHY id, L13A 상시). 초점/영상 품질/HAL 미검증. DW9800은 원본도 WIP. joyeuse DT에는 S5K5E9/OV16A1Q만 있고 주카메라 경로가 완성되지 않음 |
 | 오디오 | QDSP6/APR, sm8250 machine, TAS2562, WCD937x, SoundWire/LPASS | ADSP 및 스피커/헤드폰/마이크 DT 경로, 드라이버 설정. q6afe LPASS HW vote 재시도(audio3), WCD937x jack 등록 중 TX Slave 유지(audio9), 2.7 V MBHC 임계값 DT(audio11) | 스피커·유선 이어폰 출력 청취, 내장 마이크 2개 녹음, 헤드셋 삽입·제거 감지, 이어폰 마이크 녹음, 이어폰 3버튼(audio12/13), TX 유지 유휴 전력 영향(audio14 비교, 측정 오차 안) 실기기 확인. 통화, 음량 곡선, ACDB/HAL 대응 미검증 |
 | LTE 모뎀 | MPSS remoteproc, QRTR/QMI, IPA/RMNET | 보드 firmware/메모리/IPA DT, SM7125 PD mapper | MPSS/QMI/SIM/망 등록, 데이터, RIL/IMS/음성 호환성 |
 | Wi-Fi/Bluetooth | ath10k SNOC, QCA UART/HCI | 전원/버스/펌웨어 DT | wifi1에서 MPSS·WLAN firmware·wlan0·수동 검색, wifi2에서 WPA3-SAE 연결·DHCPv4·ICMP, wifi3에서 PMF peer 비트 backport 후 지연 개선(평균 23 ms) 실기기 확인(read-only rmtfs, 기기 BDF). bt1에서 Bluetooth firmware·임시 주소 전원·LE/BR 검색 확인. Galaxy Buds Pro 페어링과 A2DP SBC 시험음 청취 확인. 공장 MAC/BD 주소, 처리량, 공존, 장시간 오디오·통화 미검증. PMF 패치는 wifi3 브랜치에만 포함 |

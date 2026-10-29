@@ -1,0 +1,23 @@
+{
+  "capture_id": "20261029-202511",
+  "host": "WSL",
+  "kernel_release": "6.18.58-miatoll-lineage1+",
+  "boot_profile": "lineage1-ram-only",
+  "image": "boot-curtana-6.18.58-lineage1.img",
+  "image_sha256": "fb25dc41ce430728de9fd73aa03b621e4409541df9dce59bcbd83122b49c5505",
+  "capture_only": false,
+  "fastboot_commands": [
+    "fastboot devices",
+    "fastboot -s REDACTED getvar product",
+    "fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-lineage1/boot-curtana-6.18.58-lineage1.img"
+  ],
+  "physical_display_confirmed": null,
+  "user_observation": "pending",
+  "stopped": "fastboot failed (1); no automatic retry. Log: /home/hwkim/kernel/miatoll-6.18/miatoll/reports/device-tests/20261029-202511-lineage1-camera5/lineage1-fastboot-20261029-202511.txt",
+  "log_files": {
+    "lineage1-fastboot-20261029-202511.txt": {
+      "bytes": 337,
+      "sha256": "64f0640b27705d0c0b54fb7785b6862f4e87d005055bb080dd1115342b6e0485"
+    }
+  }
+}
