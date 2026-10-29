@@ -1,0 +1,48 @@
+### 2026-10-29T01:36:37 pstore
+$  true; mkdir -p /sys/fs/pstore; mount -t pstore pstore /sys/fs/pstore 2>/dev/null; ls -l /sys/fs/pstore
+ true; mkdir -p /sys/fs/pstore; mount -t pstore pstore /sys/f
+s/pstore 2>/dev/null; ls -l /sys/fs/pstore; printf "\nSTEP_DONE_013637=%s\n" "$?
+"
+total 0
+-r--r--r--    1 0        0            48342 Jan  1 00:00 [0;0mconsole-ramoops-0[m
+
+STEP_DONE_013637=0
+miatoll-sdexport1# [6n
+### 2026-10-29T01:36:46 pull
+pulled /sys/fs/pstore/console-ramoops-0 bytes=48342 sha256=c76ca6b05e1d3d607b5f729cb3cb69d1bb807a9ccf559bdc1a52bc8f52ecaf1c chunk_retries=0
+### 2026-10-29T01:38:11 partnames
+$  true; for d in /sys/class/block/sd*[0-9]; do sed -n "s/^PARTNAME=//p" $d/uevent; done | sort | tr "\n" " "
+ true; for d in /sys/class/block/sd*[0-9]; do sed -n "s/^PART
+NAME=//p" $d/uevent; done | sort | tr "\n" " "; printf "\nSTEP_DONE_013810=%s\n"
+ "$?"
+/bin/sh: sort: not found
+
+STEP_DONE_013810=0
+miatoll-sdexport1# [6n
+### 2026-10-29T01:38:23 partnames2
+$  true; for d in /sys/class/block/sd*[0-9]; do printf "%s " "$(sed -n "s/^PARTNAME=//p" $d/uevent)"; done; echo
+ true; for d in /sys/class/block/sd*[0-9]; do printf "%s " "$
+(sed -n "s/^PARTNAME=//p" $d/uevent)"; done; echo; printf "\nSTEP_DONE_013823=%s
+\n" "$?"
+ssd vbmeta_system vbmeta_systembak metadata cache exaid gsort ffu super userdata persist misc keystore frp minidump cust recovery recoverybak xbl xbl_config xblbak xbl_configbak ALIGN_TO_128K_1 cdt ddr aop keymaster cmnlib cmnlib64 devcfg qupfw imagefv uefisecapp aopbak tzbak hypbak tz modembak bluetoothbak mdtpsecappbak mdtpbak ablbak dspbak keymasterbak cmnlibbak cmnlib64bak devcfgbak hyp qupfwbak imagefvbak uefisecappbak devinfo dip apdp spunvm splash limits toolsfv modem logfs cateloader logdump storsec multiimgoem multiimgqti uefivarstore secdata catefv catecontentfv bluetooth vbmeta boot dtbo vbmetabak dtbobak bootbak mdtpsecapp mdtp abl dsp ALIGN_TO_128K_2 modemst1 modemst2 fsg fsc 
+
+STEP_DONE_013823=0
+miatoll-sdexport1# [6n
+### 2026-10-29T01:39:45 sd-export-on
+$  true; setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1 & sleep 1; cat /run/sd-export.log
+ true; setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1
+ & sleep 1; cat /run/sd-export.log; printf "\nSTEP_DONE_013944=%s\n" "$?"
+SD-EXPORT: exporting /dev/mmcblk2 (62333952 sectors)
+
+STEP_DONE_013944=0
+[1]+  Done                       setsid sh -c "sd-export on" 0</dev/null 1>/dev/null 2>&1
+miatoll-sdexport1# [6n
+### 2026-10-29T01:48:51 sd-export-status
+$  true; sd-export status
+^[[6n true; sd-export status; printf "\nSTEP_
+DONE_014851=%s\n" "$?"
+/bin/sh: miatoll-sdexport^[[6n: not found
+SD-EXPORT: off
+
+STEP_DONE_014851=0
+miatoll-sdexport1# [6n

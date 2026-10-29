@@ -1,0 +1,39 @@
+### 2026-10-29T01:12:38 wifi-board
+$  true; wifi-board 2>&1 | tail -6; ls -l /lib/firmware/ath10k/WCN3990/hw1.0/; grep -c " /run/wifi-board\| vfat " /proc/mounts
+ true; wifi-board 2>&1 | tail -6; ls -l /lib/firmware/ath10k/
+WCN3990/hw1.0/; grep -c " /run/wifi-board\| vfat " /proc/mounts; printf "\nSTEP_
+DONE_011238=%s\n" "$?"
+bdwlanu.b58 bytes=26328
+bdwlanu.b59 bytes=26328
+bdwlanu.b5b bytes=26328
+bdwlanu.b5f bytes=26328
+WIFI BOARD: staged 26328 bytes in RAM, sha256=902d380c3a59f5af480d5e4f748a5b577dadcb99b602d27a54ddc88724fe8fd9
+WIFI BOARD: source unmounted; ath10k API-1 fallback is ready.
+total 960
+-rw-r--r--    1 0        0           949600 Jan  1 00:00 [0;0mboard-2.bin[m
+-rw-r--r--    1 0        0            26328 Jan  1 00:00 [0;0mboard-snoc-18800000.wifi.bin[m
+-rw-r--r--    1 0        0               60 Jan  1 00:00 [0;0mfirmware-5.bin[m
+0
+
+STEP_DONE_011238=1
+miatoll-sdexport1# [6n
+### 2026-10-29T01:12:54 pull
+pulled /lib/firmware/ath10k/WCN3990/hw1.0/board-snoc-18800000.wifi.bin bytes=26328 sha256=902d380c3a59f5af480d5e4f748a5b577dadcb99b602d27a54ddc88724fe8fd9 chunk_retries=0
+### 2026-10-29T01:25:40 sd-export-on
+$  true; setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1 & sleep 1; cat /run/sd-export.log
+ true; setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1
+ & sleep 1; cat /run/sd-export.log; printf "\nSTEP_DONE_012539=%s\n" "$?"
+SD-EXPORT: exporting /dev/mmcblk2 (62333952 sectors)
+
+STEP_DONE_012539=0
+[1]+  Done                       setsid sh -c "sd-export on" 0</dev/null 1>/dev/null 2>&1
+miatoll-sdexport1# [6n
+### 2026-10-29T01:28:58 sd-export-status
+$  true; sd-export status
+^[[6n true; sd-export status; printf "\nSTEP_
+DONE_012858=%s\n" "$?"
+/bin/sh: miatoll-sdexport^[[6n: not found
+SD-EXPORT: off
+
+STEP_DONE_012858=0
+miatoll-sdexport1# [6n

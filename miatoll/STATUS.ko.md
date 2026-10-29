@@ -326,7 +326,11 @@ lineage1 커널을 `fastboot boot`로 RAM에서 실행하고 LineageOS 22.2를 S
 - `sys.boot_completed=1`, 세로 1080x2400·밀도 440, 터치 정확(사용자 관찰).
 - ADSP 기동, ALSA 카드 등록. 오디오 HAL은 아직 없다.
 - Mesa 26.2.5 freedreno(GLES 3.2)·Turnip(Vulkan 1.3) userspace로 GPU 렌더링. 사용자가 SwiftShader보다 빨라졌다고 확인했다.
-- 남은 일: 내비게이션 바, 오디오 HAL, 무선·모뎀, FBE, 절전.
+- 이후: 소프트키·Trebuchet(공식 overlay), 오디오 HAL(스피커·이어폰), 밝기(light HAL) 정상.
+- Wi-Fi 2.4/5 GHz·인터넷, Bluetooth A2DP 재생(사용자 확인). UFS는 rmtfs의 읽기 전용 EFS 접근용으로만 켜고 모든 LUN을 ro로 둔다.
+  SD 파티션 이름은 `los_*`. [Wi-Fi·BT 기록](reports/device-tests/20261029-172800-lineage1-lineage24-btprofiles/README.ko.md)
+- 두 번 탭 켜기는 미해결: 제스처 모드에서 탭 순간 FT8756이 리셋된다. [DT2W 기록](reports/device-tests/20261029-005930-lineage1-lineage20-oncmd/README.ko.md)
+- 남은 일: 진동, RIL, 카메라, FBE, 절전.
 [lineage1 기록](reports/device-tests/20261028-205935-lineage1-lineage3-mesa/README.ko.md)
 
 ## 하드웨어별 상태

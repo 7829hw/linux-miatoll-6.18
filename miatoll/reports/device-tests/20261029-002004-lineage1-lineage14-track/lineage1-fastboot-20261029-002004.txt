@@ -1,0 +1,9 @@
+fastboot devices
+REDACTED	 fastboot
+fastboot -s REDACTED getvar product
+product: curtana
+Finished. Total time: 0.002s
+fastboot -s REDACTED boot /home/hwkim/kernel/dist/miatoll-lineage1/boot-curtana-6.18.58-lineage1.img
+Sending 'boot.img' (131072 KB)                     OKAY [  3.007s]
+Booting                                            OKAY [  5.113s]
+Finished. Total time: 8.225s

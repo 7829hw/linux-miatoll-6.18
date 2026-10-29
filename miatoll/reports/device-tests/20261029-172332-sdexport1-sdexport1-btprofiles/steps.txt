@@ -1,0 +1,31 @@
+### 2026-10-29T17:24:07 pstore
+$  true; mkdir -p /sys/fs/pstore; mount -t pstore pstore /sys/fs/pstore 2>/dev/null; ls -l /sys/fs/pstore
+ true; mkdir -p /sys/fs/pstore; mount -t pstore pstore /sys/f
+s/pstore 2>/dev/null; ls -l /sys/fs/pstore; printf "\nSTEP_DONE_172407=%s\n" "$?
+"
+total 0
+-r--r--r--    1 0        0           352253 Jan  1 00:00 [0;0mconsole-ramoops-0[m
+-r--r--r--    1 0        0              297 Jan  1 00:00 [0;0mpmsg-ramoops-0[m
+
+STEP_DONE_172407=0
+miatoll-sdexport1# [6n
+### 2026-10-29T17:24:24 pull
+pulled /sys/fs/pstore/console-ramoops-0 bytes=352253 sha256=ba8a0550ea8d8944bc036a7036987a333f2cf59c8fbdd852a012aa331616acd4 chunk_retries=0
+### 2026-10-29T17:25:07 sd-export-on
+$  true; setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1 & sleep 1; cat /run/sd-export.log
+ true; setsid sh -c "sd-export on" </dev/null >/dev/null 2>&1
+ & sleep 1; cat /run/sd-export.log; printf "\nSTEP_DONE_172505=%s\n" "$?"
+SD-EXPORT: exporting /dev/mmcblk2 (62333952 sectors)
+
+STEP_DONE_172505=0
+[1]+  Done                       setsid sh -c "sd-export on" 0</dev/null 1>/dev/null 2>&1
+miatoll-sdexport1# [6n
+### 2026-10-29T17:27:59 sd-export-status
+$  true; sd-export status
+ true; sd-export status; printf "\nSTEP_DONE_
+172759=%s\n" "$?"
+/bin/sh: miatoll-sdexport: not found
+SD-EXPORT: off
+
+STEP_DONE_172759=0
+miatoll-sdexport1# [6n
