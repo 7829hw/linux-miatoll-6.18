@@ -1,6 +1,6 @@
 # lineage1 진동 타격감과 세기 단계 (SD 카드 LineageOS 22.2)
 
-2026-10-29 KST. 커널 `0b082ec93905`, 기기 트리 `bd6e8ca`(외부 저장소).
+2026-10-29 KST. 커널 `49c6dbbff14a`, 기기 트리 `bd6e8ca`(외부 저장소).
 이전 결과: [lineage27 진동 기록](../20261029-181230-lineage1-lineage27-vibrator/README.ko.md)는 ff-memless 사인파 반복 재생이었고, 사용자는 4.14 LineageOS보다 타격감이 부족하다고 보고했다.
 
 ## 원인 (장치 레지스터 확인)
@@ -12,7 +12,7 @@
   - f0 측정의 LRA_SRC 비트가 ANACTRL(0x38)이 아닌 0x36에 쓰였다.
 - 다운스트림 비교 대상: LineageOS android_kernel_xiaomi_sm6250 lineage-22.2 `803b5586`, `drivers/misc/aw8624_haptic/aw8624.c`, `cust-atoll-idp.dtsi`.
 
-## 커널 변경 (`0b082ec93905`)
+## 커널 변경 (`49c6dbbff14a`)
 - 칩 ID로 레지스터 배치를 고른다. AW8624는 부스트 설정을 건너뛰고 R_SPARE bit 7을 세운다.
 - f0 보정 뒤 벤더 설정을 적용한다: SW_BRAKE = `awinic,sw-brake`(curtana 0x2c), THRS_BRA_END 0, NUM_OV_DRIVER 0.
 - 벤더 파형 라이브러리 `aw8624_haptic.bin`(sha256 51dff3f7…, TheMuppets sm6250-common `b93a6532`)을 probe에서 SRAM에 쓴다.

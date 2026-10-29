@@ -13,8 +13,8 @@ Android는 SM32G microSD(`soc@0/8804000.mmc`)의 super·userdata로 부팅했다
 | --- | --- | --- |
 | 191921 | 첫 lineage1 | FBE `init_user0` 실패로 내부 리커버리로 감(keymaster 3.0을 keystore2가 못 씀). 기기 트리에서 FBE를 끔 |
 | 193935–194823 | + 치명 init 오류 정지 | userdata f2fs casefold 마운트 실패. 커널에 `CONFIG_UNICODE`가 없음 |
-| 195830 | `33d2bb4e` UNICODE | LineageOS 부팅 완료(`sys.boot_completed=1`, SurfaceFlinger 66 s). 터치 정확(사용자 관찰) |
-| 203923 | `b349e8dc` CPUSETS_V1·UCLAMP | `/dev/cpuset` 생성, task profile 실패 25건 → 0건, SurfaceFlinger 42 s. ADSP `running`, ALSA 카드 `Xiaomi-miatoll` 등록 |
+| 195830 | `b9306807` UNICODE | LineageOS 부팅 완료(`sys.boot_completed=1`, SurfaceFlinger 66 s). 터치 정확(사용자 관찰) |
+| 203923 | `82328d2c` CPUSETS_V1·UCLAMP | `/dev/cpuset` 생성, task profile 실패 25건 → 0건, SurfaceFlinger 42 s. ADSP `running`, ALSA 카드 `Xiaomi-miatoll` 등록 |
 | 205935 | 같은 커널 | Mesa 26.2.5 freedreno/Turnip userspace에서 GPU 렌더링(사용자: 화면 정상·빨라짐) |
 
 195830에서 확인한 커널 쪽 문제:

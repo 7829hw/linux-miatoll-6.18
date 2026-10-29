@@ -4,12 +4,12 @@
 Android 카메라 HAL은 아직 없다. 이 기록은 센서 → CSIPHY → CSID → VFE RDI → 비디오 노드의 RAW Bayer 수신만 다룬다(ISP 없음).
 
 ## 커널 변경
-- `3cdf3fd4487f`: asidko/qcom-camss-mainline `cd6cd249` 패치 3개를 6.18 구조로 옮겼다.
+- `b54754bd9524`: asidko/qcom-camss-mainline `cd6cd249` 패치 3개를 6.18 구조로 옮겼다.
   - v1.2.2 2PH 레인 표.
   - CTRL0 0x02와 CTRL33 0x01 쓰기. 6.18의 공용 함수라 CAMSS_7180에서만 쓴다.
   - `vfe_flush_buffers()`의 buf 정리.
-- `9a13f9f76cb1`: lineage1에서 CAMSS·CCI0/1을 켜고 CAMSS, CCI, 센서, VCM 드라이버를 내장으로 만들었다.
-- `2975e5acc7cf`: 포크에서 가져온 SC7180 CSIPHY 리소스에 `.id`가 없어 네 개가 모두 `msm_csiphy0`였다.
+- `e0c57e29fe94`: lineage1에서 CAMSS·CCI0/1을 켜고 CAMSS, CCI, 센서, VCM 드라이버를 내장으로 만들었다.
+- `bce314979a70`: 포크에서 가져온 SC7180 CSIPHY 리소스에 `.id`가 없어 네 개가 모두 `msm_csiphy0`였다.
   - 6.18은 이 id로 이름, 클럭, CSID의 PHY 선택을 정한다.
   - 수정 전 camera1에서 OV16A1Q(CSIPHY3)는 STREAMON 뒤 프레임이 오지 않았다.
 
